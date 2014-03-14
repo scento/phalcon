@@ -1,11 +1,12 @@
 #phalcon-php
 
-Phalcon-PHP is a free replacement for the [Phalcon Web Framework](https://github.com/phalcon/cphalcon), delivered as a set of PHP classes based on the [Phalcon Devtools](https://github.com/phalcon/phalcon-devtools). This projects allows the usage of the Phalcon API in runtime enviroments without the ability to set up the phalcon extension (e.g. shared hosting).
-This project tries to incease the usage of the Phalcon Web Framework by providing a compatibility layer.
+Phalcon-PHP is a free replacement for the [Phalcon Web Framework](https://github.com/phalcon/cphalcon), delivered as a set of PHP classes based on the [Phalcon Devtools](https://github.com/phalcon/phalcon-devtools). This projects allows the usage of the Phalcon API in enviroments without the ability to set up the phalcon extension (e.g. shared hosting).
+This project tries to incease the usage of the Phalcon Web Framework by providing a compatibility layer for these.
 
 ##Development
 
 The current project **is not usable for any purpose** and still requires a lot of implementation. As the base for all developments, this project is using the `phalcon-devtools/ide/{current_version}` tree as a starting point.
+In case you are interested in contributing, please note that - except of the original Phalcon files - the entire code should follow the [PSR-1](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md) coding standard. The entire code should be additionally documented by PHPDoc annotations.
 
 ##License
 

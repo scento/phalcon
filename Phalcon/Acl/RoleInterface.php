@@ -1,44 +1,45 @@
-<?php 
+<?php
+/**
+ * ACL Resource Interface
+ *
+ * @author Andres Gutierrez <andres@phalconphp.com>
+ * @author Eduar Carvajal <eduar@phalconphp.com>
+ * @version 0.1
+ * @package Phalcon
+*/
+namespace Phalcon\Acl;
 
-namespace Phalcon\Acl {
+/**
+ * Phalcon\Acl\RoleInterface initializer
+ */
+interface RoleInterface
+{
+	/**
+	 * \Phalcon\Acl\Role constructor
+	 *
+	 * @param string $name
+	 * @param string $description
+	 */
+	public function __construct($name, $description = null);
 
 	/**
-	 * Phalcon\Acl\RoleInterface initializer
+	 * Returns the role name
+	 *
+	 * @return string
 	 */
-	
-	interface RoleInterface {
+	public function getName();
 
-		/**
-		 * \Phalcon\Acl\Role constructor
-		 *
-		 * @param string $name
-		 * @param string $description
-		 */
-		public function __construct($name, $description=null);
+	/**
+	 * Returns role description
+	 *
+	 * @return string
+	 */
+	public function getDescription();
 
-
-		/**
-		 * Returns the role name
-		 *
-		 * @return string
-		 */
-		public function getName();
-
-
-		/**
-		 * Returns role description
-		 *
-		 * @return string
-		 */
-		public function getDescription();
-
-
-		/**
-		 * Magic method __toString
-		 *
-		 * @return string
-		 */
-		public function __toString();
-
-	}
+	/**
+	 * Magic method __toString
+	 *
+	 * @return string
+	 */
+	public function __toString();
 }

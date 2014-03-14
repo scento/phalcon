@@ -1,81 +1,147 @@
-<?php 
+<?php
+/**
+ * ACL Adapter Class
+ *
+ * @author Andres Gutierrez <andres@phalconphp.com>
+ * @author Eduar Carvajal <eduar@phalconphp.com>
+ * @author Wenzel Pünter <wenzel@phelix.me>
+ * @version 0.1
+ * @package Phalcon
+*/
+namespace Phalcon\Acl;
 
-namespace Phalcon\Acl {
+use \Phalcon\Events\EventsAwareInterface,
+	\Phalcon\Events\ManagerInterface,
+	\Phalcon\Acl\Exception;
+
+/**
+ * Phalcon\Acl\Adapter
+ *
+ * Adapter for Phalcon\Acl adapters
+ * 
+ * @see https://github.com/phalcon/cphalcon/blob/master/ext/acl/adapter.c
+*/
+abstract class Adapter implements EventsAwareInterface
+{
+	/**
+	 * Events Manager
+	 * 
+	 * @var null|ManagerInterface
+	 * @access protected
+	*/
+	protected $_eventsManager = null;
 
 	/**
-	 * Phalcon\Acl\Adapter
+	 * Default Access
+	 * 
+	 * @var int
+	 * @access protected
+	*/
+	protected $_defaultAccess = 1;
+
+	/**
+	 * Access Granted
+	 * 
+	 * @var bool
+	 * @access protected
+	*/
+	protected $_accessGranted = false;
+
+	/**
+	 * Active Role
+	 * 
+	 * @var null|string
+	 * @access protected
+	*/
+	protected $_activeRole = null;
+
+	/**
+	 * Active Resources
+	 * 
+	 * @var null|string
+	*/
+	protected $_activeResource = null;
+
+	/**
+	 * Active Access
+	 * 
+	 * @var null|string
+	*/
+	protected $_activeAccess = null;
+
+	/**
+	 * Sets the events manager
 	 *
-	 * Adapter for Phalcon\Acl adapters
+	 * @param ManagerInterface $eventsManager
 	 */
-	
-	abstract class Adapter implements \Phalcon\Events\EventsAwareInterface {
+	public function setEventsManager(ManagerInterface $eventsManager)
+	{
+		$this->_eventsManager = $eventsManager;
+	}
 
-		protected $_eventsManager;
+	/**
+	 * Returns the internal event manager
+	 *
+	 * @return ManagerInterface|null
+	 */
+	public function getEventsManager()
+	{
+		return $this->_eventsManager;
+	}
 
-		protected $_defaultAccess;
+	/**
+	 * Sets the default access level (Phalcon\Acl::ALLOW or \Phalcon\Acl::DENY)
+	 *
+	 * @param int $defaultAccess
+	 * @throws Exception
+	 */
+	public function setDefaultAction($defaultAccess)
+	{
+		if(is_int($defaultAccess) === false)
+		{
+			throw new Exception('Invalid parameter type.');
+		}
 
-		protected $_accessGranted;
+		$this->_defaultAccess = $defaultAccess;
+	}
 
-		protected $_activeRole;
+	/**
+	 * Returns the default ACL access level
+	 *
+	 * @return int
+	 */
+	public function getDefaultAction()
+	{
+		return $this->_defaultAccess;
+	}
 
-		protected $_activeResource;
+	/**
+	 * Returns the role which the list is checking if it's allowed to certain resource/access
+	 *
+	 * @return string|null
+	 */
+	public function getActiveRole()
+	{
+		return $this->_activeRole;
+	}
 
-		protected $_activeAccess;
+	/**
+	 * Returns the resource which the list is checking if some role can access it
+	 *
+	 * @return string|null
+	 */
+	public function getActiveResource()
+	{
+		return $this->_activeResource;
+	}
 
-		/**
-		 * Sets the events manager
-		 *
-		 * @param \Phalcon\Events\ManagerInterface $eventsManager
-		 */
-		public function setEventsManager($eventsManager){ }
-
-
-		/**
-		 * Returns the internal event manager
-		 *
-		 * @return \Phalcon\Events\ManagerInterface
-		 */
-		public function getEventsManager(){ }
-
-
-		/**
-		 * Sets the default access level (Phalcon\Acl::ALLOW or \Phalcon\Acl::DENY)
-		 *
-		 * @param int $defaultAccess
-		 */
-		public function setDefaultAction($defaultAccess){ }
-
-
-		/**
-		 * Returns the default ACL access level
-		 *
-		 * @return int
-		 */
-		public function getDefaultAction(){ }
-
-
-		/**
-		 * Returns the role which the list is checking if it's allowed to certain resource/access
-		 *
-		 * @return string
-		 */
-		public function getActiveRole(){ }
-
-
-		/**
-		 * Returns the resource which the list is checking if some role can access it
-		 *
-		 * @return string
-		 */
-		public function getActiveResource(){ }
-
-
-		/**
-		 * Returns the access which the list is checking if some role can access it
-		 *
-		 * @return string
-		 */
-		public function getActiveAccess(){ }
-
+	/**
+	 * Returns the access which the list is checking if some role can access it
+	 *
+	 * @return string|null
+	 */
+	public function getActiveAccess()
+	{
+		return $this->_activeAccess;
 	}
 }

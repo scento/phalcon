@@ -13,7 +13,6 @@
 		<testsuite name="Phalcon PHP Framework">
 
 			<!-- Basic Components -->
-			<file>unit-tests/InitTest.php</file>
 			<file>unit-tests/ConfigTest.php</file>
 			<file>unit-tests/DiTest.php</file>
 			<file>unit-tests/EventsTest.php</file>

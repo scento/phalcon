@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * INI Adapter
  *
@@ -57,6 +57,7 @@ class Ini extends Config implements Countable, ArrayAccess
 	 */
 	public function __construct($filePath)
 	{
+		$array = array();
 		if(is_string($filePath) === false)
 		{
 			throw new Exception('Invalid parameter type.');
@@ -73,7 +74,7 @@ class Ini extends Config implements Countable, ArrayAccess
 		{
 			if(is_scalar($directives) === true)
 			{
-				$this->merge(array($section => $directives));
+				$array[$section] = $directives;
 			} elseif(is_array($directives) === true) {
 				foreach($directives as $key => $value)
 				{
@@ -89,14 +90,16 @@ class Ini extends Config implements Countable, ArrayAccess
 							$temp = &$temp[$key];
 						}
 
-						$this->merge(array($section => $data));
+						$array[$section] = $data;
 					} else {
-						$this->merge(array($section => array($key => $value)));
+						$array[$section] = array($key => $value);
 					}
 				}
 			} else {
 				throw new Exception('Invalid ini file.');
 			}
 		}
+
+		parent::__construct($array);
 	}
 }

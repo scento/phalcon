@@ -58,7 +58,6 @@ abstract class Adapter
 		$this->_reader = $reader;
 	}
 
-
 	/**
 	 * Returns the annotation reader
 	 *
@@ -72,7 +71,6 @@ abstract class Adapter
 		}
 		return $this->_reader;
 	}
-
 
 	/**
 	 * Parses or retrieves all the annotations found in a class
@@ -114,7 +112,6 @@ abstract class Adapter
 		return $class_annotations;
 	}
 
-
 	/**
 	 * Returns the annotations found in all the class' methods
 	 *
@@ -132,7 +129,6 @@ abstract class Adapter
 
 		return array();
 	}
-
 
 	/**
 	 * Returns the annotations found in a specific method
@@ -169,7 +165,6 @@ abstract class Adapter
 		return new Collection();
 	}
 
-
 	/**
 	 * Returns the annotations found in all the class' methods
 	 *
@@ -187,7 +182,6 @@ abstract class Adapter
 
 		return array();
 	}
-
 
 	/**
 	 * Returns the annotations found in a specific property

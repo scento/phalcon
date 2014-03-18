@@ -4,6 +4,7 @@
  *
  * @author Andres Gutierrez <andres@phalconphp.com>
  * @author Eduar Carvajal <eduar@phalconphp.com>
+ * @author Wenzel Pünter <wenzel@phelix.me>
  * @version 0.1
  * @package Phalcon
 */
@@ -16,6 +17,22 @@ namespace Phalcon\Annotations;
  */
 interface AdapterInterface
 {
+	/**
+	 * Read parsed annotations
+	 * 
+	 * @param string $key
+	 * @return \Phalcon\Annotations\Reflection
+	*/
+	public function read($key);
+
+	/**
+	 * Write parsed annotations
+	 * 
+	 * @param string $key
+	 * @param \Phalcon\Annotations\Reflection $data
+	*/
+	public function write($key, $data);
+
 	/**
 	 * Sets the annotations parser
 	 *

@@ -13,7 +13,8 @@ namespace Phalcon\Annotations;
 use \Phalcon\Annotations\Exception,
 	\Phalcon\Annotations\ReaderInterface,
 	\Phalcon\Annotations\Reader,
-	\Phalcon\Annotations\Reflection;
+	\Phalcon\Annotations\Reflection,
+	\Phalcon\Annotations\Collection;
 
 /**
  * Phalcon\Annotations\Adapter

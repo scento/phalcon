@@ -29,7 +29,7 @@ abstract class Adapter
 	/**
 	 * Annotations Parser
 	 * 
-	 * @var null
+	 * @var null|object
 	 * @access protected
 	*/
 	protected $_reader = null;
@@ -37,7 +37,7 @@ abstract class Adapter
 	/**
 	 * Annotations
 	 * 
-	 * @var null
+	 * @var null|array
 	 * @access protected
 	*/
 	protected $_annotations = null;

@@ -9,6 +9,8 @@
 */
 namespace Phalcon\Acl;
 
+use \Phalcon\Acl\RoleInterface;
+
 /**
  * Phalcon\Acl\AdapterInterface initializer
  * 
@@ -37,7 +39,7 @@ interface AdapterInterface
 	 * @param  string $accessInherits
 	 * @return boolean
 	 */
-	public function addRole($role, $accessInherits=null);
+	public function addRole(RoleInterface $role, $accessInherits = null);
 
 	/**
 	 * Do a role inherit from another existing role
@@ -73,7 +75,7 @@ interface AdapterInterface
 	 * @param   array $accessList
 	 * @return  boolean
 	 */
-	public function addResource($resource, $accessList=null);
+	public function addResource($resource, $accessList = null);
 
 	/**
 	 * Adds access to resources

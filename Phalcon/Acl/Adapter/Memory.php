@@ -80,16 +80,22 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 {
 	/**
 	 * Positive Access Result
+	 * 
+	 * @var int
 	*/
 	const YES = 1;
 
 	/**
 	 * Negative Access Result
+	 * 
+	 * @var int
 	*/
 	const NO = 0;
 
 	/**
 	 * Unknown Access Result
+	 * 
+	 * @var int
 	*/
 	const DUNNO = -1;
 
@@ -226,7 +232,7 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 	 *
 	 * @param string $roleName
 	 * @param string|object $roleToInherit
-	 * @return boolean
+	 * @return boolean|null
 	 * @throws Exception
 	 */
 	public function addInherit($roleName, $roleToInherit)

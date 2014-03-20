@@ -188,8 +188,7 @@ class Annotation
 				return true;
 				break;
 			case PHANNOT_T_ARRAY:
-				$items = (string)$expr['items'];
-				foreach($items as $item)
+				foreach($expr['items'] as $item)
 				{
 					$resolved_item = $this->getExpression((string)$item);
 

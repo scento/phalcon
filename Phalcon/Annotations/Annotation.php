@@ -146,7 +146,6 @@ class Annotation
 		}
 	}
 
-
 	/**
 	 * Returns the annotation's name
 	 *
@@ -156,7 +155,6 @@ class Annotation
 	{
 		return (string)$this->_name;
 	}
-
 
 	/**
 	 * Resolves an annotation expression
@@ -213,7 +211,6 @@ class Annotation
 		}
 	}
 
-
 	/**
 	 * Returns the expression arguments without resolving
 	 *
@@ -223,7 +220,6 @@ class Annotation
 	{
 		return $this->_exprArguments;
 	}
-
 
 	/**
 	 * Returns the expression arguments
@@ -235,7 +231,6 @@ class Annotation
 		return $this->_arguments;
 	}
 
-
 	/**
 	 * Returns the number of arguments that the annotation has
 	 *
@@ -245,7 +240,6 @@ class Annotation
 	{
 		return (int)count($this->_arguments);
 	}
-
 
 	/**
 	 * Returns an argument in a specific position
@@ -268,7 +262,6 @@ class Annotation
 		}
 	}
 
-
 	/**
 	 * Checks if the annotation has a specific argument
 	 *
@@ -286,7 +279,6 @@ class Annotation
 		return isset($this->_arguments[$position]);
 	}
 
-
 	/**
 	 * Returns a named argument
 	 *
@@ -297,7 +289,6 @@ class Annotation
 	{
 		return $this->getArgument($position);
 	}
-
 
 	/**
 	 * Returns a named argument (deprecated)
@@ -313,7 +304,6 @@ class Annotation
 		return $this->getArgument($position);
 	}
 
-
 	/**
 	 * Checks if the annotation has a specific named argument
 	 *
@@ -324,5 +314,4 @@ class Annotation
 	{
 		return $this->hasArgument($position);
 	}
-
 }

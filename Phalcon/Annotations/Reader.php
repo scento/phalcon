@@ -24,6 +24,69 @@ use \Phalcon\Annotations\ReaderInterface,
 class Reader implements ReaderInterface
 {
 	/**
+	 * Integer Type
+	 * 
+	 * @var int
+	*/
+	const PHANNOT_T_INTEGER = 301;
+
+	/**
+	 * Double Type
+	 * 
+	 * @var int
+	*/
+	const PHANNOT_T_DOUBLE = 302;
+
+	/**
+	 * String Type
+	 * 
+	 * @var int
+	*/
+	const PHANNOT_T_STRING = 303;
+
+	/**
+	 * Null Type
+	 * 
+	 * @var int
+	*/
+	const PHANNOT_T_NULL = 304;
+
+	/**
+	 * False Type
+	 * 
+	 * @var int
+	*/
+	const PHANNOT_T_FALSE =  305;
+
+	/**
+	 * True Type
+	 * 
+	 * @var int
+	*/
+	const PHANNOT_T_TRUE = 306;
+
+	/**
+	 * Identifer Type
+	 * 
+	 * @var int
+	*/
+	const PHANNOT_T_IDENTIFIER = 307;
+
+	/**
+	 * Array Type
+	 * 
+	 * @var int
+	*/
+	const PHANNOT_T_ARRAY = 308;
+
+	/**
+	 * Annotation Type
+	 * 
+	 * @var int
+	*/
+	const PHANNOT_T_ANNOTATION = 300;
+
+	/**
 	 * Reads annotations from the class dockblocks, its methods and/or properties
 	 *
 	 * @param string $className
@@ -83,6 +146,7 @@ class Reader implements ReaderInterface
 	 * @param string|null $file
 	 * @param int|null $line
 	 * @return array
+	 * @throws Exception
 	 */
 	public static function parseDocBlock($docBlock, $file = null, $line = null)
 	{
@@ -125,17 +189,18 @@ class Reader implements ReaderInterface
 		{
 			if(strpos($match, '(') !== false)
 			{
+				//Parameterized annotation
 				$rematch = array();
 				$name = preg_match('/(?P<name>\w+)\((?<param>.*)\)\)?/', $match, $rematch);
 				$result[] = array(
 					'type' => 300,
 					'name' => $rematch['name'],
-					'arguments' => self::parseDocBlockArguments($rematch['param']),
+					'arguments' => self::parseDocBlockArguments((string)$rematch['param']),
 					'file' => $file,
 					'line' => $line
 				);
 			} else {
-				//Take first part
+				//Only the name
 				$rematch = array();
 				$name = preg_match('/(\w+)(\s+(.*))?/', $match, $rematch);
 				$result[] = array(
@@ -148,5 +213,48 @@ class Reader implements ReaderInterface
 		}
 	
 		return $result;
+	}
+
+	/**
+	 * Parses a raw arguments expression
+	 * 
+	 * @param string $raw
+	 * @return array
+	 * @throws Exception
+	 * @todo Implementation of parameter parser
+	*/
+	private static function parseDocBlockArguments($raw)
+	{
+		if(is_string($raw) === false)
+		{
+			throw new Exception('Invalid parameter type.');
+		}
+
+		$raw_length = strlen($raw);
+		for($i = 0; $i <= $raw_length; ++$i)
+		{
+			//switch by char type
+			switch($raw[$i])
+			{
+				case '(':
+					break;
+				case ')':
+					break;
+				case ':':
+					break;
+				case ',':
+					break;
+				case '[':
+					break;
+				case ']':
+					break;
+				case '{':
+					break;
+				case '}':
+					break;
+				case '=':
+					break;
+			}
+		}
 	}
 }

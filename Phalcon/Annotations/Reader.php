@@ -192,13 +192,17 @@ class Reader implements ReaderInterface
 				//Parameterized annotation
 				$rematch = array();
 				$name = preg_match('/(?P<name>\w+)\((?<param>.*)\)\)?/', $match, $rematch);
-				$result[] = array(
-					'type' => 300,
-					'name' => $rematch['name'],
-					'arguments' => self::parseDocBlockArguments((string)$rematch['param']),
-					'file' => $file,
-					'line' => $line
-				);
+				try {
+					$result[] = array(
+						'type' => 300,
+						'name' => $rematch['name'],
+						'arguments' => self::parseDocBlockArguments((string)$rematch['param']),
+						'file' => $file,
+						'line' => $line
+					);
+				} catch(Exception $e) {
+					throw new Exception('Error parsing annotation');
+				}
 			} else {
 				//Only the name
 				$rematch = array();
@@ -225,36 +229,66 @@ class Reader implements ReaderInterface
 	*/
 	private static function parseDocBlockArguments($raw)
 	{
+		$result = array();
 		if(is_string($raw) === false)
 		{
 			throw new Exception('Invalid parameter type.');
 		}
 
+		$e = &$result;
+		$temp_str = '';
+		$temp_type_expected = null;
+		$temp_last_opcode = null;
+
 		$raw_length = strlen($raw);
 		for($i = 0; $i <= $raw_length; ++$i)
 		{
-			//switch by char type
-			switch($raw[$i])
-			{
-				case '(':
-					break;
-				case ')':
-					break;
-				case ':':
-					break;
-				case ',':
-					break;
-				case '[':
-					break;
-				case ']':
-					break;
-				case '{':
-					break;
-				case '}':
-					break;
-				case '=':
-					break;
+			$char = $raw[$i];
+
+			//***************************
+			if(ctype_digit($char) === true) {
+				//Number
+				$temp_str .= (string)$char;
+
+			} elseif(ctype_alpha($char) === true) {
+				//Character
+				$temp_str .= $char;
+
+			} elseif(ctype_space($char) === true) {
+				//Whitespace
+
+			} elseif($char === ':') {
+				//Divides key and value
+
+			} elseif($char === ',') {
+				//Divides array elements and parameters
+
+			} elseif($char === '[') {
+				//Open Array
+
+			} elseif($char === ']') {
+				//Close Array
+
+			} elseif($char === '{') {
+				//Open Assoc Array
+
+			} elseif($char === '}') {
+				//Close Assoc Array
+
+			} elseif($char === '=') {
+				//Parameterized Identifer
+
+			} elseif($char === '"') {
+				//String escape
+
+			} elseif(ctype_cntrl($char) === true) {
+				//Same behaviour as whitespaces
+
+			} else {
+				throw new Exception('Invalid character sequence.');
 			}
+
+			/****************
 		}
 	}
 }

@@ -235,17 +235,13 @@ class Reader implements ReaderInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$e = &$result;
-		$temp_str = '';
-		$temp_type_expected = null;
-		$temp_last_opcode = null;
+		$raw_length = strlen($raw);		
+		$tokens = array();
 
-		$raw_length = strlen($raw);
 		for($i = 0; $i <= $raw_length; ++$i)
 		{
 			$char = $raw[$i];
 
-			//***************************
 			if(ctype_digit($char) === true) {
 				//Number
 				$temp_str .= (string)$char;
@@ -259,24 +255,31 @@ class Reader implements ReaderInterface
 
 			} elseif($char === ':') {
 				//Divides key and value
+				$tokens[] = array(8, $i);
 
 			} elseif($char === ',') {
 				//Divides array elements and parameters
+				$tokens[] = array(1, $i);
 
 			} elseif($char === '[') {
 				//Open Array
+				$tokens[] = array(16, $i);
 
 			} elseif($char === ']') {
 				//Close Array
+				$tokens[] = array(17, $i);
 
 			} elseif($char === '{') {
 				//Open Assoc Array
+				$tokens[] = array(14, $i);
 
 			} elseif($char === '}') {
 				//Close Assoc Array
+				$tokens[] = array(15, $i);
 
 			} elseif($char === '=') {
 				//Parameterized Identifer
+				$tokens[] = array(7, $i);
 
 			} elseif($char === '"') {
 				//String escape
@@ -287,8 +290,17 @@ class Reader implements ReaderInterface
 			} else {
 				throw new Exception('Invalid character sequence.');
 			}
+		}
 
-			/****************
+		if(empty($tokens) === false)
+		{
+			//Recursive
+			foreach($tokens as $token)
+			{
+
+			}	
+		} else {
+			//handle non-token script
 		}
 
 		return $result;

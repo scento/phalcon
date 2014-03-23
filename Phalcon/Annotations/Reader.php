@@ -290,5 +290,7 @@ class Reader implements ReaderInterface
 
 			/****************
 		}
+
+		return $result;
 	}
 }

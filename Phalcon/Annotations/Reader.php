@@ -196,7 +196,7 @@ class Reader implements ReaderInterface
 					$result[] = array(
 						'type' => 300,
 						'name' => $rematch['name'],
-						'arguments' => self::parseDocBlockArguments((string)$rematch['param']),
+						'arguments' => self::parseDocBlockArguments('('.(string)$rematch['param'].')'),
 						'file' => $file,
 						'line' => $line
 					);
@@ -235,72 +235,26 @@ class Reader implements ReaderInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$raw_length = strlen($raw);		
-		$tokens = array();
-
-		for($i = 0; $i <= $raw_length; ++$i)
-		{
-			$char = $raw[$i];
-
-			if(ctype_digit($char) === true) {
-				//Number
-				$temp_str .= (string)$char;
-
-			} elseif(ctype_alpha($char) === true) {
-				//Character
-				$temp_str .= $char;
-
-			} elseif(ctype_space($char) === true) {
-				//Whitespace
-
-			} elseif($char === ':') {
-				//Divides key and value
-				$tokens[] = array(8, $i);
-
-			} elseif($char === ',') {
-				//Divides array elements and parameters
-				$tokens[] = array(1, $i);
-
-			} elseif($char === '[') {
-				//Open Array
-				$tokens[] = array(16, $i);
-
-			} elseif($char === ']') {
-				//Close Array
-				$tokens[] = array(17, $i);
-
-			} elseif($char === '{') {
-				//Open Assoc Array
-				$tokens[] = array(14, $i);
-
-			} elseif($char === '}') {
-				//Close Assoc Array
-				$tokens[] = array(15, $i);
-
-			} elseif($char === '=') {
-				//Parameterized Identifer
-				$tokens[] = array(7, $i);
-
-			} elseif($char === '"') {
-				//String escape
-
-			} elseif(ctype_cntrl($char) === true) {
-				//Same behaviour as whitespaces
-
-			} else {
-				throw new Exception('Invalid character sequence.');
-			}
-		}
-
-		if(empty($tokens) === false)
-		{
-			//Recursive
-			foreach($tokens as $token)
-			{
-
-			}	
+		if($raw == 'null') {
+			//Null
+		} elseif($raw == 'false') {
+			//False
+		} elseif($raw == 'true') {
+			//True
+		} elseif(preg_match('#^([+-](?:[0-9])+)$#', $raw) === true) {
+			//Integer
+		} elseif(preg_match('#^([+-](?:[0-9.])+)$#', $raw) === true) {
+			//Double
+		} elseif(preg_match('#^"(.*)"$#', $raw) === true) {
+			//String
+		} elseif(preg_match('#^\((?:([^),])(?:,?))+\)$#', $raw) === true) {
+			//Argumented list
+	 	} elseif(preg_match('#^{(?:(?:(?:(?:(["\w])(?::|=)(?:\s?))?)(["\w])(?:,?)(?:\s?))*)}$#', $raw) === true) {
+			//Associative Array
+		} elseif(preg_match('#^\[(?:(["\w])(?:,(?:\s?))?)+\]$#', $raw) === true) {
+			//Array
 		} else {
-			//handle non-token script
+			throw new Exception('Invalid argument.');
 		}
 
 		return $result;

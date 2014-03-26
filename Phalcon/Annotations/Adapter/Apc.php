@@ -59,6 +59,10 @@ class Apc extends Adapter implements AdapterInterface
 	 */
 	public function write($key, Reflection $data)
 	{
+		if(is_string($key) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+		
 		if(apc_store(strtolower('_PHAN'.$key), $data) === false) {
 			throw new Exception('Unable to store parsed annotations (APC).');
 		}

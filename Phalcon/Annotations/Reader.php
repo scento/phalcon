@@ -229,34 +229,63 @@ class Reader implements ReaderInterface
 	*/
 	private static function parseDocBlockArguments($raw)
 	{
-		$result = array();
 		if(is_string($raw) === false)
 		{
 			throw new Exception('Invalid parameter type.');
 		}
 
-		if($raw == 'null') {
-			//Null
-		} elseif($raw == 'false') {
-			//False
-		} elseif($raw == 'true') {
-			//True
-		} elseif(preg_match('#^([+-](?:[0-9])+)$#', $raw) === true) {
-			//Integer
-		} elseif(preg_match('#^([+-](?:[0-9.])+)$#', $raw) === true) {
-			//Double
-		} elseif(preg_match('#^"(.*)"$#', $raw) === true) {
-			//String
-		} elseif(preg_match('#^\((?:([^),])(?:,?))+\)$#', $raw) === true) {
-			//Argumented list
-	 	} elseif(preg_match('#^{(?:(?:(?:(?:(["\w])(?::|=)(?:\s?))?)(["\w])(?:,?)(?:\s?))*)}$#', $raw) === true) {
-			//Associative Array
-		} elseif(preg_match('#^\[(?:(["\w])(?:,(?:\s?))?)+\]$#', $raw) === true) {
-			//Array
-		} else {
-			throw new Exception('Invalid argument.');
-		}
+		$raw = trim($raw);
+		$matches = array();
 
-		return $result;
+		if($raw == 'null') {
+			/* Type: null */
+			return array('expr' => array('type' => self::PHANNOT_T_NULL));
+
+		} elseif($raw == 'false') {
+			/* Type: boolean (false) */
+			return array('expr' => array('type' => self::PHANNOT_T_FALSE));
+
+		} elseif($raw == 'true') {
+			/* Type: boolean (true) */
+			return array('expr' => array('type' => self::PHANNOT_T_TRUE));
+
+		} elseif(preg_match('#^([+-](?:[0-9])+)$#', $raw, $matches) > 0) {
+			/* Type: integer */
+			return array('expr' => array('type' => self::PHANNOT_T_INTEGER, 'value' => (int)$matches[0]));
+
+		} elseif(preg_match('#^([+-](?:[0-9.])+)$#', $raw, $matches) > 0) {
+			/* Type: float */
+			return array('expr' => array('type' => self::PHANNOT_T_DOUBLE, 'value' => (float)$matches[0]));
+
+		} elseif(preg_match('#^"(.*)"$#', $raw, $matches) > 0) {
+			/* Type: quoted string */
+			return array('expr' => array('type' => self::PHANNOT_T_STRING, 'value' => (string)$matches[0]));
+
+		} elseif(preg_match('#^([\w]+):(?:[\s]*)(?:([\w"]+)?|(?:(\{(?:.*)\}))|(\[(?:.*)\]))$#', $raw, $matches) > 0) {
+			/* Colon-divided named parameters */
+			return array('expr' => parseDocBlockArguments($matches[2]), 'name' => $matches[1]);
+
+		} elseif(preg_match('#^([\w]+)=(?:([\w"]+)?|(?:(\{(?:.*)\}))|(\[(?:.*)\]))$#', $raw, $matches) > 0) {
+			/* Equal-divided named parameter */
+			return array('expr' => parseDocBlockArguments($matches[2]), 'name' => $matches[1]);
+
+		} elseif(preg_match_all('#^\((?:(\[[^[)\]]+\]|\{[^{)}]+\}|[^{}),]{1,})(?:,?))*\)$#', $raw, $matches, \PREG_SET_ORDER) > 0) {
+			/* Argument list (default/root element) */
+
+	 	} elseif(preg_match_all('#^{(?:(?:(?:(?:(["\w])(?::|=)(?:\s?))?)(["\w])(?:,?)(?:\s?))*)}$#', $raw, $matches) > 0) {
+			/* Associative Array */
+
+		} elseif(preg_match_all('#^\[(?:(["\w])(?:,(?:\s?))?)+\]$#', $raw, $matches) > 0) {
+			/* Type: Array */
+
+		} elseif(ctype_alnum($raw) === true) {
+			/* Type: identifier */
+			return array('expr' => array('type' => self::PHANNOT_T_IDENTIFIER, 'value' => (string)$raw));
+
+		} else {
+			/* Invalid annotation parameters */
+			throw new Exception('Invalid argument.');
+
+		}
 	}
 }

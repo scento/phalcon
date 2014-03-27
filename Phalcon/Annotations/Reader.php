@@ -220,6 +220,67 @@ class Reader implements ReaderInterface
 	}
 
 	/**
+	 * Parses a comma-separated parameter list using tokens
+	 * 
+	 * @param string $raw
+	 * @return array
+	 * @throws Exception
+	*/
+	private static function parse_comma_seperate($raw)
+	{
+		$l = strlen($raw);
+
+		//Remove parantheses
+		$raw = substr($raw, 1, $l-1);
+		$l = $l - 2;
+
+		$open_braces = 0;
+		$open_brackets = 0;
+		$breakpoints = array();
+
+		for($i = 0; $i < $l; ++$i) {
+			switch($raw[$i]) {
+				case ',':
+					if($open_braces === 0 &&
+						$open_brackets === 0) {
+						$breakpoints[] = $i+1;
+					}
+					break;
+				case '[':
+					++$open_brackets;
+					break;
+				case ']':
+					--$open_brackets;
+					break;
+				case '{':
+					++$open_braces;
+					break;
+				case '}':
+					--$open_braces;
+					break;
+				case '(':
+					throw new Exception('Invalid token.');
+					break;
+				case ')':
+					throw new Exception('Invalid token.');
+					break;
+			}
+		}
+
+		$breakpoints[] = $l+1;
+
+		$parameters = array();
+		$last_break = 0;
+
+		foreach($breakpoints as $break) {
+			$parameters[] = substr($raw, $last_break, $break-$last_break-1);
+			$last_break = $break;
+		}
+
+		return $parameters;
+	}
+
+	/**
 	 * Parses a raw arguments expression
 	 * 
 	 * @param string $raw
@@ -263,14 +324,18 @@ class Reader implements ReaderInterface
 
 		} elseif(preg_match('#^([\w]+):(?:[\s]*)(?:([\w"]+)?|(?:(\{(?:.*)\}))|(\[(?:.*)\]))$#', $raw, $matches) > 0) {
 			/* Colon-divided named parameters */
-			return array('expr' => parseDocBlockArguments($matches[2]), 'name' => $matches[1]);
 
 		} elseif(preg_match('#^([\w]+)=(?:([\w"]+)?|(?:(\{(?:.*)\}))|(\[(?:.*)\]))$#', $raw, $matches) > 0) {
 			/* Equal-divided named parameter */
-			return array('expr' => parseDocBlockArguments($matches[2]), 'name' => $matches[1]);
 
-		} elseif(preg_match_all('#^\((?:(\[[^[)\]]+\]|\{[^{)}]+\}|[^{}),]{1,})(?:,?))*\)$#', $raw, $matches, \PREG_SET_ORDER) > 0) {
+		} elseif(preg_match('#^\((?:(\[[^()]+\]|\{[^()]+\}|[^{}[\](),]{1,})(?:,?))*\)$#', $raw) > 0) {
 			/* Argument list (default/root element) */
+			$results = array();
+			$arguments = self::parse_comma_seperate($raw);
+			foreach($arguments as $argument) {
+				$results[]['expr'] = self::parseDocBlockArguments($argument);
+			}
+			return $results;
 
 	 	} elseif(preg_match_all('#^{(?:(?:(?:(?:(["\w])(?::|=)(?:\s?))?)(["\w])(?:,?)(?:\s?))*)}$#', $raw, $matches) > 0) {
 			/* Associative Array */

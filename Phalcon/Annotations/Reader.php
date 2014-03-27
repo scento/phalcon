@@ -239,27 +239,27 @@ class Reader implements ReaderInterface
 
 		if($raw == 'null') {
 			/* Type: null */
-			return array('expr' => array('type' => self::PHANNOT_T_NULL));
+			return array('type' => self::PHANNOT_T_NULL);
 
 		} elseif($raw == 'false') {
 			/* Type: boolean (false) */
-			return array('expr' => array('type' => self::PHANNOT_T_FALSE));
+			return array('type' => self::PHANNOT_T_FALSE);
 
 		} elseif($raw == 'true') {
 			/* Type: boolean (true) */
-			return array('expr' => array('type' => self::PHANNOT_T_TRUE));
+			return array('type' => self::PHANNOT_T_TRUE);
 
 		} elseif(preg_match('#^([+-](?:[0-9])+)$#', $raw, $matches) > 0) {
 			/* Type: integer */
-			return array('expr' => array('type' => self::PHANNOT_T_INTEGER, 'value' => (int)$matches[0]));
+			return array('type' => self::PHANNOT_T_INTEGER, 'value' => (int)$matches[0]);
 
 		} elseif(preg_match('#^([+-](?:[0-9.])+)$#', $raw, $matches) > 0) {
 			/* Type: float */
-			return array('expr' => array('type' => self::PHANNOT_T_DOUBLE, 'value' => (float)$matches[0]));
+			return array('type' => self::PHANNOT_T_DOUBLE, 'value' => (float)$matches[0]);
 
 		} elseif(preg_match('#^"(.*)"$#', $raw, $matches) > 0) {
 			/* Type: quoted string */
-			return array('expr' => array('type' => self::PHANNOT_T_STRING, 'value' => (string)$matches[0]));
+			return array('type' => self::PHANNOT_T_STRING, 'value' => (string)$matches[0]);
 
 		} elseif(preg_match('#^([\w]+):(?:[\s]*)(?:([\w"]+)?|(?:(\{(?:.*)\}))|(\[(?:.*)\]))$#', $raw, $matches) > 0) {
 			/* Colon-divided named parameters */
@@ -280,7 +280,7 @@ class Reader implements ReaderInterface
 
 		} elseif(ctype_alnum($raw) === true) {
 			/* Type: identifier */
-			return array('expr' => array('type' => self::PHANNOT_T_IDENTIFIER, 'value' => (string)$raw));
+			return array('type' => self::PHANNOT_T_IDENTIFIER, 'value' => (string)$raw);
 
 		} else {
 			/* Invalid annotation parameters */

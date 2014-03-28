@@ -220,13 +220,91 @@ class Reader implements ReaderInterface
 	}
 
 	/**
+	 * Parses an associative array using tokens
+	 * 
+	 * @param string $raw
+	 * @return array
+	 * @throws Exception
+	*/
+	private static function parse_assoc_array($raw) {
+		$l = strlen($raw);
+
+		//Remove parantheses
+		$raw = substr($raw, 1, $l-1);
+		$l = $l - 2;
+
+		$open_braces = 0;
+		$open_brackets = 0;
+		$breakpoints = array();
+
+		for($i = 0; $i < $l; ++$i) {
+			switch($raw[$i]) {
+				case ',':
+					if($open_braces === 0 &&
+						$open_brackets === 0) {
+						$breakpoints[] = $i+1;
+					}
+					break;
+				case '[':
+					++$open_brackets;
+					break;
+				case ']':
+					--$open_brackets;
+					break;
+				case '{':
+					++$open_braces;
+					break;
+				case '}':
+					--$open_braces;
+					break;
+				case '(':
+					throw new Exception('Invalid token.');
+					break;
+				case ')':
+					throw new Exception('Invalid token.');
+					break;
+			}
+		}
+
+		$breakpoints[] = $l+1;
+
+		if($open_braces !== 0 || $open_brackets !== 0) {
+			throw new Exception('Invalid annotation.');
+		}
+
+		$parameters = array();
+		$last_break = 0;
+
+		foreach($breakpoints as $break) {
+			$str = substr($raw, $last_break, $break-$last_break-1);
+			$pos_c = strpos($str, ':');
+			$pos_e = strpos($str, '=');
+
+			if($pos_c !== false && $pos_e === false) {
+				$parameters[] = explode(':', $str, 2);
+			} elseif($pos_e !== false && $pos_c === false) {
+				$parameters[] = explode('=', $str, 2);
+			} elseif($pos_c !== false && $pos_e !== false && $pos_c < $pos_e) {
+				$parameters[] = explode(':', $str, 2);
+			} elseif($pos_e !== false && $pos_e !== false && $pos_e < $pos_c) {
+				$parameters[] = explode('=', $str, 2);
+			} else {
+				$parameters[] = $str;
+			}
+			$last_break = $break;
+		}
+
+		return $parameters;
+	}
+
+	/**
 	 * Parses a comma-separated parameter list using tokens
 	 * 
 	 * @param string $raw
 	 * @return array
 	 * @throws Exception
 	*/
-	private static function parse_comma_seperate($raw)
+	private static function parse_parameter_list($raw)
 	{
 		$l = strlen($raw);
 
@@ -269,6 +347,10 @@ class Reader implements ReaderInterface
 
 		$breakpoints[] = $l+1;
 
+		if($open_braces !== 0 || $open_brackets !== 0) {
+			throw new Exception('Invalid annotation.');
+		}
+
 		$parameters = array();
 		$last_break = 0;
 
@@ -310,35 +392,46 @@ class Reader implements ReaderInterface
 			/* Type: boolean (true) */
 			return array('type' => self::PHANNOT_T_TRUE);
 
-		} elseif(preg_match('#^([+-](?:[0-9])+)$#', $raw, $matches) > 0) {
+		} elseif(preg_match('#^((?:[+-]?)(?:[0-9])+)$#', $raw, $matches) > 0) {
 			/* Type: integer */
-			return array('type' => self::PHANNOT_T_INTEGER, 'value' => (int)$matches[0]);
+			return array('type' => self::PHANNOT_T_INTEGER, 'value' => (string)$matches[0]);
 
-		} elseif(preg_match('#^([+-](?:[0-9.])+)$#', $raw, $matches) > 0) {
+		} elseif(preg_match('#^((?:[+-]?)(?:[0-9.])+)$#', $raw, $matches) > 0) {
 			/* Type: float */
-			return array('type' => self::PHANNOT_T_DOUBLE, 'value' => (float)$matches[0]);
+			return array('type' => self::PHANNOT_T_DOUBLE, 'value' => (string)$matches[0]);
 
 		} elseif(preg_match('#^"(.*)"$#', $raw, $matches) > 0) {
 			/* Type: quoted string */
 			return array('type' => self::PHANNOT_T_STRING, 'value' => (string)$matches[0]);
 
-		} elseif(preg_match('#^([\w]+):(?:[\s]*)(?:([\w"]+)?|(?:(\{(?:.*)\}))|(\[(?:.*)\]))$#', $raw, $matches) > 0) {
+		} elseif(preg_match('#^([\w]+):(?:[\s]*)(?:([\w"]+)?|(?:(\{(?:.*)\}))|(\[(?:.*)\]))$#', $raw) > 0) {
 			/* Colon-divided named parameters */
 
-		} elseif(preg_match('#^([\w]+)=(?:([\w"]+)?|(?:(\{(?:.*)\}))|(\[(?:.*)\]))$#', $raw, $matches) > 0) {
+		} elseif(preg_match('#^([\w]+)=(?:([\w"]+)?|(?:(\{(?:.*)\}))|(\[(?:.*)\]))$#', $raw) > 0) {
 			/* Equal-divided named parameter */
 
-		} elseif(preg_match('#^\((?:(\[[^()]+\]|\{[^()]+\}|[^{}[\](),]{1,})(?:,?))*\)$#', $raw) > 0) {
+		} elseif(preg_match('#^\((?:(\[[^()]+\]|\{[^()]+\}|[^{}[\](),]{1,})(?:,?))*\)(?:;?)$#', $raw) > 0) {
 			/* Argument list (default/root element) */
 			$results = array();
-			$arguments = self::parse_comma_seperate($raw);
+			$arguments = self::parse_parameter_list($raw);
 			foreach($arguments as $argument) {
-				$results[]['expr'] = self::parseDocBlockArguments($argument);
+				$results[] = array('expr' => self::parseDocBlockArguments($argument));
 			}
 			return $results;
 
-	 	} elseif(preg_match_all('#^{(?:(?:(?:(?:(["\w])(?::|=)(?:\s?))?)(["\w])(?:,?)(?:\s?))*)}$#', $raw, $matches) > 0) {
+	 	} elseif(preg_match('#^\{(?:(?:([\w"]+)(?:[:=])[\s]*([\w"])+(?:}$|,[\s]*))|(?:([\w"]+)(?:[:=])[\s]*(\[(?:.*)\])(?:}$|,[\s]*))|(?:([\w"]+)(?:[:=][\s]*(\{(?:.*)\})(?:}$|,[\s]*)))|(?:([\w"]+)[\s]*(?:}$|,[\s]*)))+#', $raw) > 0) {
 			/* Associative Array */
+			$result = array();
+			$arguments = self::parse_assoc_array($raw);
+			foreach($arguments as $argument) {
+				if(is_array($argument) === true) {
+					$result[] = array('name' => (string)$argument[0], 
+						'expr' => self::parseDocBlockArguments($argument[1]));
+				} else {
+					$result[] = array('expr' => self::parseDocBlockArguments($argument));
+				}
+			}
+			return array('type' => self::PHANNOT_T_ARRAY, 'items' => $result);
 
 		} elseif(preg_match_all('#^\[(?:(["\w])(?:,(?:\s?))?)+\]$#', $raw, $matches) > 0) {
 			/* Type: Array */

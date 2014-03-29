@@ -192,17 +192,13 @@ class Reader implements ReaderInterface
 				//Parameterized annotation
 				$rematch = array();
 				$name = preg_match('/(?P<name>\w+)\((?<param>.*)\)\)?/', $match, $rematch);
-				try {
-					$result[] = array(
-						'type' => 300,
-						'name' => $rematch['name'],
-						'arguments' => self::parseDocBlockArguments('('.(string)$rematch['param'].')'),
-						'file' => $file,
-						'line' => $line
-					);
-				} catch(Exception $e) {
-					throw new Exception('Error parsing annotation');
-				}
+				$result[] = array(
+					'type' => 300,
+					'name' => $rematch['name'],
+					'arguments' => self::parseDocBlockArguments('('.(string)$rematch['param'].')'),
+					'file' => $file,
+					'line' => $line
+				);
 			} else {
 				//Only the name
 				$rematch = array();
@@ -226,7 +222,8 @@ class Reader implements ReaderInterface
 	 * @return array
 	 * @throws Exception
 	*/
-	private static function parse_assoc_array($raw) {
+	private static function parse_assoc_array($raw)
+	{
 		$l = strlen($raw);
 
 		//Remove parantheses
@@ -258,10 +255,10 @@ class Reader implements ReaderInterface
 					--$open_braces;
 					break;
 				case '(':
-					throw new Exception('Invalid token.');
+					throw new Exception('Syntax error, unexpected token.');
 					break;
 				case ')':
-					throw new Exception('Invalid token.');
+					throw new Exception('Syntax error, unexpected token.');
 					break;
 			}
 		}
@@ -269,7 +266,7 @@ class Reader implements ReaderInterface
 		$breakpoints[] = $l+1;
 
 		if($open_braces !== 0 || $open_brackets !== 0) {
-			throw new Exception('Invalid annotation.');
+			throw new Exception('Syntax error, unexpected token.');
 		}
 
 		$parameters = array();
@@ -337,10 +334,10 @@ class Reader implements ReaderInterface
 					--$open_braces;
 					break;
 				case '(':
-					throw new Exception('Invalid token.');
+					throw new Exception('Syntax error, unexpected token.');
 					break;
 				case ')':
-					throw new Exception('Invalid token.');
+					throw new Exception('Syntax error, unexpected token.');
 					break;
 			}
 		}
@@ -348,7 +345,7 @@ class Reader implements ReaderInterface
 		$breakpoints[] = $l+1;
 
 		if($open_braces !== 0 || $open_brackets !== 0) {
-			throw new Exception('Invalid annotation.');
+			throw new Exception('Syntax error, unexpected token.');
 		}
 
 		$parameters = array();
@@ -422,7 +419,7 @@ class Reader implements ReaderInterface
 			return $results;
 
 	 	} elseif(preg_match('#^\{(?:(?:([\w"]+)(?:[:=])[\s]*([\w"])+(?:}$|,[\s]*))|(?:([\w"]+)(?:[:=])[\s]*(\[(?:.*)\])(?:}$|,[\s]*))|(?:([\w"]+)(?:[:=][\s]*(\{(?:.*)\})(?:}$|,[\s]*)))|(?:([\w"]+)[\s]*(?:}$|,[\s]*)))+#', $raw) > 0) {
-			/* Associative Array */
+			/* Type: Associative Array */
 			$result = array();
 			$arguments = self::parse_assoc_array($raw);
 			foreach($arguments as $argument) {
@@ -445,12 +442,12 @@ class Reader implements ReaderInterface
 			return array('expr' => array('type' => self::PHANNOT_T_ARRAY, 'items' => $items));
 
 		} elseif(ctype_alnum($raw) === true) {
-			/* Type: identifier */
+			/* Type: Identifier */
 			return array('expr' => array('type' => self::PHANNOT_T_IDENTIFIER, 'value' => (string)$raw));
 
 		} else {
-			/* Invalid annotation parameters */
-			throw new Exception('Invalid argument.');
+			/* Unknown annotation format */
+			throw new Exception('Syntax error, unexpected token.');
 
 		}
 	}

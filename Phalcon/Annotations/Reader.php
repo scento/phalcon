@@ -435,9 +435,14 @@ class Reader implements ReaderInterface
 			}
 			return array('expr' => array('type' => self::PHANNOT_T_ARRAY, 'items' => $result));
 
-		} elseif(preg_match_all('#^\[(?:(["\w])(?:,(?:\s?))?)+\]$#', $raw, $matches) > 0) {
+		} elseif(preg_match_all('#^\[(?:((?:["\w]+)|(?:\[(?:.*)\])|(?:\{(?:.*)\}))(?:,|\]$)[\s]*)+#', $raw, $matches) > 0) {
 			/* Type: Array */
-			return array();
+			$items = array();
+			$elements = self::parse_parameter_list($raw);
+			foreach($elements as $element) {
+				$items[] = self::parseDocBlockArguments($element);
+			}
+			return array('expr' => array('type' => self::PHANNOT_T_ARRAY, 'items' => $items));
 
 		} elseif(ctype_alnum($raw) === true) {
 			/* Type: identifier */

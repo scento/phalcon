@@ -365,7 +365,6 @@ class Reader implements ReaderInterface
 	 * @param string $raw
 	 * @return array
 	 * @throws Exception
-	 * @todo Implementation of parameter parser
 	*/
 	private static function parseDocBlockArguments($raw)
 	{

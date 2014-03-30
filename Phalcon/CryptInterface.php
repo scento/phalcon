@@ -1,118 +1,113 @@
-<?php 
+<?php
+/**
+ * Crypt Interface
+ *
+ * @author Andres Gutierrez <andres@phalconphp.com>
+ * @author Eduar Carvajal <eduar@phalconphp.com>
+ * @version 0.1
+ * @package Phalcon
+*/
+namespace Phalcon;
 
-namespace Phalcon {
+/**
+ * Phalcon\CryptInterface initializer
+ * 
+ * @see https://github.com/phalcon/cphalcon/blob/master/ext/cryptinterface.c
+ */
+interface CryptInterface
+{
+	/**
+	 * Sets the cipher algorithm
+	 *
+	 * @param string $cipher
+	 * @return \Phalcon\EncryptInterface
+	 */
+	public function setCipher($cipher);
 
 	/**
-	 * Phalcon\CryptInterface initializer
+	 * Returns the current cipher
+	 *
+	 * @return string
 	 */
-	
-	interface CryptInterface {
+	public function getCipher();
 
-		/**
-		 * Sets the cipher algorithm
-		 *
-		 * @param string $cipher
-		 * @return \Phalcon\EncryptInterface
-		 */
-		public function setCipher($cipher);
+	/**
+	 * Sets the encrypt/decrypt mode
+	 *
+	 * @param string $mode
+	 * @return \Phalcon\EncryptInterface
+	 */
+	public function setMode($mode);
 
+	/**
+	 * Returns the current encryption mode
+	 *
+	 * @return string
+	 */
+	public function getMode();
 
-		/**
-		 * Returns the current cipher
-		 *
-		 * @return string
-		 */
-		public function getCipher();
+	/**
+	 * Sets the encryption key
+	 *
+	 * @param string $key
+	 * @return \Phalcon\EncryptInterface
+	 */
+	public function setKey($key);
 
+	/**
+	 * Returns the encryption key
+	 *
+	 * @return string
+	 */
+	public function getKey();
 
-		/**
-		 * Sets the encrypt/decrypt mode
-		 *
-		 * @param string $cipher
-		 * @return \Phalcon\EncryptInterface
-		 */
-		public function setMode($mode);
+	/**
+	 * Encrypts a text
+	 *
+	 * @param string $text
+	 * @param string|null $key
+	 * @return string
+	 */
+	public function encrypt($text, $key = null);
 
+	/**
+	 * Decrypts a text
+	 *
+	 * @param string $text
+	 * @param string|null $key
+	 * @return string
+	 */
+	public function decrypt($text, $key = null);
 
-		/**
-		 * Returns the current encryption mode
-		 *
-		 * @return string
-		 */
-		public function getMode();
+	/**
+	 * Encrypts a text returning the result as a base64 string
+	 *
+	 * @param string $text
+	 * @param string|null $key
+	 * @return string
+	 */
+	public function encryptBase64($text, $key = null);
 
+	/**
+	 * Decrypt a text that is coded as a base64 string
+	 *
+	 * @param string $text
+	 * @param string|null $key
+	 * @return string
+	 */
+	public function decryptBase64($text, $key = null);
 
-		/**
-		 * Sets the encryption key
-		 *
-		 * @param string $key
-		 * @return \Phalcon\EncryptInterface
-		 */
-		public function setKey($key);
+	/**
+	 * Returns a list of available cyphers
+	 *
+	 * @return array
+	 */
+	public function getAvailableCiphers();
 
-
-		/**
-		 * Returns the encryption key
-		 *
-		 * @return string
-		 */
-		public function getKey();
-
-
-		/**
-		 * Encrypts a text
-		 *
-		 * @param string $text
-		 * @param string $key
-		 * @return string
-		 */
-		public function encrypt($text, $key=null);
-
-
-		/**
-		 * Decrypts a text
-		 *
-		 * @param string $text
-		 * @param string $key
-		 * @return string
-		 */
-		public function decrypt($text, $key=null);
-
-
-		/**
-		 * Encrypts a text returning the result as a base64 string
-		 *
-		 * @param string $text
-		 * @param string $key
-		 * @return string
-		 */
-		public function encryptBase64($text, $key=null);
-
-
-		/**
-		 * Decrypt a text that is coded as a base64 string
-		 *
-		 * @param string $text
-		 * @param string $key
-		 * @return string
-		 */
-		public function decryptBase64($text, $key=null);
-
-
-		/**
-		 * Returns a list of available cyphers
-		 *
-		 * @return array
-		 */
-		public function getAvailableCiphers();
-
-
-		/**
-		 * Returns a list of available modes
-		 *
-		 * @return array
-		 */
-		public function getAvailableModes();
-
-	}
+	/**
+	 * Returns a list of available modes
+	 *
+	 * @return array
+	 */
+	public function getAvailableModes();
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * ACL Exception
+ * Annotations Exception
  *
  * @author Andres Gutierrez <andres@phalconphp.com>
  * @author Eduar Carvajal <eduar@phalconphp.com>

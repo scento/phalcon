@@ -10,8 +10,6 @@
 */
 namespace Phalcon;
 
-use \Phalcon\Exception;
-
 /**
  * Kernel
  * 

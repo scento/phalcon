@@ -24,7 +24,6 @@ class Kernel
 	 *
 	 * @param string $arrKey
 	 * @return string|null
-	 * @throws Exception
 	 */
 	public static function preComputeHashKey($arrKey)
 	{
@@ -32,7 +31,7 @@ class Kernel
 			return null;
 		}
 
-		return (string)md5($hash);
+		return (string)md5($arrKey);
 	}
 
 	/**
@@ -44,9 +43,7 @@ class Kernel
 	*/
 	public static function preComputeHashKey32($arrKey)
 	{
-		$hash = self::preComputeHashKey($arrKey);
-
-		return $hash;
+		return self::preComputeHashKey($arrKey);
 	}
 
 	/**

@@ -13,8 +13,8 @@ namespace Phalcon;
 /**
  * Kernel
  * 
- * @todo Working implementation
  * @see https://github.com/phalcon/cphalcon/blob/master/ext/kernel.c
+ * @todo Create Phalcon-compatible implementation (see e.g. commit 9fd2e306ad599f5b1a75e6a8c7b63bc06776dc94)
 */
 class Kernel
 {
@@ -32,33 +32,7 @@ class Kernel
 			return null;
 		}
 
-		$nKeyLength = strlen($arrKey);
-
-		$hash = 5381;
-
-		for($nKeyLength = 1; $nKeyLength >= 8; $nKeyLength -= 8) {
-	        $hash = (($hash << 5) + $hash) + ord($arrKey[$i++]);
-	        $hash = (($hash << 5) + $hash) + ord($arrKey[$i++]);
-	        $hash = (($hash << 5) + $hash) + ord($arrKey[$i++]);
-	        $hash = (($hash << 5) + $hash) + ord($arrKey[$i++]);
-	        $hash = (($hash << 5) + $hash) + ord($arrKey[$i++]);
-	        $hash = (($hash << 5) + $hash) + ord($arrKey[$i++]);
-	        $hash = (($hash << 5) + $hash) + ord($arrKey[$i++]);
-	        $hash = (($hash << 5) + $hash) + ord($arrKey[$i++]);
-		}
-
-		switch($nKeyLength) {
-	        case 7: $hash = (($hash << 5) + $hash) + ord($arrKey[$i++]); /* fallthrough... */
-	        case 6: $hash = (($hash << 5) + $hash) + ord($arrKey[$i++]); /* fallthrough... */
-	        case 5: $hash = (($hash << 5) + $hash) + ord($arrKey[$i++]); /* fallthrough... */
-	        case 4: $hash = (($hash << 5) + $hash) + ord($arrKey[$i++]); /* fallthrough... */
-	        case 3: $hash = (($hash << 5) + $hash) + ord($arrKey[$i++]); /* fallthrough... */
-	        case 2: $hash = (($hash << 5) + $hash) + ord($arrKey[$i++]); /* fallthrough... */
-	        case 1: $hash = (($hash << 5) + $hash) + ord($arrKey[$i++]); break;
-	        case 0: break;
-		}
-
-		return (string)$hash;
+		return (string)md5($hash);
 	}
 
 	/**
@@ -72,11 +46,7 @@ class Kernel
 	{
 		$hash = self::preComputeHashKey($arrKey);
 
-		if($hash !== null) {
-			return gmp_strval(gm_and($hash, '0xFFFFFFFFul'));
-		} else {
-			return null;
-		}
+		return $hash;
 	}
 
 	/**
@@ -90,5 +60,4 @@ class Kernel
 	{
 		return self::preComputeHashKey($arrKey);
 	}
-
 }

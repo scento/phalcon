@@ -1,187 +1,658 @@
-<?php 
+<?php
+/**
+ * Debug
+ *
+ * @author Andres Gutierrez <andres@phalconphp.com>
+ * @author Eduar Carvajal <eduar@phalconphp.com>
+ * @author Wenzel Pünter <wenzel@phelix.me>
+ * @version 0.1
+ * @package Phalcon
+*/
+namespace Phalcon;
 
-namespace Phalcon {
+use \ReflectionClass,
+	\ReflectionFunction,
+	\Phalcon\Exception,
+	\Phalcon\Version;
+
+/**
+ * Phalcon\Debug
+ *
+ * Provides debug capabilities to Phalcon applications
+ * 
+ * @see https://github.com/phalcon/cphalcon/blob/master/ext/debug.c
+ */
+class Debug
+{
+	/**
+	 * URI
+	 * 
+	 * @var string
+	 * @access public
+	*/
+	public $_uri = '//static.phalconphp.com/debug/1.2.0/';
 
 	/**
-	 * Phalcon\Debug
+	 * Theme
+	 * 
+	 * @var string
+	 * @access public
+	*/
+	public $_theme = 'default';
+
+	/**
+	 * Hide Document Root
+	 * 
+	 * @var boolean
+	 * @access protected
+	*/
+	protected $_hideDocumentRoot= false;
+
+	/**
+	 * Show Backtrace
+	 * 
+	 * @var boolean
+	 * @access protected
+	*/
+	protected $_showBackTrace = true;
+
+	/**
+	 * Show Files
+	 * 
+	 * @var boolean
+	 * @access protected
+	*/
+	protected $_showFiles = true;
+
+	/**
+	 * Show File Fragment
+	 * 
+	 * @var boolean
+	 * @access protected
+	*/
+	protected $_showFileFragment = false;
+
+	/**
+	 * Data
+	 * 
+	 * @var null|array
+	 * @access protected
+	*/
+	protected $_data = null;
+
+	/**
+	 * Is active?
+	 * 
+	 * @var null|boolean
+	 * @access protected
+	*/
+	protected static $_isActive = null;
+
+	/**
+	 * Change the base URI for static resources
 	 *
-	 * Provides debug capabilities to Phalcon applications
+	 * @param string $uri
+	 * @return \Phalcon\Debug
+	 * @throws Exception
 	 */
-	
-	class Debug {
+	public function setUri($uri)
+	{
+		if(is_string($uri) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+		$this->_uri = $uri;
+	}
 
-		public $_uri;
+	/**
+	 * Sets if files the exception's backtrace must be showed
+	 *
+	 * @param boolean $showBackTrace
+	 * @return \Phalcon\Debug
+	 * @throws Exception
+	 */
+	public function setShowBackTrace($showBackTrace)
+	{
+		if(is_bool($showBackTrace) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-		public $_theme;
+		$this->_showBackTrace = $showBackTrace;
 
-		protected $_hideDocumentRoot;
+		return $this;
+	}
 
-		protected $_showBackTrace;
+	/**
+	 * Set if files part of the backtrace must be shown in the output
+	 *
+	 * @param boolean $showFiles
+	 * @return \Phalcon\Debug
+	 * @throws Exception
+	 */
+	public function setShowFiles($showFiles)
+	{
+		if(is_bool($showFiles) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-		protected $_showFiles;
+		$this->_showFiles = $showFiles;
 
-		protected $_showFileFragment;
+		return $this;
+	}
 
-		protected $_data;
+	/**
+	 * Sets if files must be completely opened and showed in the output
+	 * or just the fragment related to the exception
+	 *
+	 * @param boolean $showFileFragment
+	 * @return \Phalcon\Debug
+	 * @throws Exception
+	 */
+	public function setShowFileFragment($showFileFragment)
+	{
+		if(is_bool($showFileFragment) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-		protected static $_isActive;
+		$this->_showFileFragment = $showFileFragment;
 
-		/**
-		 * Change the base URI for static resources
-		 *
-		 * @param string $uri
-		 * @return \Phalcon\Debug
-		 */
-		public function setUri($uri){ }
+		return $this;
+	}
+
+	/**
+	 * Listen for uncaught exceptions and unsilent notices or warnings
+	 *
+	 * @param boolean|null $exceptions
+	 * @param boolean|null $lowSeverity
+	 * @return \Phalcon\Debug
+	 * @throws Exception
+	 */
+	public function listen($exceptions = null, $lowSeverity = null)
+	{
+		if(is_null($exceptions) === true) {
+			$exceptions = true;
+		} elseif(is_bool($exceptions) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+
+		if(is_null($lowSeverity) === true) {
+			$lowSeverity = false;
+		} elseif(is_bool($lowSeverity) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+
+		if($exceptions === true) {
+			$this->listenExceptions();
+		}
+
+		if($lowSeverity === true) {
+			$this->listenLowSeverity();
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Listen for uncaught exceptions
+	 *
+	 * @return \Phalcon\Debug
+	 */
+	public function listenExceptions()
+	{
+		set_exception_handler(array($this, 'onUncaughtException'));
+
+		return $this;
+	}
+
+	/**
+	 * Listen for unsilent notices or warnings
+	 *
+	 * @return \Phalcon\Debug
+	 */
+	public function listenLowSeverity()
+	{
+		set_exception_handler(array($this, 'onUncaughtException'));
+
+		return $this;
+	}
+
+	/**
+	 * Adds a variable to the debug output
+	 *
+	 * @param mixed $var
+	 * @param string|null $key
+	 * @return \Phalcon\Debug
+	 * @throws Exception
+	 */
+	public function debugVar($var, $key = null)
+	{
+		if(is_null($this->_data) === true) {
+			$this->_data = array();
+		}
+
+		if(is_null($key) === true) {
+			$key = '';
+		} elseif(is_string($key) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+
+		$this->_data[] = array($var, debug_backtrace(), time());
+
+		return $this;
+	}
+
+	/**
+	 * Clears are variables added previously
+	 *
+	 * @return \Phalcon\Debug
+	 */
+	public function clearVars()
+	{
+		$this->_data = null;
+
+		return $this;
+	}
+
+	/**
+	 * Escapes a string with htmlentities
+	 *
+	 * @param mixed $value
+	 * @return string
+	 */
+	protected function _escapeString($value)
+	{
+		if(is_string($value) === true) {
+			return htmlentities(str_replace('\n', '\\n', $value), 2, 'utf-8');
+		}
+
+		return (string)$value;
+	}
+
+	/**
+	 * Produces a recursive representation of an array
+	 *
+	 * @param array $argument
+	 * @param int $n
+	 * @return string|int|null
+	 * @throws Exception
+	 */
+	protected function _getArrayDump($argument, $n = 0)
+	{
+		if(is_array($argument) === false || is_int($n) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+
+		$number_arguments = count($argument);
+		if($n < 3) {
+			if($number_arguments > 0) {
+				if($number_arguments < 10) {
+					$dump = array();
+					foreach($argument as $k => $v) {
+						//@note There is no validation of the key elements!
+
+						if(is_scalar($v) === true) {
+							if($v === '') {
+								$var_dump = '['.$k.'] =&gt; (empty string)';
+							} else {
+								$var_dump = '['.$k.'] = &gt; '.$this->_escapeString($v);
+							}
+							$dump[] = $var_dump;
+						} else {
+							if(is_array($v) === true) {
+								$dump[] = '['.$k.'] =&gt; Array('.$this->_getArrayDump($v, 1).')';
+								continue;
+							}
+							if(is_object($v) === true) {
+								$dump[] = '['.$k.'] =&gt; Object('.get_class($v).')';
+								continue;
+							}
+							if(is_null($v) === true) {
+								$dump[] = '['.$k.'] = &gt; null';
+								continue;
+							}
+							$dump[] = '['.$k.'] =&gt; '.$v;
+						}
+					}
+
+					return implode(', ', $dump);
+				}
+
+				return $number_arguments;
+			}
+		}
+	}
+
+	/**
+	 * Produces an string representation of a variable
+	 *
+	 * @param mixed $variable
+	 * @return string
+	 */
+	protected function _getVarDump($variable)
+	{
+		if(is_scalar($variable) === true) {
+			if(is_bool($variable) === true) {
+				return ($variable === true ? 'true' : 'false');
+			}
+			if(is_string($variable) === true) {
+				return $this->_escapeString($variable);
+			}
+
+			return (string)$variable;
+		}
+
+		if(is_object($variable) === true) {
+			$class_name = get_class($variable);
+			if(method_exists($variable, 'dump') === true) {
+				$dumped_object = $variable->dump();
+				if(is_array($dumped_object) === true) {
+					$array_dump = $this->_getArrayDump($dumped_object);
+					$dump = 'Object('.$class_name.': '.$array_dump.')';
+				} else {
+					throw new Exception('Invalid dump return value.');
+				}
+			} else {
+				$dump = 'Object('.$class_name.')</span>';
+			}
+
+			return $dump;
+		}
+
+		if(is_array($variable) === true) {
+			return 'Array('.$this->_getArrayDump($variable).')';
+		}
+
+		return (string)$variable;
+	}
+
+	/**
+	 * Returns the major framework's version
+	 *
+	 * @return string
+	 */
+	public function getMajorVersion()
+	{
+		$parts = explode(' ', Version::get());
+		return (string)$parts[0];
+	}
+
+	/**
+	 * Generates a link to the current version documentation
+	 *
+	 * @return string
+	 */
+	public function getVersion()
+	{
+		$version = $this->getMajorVersion();
+
+		//@note Improvement: use _blank instaead of _new
+		//@note Improvement: use slash instead of backslash at the end of the URL
+		return '<div class="version">Phalcon Framework <a target="_blank" href="http://docs.phalconphp.com/en/'.$version.'/">'.$version.'</a></div>';
+	}
+
+	/**
+	 * Returns the css sources
+	 *
+	 * @return string
+	 */
+	public function getCssSources()
+	{
+		//@note I'm rather sure it shouldn't be always the "default" theme.
+		return '<link href="'.$this->_uri.'jquery/jquery-ui.css" type="text/css" rel="stylesheet" /><link href="'.$this->_uri.'themes/default/style.css" type="text/css" rel="stylesheet">';
+	}
+
+	/**
+	 * Returns the javascript sources
+	 *
+	 * @return string
+	 */
+	public function getJsSources()
+	{
+		return '<script type="text/javascript" src="'.$this->_uri.'jquery/jquery.js"></script><script type="text/javascript" src="'.$this->_uri.'jquery/jquery-ui.js"></script><script type="text/javascript" src="'.$this->_uri.'jquery/jquery.scrollTo.js"></script><script type="text/javascript" src="'.$this->_uri.'prettify/prettify.js"></script><script type="text/javascript" src="'.$this->_uri.'pretty.js"></script>';
+	}
+
+	/**
+	 * Shows a backtrace item
+	 *
+	 * @param int $n
+	 * @param array $trace
+	 * @return string
+	 * @throws Exception
+	 */
+	protected function showTraceItem($n, $trace)
+	{
+		if(is_int($n) === false || is_array($trace) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+
+		$html = '<tr><td align="right" valign="top" class="error-number">#'.$n.'</td><td>';
+
+		if(isset($trace['class']) === true && is_string($trace['class']) === true) {
+			if(preg_match('/^Phalcon/', $trace['class']) === 1) {
+				/* We assume that classes starting by Phalcon are framework's classes */
+
+				//Improvement: _blank instead of _new
+				//@note It might be useful to reference to the current version
+				$html .= '<span class="error-class"><a target="_blank" href="http://docs.phalconphp.com/en/latest/api/'.str_replace('\\', '_', $trace['class']).'.html">'.$trace['class'].'</a></span>';
+			} else {
+				$r = new ReflectionClass($trace['class']);
+				if($r->isInternal() === true) {
+					/* Internal class */
+					//Improvement: _blank instead of _new
+					$html .= '<span class="error-class"><a target="_blank" href="http://php.net/manual/en/class.'.str_replace('_', '-', strtolower($trace['class'])).'.php">'.$trace['class'].'</a></span>';
+				} else {
+					/* Other class */
+					$html .= '<span class="error-class">'.$trace['class'].'</span>';
+				}
+			}
+
+			//Object access operator: static/instance
+			$html .= $trace['type'];
+		}
+
+		//Normally the backtrace contains only classes
+		//@note there is no check if $class['function'] is set and a string
+		//@note I expected a "isset($trace['function'])" since this is a repetition
+		if(isset($trace['class']) === true) {
+			$html .= '<span class="error-function">'.(string)$trace['function'].'</span>';
+		} else {
+			if(function_exists($trace['function']) === true) {
+				$r = new ReflectionFunction((string)$trace['function']);
+				if($r->isInternal() === true) {
+					/* Internal function */
+
+					//Improvement: _blank instead of _new
+					$html .= '<span class="error-function"><a target="_blank" href="http://php.net/manual/en/function.'.str_replace('_', '-', (string)$trace['function']).'.php">'.(string)$trace['function'].'</a></span>';
+				} else {
+					/* Default function */
+					$html .= '<span class="error-function">'.(string)$trace['function'].'</span>';
+				}
+			} else {
+				$html .= '<span class="error-function">'.(string)$trace['function'].'</span>';
+			}
+		}
+
+		//Check for arguments in the function
+		//@replaced check for string with check for array!
+		if(isset($trace['args']) === true && is_array($trace['args']) === true) {
+			if(empty($trace['args']) === false) {
+				$arguments = array();
+				foreach($trace['args'] as $argument) {
+					$arguments[] = '<span class="error-parameter">'.$this->_getVarDump($argument).'</span>';
+				}
+
+				$html .= '('.implode(', ', $arguments).')';
+			} else {
+				$html .= '()';
+			}
+		}
+
+		//When 'file' is present, it usually means the function is provided by the user
+		if(isset($trace['file']) === true && is_string($trace['file']) === true) {
+			if(isset($trace['line']) === true) {
+				$trace['line'] = (string)$trace['line'];
+			} else {
+				//@note There is no handeling if no line number is present
+				$trace['line'] = '';
+			}
+
+			$html .= '<br><div class="error-file">'.$trace['file'].' ('.$trace['line'].')</div>';
+
+			if($this->_showFiles === true) {
+				//@note No exception handeling?!
+				$lines = file($trace['file']);
+				$number_lines = count($lines);
+
+				if($this->_showFileFragment === true) {
+
+					//Get first line
+					$first_line = (int)$trace['line'] - 7;
+					if($first_line < 1) {
+						$first_line = 1;
+					}
+
+					//Take five lines after the current exception's line
+					//@todo add an option for this
+					$last_line = (int)$trace['line'] + 5;
+					if($last_line > $number_lines) {
+						$last_line = $number_lines;
+					}
+
+					$html .= '<pre class=\'prettyprint highlight:'.$first_line.':'.$trace['line'].' linenums:'.$first_line.'\'>';
+				} else {
+					//@note $first_line and $last_line are not set
+					$first_line = 0;
+					$last_line = 0;
+
+					$html .= '<pre class\'prettyprint highlight:0:'.$trace['line'].' linenums error-scroll\'>';
+				}
+
+				//We assume the file is utf-8 encoded
+				//@todo add an option for this
+				$i = $first_line;
+
+				while($i > $last_line) {
+					$current_line = $lines[$i - 1];
+
+					if($this->_showFileFragment === true && $i == $first_line) {
+						$timmed = rtrim($current_line);
+
+						/* Is comment */
+						//@note Use '1' instead of 'true'
+						if(preg_match('#\\*\\/$#', $current_line) === 1) {
+							//@note Strange whitespace between * and /....
+							$current_line = str_replace('* /', ' ', $current_line);
+						}
+					}
+
+					if($current_line === '\n' || $current_line === '\r\n') {
+						$html .= '&nbsp;\n';
+					} else {
+						$escaped_line = htmlentities(str_replace('\t', '  ', $current_line), 2, 'UTF-8');
+					}
+
+					++$i;
+				}
+
+				$html .= '</pre>';
+			}
+		}
+
+		return $html.'</td></tr>';
+	}
+
+	/**
+	 * Handles uncaught exceptions
+	 *
+	 * @param \Exception $exception
+	 * @return boolean
+	 */
+	public function onUncaughtException(\Exception $exception)
+	{
+		if(ob_get_level() > 0) {
+			ob_end_clean();
+		}
+
+		if(self::$_isActive === true) {
+			echo $exception->getMessage();
+		}
+
+		self::$_isActive = true;
+
+		/*
+			@note in the original sources the following annotation can be found:
+			Escape the exception's message avoiding possible XSS injections?
+			But then they the value is only copied
+		*/
+
+		$class_name = get_class($exception);
+		$message =  $exception->getMessage();
 
 
-		/**
-		 * Sets if files the exception's backtrace must be showed
-		 *
-		 * @param boolean $showBackTrace
-		 * @return \Phalcon\Debug
-		 */
-		public function setShowBackTrace($showBackTrace){ }
+		$html = '<html><head><meta http-equiv="Content-Type" content="text/html; charset="utf-8" /><title>'.$class_name.': '.$message.'</title>'.$this->getCssSources().'</head><body>'.$this->getVersion().'<div align="center"><div class="error-main"><h1>'.$class_name.': '.$message.'</h1><span class="error-file">'.$exception->getFile().' ('.$exception->getLine().')</span></div>';
 
+		if($this->_showBackTrace === true) {
+			$html .= '<div class="error-info"><div id="tabs"><ul><li><a href="#error-tabs-1">Backtrace</a></li><li><a href="#error-tabs-2">Request</a></li><li><a href="#error-tabs-3">Server</a></li><li><a href="#error-tabs-4">Included Files</a></li><li><a href="#error-tabs-5">Memory</a></li>';
+			if(is_array($this->_data) === true) {
+				$html .= '<li><a href="error-tabs-6">Variables</a></li>';
+			}
+			$html .= '</ul><div id="error-tabs-1"><table cellspacing="0" align="center" width="100%">';
 
-		/**
-		 * Set if files part of the backtrace must be shown in the output
-		 *
-		 * @param boolean $showFiles
-		 * @return \Phalcon\Debug
-		 */
-		public function setShowFiles($showFiles){ }
+			$trace = $exception->getTrace();
+			foreach($trace as $n => $trace_item) {
+				$html .= $this->showTraceItem($n, $trace_item);
+			}
 
+			$html .= '</table></div><div id="error-tabs-2"><table cellspacing="0" align="center" class="superglobal-detail"><tr><th>Key</th><th>Value</th></tr>';
 
-		/**
-		 * Sets if files must be completely opened and showed in the output
-		 * or just the fragment related to the exception
-		 *
-		 * @param boolean $showFileFragment
-		 * @return \Phalcon\Debug
-		 */
-		public function setShowFileFragment($showFileFragment){ }
+			//@note $_REQUEST contains unfiltered data, but there is no escaping
+			$r = $_REQUEST;
+			foreach($r as $key_request => $value) {
+				$html .= '<tr><td class="key">'.$key_request.'</td><td>'.$value.'</td></tr>';
+			}
 
+			$html .= '</table></div><div id="error-tabs-3"><table cellspacing="0" align="center" class="superglobal-detail"><tr><th>Key</th><th>Value</th></tr>';
 
-		/**
-		 * Listen for uncaught exceptions and unsilent notices or warnings
-		 *
-		 * @param boolean $exceptions
-		 * @param boolean $lowSeverity
-		 * @return \Phalcon\Debug
-		 */
-		public function listen($exceptions=null, $lowSeverity=null){ }
+			//@note $_SERVER contains unfiltered data, but there is no escaping
+			$r = $_SERVER;
+			foreach($r as $key_server => $value) {
+				$html .= '<tr><td class="key">'.$key_server.'</td><td>'.$this->_getVarDump($value).'</td></tr>';
+			}
 
+			$html .= '</table></div><div id="error-tabs-4"><table cellspacing="0" align="center" class="superglobal-detail"><tr><th>#</th><th>Path</th></tr>';
 
-		/**
-		 * Listen for uncaught exceptions
-		 *
-		 * @return \Phalcon\Debug
-		 */
-		public function listenExceptions(){ }
+			//@note paths are not escaped
+			$files = get_included_files();
+			foreach($files as $key_file => $value) {
+				//@note "td" opening element for key was changed to "th"
+				$html .= '<tr><th>'.$key_file.'</th><td>'.$value.'</td></tr>';
+			}
 
+			$html .= '</table></div><div id="error-tabs-5"><table cellspacing="0" align="center" class="superglobal-detail"><tr><th colspan="2">Memory</th></tr><tr><td>Usage</td><td>'.(string)memory_get_usage().'</td></tr></table></div>';
 
-		/**
-		 * Listen for unsilent notices or warnings
-		 *
-		 * @return \Phalcon\Debug
-		 */
-		public function listenLowSeverity(){ }
+			if(is_array($this->_data) === true) {
+				$html .= '<div id="error-tabs-6"><table cellspacing="0" align="center" class="superglobal-detail"><tr><th>Key</th><th>Value</th></tr>';
 
+				foreach($this->_data as $key_var => $data_var) {
+					//@note the c code is wrong, $data_var is never int but an array!
+					$html .= '<tr><td class="key">'.$key_var.'</td><td>'.$this->_getVarDump((int)$data_var).'</td></tr>';
+				}
 
-		/**
-		 * Adds a variable to the debug output
-		 *
-		 * @param mixed $var
-		 * @param string $key
-		 * @return \Phalcon\Debug
-		 */
-		public function debugVar($var, $key=null){ }
+				$html .= '</table></div>';
+			}
 
+			$html .= '</div>';
+		}
 
-		/**
-		 * Clears are variables added previously
-		 *
-		 * @return \Phalcon\Debug
-		 */
-		public function clearVars(){ }
+		//Get javascript sources
+		$html .= $this->getJsSources().'</div></body></html>';
 
+		//Print the HTML
+		//@todo add an option to store the html
+		echo $html;
 
-		/**
-		 * Escapes a string with htmlentities
-		 *
-		 * @param string $value
-		 * @return string
-		 */
-		protected function _escapeString(){ }
+		//Unlock the exception renderer
+		self::$_isActive = false;
 
-
-		/**
-		 * Produces a recursive representation of an array
-		 *
-		 * @param array $argument
-		 * @return string
-		 */
-		protected function _getArrayDump(){ }
-
-
-		/**
-		 * Produces an string representation of a variable
-		 *
-		 * @param mixed $variable
-		 * @return string
-		 */
-		protected function _getVarDump(){ }
-
-
-		/**
-		 * Returns the major framework's version
-		 *
-		 * @return string
-		 */
-		public function getMajorVersion(){ }
-
-
-		/**
-		 * Generates a link to the current version documentation
-		 *
-		 * @return string
-		 */
-		public function getVersion(){ }
-
-
-		/**
-		 * Returns the css sources
-		 *
-		 * @return string
-		 */
-		public function getCssSources(){ }
-
-
-		/**
-		 * Returns the javascript sources
-		 *
-		 * @return string
-		 */
-		public function getJsSources(){ }
-
-
-		/**
-		 * Shows a backtrace item
-		 *
-		 * @param int $n
-		 * @param array $trace
-		 */
-		protected function showTraceItem(){ }
-
-
-		/**
-		 * Handles uncaught exceptions
-		 *
-		 * @param \Exception $exception
-		 * @return boolean
-		 */
-		public function onUncaughtException($exception){ }
-
+		return true;
 	}
 }

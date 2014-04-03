@@ -7,6 +7,10 @@ Phalcon-PHP is a free replacement for the [Phalcon Web Framework](https://github
 The current project **is not usable for any purpose** and still requires a lot of implementation. As the base for all developments, this project is using the `phalcon-devtools/ide/1.2.6` tree as a starting point.
 In case you are interested in contributing, please note that - except of the original Phalcon files - the entire code should follow the [PSR-1](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md) coding standard. The entire code should be additionally documented by PHPDoc annotations.
 
+##Documentation
+
+It is possible to generate a low-level PHPDoc-based documentation of the entire code by using [PHP_UML](https://pear.php.net/manual/en/package.php.php-uml.command-line.php) or [phpDocumentator](http://www.phpdoc.org/). The repository contains a shell script, which generates the corresponding documentation if one or both of the tools are available.
+
 ##Branching
 
 This project will in future use the same braching system as the original Phalcon project. As long as the version `1.2.6` is not working, all development progresses are made in the `master` branch.

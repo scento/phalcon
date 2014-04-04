@@ -1,57 +1,57 @@
-<?php 
+<?php
+/**
+ * Flash Interface
+ *
+ * @author Andres Gutierrez <andres@phalconphp.com>
+ * @author Eduar Carvajal <eduar@phalconphp.com>
+ * @version 0.1
+ * @package Phalcon
+*/
+namespace Phalcon;
 
-namespace Phalcon {
+/**
+ * Phalcon\FlashInterface initializer
+ */
+interface FlashInterface
+{
+	/**
+	 * Shows a HTML error message
+	 *
+	 * @param string $message
+	 * @return string
+	 */
+	public function error($message);
 
 	/**
-	 * Phalcon\FlashInterface initializer
+	 * Shows a HTML notice/information message
+	 *
+	 * @param string $message
+	 * @return string
 	 */
-	
-	interface FlashInterface {
+	public function notice($message);
 
-		/**
-		 * Shows a HTML error message
-		 *
-		 * @param string $message
-		 * @return string
-		 */
-		public function error($message);
+	/**
+	 * Shows a HTML success message
+	 *
+	 * @param string $message
+	 * @return string
+	 */
+	public function success($message);
 
+	/**
+	 * Shows a HTML warning message
+	 *
+	 * @param string $message
+	 * @return string
+	 */
+	public function warning($message);
 
-		/**
-		 * Shows a HTML notice/information message
-		 *
-		 * @param string $message
-		 * @return string
-		 */
-		public function notice($message);
-
-
-		/**
-		 * Shows a HTML success message
-		 *
-		 * @param string $message
-		 * @return string
-		 */
-		public function success($message);
-
-
-		/**
-		 * Shows a HTML warning message
-		 *
-		 * @param string $message
-		 * @return string
-		 */
-		public function warning($message);
-
-
-		/**
-		 * Outputs a message
-		 *
-		 * @param  string $type
-		 * @param  string $message
-		 * @return string
-		 */
-		public function message($type, $message);
-
-	}
+	/**
+	 * Outputs a message
+	 *
+	 * @param  string $type
+	 * @param  string $message
+	 * @return string
+	 */
+	public function message($type, $message);
 }

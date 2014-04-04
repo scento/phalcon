@@ -12,7 +12,7 @@ namespace Phalcon\Annotations;
 /**
  * Phalcon\Annotations\ReaderInterface initializer
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/annotations/readerinterface.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/annotations/readerinterface.c
  */
 interface ReaderInterface
 {

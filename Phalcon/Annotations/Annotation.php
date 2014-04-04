@@ -17,7 +17,7 @@ use \Phalcon\Annotations\Exception;
  *
  * Represents a single annotation in an annotations collection
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/annotations/annotation.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/annotations/annotation.c
  */
 class Annotation
 {

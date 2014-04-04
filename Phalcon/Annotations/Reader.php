@@ -19,7 +19,7 @@ use \Phalcon\Annotations\ReaderInterface,
  *
  * Parses docblocks returning an array with the found annotations
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/annotations/reader.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/annotations/reader.c
  */
 class Reader implements ReaderInterface
 {

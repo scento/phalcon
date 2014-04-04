@@ -14,7 +14,7 @@ use \Phalcon\Acl\RoleInterface;
 /**
  * Phalcon\Acl\AdapterInterface initializer
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/acl/adapterinterface.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/acl/adapterinterface.c
  */
 interface AdapterInterface
 {

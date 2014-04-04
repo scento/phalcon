@@ -11,6 +11,8 @@ namespace Phalcon;
 
 /**
  * Phalcon\DiInterface initializer
+ * 
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/diinterface.c
  */
 interface DiInterface extends \ArrayAccess
 {

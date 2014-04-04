@@ -15,7 +15,7 @@ namespace Phalcon;
  *
  * This class allows to get the installed version of the framework
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/version.c
+ * @see https://github.com/phalcon/cphalcon/1.2.6/master/ext/version.c
  */
 class Version
 {

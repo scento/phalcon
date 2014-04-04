@@ -35,7 +35,7 @@ use \Countable,
  *	echo $config->models->metadata;
  *</code>
  *
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/config/adapter/json.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/config/adapter/json.c
  */
 class Json extends Config implements Countable, ArrayAccess
 {

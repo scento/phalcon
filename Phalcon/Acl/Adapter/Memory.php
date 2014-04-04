@@ -75,6 +75,8 @@ use \Phalcon\Events\EventsAwareInterface,
  *	}
  *
  *</code>
+ * 
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/acl/adapter/memory.c
  */
 class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 {

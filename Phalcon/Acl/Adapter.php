@@ -19,7 +19,7 @@ use \Phalcon\Events\EventsAwareInterface,
  *
  * Adapter for Phalcon\Acl adapters
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/acl/adapter.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/acl/adapter.c
 */
 abstract class Adapter implements EventsAwareInterface
 {

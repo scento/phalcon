@@ -13,7 +13,7 @@ namespace Phalcon;
 /**
  * Kernel
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/kernel.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/kernel.c
  * @todo Create Phalcon-compatible implementation (see e.g. commit 9fd2e306ad599f5b1a75e6a8c7b63bc06776dc94)
 */
 class Kernel

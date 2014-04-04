@@ -48,7 +48,7 @@ use \Phalcon\Db\Exception;
  *
  * </code>
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/db.c
+ * @see https://github.com/phalcon/cphalcon/1.2.6/master/ext/db.c
  */
 abstract class Db
 {

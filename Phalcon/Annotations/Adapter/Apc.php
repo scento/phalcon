@@ -24,7 +24,7 @@ use \Phalcon\Annotations\AdapterInterface,
  * $annotations = new \Phalcon\Annotations\Adapter\Apc();
  *</code>
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/annotations/adapter/apc.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/annotations/adapter/apc.c
  */
 class Apc extends Adapter implements AdapterInterface
 {

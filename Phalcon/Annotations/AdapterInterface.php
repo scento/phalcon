@@ -13,7 +13,7 @@ namespace Phalcon\Annotations;
 /**
  * Phalcon\Annotations\AdapterInterface initializer
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/annotations/adapterinterface.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/annotations/adapterinterface.c
  */
 interface AdapterInterface
 {

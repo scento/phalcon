@@ -26,10 +26,11 @@ namespace Phalcon\Annotations;
  * //Get the annotations in the class docblock
  * $classAnnotations = $reflection->getClassAnnotations();
  *</code>
+ * 
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/annotations/reflection.c
  */
-
-class Reflection {
-
+class Reflection
+{
 	/**
 	 * Reflection Data
 	 * 

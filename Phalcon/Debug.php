@@ -20,7 +20,7 @@ use \ReflectionClass,
  *
  * Provides debug capabilities to Phalcon applications
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/debug.c
+ * @see https://github.com/phalcon/cphalcon/1.2.6/master/ext/debug.c
  */
 class Debug
 {

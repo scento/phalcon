@@ -18,7 +18,7 @@ use \Phalcon\Acl\RoleInterface,
  *
  * This class defines role entity and its description
  *
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/acl/role.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/acl/role.c
  */
 class Role implements RoleInterface
 {

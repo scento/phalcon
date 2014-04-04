@@ -38,6 +38,7 @@ use \ArrayAccess,
  * ));
  *</code>
  *
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/config.c
  */
 class Config implements ArrayAccess, Countable
 {

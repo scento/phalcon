@@ -51,6 +51,8 @@ namespace Phalcon;
  *	$acl->isAllowed('Guests', 'Customers', 'create'); //Returns 1
  *
  *</code>
+ * 
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/acl.c
  */
 abstract class Acl
 {

@@ -12,7 +12,7 @@ namespace Phalcon;
 /**
  * Phalcon\EscaperInterface initializer
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/escaperinterface.c
+ * @see https://github.com/phalcon/cphalcon/1.2.6/master/ext/escaperinterface.c
  */
 interface EscaperInterface
 {

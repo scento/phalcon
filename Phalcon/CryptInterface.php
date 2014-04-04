@@ -12,7 +12,7 @@ namespace Phalcon;
 /**
  * Phalcon\CryptInterface initializer
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/cryptinterface.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/cryptinterface.c
  */
 interface CryptInterface
 {

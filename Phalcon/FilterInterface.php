@@ -11,6 +11,8 @@ namespace Phalcon;
 
 /**
  * Phalcon\FilterInterface initializer
+ * 
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/filterinterface.c
  */
 interface FilterInterface
 {

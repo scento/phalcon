@@ -26,7 +26,7 @@ use \Phalcon\Annotations\AdapterInterface,
  * ));
  *</code>
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/annotations/adapter/files.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/annotations/adapter/files.c
  */
 class Files extends Adapter implements AdapterInterface
 {

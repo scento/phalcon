@@ -20,7 +20,7 @@ use \Phalcon\Annotations\AdapterInterface,
  *
  * Stores the parsed annotations in memory. This adapter is the suitable development/testing
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/annotations/adapter/memory.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/annotations/adapter/memory.c
  */
 class Memory extends Adapter implements AdapterInterface
 {

@@ -12,7 +12,7 @@ namespace Phalcon;
 /**
  * Phalcon\DispatcherInterface initializer
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/dispatcher.c
+ * @see https://github.com/phalcon/cphalcon/1.2.6/master/ext/dispatcher.c
  */
 interface DispatcherInterface
 {

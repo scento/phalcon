@@ -21,7 +21,7 @@ use \Phalcon\Annotations\Exception,
  *
  * This is the base class for Phalcon\Annotations adapters
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/annotations/adapter.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/annotations/adapter.c
  */
 abstract class Adapter
 {

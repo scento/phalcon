@@ -24,7 +24,7 @@ use \Phalcon\Annotations\AdapterInterface,
  * $annotations = new \Phalcon\Annotations\Adapter\Xcache();
  *</code>
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/annotations/adapter/xcache.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/annotations/adapter/xcache.c
  */
 class Xcache extends Adapter implements AdapterInterface
 {

@@ -34,7 +34,7 @@ use \Iterator,
  * $annotation = $classAnnotations->get('Cacheable');
  *</code>
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/annotations/collection.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/annotations/collection.c
  */
 class Collection implements Iterator, Traversable, Countable
 {

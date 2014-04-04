@@ -29,7 +29,7 @@ use \Phalcon\CryptInterface,
  *	echo $crypt->decrypt($encrypted, $key);
  *</code>
  * 
- * @see https://github.com/scento/cphalcon/blob/master/ext/crypt.c
+ * @see https://github.com/scento/cphalcon/blob/1.2.6/ext/crypt.c
  */
 class Crypt implements CryptInterface
 {

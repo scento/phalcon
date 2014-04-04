@@ -18,7 +18,7 @@ use \Phalcon\Acl\ResourceInterface,
  *
  * This class defines resource entity and its description
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/acl/resource.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/acl/resource.c
  */
 class Resource implements ResourceInterface
 {

@@ -12,7 +12,7 @@ namespace Phalcon\Acl;
 /**
  * Phalcon\Acl\ResourceInterface initializer
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/acl/resourceinterface.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/acl/resourceinterface.c
  */
 interface ResourceInterface
 {

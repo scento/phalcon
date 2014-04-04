@@ -11,6 +11,8 @@ namespace Phalcon\Acl;
 
 /**
  * Phalcon\Acl\RoleInterface initializer
+ * 
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/acl/roleinterface.c
  */
 interface RoleInterface
 {

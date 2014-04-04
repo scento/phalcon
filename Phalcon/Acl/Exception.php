@@ -14,7 +14,7 @@ namespace Phalcon\Acl;
  *
  * Class for exceptions thrown by Phalcon\Acl
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/acl/exception.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/acl/exception.c
  */
 class Exception extends \Phalcon\Exception
 {

@@ -11,6 +11,8 @@ namespace Phalcon;
 
 /**
  * Phalcon\FlashInterface initializer
+ * 
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/flashinterface.c
  */
 interface FlashInterface
 {

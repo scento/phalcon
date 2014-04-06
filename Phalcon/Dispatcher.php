@@ -593,7 +593,7 @@ abstract class Dispatcher implements DispatcherInterface, InjectionAwareInterfac
 
 			//Create the complete controller class name prepending the namespace
 			if(is_null($this->_namespaceName) === false) {
-				if(strrpos($this->_namespaceName, '\\') === strlen($this->_namespaceName)) {
+				if(strrpos($this->_namespaceName, '\\') === (strlen($this->_namespaceName)-1)) {
 					$handler_class = $this->_namespaceName.$camelized_class.$this->_handlerSuffix;
 				} else {
 					$handler_class = $this->_namespaceName.'\\'.$camelized_class.$this->_handlerSuffix;
@@ -857,7 +857,7 @@ abstract class Dispatcher implements DispatcherInterface, InjectionAwareInterfac
 
 		//Create the complete controller class name prepending the namespace
 		if(is_null($this->_namespaceName) === false) {
-			if(strrpos($this->_namespaceName, '\\') === strlen($this->_namespaceName)) {
+			if(strrpos($this->_namespaceName, '\\') === (strlen($this->_namespaceName)-1)) {
 				return $this->_namespaceName.$camelized_class.$this->_handlerSuffix;
 			} else {
 				return $this->_namespaceName.'\\'.$camelized_class.$this->_handlerSuffix;

@@ -20,7 +20,7 @@ use \Phalcon\Assets\Exception,
  *
  * Manages collections of CSS/Javascript assets
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/assets/manager.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/assets/manager.c
  */
 class Manager
 {

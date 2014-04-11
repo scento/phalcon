@@ -10,7 +10,10 @@
 */
 namespace Phalcon\Assets;
 
-use \Phalcon\Assets\Exception,
+use \Countable,
+	\Iterator,
+	\Traversable,
+	\Phalcon\Assets\Exception,
 	\Phalcon\Assets\Resource,
 	\Phalcon\Assets\Resource\Css,
 	\Phalcon\Assets\Resource\Js,
@@ -23,7 +26,7 @@ use \Phalcon\Assets\Exception,
  * 
  * @see https://github.com/phalcon/cphalcon/blob/master/ext/assets/collection.c
  */
-class Collection implements \Countable, \Iterator, \Traversable
+class Collection implements Countable, Iterator, Traversable
 {
 	/**
 	 * Prefix
@@ -124,7 +127,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 		return $this;
 	}
 
-
 	/**
 	 * Adds a CSS resource to the collection
 	 *
@@ -158,7 +160,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 
 		return $this;
 	}
-
 
 	/**
 	 * Adds a javascript resource to the collection
@@ -195,7 +196,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 		return $this;
 	}
 
-
 	/**
 	 * Returns the resources as an array
 	 *
@@ -205,7 +205,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 	{
 		return (is_array($this->_resources) === true ? $this->_resources : array());
 	}
-
 
 	/**
 	 * Returns the number of elements in the form
@@ -221,7 +220,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 		return count($this->_resources);
 	}
 
-
 	/**
 	 * Rewinds the internal iterator
 	 */
@@ -229,7 +227,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 	{
 		$this->_position = 0;
 	}
-
 
 	/**
 	 * Returns the current resource in the iterator
@@ -250,7 +247,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 			$this->_resources[$this->_position] : null);
 	}
 
-
 	/**
 	 * Returns the current position/key in the iterator
 	 *
@@ -265,7 +261,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 		return $this->_position;
 	}
 
-
 	/**
 	 * Moves the internal iteration pointer to the next position
 	 *
@@ -278,7 +273,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 
 		$this->_position++;
 	}
-
 
 	/**
 	 * Check if the current element in the iterator is valid
@@ -298,7 +292,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 		return isset($this->_resources[$this->_position]);
 	}
 
-
 	/**
 	 * Sets the target path of the file for the filtered/join output
 	 *
@@ -317,7 +310,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 		return $this;
 	}
 
-
 	/**
 	 * Returns the target path of the file for the filtered/join output
 	 *
@@ -327,7 +319,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 	{
 		return $this->_targetPath;
 	}
-
 
 	/**
 	 * Sets a base source path for all the resources in this collection
@@ -347,7 +338,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 		return $this;
 	}
 
-
 	/**
 	 * Returns the base source path for all the resources in this collection
 	 *
@@ -357,7 +347,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 	{
 		return $this->_sourcePath;
 	}
-
 
 	/**
 	 * Sets a target uri for the generated HTML
@@ -377,7 +366,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 		return $this;
 	}
 
-
 	/**
 	 * Returns the target uri for the generated HTML
 	 *
@@ -387,7 +375,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 	{
 		return $this->_targetUri;
 	}
-
 
 	/**
 	 * Sets a common prefix for all the resources
@@ -407,7 +394,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 		return $this;
 	}
 
-
 	/**
 	 * Returns the prefix
 	 *
@@ -417,7 +403,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 	{
 		return $this->_prefix;
 	}
-
 
 	/**
 	 * Sets if the collection uses local resources by default
@@ -435,7 +420,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 		$this->_local = $local;
 	}
 
-
 	/**
 	 * Returns if the collection uses local resources by default
 	 *
@@ -445,7 +429,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 	{
 		return $this->_local;
 	}
-
 
 	/**
 	 * Sets extra HTML attributes
@@ -469,7 +452,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 		return $this;
 	}
 
-
 	/**
 	 * Returns extra HTML attributes
 	 *
@@ -479,7 +461,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 	{
 		return $this->_attributes;
 	}
-
 
 	/**
 	 * Adds a filter to the collection
@@ -504,7 +485,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 		return $this;
 	}
 
-
 	/**
 	 * Sets an array of filters in the collection
 	 *
@@ -527,7 +507,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 		return $this;
 	}
 
-
 	/**
 	 * Returns the filters set in the collection
 	 *
@@ -537,7 +516,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 	{
 		return $this->_filters;
 	}
-
 
 	/**
 	 * Sets if all filtered resources in the collection must be joined in a single result file
@@ -557,7 +535,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 		return $this;
 	}
 
-
 	/**
 	 * Returns if all the filtered resources must be joined
 	 *
@@ -567,7 +544,6 @@ class Collection implements \Countable, \Iterator, \Traversable
 	{
 		return $this->_join;
 	}
-
 
 	/**
 	 * Returns the complete location where the joined/filtered collection must be written
@@ -594,5 +570,4 @@ class Collection implements \Countable, \Iterator, \Traversable
 
 		return $complete_path;
 	}
-
 }

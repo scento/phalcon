@@ -14,7 +14,7 @@ namespace Phalcon\Assets;
  *
  * Exceptions thrown in Phalcon\Assets will use this class
  *
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/assets/exception.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/assets/exception.c
  */
 class Exception extends \Phalcon\Exception
 {

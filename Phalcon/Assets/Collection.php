@@ -24,7 +24,7 @@ use \Countable,
  *
  * Represents a collection of resources
  * 
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/assets/collection.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/assets/collection.c
  */
 class Collection implements Countable, Iterator, Traversable
 {

@@ -1,122 +1,238 @@
-<?php 
+<?php
+/**
+ * CLI Dispatcher
+ *
+ * @author Andres Gutierrez <andres@phalconphp.com>
+ * @author Eduar Carvajal <eduar@phalconphp.com>
+ * @author Wenzel Pünter <wenzel@phelix.me>
+ * @version 1.2.6
+ * @package Phalcon
+*/
+namespace Phalcon\CLI;
 
-namespace Phalcon\CLI {
+use \Phalcon\Dispatcher,
+	\Phalcon\Events\EventsAwareInterface,
+	\Phalcon\DI\InjectionAwareInterface,
+	\Phalcon\DispatcherInterface,
+	\Phalcon\CLI\Dispatcher\Exception;
+
+/**
+ * Phalcon\CLI\Dispatcher
+ *
+ * Dispatching is the process of taking the command-line arguments, extracting the module name,
+ * task name, action name, and optional parameters contained in it, and then
+ * instantiating a task and calling an action on it.
+ *
+ *<code>
+ *
+ *	$di = new Phalcon\DI();
+ *
+ *	$dispatcher = new Phalcon\CLI\Dispatcher();
+ *
+ *  $dispatcher->setDI($di);
+ *
+ *	$dispatcher->setTaskName('posts');
+ *	$dispatcher->setActionName('index');
+ *	$dispatcher->setParams(array());
+ *
+ *	$handle = $dispatcher->dispatch();
+ *
+ *</code>
+ * 
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/cli/dispatcher.c
+ */
+class Dispatcher extends Dispatcher implements EventsAwareInterface, InjectionAwareInterface, DispatcherInterface
+{
+	/**
+	 * Exception: No Dependency Injector
+	 * 
+	 * @var int
+	*/
+	const EXCEPTION_NO_DI = 0;
 
 	/**
-	 * Phalcon\CLI\Dispatcher
+	 * Exception: Cyclic Routing
+	 * 
+	 * @var int
+	*/
+	const EXCEPTION_CYCLIC_ROUTING = 1;
+
+	/**
+	 * Exception: Handler Not Found
+	 * 
+	 * @var int
+	*/
+	const EXCEPTION_HANDLER_NOT_FOUND = 2;
+
+	/**
+	 * Exception: Invalid Handler
+	 * 
+	 * @var int
+	*/
+	const EXCEPTION_INVALID_HANDLER = 3;
+
+	/**
+	 * Exception: Invalid Params
+	 * 
+	 * @var int
+	*/
+	const EXCEPTION_INVALID_PARAMS = 4;
+
+	/**
+	 * Exception: Action Not Found
+	 * 
+	 * @var int
+	*/
+	const EXCEPTION_ACTION_NOT_FOUND = 5;
+
+	/**
+	 * Handler Suffix
+	 * 
+	 * @var string
+	 * @access protected
+	*/
+	protected $_handlerSuffix = 'Task';
+
+	/**
+	 * Default Handler
+	 * 
+	 * @var string
+	 * @access protected
+	*/
+	protected $_defaultHandler = 'main';
+
+	/**
+	 * Default Action
+	 * 
+	 * @var string
+	 * @access protected
+	*/
+	protected $_defaultAction = 'main';
+
+	/**
+	 * Sets the default task suffix
 	 *
-	 * Dispatching is the process of taking the command-line arguments, extracting the module name,
-	 * task name, action name, and optional parameters contained in it, and then
-	 * instantiating a task and calling an action on it.
-	 *
-	 *<code>
-	 *
-	 *	$di = new Phalcon\DI();
-	 *
-	 *	$dispatcher = new Phalcon\CLI\Dispatcher();
-	 *
-	 *  $dispatcher->setDI($di);
-	 *
-	 *	$dispatcher->setTaskName('posts');
-	 *	$dispatcher->setActionName('index');
-	 *	$dispatcher->setParams(array());
-	 *
-	 *	$handle = $dispatcher->dispatch();
-	 *
-	 *</code>
+	 * @param string $taskSuffix
+	 * @throws Exception
 	 */
-	
-	class Dispatcher extends \Phalcon\Dispatcher implements \Phalcon\Events\EventsAwareInterface, \Phalcon\DI\InjectionAwareInterface, \Phalcon\DispatcherInterface {
+	public function setTaskSuffix($taskSuffix)
+	{
+		if(is_string($taskSuffix) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-		const EXCEPTION_NO_DI = 0;
+		$this->_handlerSuffix = $taskSuffix;
+	}
 
-		const EXCEPTION_CYCLIC_ROUTING = 1;
+	/**
+	 * Sets the default task name
+	 *
+	 * @param string $taskName
+	 * @throws Exception
+	 */
+	public function setDefaultTask($taskName)
+	{
+		if(is_string($taskName) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-		const EXCEPTION_HANDLER_NOT_FOUND = 2;
+		$this->_defaultHandler = $taskName;
+	}
 
-		const EXCEPTION_INVALID_HANDLER = 3;
+	/**
+	 * Sets the task name to be dispatched
+	 *
+	 * @param string $taskName
+	 * @throws Exception
+	 */
+	public function setTaskName($taskName)
+	{
+		if(is_string($taskName) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-		const EXCEPTION_INVALID_PARAMS = 4;
+		//@see \Phalcon\Dispatcher::_handlerName
+		$this->_handlerName = $taskName;
+	}
 
-		const EXCEPTION_ACTION_NOT_FOUND = 5;
+	/**
+	 * Gets last dispatched task name
+	 *
+	 * @return string
+	 */
+	public function getTaskName()
+	{
+		return $this->_handlerName;
+	}
 
-		protected $_handlerSuffix;
+	/**
+	 * Throws an internal exception
+	 *
+	 * @param string $message
+	 * @param int $exceptionCode
+	 * @throws Exception
+	 * @return boolean|null
+	 */
+	protected function _throwDispatchException($message, $exceptionCode = 0)
+	{
+		if(is_string($message) === false || is_int($exceptionCode) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-		protected $_defaultHandler;
+		$exception = new Exception($message, $exceptionCode);
 
-		protected $_defaultAction;
+		if(is_object($this->_eventsManager) === true) {
+			if($this->_eventsManager->fire('dispatch:beforeException', $this, $exception) === false) {
+				return false;
+			}
+		}
 
-		/**
-		 * Sets the default task suffix
-		 *
-		 * @param string $taskSuffix
-		 */
-		public function setTaskSuffix($taskSuffix){ }
+		//Throw the exception if it wasn't handled
+		throw $exception;
+	}
 
+	/**
+	 * Handles a user exception
+	 *
+	 * @param \Exception $exception
+	 * @return boolean|null
+	 */
+	protected function _handleException($exception)
+	{
+		if(is_object($this->_eventsManager) === true) {
+			if($this->_eventsManager->fire('dispatch:beforeException', $this, $exception) === false) {
+				return false;
+			}
+		}
+	}
 
-		/**
-		 * Sets the default task name
-		 *
-		 * @param string $taskName
-		 */
-		public function setDefaultTask($taskName){ }
+	/**
+	 * Possible task class name that will be located to dispatch the request
+	 *
+	 * @return string
+	 */
+	public function getTaskClass()
+	{
+		return $this->getHandlerName();
+	}
 
+	/**
+	 * Returns the lastest dispatched controller
+	 *
+	 * @return null|object
+	 */
+	public function getLastTask()
+	{
+		return $this->_lastHandler;
+	}
 
-		/**
-		 * Sets the task name to be dispatched
-		 *
-		 * @param string $taskName
-		 */
-		public function setTaskName($taskName){ }
-
-
-		/**
-		 * Gets last dispatched task name
-		 *
-		 * @return string
-		 */
-		public function getTaskName(){ }
-
-
-		/**
-		 * Throws an internal exception
-		 *
-		 * @param string $message
-		 * @param int $exceptionCode
-		 */
-		protected function _throwDispatchException(){ }
-
-
-		/**
-		 * Handles a user exception
-		 *
-		 * @param \Exception $exception
-		 */
-		protected function _handleException(){ }
-
-
-		/**
-		 * Possible task class name that will be located to dispatch the request
-		 *
-		 * @return string
-		 */
-		public function getTaskClass(){ }
-
-
-		/**
-		 * Returns the lastest dispatched controller
-		 *
-		 * @return \Phalcon\CLI\Task
-		 */
-		public function getLastTask(){ }
-
-
-		/**
-		 * Returns the active task in the dispatcher
-		 *
-		 * @return \Phalcon\CLI\Task
-		 */
-		public function getActiveTask(){ }
-
+	/**
+	 * Returns the active task in the dispatcher
+	 *
+	 * @return null|object
+	 */
+	public function getActiveTask()
+	{
+		return $this->_activeHandler;
 	}
 }

@@ -1,143 +1,282 @@
-<?php 
+<?php
+/**
+ * Injectable
+ *
+ * @author Andres Gutierrez <andres@phalconphp.com>
+ * @author Eduar Carvajal <eduar@phalconphp.com>
+ * @author Wenzel Pünter <wenzel@phelix.me>
+ * @version 1.2.6
+ * @package Phalcon
+*/
+namespace Phalcon\DI;
 
-namespace Phalcon\DI {
+use \Phalcon\DI\InjectionAwareInterface,
+	\Phalcon\Events\EventsAwareInterface,
+	\Phalcon\DiInterface,
+	\Phalcon\DI\Exception,
+	\Phalcon\DI,
+	\Phalcon\Events\ManagerInterface;
+
+/**
+ * Phalcon\DI\Injectable
+ *
+ * This class allows to access services in the services container by just only accessing a public property
+ * with the same name of a registered service
+ * 
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/di/injectable.c
+ */
+abstract class Injectable implements InjectionAwareInterface, EventsAwareInterface
+{
+	/**
+	 * Dependency Injector
+	 * 
+	 * @var null|Phalcon\DiInterface
+	 * @access protected
+	*/
+	protected $_dependencyInjector;
 
 	/**
-	 * Phalcon\DI\Injectable
+	 * Events Manager
+	 * 
+	 * @var null|Phalcon\Events\ManagerInterface
+	 * @access protected
+	*/
+	protected $_eventsManager;
+
+	/**
+	 * View
+	 * 
+	 * @var \Phalcon\Mvc\ViewInterface|null
+	 * @access public
+	*/
+	public $view;
+
+	/**
+	 * Router
+	 * 
+	 * @var \Phalcon\Mvc\RouterInterface|null
+	 * @access public
+ 	 */
+	public $router;
+
+	/**
+	 * Dispatcher
+	 * 
+	 * @var \Phalcon\Mvc\DispatcherInterface|null
+	 * @access public
+ 	 */
+	public $dispatcher;
+
+	/**
+	 * URL
+	 * 
+	 * @var \Phalcon\Mvc\UrlInterface|null
+	 * @access public
+ 	 */
+	public $url;
+
+	/**
+	 * DI
+	 * 
+	 * @var \Phalcon\DiInterface|null
+	 * @access public
+ 	 */
+	public $di;
+
+	/**
+	 * Request
+	 * 
+	 * @var \Phalcon\HTTP\RequestInterface|null
+	 * @access public
+ 	 */
+	public $request;
+
+	/**
+	 * Response
+	 * 
+	 * @var \Phalcon\HTTP\ResponseInterface|null
+	 * @access public
+ 	 */
+	public $response;
+
+	/**
+	 * Flash
+	 * 
+	 * @var \Phalcon\Flash\Direct|null
+	 * @access public
+ 	 */
+	public $flash;
+
+	/**
+	 * Flash Session
+	 * 
+	 * @var \Phalcon\Flash\Session|null
+	 * @access public
+ 	 */
+	public $flashSession;
+
+	/**
+	 * Session
+	 * 
+	 * @var \Phalcon\Session\AdapterInterface|null
+	 * @access public
+ 	 */
+	public $session;
+
+	/**
+	 * Persistent
+	 * 
+	 * @var \Phalcon\Session\Bag|null
+	 * @access public
+ 	 */
+	public $persistent;
+
+	/**
+	 * Models Manager
+	 * 
+	 * @var \Phalcon\Mvc\Model\ManagerInterface|null
+	 * @access public
+ 	 */
+	public $modelsManager;
+
+	/**
+	 * Models Metadata
+	 * 
+	 * @var \Phalcon\Mvc\Model\MetadataInterface|null
+	 * @access public
+ 	 */
+	public $modelsMetadata;
+
+	/**
+	 * Transaction Manager
+	 * 
+	 * @var \Phalcon\Mvc\Model\Transaction\Manager|null
+	 * @access public
+ 	 */
+	public $transactionManager;
+
+	/**
+	 * Filter
+	 * 
+	 * @var \Phalcon\FilterInterface|null
+	 * @access public
+ 	 */
+	public $filter;
+
+	/**
+	 * Security
+	 * 
+	 * @var \Phalcon\Security|null
+	 * @access public
+ 	 */
+	public $security;
+
+	/**
+	 * Annotations
+	 * 
+	 * @var \Phalcon\Annotations\Adapter\Memory|null
+	 * @access public
+ 	 */
+	public $annotations;
+
+	/**
+	 * Sets the dependency injector
 	 *
-	 * This class allows to access services in the services container by just only accessing a public property
-	 * with the same name of a registered service
+	 * @param \Phalcon\DiInterface $dependencyInjector
+	 * @throws Exception
 	 */
-	
-	abstract class Injectable implements \Phalcon\DI\InjectionAwareInterface, \Phalcon\Events\EventsAwareInterface {
+	public function setDI($dependencyInjector)
+	{
+		if(is_object($dependencyInjector) === false ||
+			$dependencyInjector instanceof DiInterface === false) {
+			throw new Exception('Dependency Injector is invalid');
+		}
 
-		protected $_dependencyInjector;
+		$this->_dependencyInjector = $dependencyInjector;
+	}
 
-		protected $_eventsManager;
+	/**
+	 * Returns the internal dependency injector
+	 *
+	 * @return \Phalcon\DiInterface|null
+	 */
+	public function getDI()
+	{
+		if(is_object($this->_dependencyInjector) === true) {
+			return $this->_dependencyInjector;
+		} else {
+			return DI::getDefault();
+		}
+	}
 
-		/**
- 		 * @var \Phalcon\Mvc\ViewInterface
- 		 */
-		public $view;
+	/**
+	 * Sets the event manager
+	 *
+	 * @param \Phalcon\Events\ManagerInterface $eventsManager
+	 * @throws Exception
+	 */
+	public function setEventsManager($eventsManager)
+	{
+		if(is_object($eventsManager) === false ||
+			$eventsManager instanceof ManagerInterface === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-		/**
-		 * @var \Phalcon\Mvc\RouterInterface
-	 	 */
-		public $router;
+		$this->_eventsManager = $eventsManager;
+	}
 
-		/**
-		 * @var \Phalcon\Mvc\DispatcherInterface
-	 	 */
-		public $dispatcher;
+	/**
+	 * Returns the internal event manager
+	 *
+	 * @return \Phalcon\Events\ManagerInterface|null
+	 */
+	public function getEventsManager()
+	{
+		return $this->_eventsManager;
+	}
 
-		/**
-		 * @var \Phalcon\Mvc\UrlInterface
-	 	 */
-		public $url;
+	/**
+	 * Magic method __get
+	 *
+	 * @param string $propertyName
+	 * @return mixed
+	 */
+	public function __get($propertyName)
+	{
+		if(is_string($propertyName) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-		/**
-		 * @var \Phalcon\DiInterface
-	 	 */
-		public $di;
+		$dependency_injector = $this->_dependencyInjector;
+		if(is_object($dependency_injector) === false) {
+			$dependency_injector = DI::getDefault();
 
-		/**
-		 * @var \Phalcon\HTTP\RequestInterface
-	 	 */
-		public $request;
+			if(is_object($dependency_injector) === false) {
+				throw new Exception('A dependency injector object is required to access the application services');
+			}
+		}
 
-		/**
-		 * @var \Phalcon\HTTP\ResponseInterface
-	 	 */
-		public $response;
+		//Fallback to the PHP userland if the cache is not available
+		if($dependency_injector->has($propertyName) === true) {
+			$service = $dependency_injector->getShared($propertyName);
+			$this->$propertyName = $service;
+			return $service;
+		}
 
-		/**
-		 * @var \Phalcon\Flash\Direct
-	 	 */
-		public $flash;
+		//Dependency Injector
+		if($propertyName === 'di') {
+			$this->di = $dependency_injector;
+			return $dependency_injector;
+		}
 
-		/**
-		 * @var \Phalcon\Flash\Session
-	 	 */
-		public $flashSession;
+		//Accessing the persistent property will create a session bag in any class
+		if($propertyName === 'persistent') {
+			$persistent = $dependency_injector->get('sessionBag', array(get_class($this)));
+			$this->persistent = $persistent;
+			return $persistent;
+		}
 
-		/**
-		 * @var \Phalcon\Session\AdapterInterface
-	 	 */
-		public $session;
-
-		/**
-		 * @var \Phalcon\Session\Bag
-	 	 */
-		public $persistent;
-
-		/**
-		 * @var \Phalcon\Mvc\Model\ManagerInterface
-	 	 */
-		public $modelsManager;
-
-		/**
-		 * @var \Phalcon\Mvc\Model\MetadataInterface
-	 	 */
-		public $modelsMetadata;
-
-		/**
-		 * @var \Phalcon\Mvc\Model\Transaction\Manager
-	 	 */
-		public $transactionManager;
-
-		/**
-		 * @var \Phalcon\FilterInterface
-	 	 */
-		public $filter;
-
-		/**
-		 * @var \Phalcon\Security
-	 	 */
-		public $security;
-
-		/**
-		 * @var \Phalcon\Annotations\Adapter\Memory
-	 	 */
-		public $annotations;
-		
-		/**
-		 * Sets the dependency injector
-		 *
-		 * @param \Phalcon\DiInterface $dependencyInjector
-		 */
-		public function setDI($dependencyInjector){ }
-
-
-		/**
-		 * Returns the internal dependency injector
-		 *
-		 * @return \Phalcon\DiInterface
-		 */
-		public function getDI(){ }
-
-
-		/**
-		 * Sets the event manager
-		 *
-		 * @param \Phalcon\Events\ManagerInterface $eventsManager
-		 */
-		public function setEventsManager($eventsManager){ }
-
-
-		/**
-		 * Returns the internal event manager
-		 *
-		 * @return \Phalcon\Events\ManagerInterface
-		 */
-		public function getEventsManager(){ }
-
-
-		/**
-		 * Magic method __get
-		 *
-		 * @param string $propertyName
-		 */
-		public function __get($propertyName){ }
-
+		//A notice is shown if the property is not defined and isn't a valid service
+		trigger_error('Access to undefined property '.$propertyName, \E_USER_WARNING);
 	}
 }

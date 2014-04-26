@@ -12,7 +12,8 @@ namespace Phalcon\Cache\Backend;
 
 use \Phalcon\Cache\Backend,
 	\Phalcon\Cache\BackendInterface,
-	\Phalcon\Cache\Exception;
+	\Phalcon\Cache\Exception,
+	\Phalcon\Text;
 
 /**
  * Phalcon\Cache\Backend\Memcache

@@ -12,7 +12,8 @@ namespace Phalcon\DI\Service;
 
 use \Phalcon\DI\Exception,
 	\Phalcon\DiInterface,
-	\ReflectionClass;
+	\ReflectionClass,
+	\ReflectionProperty;
 
 /**
  * Phalcon\DI\Service\Builder

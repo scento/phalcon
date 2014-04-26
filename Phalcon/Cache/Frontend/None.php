@@ -10,8 +10,7 @@
 */
 namespace Phalcon\Cache\Frontend;
 
-use \Phalcon\Cache\FrontendInterface,
-	\Phalcon\Cache\Exception;
+use \Phalcon\Cache\FrontendInterface;
 
 /**
  * Phalcon\Cache\Frontend\None

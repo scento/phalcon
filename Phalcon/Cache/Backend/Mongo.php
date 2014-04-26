@@ -50,7 +50,8 @@ class Mongo extends Backend implements BackendInterface
 	/**
 	 * Mongo Collection
 	 * 
-	 * @var null
+	 * @var null|\MongoCollection
+	 * @access protected
 	*/
 	protected $_collection;
 

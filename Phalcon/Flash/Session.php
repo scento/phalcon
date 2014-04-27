@@ -21,6 +21,8 @@ use \Phalcon\Flash,
  * Phalcon\Flash\Session
  *
  * Temporarily stores the messages in session, then messages can be printed in the next request
+ * 
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/flash/session.c
  */
 class Session extends Flash implements FlashInterface, InjectionAwareInterface
 {

@@ -30,6 +30,7 @@ abstract class Select
 	 *
 	 * @param mixed $parameters
 	 * @param array|null $data
+	 * @throws Exception
 	 */
 	public static function selectField($parameters, $data = null)
 	{
@@ -240,6 +241,7 @@ abstract class Select
 	 * @param array $resultset
 	 * @param mixed value
 	 * @param string $closeOption
+	 * @throws Exception
 	 */
 	protected static function _optionsFromArray($resultset, $value, $closeOption)
 	{

@@ -13,6 +13,7 @@ namespace Phalcon;
 use \Phalcon\DI\InjectionAwareInterface,
 	\Phalcon\DiInterface,
 	\Phalcon\Flash\Exception, //@note Look into the original code!
+	\Phalcon\Security\Exception as SecException,
 	\Phalcon\Filter,
 	\Phalcon\Text,
 	\Phalcon\Session\AdapterInterface as SessionAdapterInterface,
@@ -110,7 +111,7 @@ class Security implements InjectionAwareInterface
 		}
 
 		if(count($randomBytes) < 16) {
-			throw new Exception('At least 16 bytes are needed to produce a correct salt');
+			throw new SecException('At least 16 bytes are needed to produce a correct salt');
 		}
 
 		$this->_numberBytes = $randomBytes;
@@ -186,7 +187,7 @@ class Security implements InjectionAwareInterface
 	public function getSaltBytes()
 	{
 		if(function_exists('openssl_random_pseudo_bytes') === false) {
-			throw new Exception('Openssl extension must be loaded');
+			throw new SecException('Openssl extension must be loaded');
 		}
 
 		$safe_bytes = '';
@@ -319,7 +320,7 @@ class Security implements InjectionAwareInterface
 		}
 
 		if(function_exists('openssl_random_pseudo_bytes') === false) {
-			throw new Exception('Openssl extension must be loaded');
+			throw new SecException('Openssl extension must be loaded');
 		}
 
 		$random_bytes = openssl_random_pseudo_bytes($numberBytes);
@@ -357,7 +358,7 @@ class Security implements InjectionAwareInterface
 		}
 
 		if(function_exists('openssl_random_pseudo_bytes') === false) {
-			throw new Exception('Openssl extension must be loaded');
+			throw new SecException('Openssl extension must be loaded');
 		}
 
 		$random_bytes = openssl_random_pseudo_bytes($numberBytes);

@@ -12,6 +12,7 @@ namespace Phalcon\Events;
 
 use \Phalcon\Events\ManagerInterface,
 	\Phalcon\Events\Exception,
+	\Phalcon\Events\Event,
 	\SplPriorityQueue,
 	\Closure;
 

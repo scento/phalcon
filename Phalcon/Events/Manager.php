@@ -22,7 +22,7 @@ use \Phalcon\Events\ManagerInterface,
  * the normal flow of operation. With the EventsManager the developer can create hooks or
  * plugins that will offer monitoring of data, manipulation, conditional execution and much more.
  *
- * @see https://github.com/phalcon/cphalcon/blob/master/ext/events/manager.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/events/manager.c
  */
 class Manager implements ManagerInterface
 {

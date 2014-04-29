@@ -13,7 +13,8 @@ namespace Phalcon\Validation\Validator;
 use \Phalcon\Validation\Validator,
 	\Phalcon\Validation\ValidatorInterface,
 	\Phalcon\Validation\Exception,
-	\Phalcon\Validation\Message;
+	\Phalcon\Validation\Message,
+	\Phalcon\Validation;
 
 /**
  * Phalcon\Validation\Validator\Confirmation

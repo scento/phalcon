@@ -49,6 +49,10 @@ class Regex extends Validator implements ValidatorInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
+		if(is_string($attribute) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+
 		$value = $validator->getValue($attribute);
 
 		//the regular expression is set in the option 'pattern'

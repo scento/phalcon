@@ -60,7 +60,7 @@ class ExclusionIn extends Validator implements ValidatorInterface
 		}
 
 		//Check if the value is contained in the array
-		if(in_array($value, $domain) === false) {
+		if(in_array($value, $domain) === true) {
 			$message = $this->getOption('message');
 			if(empty($message) === true) {
 				$message = "Value of field '".$attribute."' must not be part of list: ".implode(', '.$domain);

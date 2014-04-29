@@ -10,6 +10,12 @@
 */
 namespace Phalcon\Validation\Validator;
 
+use \Phalcon\Validation\Validator,
+	\Phalcon\Validation\ValidatorInterface,
+	\Phalcon\Validation\Message,
+	\Phalcon\Validation\Exception,
+	\Phalcon\Validation;
+
 /**
  * Phalcon\Validation\Validator\InclusionIn
  *

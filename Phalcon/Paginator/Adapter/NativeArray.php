@@ -11,7 +11,8 @@
 namespace Phalcon\Paginator\Adapter;
 
 use \Phalcon\Paginator\AdapterInterface,
-	\Phalcon\Paginator\Exception;
+	\Phalcon\Paginator\Exception,
+	\stdClass;
 
 /**
  * Phalcon\Paginator\Adapter\NativeArray

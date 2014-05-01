@@ -1,144 +1,254 @@
-<?php 
+<?php
+/**
+ * Session Adapter
+ *
+ * @author Andres Gutierrez <andres@phalconphp.com>
+ * @author Eduar Carvajal <eduar@phalconphp.com>
+ * @author Wenzel Pünter <wenzel@phelix.me>
+ * @version 1.2.6
+ * @package Phalcon
+*/
+namespace Phalcon\Session;
 
-namespace Phalcon\Session {
+use \Phalcon\Session\Exception;
+
+/**
+ * Phalcon\Session\Adapter
+ *
+ * Base class for Phalcon\Session adapters
+ * 
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/session/adapter.c
+ */
+abstract class Adapter
+{
+	/**
+	 * Unique ID
+	 * 
+	 * @var null
+	 * @access protected
+	*/
+	protected $_uniqueId;
 
 	/**
-	 * Phalcon\Session\Adapter
+	 * Started
+	 * 
+	 * @var null
+	 * @access protected
+	*/
+	protected $_started;
+
+	/**
+	 * Options
+	 * 
+	 * @var null|array
+	 * @access protected
+	*/
+	protected $_options;
+
+	/**
+	 * \Phalcon\Session\Adapter constructor
 	 *
-	 * Base class for Phalcon\Session adapters
+	 * @param array|null $options
 	 */
-	
-	abstract class Adapter {
+	public function __construct($options = null)
+	{
+		if(is_array($options) === true) {
+			$this->setOptions($options);
+		}
+	}
 
-		protected $_uniqueId;
+	/**
+	 * Destructor
+	*/
+	public function __destruct()
+	{
+		if($this->_started === true) {
+			session_write_close();
+			$this->_started = false;
+		}
+	}
 
-		protected $_started;
+	/**
+	 * Starts the session (if headers are already sent the session will not be started)
+	 *
+	 * @return boolean
+	 */
+	public function start()
+	{
+		if(headers_sent() === false) {
+			//@note no result check for session_start()
+			session_start();
+			$this->_started = true;
 
-		protected $_options;
+			return true;
+		}
 
-		/**
-		 * \Phalcon\Session\Adapter constructor
-		 *
-		 * @param array $options
-		 */
-		public function __construct($options=null){ }
+		return false;
+	}
 
+	/**
+	 * Sets session's options
+	 *
+	 *<code>
+	 *	$session->setOptions(array(
+	 *		'uniqueId' => 'my-private-app'
+	 *	));
+	 *</code>
+	 *
+	 * @param array $options
+	 * @throws Exception
+	 */
+	public function setOptions($options)
+	{
+		if(is_array($options) === false) {
+			throw new Exception('Options must be an Array');
+		}
 
-		public function __destruct(){ }
+		if(isset($options['uniqueId']) === true) {
+			$this->_uniqueId = $options['uniqueId'];
+		}
 
+		$this->_options = $options;
+	}
 
-		/**
-		 * Starts the session (if headers are already sent the session will not be started)
-		 *
-		 * @return boolean
-		 */
-		public function start(){ }
+	/**
+	 * Get internal options
+	 *
+	 * @return array|null
+	 */
+	public function getOptions()
+	{
+		return $this->_options;
+	}
 
+	/**
+	 * Gets a session variable from an application context
+	 *
+	 * @param string $index
+	 * @param mixed $defaultValue
+	 * @return mixed
+	 * @throws Exception
+	 */
+	public function get($index, $defaultValue = null)
+	{
+		if(is_string($index) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-		/**
-		 * Sets session's options
-		 *
-		 *<code>
-		 *	$session->setOptions(array(
-		 *		'uniqueId' => 'my-private-app'
-		 *	));
-		 *</code>
-		 *
-		 * @param array $options
-		 */
-		public function setOptions($options){ }
+		$key = $this->_uniqueId.$index;
 
+		if(isset($_SESSION[$key]) === true) {
+			$value = $_SESSION[$key];
+			if(empty($value) === false) {
+				return $value;
+			}
+		}
 
-		/**
-		 * Get internal options
-		 *
-		 * @return array
-		 */
-		public function getOptions(){ }
+		return $defaultValue;
+	}
 
+	/**
+	 * Sets a session variable in an application context
+	 *
+	 *<code>
+	 *	$session->set('auth', 'yes');
+	 *</code>
+	 *
+	 * @param string $index
+	 * @param mixed $value
+	 * @throws Exception
+	 */
+	public function set($index, $value)
+	{
+		if(is_string($index) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-		/**
-		 * Gets a session variable from an application context
-		 *
-		 * @param string $index
-		 * @param mixed $defaultValue
-		 * @return mixed
-		 */
-		public function get($index, $defaultValue=null){ }
+		$_SESSION[$this->_uniqueId.$index] = $value;
 
+	}
 
-		/**
-		 * Sets a session variable in an application context
-		 *
-		 *<code>
-		 *	$session->set('auth', 'yes');
-		 *</code>
-		 *
-		 * @param string $index
-		 * @param string $value
-		 */
-		public function set($index, $value){ }
+	/**
+	 * Check whether a session variable is set in an application context
+	 *
+	 *<code>
+	 *	var_dump($session->has('auth'));
+	 *</code>
+	 *
+	 * @param string $index
+	 * @return boolean
+	 * @throws Exception
+	 */
+	public function has($index)
+	{
+		if(is_string($index) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
+		return $_SESSION[$this->_uniqueId.$index];
+	}
 
-		/**
-		 * Check whether a session variable is set in an application context
-		 *
-		 *<code>
-		 *	var_dump($session->has('auth'));
-		 *</code>
-		 *
-		 * @param string $index
-		 * @return boolean
-		 */
-		public function has($index){ }
+	/**
+	 * Removes a session variable from an application context
+	 *
+	 *<code>
+	 *	$session->remove('auth');
+	 *</code>
+	 *
+	 * @param string $index
+	 * @throws Exception
+	 */
+	public function remove($index)
+	{
+		if(is_string($index) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
+		unset($_SESSION[$this->_uniqueId.$index]);
+	}
 
-		/**
-		 * Removes a session variable from an application context
-		 *
-		 *<code>
-		 *	$session->remove('auth');
-		 *</code>
-		 *
-		 * @param string $index
-		 */
-		public function remove($index){ }
+	/**
+	 * Returns active session id
+	 *
+	 *<code>
+	 *	echo $session->getId();
+	 *</code>
+	 *
+	 * @return string
+	 */
+	public function getId()
+	{
+		return session_id();
+	}
 
+	/**
+	 * Check whether the session has been started
+	 *
+	 *<code>
+	 *	var_dump($session->isStarted());
+	 *</code>
+	 *
+	 * @return boolean|null
+	 */
+	public function isStarted()
+	{
+		return $this->_started;
+	}
 
-		/**
-		 * Returns active session id
-		 *
-		 *<code>
-		 *	echo $session->getId();
-		 *</code>
-		 *
-		 * @return string
-		 */
-		public function getId(){ }
-
-
-		/**
-		 * Check whether the session has been started
-		 *
-		 *<code>
-		 *	var_dump($session->isStarted());
-		 *</code>
-		 *
-		 * @return boolean
-		 */
-		public function isStarted(){ }
-
-
-		/**
-		 * Destroys the active session
-		 *
-		 *<code>
-		 *	var_dump($session->destroy());
-		 *</code>
-		 *
-		 * @return boolean
-		 */
-		public function destroy(){ }
-
+	/**
+	 * Destroys the active session
+	 *
+	 *<code>
+	 *	var_dump($session->destroy());
+	 *</code>
+	 *
+	 * @return boolean
+	 */
+	public function destroy()
+	{
+		$this->_started = false;
+		//@note no return value check
+		session_destroy();
+		return true;
 	}
 }

@@ -106,7 +106,7 @@ class Multiple
 	 * Sends a message to each registered logger
 	 *
 	 * @param string $message
-	 * @param int $type
+	 * @param int|null $type
 	 * @throws Exception
 	 */
 	public function log($message, $type = null)

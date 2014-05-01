@@ -24,7 +24,7 @@ abstract class Adapter
 	/**
 	 * Unique ID
 	 * 
-	 * @var null
+	 * @var null|string
 	 * @access protected
 	*/
 	protected $_uniqueId;
@@ -32,10 +32,10 @@ abstract class Adapter
 	/**
 	 * Started
 	 * 
-	 * @var null
+	 * @var boolean
 	 * @access protected
 	*/
-	protected $_started;
+	protected $_started = false;
 
 	/**
 	 * Options
@@ -105,6 +105,7 @@ abstract class Adapter
 		}
 
 		if(isset($options['uniqueId']) === true) {
+			//@note no type check
 			$this->_uniqueId = $options['uniqueId'];
 		}
 

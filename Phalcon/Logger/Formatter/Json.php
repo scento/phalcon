@@ -19,7 +19,7 @@ use \Phalcon\Logger\Formatter,
  *
  * Formats messages using JSON encoding
  * 
- * @see https://github.com/phalcon/cphalcon/blob/1.3.2/ext/logger/formatter/json.c
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/logger/formatter/json.c
  */
 class Json extends Formatter implements FormatterInterface
 {

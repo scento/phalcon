@@ -76,7 +76,7 @@ class File extends Adapter implements AdapterInterface
 		}
 
 		if(isset($options['mode']) === true) {
-			if(strpos($options['mode'], 'r') === false) {
+			if(strpos($options['mode'], 'r') === true) {
 				throw new Exception('Logger must be opened in append or write mode');
 			}
 		} else {

@@ -97,6 +97,12 @@ class Stream extends Adapter implements AdapterInterface
 	 */
 	public function logInternal($message, $type, $time)
 	{
+		if(is_string($message) === false ||
+			is_int($type) === false ||
+			is_int($time) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+
 		if(is_resource($this->_stream) === false) {
 			throw new Exception('Cannot send message to the log because it is invalid');
 		}

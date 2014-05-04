@@ -8,7 +8,6 @@
  * @version 1.2.6
  * @package Phalcon
 */
-
 namespace Phalcon\Http;
 
 use \Phalcon\DI\InjectionAwareInterface,

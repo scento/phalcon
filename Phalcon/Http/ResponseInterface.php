@@ -11,6 +11,8 @@ namespace Phalcon\Http;
 
 /**
  * Phalcon\Http\ResponseInterface initializer
+ * 
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/http/responseinterface.c
  */
 interface ResponseInterface
 {

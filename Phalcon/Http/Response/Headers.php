@@ -25,7 +25,7 @@ class Headers implements HeadersInterface
 	/**
 	 * Headers
 	 * 
-	 * @var null
+	 * @var null|array
 	 * @access protected
 	*/
 	protected $_headers;

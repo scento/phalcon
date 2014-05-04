@@ -1,166 +1,155 @@
-<?php 
+<?php
+/**
+ * Response Interface
+ *
+ * @author Andres Gutierrez <andres@phalconphp.com>
+ * @author Eduar Carvajal <eduar@phalconphp.com>
+ * @version 1.2.6
+ * @package Phalcon
+*/
+namespace Phalcon\Http;
 
-namespace Phalcon\Http {
+/**
+ * Phalcon\Http\ResponseInterface initializer
+ */
+interface ResponseInterface
+{
+	/**
+	 * Sets the HTTP response code
+	 *
+	 * @param int $code
+	 * @param string $message
+	 * @return \Phalcon\Http\ResponseInterface
+	 */
+	public function setStatusCode($code, $message);
 
 	/**
-	 * Phalcon\Http\ResponseInterface initializer
+	 * Returns headers set by the user
+	 *
+	 * @return \Phalcon\Http\Response\Headers
 	 */
-	
-	interface ResponseInterface {
+	public function getHeaders();
 
-		/**
-		 * Sets the HTTP response code
-		 *
-		 * @param int $code
-		 * @param string $message
-		 * @return \Phalcon\Http\ResponseInterface
-		 */
-		public function setStatusCode($code, $message);
+	/**
+	 * Overwrites a header in the response
+	 *
+	 * @param string $name
+	 * @param string $value
+	 * @return \Phalcon\Http\ResponseInterface
+	 */
+	public function setHeader($name, $value);
 
+	/**
+	 * Send a raw header to the response
+	 *
+	 * @param string $header
+	 * @return \Phalcon\Http\ResponseInterface
+	 */
+	public function setRawHeader($header);
 
-		/**
-		 * Returns headers set by the user
-		 *
-		 * @return \Phalcon\Http\Response\Headers
-		 */
-		public function getHeaders();
+	/**
+	 * Resets all the stablished headers
+	 *
+	 * @return \Phalcon\Http\ResponseInterface
+	 */
+	public function resetHeaders();
 
+	/**
+	 * Sets output expire time header
+	 *
+	 * @param DateTime $datetime
+	 * @return \Phalcon\Http\ResponseInterface
+	 */
+	public function setExpires($datetime);
 
-		/**
-		 * Overwrites a header in the response
-		 *
-		 * @param string $name
-		 * @param string $value
-		 * @return \Phalcon\Http\ResponseInterface
-		 */
-		public function setHeader($name, $value);
+	/**
+	 * Sends a Not-Modified response
+	 *
+	 * @return \Phalcon\Http\ResponseInterface
+	 */
+	public function setNotModified();
 
+	/**
+	 * Sets the response content-type mime, optionally the charset
+	 *
+	 * @param string $contentType
+	 * @param string|null $charset
+	 * @return \Phalcon\Http\ResponseInterface
+	 */
+	public function setContentType($contentType, $charset = null);
 
-		/**
-		 * Send a raw header to the response
-		 *
-		 * @param string $header
-		 * @return \Phalcon\Http\ResponseInterface
-		 */
-		public function setRawHeader($header);
+	/**
+	 * Redirect by HTTP to another action or URL
+	 *
+	 * @param string|null $location
+	 * @param boolean|null $externalRedirect
+	 * @param int|null $statusCode
+	 * @return \Phalcon\Http\ResponseInterface
+	 */
+	public function redirect($location = null, $externalRedirect = null, 
+		$statusCode = null);
 
+	/**
+	 * Sets HTTP response body
+	 *
+	 * @param string $content
+	 * @return \Phalcon\Http\ResponseInterface
+	 */
+	public function setContent($content);
 
-		/**
-		 * Resets all the stablished headers
-		 *
-		 * @return \Phalcon\Http\ResponseInterface
-		 */
-		public function resetHeaders();
+	/**
+	 * Sets HTTP response body. The parameter is automatically converted to JSON
+	 *
+	 *<code>
+	 *	$response->setJsonContent(array("status" => "OK"));
+	 *</code>
+	 *
+	 * @param string $content
+	 * @return \Phalcon\Http\ResponseInterface
+	 */
+	public function setJsonContent($content);
 
+	/**
+	 * Appends a string to the HTTP response body
+	 *
+	 * @param string $content
+	 * @return \Phalcon\Http\ResponseInterface
+	 */
+	public function appendContent($content);
 
-		/**
-		 * Sets output expire time header
-		 *
-		 * @param DateTime $datetime
-		 * @return \Phalcon\Http\ResponseInterface
-		 */
-		public function setExpires($datetime);
+	/**
+	 * Gets the HTTP response body
+	 *
+	 * @return string
+	 */
+	public function getContent();
 
+	/**
+	 * Sends headers to the client
+	 *
+	 * @return \Phalcon\Http\ResponseInterface
+	 */
+	public function sendHeaders();
 
-		/**
-		 * Sends a Not-Modified response
-		 *
-		 * @return \Phalcon\Http\ResponseInterface
-		 */
-		public function setNotModified();
+	/**
+	 * Sends cookies to the client
+	 *
+	 * @return \Phalcon\Http\ResponseInterface
+	 */
+	public function sendCookies();
 
+	/**
+	 * Prints out HTTP response to the client
+	 *
+	 * @return \Phalcon\Http\ResponseInterface
+	 */
+	public function send();
 
-		/**
-		 * Sets the response content-type mime, optionally the charset
-		 *
-		 * @param string $contentType
-		 * @param string $charset
-		 * @return \Phalcon\Http\ResponseInterface
-		 */
-		public function setContentType($contentType, $charset=null);
-
-
-		/**
-		 * Redirect by HTTP to another action or URL
-		 *
-		 * @param string $location
-		 * @param boolean $externalRedirect
-		 * @param int $statusCode
-		 * @return \Phalcon\Http\ResponseInterface
-		 */
-		public function redirect($location=null, $externalRedirect=null, $statusCode=null);
-
-
-		/**
-		 * Sets HTTP response body
-		 *
-		 * @param string $content
-		 * @return \Phalcon\Http\ResponseInterface
-		 */
-		public function setContent($content);
-
-
-		/**
-		 * Sets HTTP response body. The parameter is automatically converted to JSON
-		 *
-		 *<code>
-		 *	$response->setJsonContent(array("status" => "OK"));
-		 *</code>
-		 *
-		 * @param string $content
-		 * @return \Phalcon\Http\ResponseInterface
-		 */
-		public function setJsonContent($content);
-
-
-		/**
-		 * Appends a string to the HTTP response body
-		 *
-		 * @param string $content
-		 * @return \Phalcon\Http\ResponseInterface
-		 */
-		public function appendContent($content);
-
-
-		/**
-		 * Gets the HTTP response body
-		 *
-		 * @return string
-		 */
-		public function getContent();
-
-
-		/**
-		 * Sends headers to the client
-		 *
-		 * @return \Phalcon\Http\ResponseInterface
-		 */
-		public function sendHeaders();
-
-
-		/**
-		 * Sends cookies to the client
-		 *
-		 * @return \Phalcon\Http\ResponseInterface
-		 */
-		public function sendCookies();
-
-
-		/**
-		 * Prints out HTTP response to the client
-		 *
-		 * @return \Phalcon\Http\ResponseInterface
-		 */
-		public function send();
-
-
-		/**
-		 * Sets an attached file to be sent at the end of the request
-		 *
-		 * @param string $filePath
-		 * @param string $attachmentName
-		 */
-		public function setFileToSend($filePath, $attachmentName=null);
-
-	}
+	/**
+	 * Sets an attached file to be sent at the end of the request
+	 *
+	 * @param string $filePath
+	 * @param string|null $attachmentName
+	 */
+	public function setFileToSend($filePath, $attachmentName = null);
 }

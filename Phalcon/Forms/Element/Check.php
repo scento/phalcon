@@ -12,7 +12,8 @@ namespace Phalcon\Forms\Element;
 
 use \Phalcon\Tag,
 	\Phalcon\Forms\Element,
-	\Phalcon\Forms\ElementInterface;
+	\Phalcon\Forms\ElementInterface,
+	\Phalcon\Forms\Exception;
 
 /**
  * Phalcon\Forms\Element\Check

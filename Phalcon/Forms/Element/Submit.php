@@ -1,22 +1,43 @@
-<?php 
+<?php
+/**
+ * Submit
+ *
+ * @author Andres Gutierrez <andres@phalconphp.com>
+ * @author Eduar Carvajal <eduar@phalconphp.com>
+ * @author Wenzel Pünter <wenzel@phelix.me>
+ * @version 1.2.6
+ * @package Phalcon
+*/
+namespace Phalcon\Forms\Element;
 
-namespace Phalcon\Forms\Element {
+use \Phalcon\Tag,
+	\Phalcon\Forms\Element,
+	\Phalcon\Forms\ElementInterface,
+	\Phalcon\Forms\Exception;
 
+/**
+ * Phalcon\Forms\Element\Submit
+ *
+ * Component INPUT[type=submit] for forms
+ *
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/forms/element/submit.c
+ */
+class Submit extends Element implements ElementInterface
+{
 	/**
-	 * Phalcon\Forms\Element\Submit
+	 * Renders the element widget
 	 *
-	 * Component INPUT[type=submit] for forms
+	 * @param array|null $attributes
+	 * @return string
+	 * @throws Exception
 	 */
-	
-	class Submit extends \Phalcon\Forms\Element implements \Phalcon\Forms\ElementInterface {
+	public function render($attributes = null)
+	{
+		if(is_array($attributes) === false &&
+			is_null($attributes) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-		/**
-		 * Renders the element widget
-		 *
-		 * @param array $attributes
-		 * @return string
-		 */
-		public function render($attributes=null){ }
-
+		return Tag::submitButton($this->prepareAttributes($attributes));
 	}
 }

@@ -19,6 +19,7 @@ use \Phalcon\Tag,
  * Phalcon\Forms\Element\Email
  *
  * Component INPUT[type=email] for forms
+ * 
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/forms/element/email.c
  */
 class Email extends Element implements ElementInterface

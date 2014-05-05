@@ -1,22 +1,43 @@
-<?php 
+<?php
+/**
+ * Password
+ *
+ * @author Andres Gutierrez <andres@phalconphp.com>
+ * @author Eduar Carvajal <eduar@phalconphp.com>
+ * @author Wenzel Pünter <wenzel@phelix.me>
+ * @version 1.2.6
+ * @package Phalcon
+*/
+namespace Phalcon\Forms\Element;
 
-namespace Phalcon\Forms\Element {
+use \Phalcon\Tag,
+	\Phalcon\Forms\Element,
+	\Phalcon\Forms\ElementInterface,
+	\Phalcon\Forms\Exception;
 
+/**
+ * Phalcon\Forms\Element\Password
+ *
+ * Component INPUT[type=password] for forms
+ *
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/forms/element/password.c
+ */
+class Password extends Element implements ElementInterface
+{
 	/**
-	 * Phalcon\Forms\Element\Password
+	 * Renders the element widget returning html
 	 *
-	 * Component INPUT[type=password] for forms
+	 * @param array $attributes
+	 * @return string
+	 * @throws Exception
 	 */
-	
-	class Password extends \Phalcon\Forms\Element implements \Phalcon\Forms\ElementInterface {
+	public function render($attributes = null)
+	{
+		if(is_null($attributes) === false &&
+			is_array($attributes) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-		/**
-		 * Renders the element widget returning html
-		 *
-		 * @param array $attributes
-		 * @return string
-		 */
-		public function render($attributes=null){ }
-
+		return Tag::passwordField($this->prepareAttributes($attributes));
 	}
 }

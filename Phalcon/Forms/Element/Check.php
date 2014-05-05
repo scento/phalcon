@@ -1,22 +1,42 @@
-<?php 
+<?php
+/**
+ * Checkbox
+ *
+ * @author Andres Gutierrez <andres@phalconphp.com>
+ * @author Eduar Carvajal <eduar@phalconphp.com>
+ * @author Wenzel Pünter <wenzel@phelix.me>
+ * @version 1.2.6
+ * @package Phalcon
+*/
+namespace Phalcon\Forms\Element;
 
-namespace Phalcon\Forms\Element {
+use \Phalcon\Tag,
+	\Phalcon\Forms\Element,
+	\Phalcon\Forms\ElementInterface;
 
+/**
+ * Phalcon\Forms\Element\Check
+ *
+ * Component INPUT[type=check] for forms
+ * 
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/forms/element/check.c
+ */
+class Check extends Element implements ElementInterface
+{
 	/**
-	 * Phalcon\Forms\Element\Check
+	 * Renders the element widget returning html
 	 *
-	 * Component INPUT[type=check] for forms
+	 * @param array|null $attributes
+	 * @return string
+	 * @throws Exception
 	 */
-	
-	class Check extends \Phalcon\Forms\Element implements \Phalcon\Forms\ElementInterface {
+	public function render($attributes = null)
+	{
+		if(is_array($attributes) === false &&
+			is_null($attributes) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-		/**
-		 * Renders the element widget returning html
-		 *
-		 * @param array $attributes
-		 * @return string
-		 */
-		public function render($attributes=null){ }
-
+		return Tag::checkField($this->prepareAttributes($attributes, true));
 	}
 }

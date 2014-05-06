@@ -16,7 +16,7 @@ use \Phalcon\DispatcherInterface;
  * 
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/mvc/dispatcherinterface.c
  */
-interface DispatcherInterface extends \Phalcon\DispatcherInterface
+interface DispatcherInterface extends DispatcherInterface
 {
 	/**
 	 * Sets the default controller suffix

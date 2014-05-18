@@ -1,76 +1,133 @@
-<?php 
+<?php
+/**
+ * Document
+ *
+ * @author Andres Gutierrez <andres@phalconphp.com>
+ * @author Eduar Carvajal <eduar@phalconphp.com>
+ * @author Wenzel Pünter <wenzel@phelix.me>
+ * @version 1.2.6
+ * @package Phalcon
+*/
+namespace Phalcon\Mvc\Collection;
 
-namespace Phalcon\Mvc\Collection {
+use \ArrayAccess,
+	\Phalcon\Mvc\Collection\Document;
+
+/**
+ * Phalcon\Mvc\Collection\Document
+ *
+ * This component allows Phalcon\Mvc\Collection to return rows without an associated entity.
+ * This objects implements the ArrayAccess interface to allow access the object as object->x or array[x].
+ * 
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/mvc/collection/document.c
+ */
+class Document implements ArrayAccess
+{
+	/**
+	 * Checks whether an offset exists in the document
+	 *
+	 * @param scalar $index
+	 * @return boolean
+	 * @throws Exception
+	 */
+	public function offsetExists($index)
+	{
+		if(is_scalar($index) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+
+		return isset($this->$index);
+	}
 
 	/**
-	 * Phalcon\Mvc\Collection\Document
+	 * Returns the value of a field using the ArrayAccess interfase
 	 *
-	 * This component allows Phalcon\Mvc\Collection to return rows without an associated entity.
-	 * This objects implements the ArrayAccess interface to allow access the object as object->x or array[x].
+	 * @param scalar $index
+	 * @return mixed
+	 * @throws Exception
 	 */
-	
-	class Document implements \ArrayAccess {
+	public function offsetGet($index)
+	{
+		if(is_scalar($index) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-		/**
-		 * Checks whether an offset exists in the document
-		 *
-		 * @param int $index
-		 * @return boolean
-		 */
-		public function offsetExists($index){ }
+		if(isset($this->$index) === true) {
+			return $this->$index;
+		}
 
+		throw new Exception('The index does not exist in the row');
+	}
 
-		/**
-		 * Returns the value of a field using the ArrayAccess interfase
-		 *
-		 * @param string $index
-		 * @return mixed
-		 */
-		public function offsetGet($index){ }
+	/**
+	 * Change a value using the ArrayAccess interface
+	 *
+	 * @param scalar $index
+	 * @param mixed $value
+	 * @param \Phalcon\Mvc\ModelInterface $value
+	 * @throws Exception
+	 */
+	public function offsetSet($index, $value)
+	{
+		if(is_scalar($index) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
+		$this->$index = $value;
+	}
 
-		/**
-		 * Change a value using the ArrayAccess interface
-		 *
-		 * @param string $index
-		 * @param mixed $value
-		 * @param \Phalcon\Mvc\ModelInterface $value
-		 */
-		public function offsetSet($index, $value){ }
+	/**
+	 * Rows cannot be changed. It has only been implemented to meet the definition of the ArrayAccess interface
+	 *
+	 * @param string $offset
+	 * @throws Exception
+	 */
+	public function offsetUnset($offset)
+	{
+		throw new Exception('The index does not exist in the row');
+	}
 
+	/**
+	 * Reads an attribute value by its name
+	 *
+	 *<code>
+	 *	echo $robot->readAttribute('name');
+	 *</code>
+	 *
+	 * @param scalar $attribute
+	 * @return mixed
+	 * @throws Exception
+	 */
+	public function readAttribute($attribute)
+	{
+		if(is_scalar($attribute) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-		/**
-		 * Rows cannot be changed. It has only been implemented to meet the definition of the ArrayAccess interface
-		 *
-		 * @param string $offset
-		 */
-		public function offsetUnset($offset){ }
+		if(isset($this->$attribute) === true) {
+			return $this->$attribute;
+		}
 
+		return null;
+	}
 
-		/**
-		 * Reads an attribute value by its name
-		 *
-		 *<code>
-		 *	echo $robot->readAttribute('name');
-		 *</code>
-		 *
-		 * @param string $attribute
-		 * @return mixed
-		 */
-		public function readAttribute($attribute){ }
+	/**
+	 * Writes an attribute value by its name
+	 *
+	 *<code>
+	 *	$robot->writeAttribute('name', 'Rosey');
+	 *</code>
+	 *
+	 * @param scalar $attribute
+	 * @param mixed $value
+	 * @throws Exception
+	 */
+	public function writeAttribute($attribute, $value)
+	{
+		if(is_scalar($attribute) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-
-		/**
-		 * Writes an attribute value by its name
-		 *
-		 *<code>
-		 *	$robot->writeAttribute('name', 'Rosey');
-		 *</code>
-		 *
-		 * @param string $attribute
-		 * @param mixed $value
-		 */
-		public function writeAttribute($attribute, $value){ }
-
+		$this->$attribute = $value;
 	}
 }

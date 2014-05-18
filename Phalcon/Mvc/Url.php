@@ -155,7 +155,7 @@ class Url implements UrlInterface, InjectionAwareInterface
 	 * @param string $path
 	 * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/kernel/framework/url.c
 	*/
-	private function getUri($path)
+	private static function getUri($path)
 	{
 		if(is_string($path) === false) {
 			return '';
@@ -193,7 +193,7 @@ class Url implements UrlInterface, InjectionAwareInterface
 
 		if(is_null($this->_baseUri) === true) {
 			if(isset($_SERVER['PHP_SELF']) === true) {
-				$uri = getUri($_SERVER['PHP_SELF']);
+				$uri = self::getUri($_SERVER['PHP_SELF']);
 			}
 
 			if(is_string($uri) === false) {

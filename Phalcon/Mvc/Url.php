@@ -265,11 +265,20 @@ class Url implements UrlInterface, InjectionAwareInterface
 	*/
 	private static function replaceMarker($pattern, $named, &$paths, &$replacements, &$position, 
 		&$cursor, &$marker) {
+		$not_valid = false;
+		/*
+		 * $marker: string index of the start char (e.g. "{")
+		 * $cursor: string index of the character before end (e.g. "}")
+		 * $pattern: string to handle
+		 * $named: is named marker?
+		 * $replacements: parameter data to use
+		*/
+
 		if($named === true) {
-			$length = $cursor - $marker - 1;
-			$item = substr($pattern, $marker + 1, $length)."\0";
-			$cursor_var = 0;
-			$marker = 0;
+			$length = $cursor - $marker - 1;	//Length of the name
+			$item = substr($pattern, $marker + 1, $length); //The name
+			$cursor_var = $marker + 1;
+			$marker = $marker + 1;
 			for($j = 0; $j < $length; ++$j) {
 				$ch = $pattern[$cursor_var];
 				if($ch === "\0") {
@@ -287,7 +296,7 @@ class Url implements UrlInterface, InjectionAwareInterface
 				$z <= 57) || $ch === '-' || $ch === '_' || $ch === ':') {
 					if($ch === ':') {
 						$variable_length = $cursor_var - $marker;
-						$variable = substr($pattern, $marker, $variable_length)."\0";
+						$variable = substr($pattern, $marker, $variable_length);
 						break;
 					}
 				} else {
@@ -347,9 +356,10 @@ class Url implements UrlInterface, InjectionAwareInterface
 			throw new Exception('Invalid arguments supplied for phalcon_replace_paths()');
 		}
 
+
 		$l = strlen($pattern);
 
-		if($l === 0) {
+		if($l <= 0) {
 			return false;
 		}
 
@@ -387,7 +397,7 @@ class Url implements UrlInterface, InjectionAwareInterface
 					}
 					++$bracket_count;
 				} else {
-					if($ch === '{') {
+					if($ch === '}') {
 						--$bracket_count;
 						if($intermediate > 0) {
 							if($bracket_count === 0) {

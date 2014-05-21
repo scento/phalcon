@@ -34,7 +34,7 @@ use \Phalcon\Mvc\Micro\CollectionInterface,
  *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/mvc/micro/collection.c
  */
-class Collection implements \Phalcon\Mvc\Micro\CollectionInterface
+class Collection implements CollectionInterface
 {
 	/**
 	 * Prefix
@@ -80,7 +80,7 @@ class Collection implements \Phalcon\Mvc\Micro\CollectionInterface
 		if(is_array($this->_handlers) === false) {
 			$this->_handlers = array();
 		}
-		
+
 		$this->_handlers[] = array($method, $routePattern, $handler);
 	}
 

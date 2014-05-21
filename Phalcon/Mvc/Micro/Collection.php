@@ -77,6 +77,10 @@ class Collection implements \Phalcon\Mvc\Micro\CollectionInterface
 	*/
 	private function addToMap($method, $routePattern, $handler)
 	{
+		if(is_array($this->_handlers) === false) {
+			$this->_handlers = array();
+		}
+		
 		$this->_handlers[] = array($method, $routePattern, $handler);
 	}
 

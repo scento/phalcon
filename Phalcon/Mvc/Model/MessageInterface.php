@@ -1,86 +1,84 @@
-<?php 
+<?php
+/**
+ * Message Interface
+ *
+ * @author Andres Gutierrez <andres@phalconphp.com>
+ * @author Eduar Carvajal <eduar@phalconphp.com>
+ * @version 1.2.6
+ * @package Phalcon
+*/
+namespace Phalcon\Mvc\Model;
 
-namespace Phalcon\Mvc\Model {
+/**
+ * Phalcon\Mvc\Model\MessageInterface initializer
+ * 
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/mvc/model/messageinterface.c
+ */
+interface MessageInterface
+{
+	/**
+	 * \Phalcon\Mvc\Model\Message constructor
+	 *
+	 * @param string $message
+	 * @param string|null $field
+	 * @param string|null $type
+	 */
+	public function __construct($message, $field = null, $type = null);
 
 	/**
-	 * Phalcon\Mvc\Model\MessageInterface initializer
+	 * Sets message type
+	 *
+	 * @param string $type
 	 */
-	
-	interface MessageInterface {
+	public function setType($type);
 
-		/**
-		 * \Phalcon\Mvc\Model\Message constructor
-		 *
-		 * @param string $message
-		 * @param string $field
-		 * @param string $type
-		 */
-		public function __construct($message, $field=null, $type=null);
+	/**
+	 * Returns message type
+	 *
+	 * @return string
+	 */
+	public function getType();
 
+	/**
+	 * Sets verbose message
+	 *
+	 * @param string $message
+	 */
+	public function setMessage($message);
 
-		/**
-		 * Sets message type
-		 *
-		 * @param string $type
-		 */
-		public function setType($type);
+	/**
+	 * Returns verbose message
+	 *
+	 * @return string
+	 */
+	public function getMessage();
 
+	/**
+	 * Sets field name related to message
+	 *
+	 * @param string $field
+	 */
+	public function setField($field);
 
-		/**
-		 * Returns message type
-		 *
-		 * @return string
-		 */
-		public function getType();
+	/**
+	 * Returns field name related to message
+	 *
+	 * @return string
+	 */
+	public function getField();
 
+	/**
+	 * Magic __toString method returns verbose message
+	 *
+	 * @return string
+	 */
+	public function __toString();
 
-		/**
-		 * Sets verbose message
-		 *
-		 * @param string $message
-		 */
-		public function setMessage($message);
-
-
-		/**
-		 * Returns verbose message
-		 *
-		 * @return string
-		 */
-		public function getMessage();
-
-
-		/**
-		 * Sets field name related to message
-		 *
-		 * @param string $field
-		 */
-		public function setField($field);
-
-
-		/**
-		 * Returns field name related to message
-		 *
-		 * @return string
-		 */
-		public function getField();
-
-
-		/**
-		 * Magic __toString method returns verbose message
-		 *
-		 * @return string
-		 */
-		public function __toString();
-
-
-		/**
-		 * Magic __set_state helps to recover messsages from serialization
-		 *
-		 * @param array $message
-		 * @return \Phalcon\Mvc\Model\MessageInterface
-		 */
-		public static function __set_state($message);
-
-	}
+	/**
+	 * Magic __set_state helps to recover messsages from serialization
+	 *
+	 * @param array $message
+	 * @return \Phalcon\Mvc\Model\MessageInterface
+	 */
+	public static function __set_state($message);
 }

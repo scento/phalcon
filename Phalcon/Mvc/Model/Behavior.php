@@ -107,10 +107,9 @@ abstract class Behavior
 	 * @param \Phalcon\Mvc\ModelInterface $model
 	 * @param string $method
 	 * @param array|null $arguments
-	 * @throws Exception
 	 */
 	public function missingMethod($model, $method, $arguments = null)
 	{
-		
+
 	}
 }

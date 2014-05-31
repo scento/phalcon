@@ -10,7 +10,8 @@
 */
 namespace Phalcon\Mvc\Model;
 
-use \Phalcon\Mvc\Model\Message;
+use \Phalcon\Mvc\Model\Message,
+	\Phalcon\Mvc\Model\Exception;
 
 /**
  * Phalcon\Mvc\Model\Validator
@@ -135,7 +136,7 @@ abstract class Validator
 		if(is_string($option) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
-		
+
 		return isset($this->_options[$option]);
 	}
 }

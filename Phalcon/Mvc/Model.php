@@ -1752,7 +1752,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 				//Check if the relation has a virtual foreign key
 				$foreign_key = $relation->getForeignKey();
 				if($foreign_key != false) {
-					//By defualt action is restricted
+					//By default action is restricted
 					$action = false;
 
 					//Try to find a different action in the foreign key's options

@@ -137,11 +137,9 @@ SeekableIterator, Iterator, ResultsetInterface
 		} else {
 			//The full rows are dumped into $this->rows
 			if(is_array($this->_rows) === true) {
-				$rows = new ArrayObject($this->_rows);
-				$rows_i = $rows->getIterator();
-				$row = $rows_i->current();
+				$row = current($this->_rows);
 				if(is_object($row) === true) {
-					$rows->next();
+					next($this->_rows);
 				}
 			} else {
 				$row = false;

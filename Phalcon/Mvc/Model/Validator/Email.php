@@ -12,7 +12,8 @@ namespace Phalcon\Mvc\Model\Validator;
 
 use \Phalcon\Mvc\Model\Validator,
 	\Phalcon\Mvc\Model\ValidatorInterface,
-	\Phalcon\Mvc\Model\Exception;
+	\Phalcon\Mvc\Model\Exception,
+	\Phalcon\Mvc\ModelInterface;
 
 /**
  * Phalcon\Mvc\Model\Validator\Email

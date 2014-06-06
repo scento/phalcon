@@ -53,6 +53,11 @@ class Inclusionin extends Validator implements ValidatorInterface
 	 */
 	public function validate($record)
 	{
+		if(is_object($record) === false ||
+			$record instanceof ModelInterface === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+		
 		$field_name = $this->getOption('field');
 		if(is_string($field_name) === false) {
 			throw new Exception('Field name must be a string');

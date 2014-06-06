@@ -64,7 +64,7 @@ class Regex extends Validator implements ValidatorInterface
 		}
 
 		//The 'pattern' option must be a valid regular expression
-		if($this->issetOption('pattern') === false) {
+		if($this->isSetOption('pattern') === false) {
 			throw new Exception('Validator requires a perl-compatible regex pattern');
 		}
 		$pattern = $this->getOption('pattern');

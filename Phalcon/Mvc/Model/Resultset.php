@@ -1,246 +1,578 @@
-<?php 
+<?php
+/**
+* Resultset
+*
+* @author Andres Gutierrez <andres@phalconphp.com>
+* @author Eduar Carvajal <eduar@phalconphp.com>
+* @author Wenzel Pünter <wenzel@phelix.me>
+* @version 1.2.6
+* @package Phalcon
+*/
+namespace Phalcon\Mvc\Model;
 
-namespace Phalcon\Mvc\Model {
+use \Phalcon\Mvc\Model\ResultsetInterface,
+	\Phalcon\Mvc\Model\Exception,
+	\Iterator,
+	\SeekableIterator,
+	\Countable,
+	\ArrayAccess,
+	\Serializable,
+	\Closure;
+
+/**
+ * Phalcon\Mvc\Model\Resultset
+ *
+ * This component allows to Phalcon\Mvc\Model returns large resulsets with the minimum memory consumption
+ * Resulsets can be traversed using a standard foreach or a while statement. If a resultset is serialized
+ * it will dump all the rows into a big array. Then unserialize will retrieve the rows as they were before
+ * serializing.
+ *
+ * <code>
+ *
+ * //Using a standard foreach
+ * $robots = Robots::find(array("type='virtual'", "order" => "name"));
+ * foreach ($robots as $robot) {
+ *  echo $robot->name, "\n";
+ * }
+ *
+ * //Using a while
+ * $robots = Robots::find(array("type='virtual'", "order" => "name"));
+ * $robots->rewind();
+ * while ($robots->valid()) {
+ *  $robot = $robots->current();
+ *  echo $robot->name, "\n";
+ *  $robots->next();
+ * }
+ * </code>
+ *
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/mvc/model/resultset.c
+ */
+abstract class Resultset implements ResultsetInterface, Iterator, SeekableIterator, Countable, ArrayAccess, Serializable
+{
+	/**
+	 * Type: Full Result
+	 * 
+	 * @var int
+	*/
+	const TYPE_RESULT_FULL = 0;
 
 	/**
-	 * Phalcon\Mvc\Model\Resultset
-	 *
-	 * This component allows to Phalcon\Mvc\Model returns large resulsets with the minimum memory consumption
-	 * Resulsets can be traversed using a standard foreach or a while statement. If a resultset is serialized
-	 * it will dump all the rows into a big array. Then unserialize will retrieve the rows as they were before
-	 * serializing.
-	 *
-	 * <code>
-	 *
-	 * //Using a standard foreach
-	 * $robots = Robots::find(array("type='virtual'", "order" => "name"));
-	 * foreach ($robots as $robot) {
-	 *  echo $robot->name, "\n";
-	 * }
-	 *
-	 * //Using a while
-	 * $robots = Robots::find(array("type='virtual'", "order" => "name"));
-	 * $robots->rewind();
-	 * while ($robots->valid()) {
-	 *  $robot = $robots->current();
-	 *  echo $robot->name, "\n";
-	 *  $robots->next();
-	 * }
-	 * </code>
-	 *
+	 * Type: Partial Result
+	 * 
+	 * @var int
+	*/
+	const TYPE_RESULT_PARTIAL = 1;
+
+	/**
+	 * Hydrate: Records
+	 * 
+	 * @var int
+	*/
+	const HYDRATE_RECORDS = 0;
+
+	/**
+	 * Hydrate: Objects
+	 * 
+	 * @var int
+	*/
+	const HYDRATE_OBJECTS = 2;
+
+	/**
+	 * Hydrate: Arrays
+	 * 
+	 * @var int
+	*/
+	const HYDRATE_ARRAYS = 1;
+
+	/**
+	 * Type
+	 * 
+	 * @var int
+	 * @access protected
+	*/
+	protected $_type = 0;
+
+	/**
+	 * Result
+	 * 
+	 * @var null|\Phalcon\Db\ResultInterface
+	 * @access protected
+	*/
+	protected $_result;
+
+	/**
+	 * Cache
+	 * 
+	 * @var null|\Phalcon\Cache\BackendInterface
+	 * @access protected
+	*/
+	protected $_cache;
+
+	/**
+	 * Is Fresh
+	 * 
+	 * @var boolean
+	 * @access protected
+	*/
+	protected $_isFresh = true;
+
+	/**
+	 * Pointer
+	 * 
+	 * @var int
+	 * @access protected
+	*/
+	protected $_pointer = -1;
+
+	/**
+	 * Count
+	 * 
+	 * @var null|int
+	 * @access protected
+	*/
+	protected $_count;
+
+	/**
+	 * Active Row
+	 * 
+	 * @var null|\Phalcon\Mvc\ModelInterface
+	 * @access protected
+	*/
+	protected $_activeRow;
+
+	/**
+	 * Rows
+	 * 
+	 * @var null|array
+	 * @access protected
+	*/
+	protected $_rows;
+
+	/**
+	 * Error Messages
+	 * 
+	 * @var null|array
+	 * @access protected
+	*/
+	protected $_errorMessages;
+
+	/**
+	 * Hydrate Mode
+	 * 
+	 * @var int|null
+	 * @access protected
+	*/
+	protected $_hydrateMode;
+
+	/**
+	 * Moves cursor to next row in the resultset
 	 */
-	
-	abstract class Resultset implements \Phalcon\Mvc\Model\ResultsetInterface, \Iterator, \Traversable, \SeekableIterator, \Countable, \ArrayAccess, \Serializable {
+	public function next()
+	{
+		$this->_pointer++;
+	}
 
-		const TYPE_RESULT_FULL = 0;
+	/**
+	 * Gets pointer number of active row in the resultset
+	 *
+	 * @return int
+	 */
+	public function key()
+	{
+		return $this->_pointer;
+	}
 
-		const TYPE_RESULT_PARTIAL = 1;
+	/**
+	 * Rewinds resultset to its beginning
+	 */
+	public function rewind()
+	{
+		if($this->_type === 1) {
+			//Here the resultset act as a result that is fetched one by one
+			if($this->_result != false && is_null($this->_activeRow) === false) {
+				$this->_result->dataSeek(0);
+			}
+		} else {
+			//Here the resultset acts as an array
+			if(is_null($this->_rows) === true && is_object($this->_result) === true) {
+				$this->_rows = $this->_result->fetchAll();
+			}
 
-		const HYDRATE_RECORDS = 0;
+			if(is_array($this->_rows) === true) {
+				reset($this->_rows);
+			}
+		}
 
-		const HYDRATE_OBJECTS = 2;
+		$this->_pointer = 0;
+	}
 
-		const HYDRATE_ARRAYS = 1;
+	/**
+	 * Changes internal pointer to a specific position in the resultset
+	 *
+	 * @param int $position
+	 */
+	public function seek($position)
+	{
+		if(is_int($position) === false) {
+			return;
+		}
 
-		protected $_type;
+		//We only seek the records if the current position is different than the passed one
+		if($this->_pointer !== $position) {
+			if($this->_type === 1) {
+				//Here the resultset is fetched one by one because it is large
+				$result = $this->_result;
+				$result->dataSeek($position);
+			} else {
+				//Here the resultset is a small array
+				//We need to fetch the records because rows is null
+				if(is_null($this->_rows) === true &&
+					$this->_result != false) {
+					$this->_rows = $this->_result->fetchAll();
+				}
 
-		protected $_result;
+				if(is_array($this->_rows) === true) {
+					for($i = 0; $i < $position; ++$i) {
+						next($this->_rows);
+					}
+				}
 
-		protected $_cache;
+				$this->_pointer = $position;
+			}
+		}
+	}
 
-		protected $_isFresh;
+	/**
+	 * Counts how many rows are in the resultset
+	 *
+	 * @return int
+	 */
+	public function count()
+	{
+		//We only calculate the row number if it wasn't calculated before
+		if(is_null($this->_count) === true) {
+			$this->_count = 0;
 
-		protected $_pointer;
+			if($this->_type === 1) {
+				//Here the resultset acts as a result that is fetched one by one
+				if($this->_result != false) {
+					$this->_count = (int)$this->_result->numRows();
+				}
+			} else {
+				//Here the resultset acts as an array
+				if(is_null($this->_rows) === true && is_object($this->_result) === true) {
+					$this->_rows = $this->_result->fetchAll();
+				}
 
-		protected $_count;
+				$this->_count = count($this->_rows);
+			}
+		}
 
-		protected $_activeRow;
+		return $this->_count;
+	}
 
-		protected $_rows;
+	/**
+	 * Checks whether offset exists in the resultset
+	 *
+	 * @param int $index
+	 * @return boolean
+	 * @throws Exception
+	 */
+	public function offsetExists($index)
+	{
+		if(is_int($index) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-		protected $_errorMessages;
+		return ($index < $this->count() ? true : false);
+	}
 
-		protected $_hydrateMode;
+	/**
+	 * Gets row in a specific position of the resultset
+	 *
+	 * @param int $index
+	 * @return \Phalcon\Mvc\ModelInterface
+	 * @throws Exception
+	 */
+	public function offsetGet($index)
+	{
+		if(is_int($index) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-		/**
-		 * Moves cursor to next row in the resultset
-		 *
-		 */
-		public function next(){ }
+		$count = $this->count();
+		if($index < $count) {
+			//Check if the last record returned is the current requested
+			if($this->_pointer === $index) {
+				return $this->current();
+			}
 
+			//Move to the specific position
+			$this->seek($index);
 
-		/**
-		 * Gets pointer number of active row in the resultset
-		 *
-		 * @return int
-		 */
-		public function key(){ }
+			//Check if the last record returned is the requested
+			if($this->valid() !== false) {
+				return $this->current();
+			}
 
+			return false;
+		}
 
-		/**
-		 * Rewinds resultset to its beginning
-		 *
-		 */
-		public function rewind(){ }
+		throw new Exception('The index does not exist in the cursor');
+	}
 
+	/**
+	 * Resultsets cannot be changed. It has only been implemented to meet the definition of the ArrayAccess interface
+	 *
+	 * @param int $index
+	 * @param \Phalcon\Mvc\ModelInterface $value
+	 * @throws Exception
+	 */
+	public function offsetSet($index, $value)
+	{
+		throw new Exception('Cursor is an immutable ArrayAccess object');
+	}
 
-		/**
-		 * Changes internal pointer to a specific position in the resultset
-		 *
-		 * @param int $position
-		 */
-		public function seek($position){ }
+	/**
+	 * Resultsets cannot be changed. It has only been implemented to meet the definition of the ArrayAccess interface
+	 *
+	 * @param int $offset
+	 * @throws Exception
+	 */
+	public function offsetUnset($offset)
+	{
+		throw new Exception('Cursor is an immutable ArrayAccess object');
+	}
 
+	/**
+	 * Returns the internal type of data retrieval that the resultset is using
+	 *
+	 * @return int
+	 */
+	public function getType()
+	{
+		return $this->_type;
+	}
 
-		/**
-		 * Counts how many rows are in the resultset
-		 *
-		 * @return int
-		 */
-		public function count(){ }
+	/**
+	 * Get first row in the resultset
+	 *
+	 * @return \Phalcon\Mvc\ModelInterface|boolean
+	 */
+	public function getFirst()
+	{
+		//Check if the last record returned is the current requested
+		if($this->_pointer === 0) {
+			return $this->current();
+		}
 
+		//Otherwise re-execute the statement
+		$this->rewind();
+		if($this->valid() !== false) {
+			return $this->current();
+		}
 
-		/**
-		 * Checks whether offset exists in the resultset
-		 *
-		 * @param int $index
-		 * @return boolean
-		 */
-		public function offsetExists($index){ }
+		return false;
+	}
 
+	/**
+	 * Get last row in the resultset
+	 *
+	 * @return \Phalcon\Mvc\ModelInterface|boolean
+	 */
+	public function getLast()
+	{
+		$this->seek($this->count() - 1);
+		if($this->valid() !== false) {
+			return $this->current();
+		}
 
-		/**
-		 * Gets row in a specific position of the resultset
-		 *
-		 * @param int $index
-		 * @return \Phalcon\Mvc\ModelInterface
-		 */
-		public function offsetGet($index){ }
+		return false;
+	}
 
+	/**
+	 * Set if the resultset is fresh or an old one cached
+	 *
+	 * @param boolean $isFresh
+	 * @return \Phalcon\Mvc\Model\Resultset
+	 * @throws Exception
+	 */
+	public function setIsFresh($isFresh)
+	{
+		if(is_bool($isFresh) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-		/**
-		 * Resultsets cannot be changed. It has only been implemented to meet the definition of the ArrayAccess interface
-		 *
-		 * @param int $index
-		 * @param \Phalcon\Mvc\ModelInterface $value
-		 */
-		public function offsetSet($index, $value){ }
+		$this->_isFresh = $isFresh;
 
+		return $this;
+	}
 
-		/**
-		 * Resultsets cannot be changed. It has only been implemented to meet the definition of the ArrayAccess interface
-		 *
-		 * @param int $offset
-		 */
-		public function offsetUnset($offset){ }
+	/**
+	 * Tell if the resultset if fresh or an old one cached
+	 *
+	 * @return boolean
+	 */
+	public function isFresh()
+	{
+		return $this->_isFresh;
+	}
 
+	/**
+	 * Sets the hydration mode in the resultset
+	 *
+	 * @param int $hydrateMode
+	 * @return \Phalcon\Mvc\Model\Resultset
+	 * @throws Exception
+	 */
+	public function setHydrateMode($hydrateMode)
+	{
+		if(is_int($hydrateMode) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
-		/**
-		 * Returns the internal type of data retrieval that the resultset is using
-		 *
-		 * @return int
-		 */
-		public function getType(){ }
+		$this->_hydrateMode = $hydrateMode;
 
+		return $this;
+	}
 
-		/**
-		 * Get first row in the resultset
-		 *
-		 * @return \Phalcon\Mvc\ModelInterface
-		 */
-		public function getFirst(){ }
+	/**
+	 * Returns the current hydration mode
+	 *
+	 * @return int|null
+	 */
+	public function getHydrateMode()
+	{
+		return $this->_hydrateMode;
+	}
 
+	/**
+	 * Returns the associated cache for the resultset
+	 *
+	 * @return \Phalcon\Cache\BackendInterface|null
+	 */
+	public function getCache()
+	{
+		return $this->_cache;
+	}
 
-		/**
-		 * Get last row in the resultset
-		 *
-		 * @return \Phalcon\Mvc\ModelInterface
-		 */
-		public function getLast(){ }
+	/**
+	 * Returns current row in the resultset
+	 *
+	 * @return \Phalcon\Mvc\ModelInterface
+	 */
+	public function current()
+	{
+		return $this->_activeRow;
+	}
 
+	/**
+	 * Returns the error messages produced by a batch operation
+	 *
+	 * @return \Phalcon\Mvc\Model\MessageInterface[]|null
+	 */
+	public function getMessages()
+	{
+		return $this->_errorMessages;
+	}
 
-		/**
-		 * Set if the resultset is fresh or an old one cached
-		 *
-		 * @param boolean $isFresh
-		 * @return \Phalcon\Mvc\Model\Resultset
-		 */
-		public function setIsFresh($isFresh){ }
+	/**
+	 * Deletes every record in the resultset
+	 *
+	 * @param Closure|null $conditionCallback
+	 * @return boolean
+	 * @throws Exception
+	 */
+	public function delete($conditionCallback = null)
+	{
+		if((is_object($conditionCallback) === false ||
+			$conditionCallback instanceof Closure === false) &&
+			is_null($conditionCallback) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
 
+		$transaction = false;
+		$this->rewind();
 
-		/**
-		 * Tell if the resultset if fresh or an old one cached
-		 *
-		 * @return boolean
-		 */
-		public function isFresh(){ }
+		while($this->valid()) {
+			$record = $this->current();
 
+			//Start transaction
+			if($transaction === false) {
+				//We can only delete resultsets whose every element is a complete object
+				if(method_exists($record, 'getWriteConnection') === false) {
+					throw new Exception('The returned record is not valid');
+				}
 
-		/**
-		 * Sets the hydration mode in the resultset
-		 *
-		 * @param int $hydrateMode
-		 * @return \Phalcon\Mvc\Model\Resultset
-		 */
-		public function setHydrateMode($hydrateMode){ }
+				$connection = $record->getWriteConnection();
+				$connection->begin();
+			}
 
+			//Perform additional validations
+			if(is_object($conditionCallback) === true) {
+				if(call_user_func($conditionCallback, $record) === false) {
+					continue; //This can lead to an infinity loop
+				}
+			}
 
-		/**
-		 * Returns the current hydration mode
-		 *
-		 * @return int
-		 */
-		public function getHydrateMode(){ }
+			//Try to delete the record
+			if($record->delete() !== true) {
+				//Get the messages from the record that produces the error
+				$this->_errorMessages = $record->getMessages();
 
+				//Rollback the transaction
+				$connection->rollback();
+				$transaction = false;
+				break;
+			}
 
-		/**
-		 * Returns the associated cache for the resultset
-		 *
-		 * @return \Phalcon\Cache\BackendInterface
-		 */
-		public function getCache(){ }
+			//Next element
+			$this->next();
+		}
 
+		//Commit the transaction
+		if($transaction === true) {
+			$connection->commit();
+		}
 
-		/**
-		 * Returns current row in the resultset
-		 *
-		 * @return \Phalcon\Mvc\ModelInterface
-		 */
-		public function current(){ }
+		return true;
+	}
 
+	/**
+	 * Filters a resultset returning only those the developer requires
+	 *
+	 *<code>
+	 * $filtered = $robots->filter(function($robot){
+	 *		if ($robot->id < 3) {
+	 *			return $robot;
+	 *		}
+	 *	});
+	 *</code>
+	 *
+	 * @param callable $filter
+	 * @return \Phalcon\Mvc\Model[]
+	 * @throws Exception
+	 */
+	public function filter($filter)
+	{
+		$records = array();
+		$parameters = array();
+		$this->rewind();
 
-		/**
-		 * Returns the error messages produced by a batch operation
-		 *
-		 * @return \Phalcon\Mvc\Model\MessageInterface[]
-		 */
-		public function getMessages(){ }
+		while($this->valid()) {
+			$record = $this->current();
+			$parameters[0] = $record;
+			$processed_record = call_user_func_array($filter, $parameters);
 
+			//Only add processed records to 'records' if the returned value is an array/object
+			if(is_object($processed_record) === false && is_array($processed_record) === false) {
+				continue; //@note this can lead to an infinity loop
+			}
 
-		/**
-		 * Deletes every record in the resultset
-		 *
-		 * @param Closure $conditionCallback
-		 * @return boolean
-		 */
-		public function delete($conditionCallback=null){ }
+			$records[] = $processed_record;
+			$this->next();
+		}
 
-
-		/**
-		 * Filters a resultset returning only those the developer requires
-		 *
-		 *<code>
-		 * $filtered = $robots->filter(function($robot){
-		 *		if ($robot->id < 3) {
-		 *			return $robot;
-		 *		}
-		 *	});
-		 *</code>
-		 *
-		 * @param callback $filter
-		 * @return \Phalcon\Mvc\Model[]
-		 */
-		public function filter($filter){ }
-
+		return $records;
 	}
 }

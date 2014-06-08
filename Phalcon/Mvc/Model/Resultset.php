@@ -511,7 +511,7 @@ abstract class Resultset implements ResultsetInterface, Iterator, SeekableIterat
 			//Perform additional validations
 			if(is_object($conditionCallback) === true) {
 				if(call_user_func($conditionCallback, $record) === false) {
-					continue; //This can lead to an infinity loop
+					continue;
 				}
 			}
 
@@ -566,7 +566,7 @@ abstract class Resultset implements ResultsetInterface, Iterator, SeekableIterat
 
 			//Only add processed records to 'records' if the returned value is an array/object
 			if(is_object($processed_record) === false && is_array($processed_record) === false) {
-				continue; //@note this can lead to an infinity loop
+				continue;
 			}
 
 			$records[] = $processed_record;

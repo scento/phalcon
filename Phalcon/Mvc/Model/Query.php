@@ -1700,8 +1700,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
 		//This function parses the PHQL statement
 		include_once(__DIR__.'/Query/Parser.php');
-		$parser = new Parser();
-		$ast = $parser->parse($this->_phql);
+		$ast = Parser::parse($this->_phql);
 
 		$ir_phql = null;
 		$ir_phql_cache = null;

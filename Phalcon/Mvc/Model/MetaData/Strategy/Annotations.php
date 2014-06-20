@@ -80,7 +80,7 @@ class Annotations
 			//Check if annotation has the 'type' named parameter
 			$feature = $column_annotation->getNamedParameter('type');
 			if($feature === 'integer') {
-				$find_types[$property] = 0;
+				$field_types[$property] = 0;
 				$field_bind_types[$property] = 1;
 				$numeric_typed[$property] = 1;
 			} elseif($feature === 'decimal') {
@@ -115,9 +115,9 @@ class Annotations
 		}
 
 		//Create an array using the MODELS_* constants as indexes
-		return array($attributes, $primary_keys, $non_primary_keys, $not_null, 
-			$field_types, $numeric_typed, $identity_field, $field_bind_types, 
-			$automatic_default, $automatic_default);
+		return array(0 => $attributes, 1 => $primary_keys, 2 => $non_primary_keys, 3 => $not_null, 
+			4 => $field_types, 5 => $numeric_typed, 8 => $identity_field, 9 => $field_bind_types, 
+			10 => $automatic_default, 11 => $automatic_default);
 	}
 
 	/**
@@ -129,6 +129,6 @@ class Annotations
 	 */
 	public function getColumnMaps()
 	{
-		
+
 	}
 }

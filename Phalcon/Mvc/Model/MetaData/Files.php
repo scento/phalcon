@@ -11,8 +11,9 @@
 namespace Phalcon\Mvc\Model\MetaData;
 
 use \Phalcon\Mvc\Model\MetaData,
-	\Phalcon\DI\InjectionAwareInterface,
-	\Phalcon\Mvc\Model\MetaDataInterface;
+	\Phalcon\Mvc\Model\Exception,
+	\Phalcon\Mvc\Model\MetaDataInterface,
+	\Phalcon\DI\InjectionAwareInterface;
 
 /**
  * Phalcon\Mvc\Model\MetaData\Files

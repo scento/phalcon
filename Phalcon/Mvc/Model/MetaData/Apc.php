@@ -1,6 +1,6 @@
 <?php
 /**
-* APC Model Metadata
+* APC Adapter
 *
 * @author Andres Gutierrez <andres@phalconphp.com>
 * @author Eduar Carvajal <eduar@phalconphp.com>

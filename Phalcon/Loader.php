@@ -539,7 +539,7 @@ class Loader implements EventsAwareInterface
 		$ds_class_name = str_replace('_', \DIRECTORY_SEPARATOR, $className);
 
 		//And change the namespace seperator by the directory seperator too
-		$ns_class_name = str_replace('\\', \DIRECTORY_SEPARATOR, $class_name);
+		$ns_class_name = str_replace('\\', \DIRECTORY_SEPARATOR, $className);
 
 		//Checking in directories
 		if(is_array($this->_directories) === true) {

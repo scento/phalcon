@@ -533,7 +533,7 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		return $this->_allowOrDeny($roleName, $resourceName, $access, \ACL::ALLOW);
+		return $this->_allowOrDeny($roleName, $resourceName, $access, Acl::ALLOW);
 	}
 
 
@@ -569,7 +569,7 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		return $this->_allowOrDeny($roleName, $resourceName, $access, \ACL::DENY);
+		return $this->_allowOrDeny($roleName, $resourceName, $access, Acl::DENY);
 	}
 
 	/**

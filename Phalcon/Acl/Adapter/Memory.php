@@ -451,7 +451,7 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 			throw new Exception('Role "'.$roleName.'" does not exist in ACL');
 		}
 
-		if(isset($this->_resourceNames[$resourceName]) === false)
+		if(isset($this->_resourcesNames[$resourceName]) === false)
 		{
 			throw new Exception('Resource "'.$resourceName.'" does not exist in ACL');
 		}

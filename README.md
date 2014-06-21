@@ -18,3 +18,29 @@ This project will in future use the original Phalcon project's braching system. 
 ##License
 
 To keep the compatibility with the framework, this legacy layer is licensed under the terms of the New BSD license.
+
+##Usage
+
+You can use this project as a fallback for the original framework.
+
+1. **Native**
+Add the following code at the top of your bootstrap file:
+```
+if(extension_loaded('Phalcon') === false) {
+	$path_to_phalcon_php = __DIR__.'/Phalcon/';
+	require($path_to_phalcon_php.'Exception.php');
+	require($path_to_phalcon_php.'Loader/Exception.php');
+	require($path_to_phalcon_php.'Events/EventsAwareInterface.php');
+	require($path_to_phalcon_php.'Text.php');
+	require($path_to_phalcon_php.'Loader.php');
+
+	$loader = new \Phalcon\Loader();
+	$loader->registerNamespaces(array(
+		'Phalcon' => $path_to_phalcon_php
+	));
+	$loader->register();
+}
+```
+
+2. **Composer**
+You can include the default autoloader of Composer, which is generated after the execution of `composer install`.

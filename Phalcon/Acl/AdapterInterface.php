@@ -39,7 +39,7 @@ interface AdapterInterface
 	 * @param  string $accessInherits
 	 * @return boolean
 	 */
-	public function addRole(RoleInterface $role, $accessInherits = null);
+	public function addRole($role, $accessInherits = null);
 
 	/**
 	 * Do a role inherit from another existing role

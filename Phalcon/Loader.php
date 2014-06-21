@@ -462,14 +462,14 @@ class Loader implements EventsAwareInterface
 	{
 		//Checking in namespaces
 		if(is_array($this->_namespaces) === true) {
-			foreach($this->_namespaces as $ns_prefix => $directories) {
+			foreach($this->_namespaces as $ns_prefix => $directory) {
 				//The class name must start with the current namespace
 				if(Text::startsWith($className, $ns_prefix, null) === true) {
 					//get the possible file path
 					$file_name = self::possibleAutoloadFilePath($ns_prefix, $className, \DIRECTORY_SEPARATOR);
 					if($file_name !== false) {
 						//Add a trailing directory seperator if the user forgot to do that
-						$fixed_directory = self::fixPath($path, \DIRECTORY_SEPARATOR);
+						$fixed_directory = self::fixPath($directory, \DIRECTORY_SEPARATOR);
 
 						foreach($this->_extensions as $extension) {
 							$file_path = $fixed_directory.$file_name.'.'.$extension;

@@ -466,10 +466,10 @@ class Loader implements EventsAwareInterface
 				//The class name must start with the current namespace
 				if(Text::startsWith($className, $ns_prefix, null) === true) {
 					//get the possible file path
-					$file_name = self::possibleAutoloadFilePath($ns_prefix, $className, \DIRECTORY_SEPERATOR);
+					$file_name = self::possibleAutoloadFilePath($ns_prefix, $className, \DIRECTORY_SEPARATOR);
 					if($file_name !== false) {
 						//Add a trailing directory seperator if the user forgot to do that
-						$fixed_directory = self::fixPath($path, \DIRECTORY_SEPERATOR);
+						$fixed_directory = self::fixPath($path, \DIRECTORY_SEPARATOR);
 
 						foreach($this->_extensions as $extension) {
 							$file_path = $fixed_directory.$file_name.'.'.$extension;
@@ -509,7 +509,7 @@ class Loader implements EventsAwareInterface
 					$file_name = self::possibleAutoloadFilePath($prefix, $className, '_');
 					if($file_name !== false) {
 						//Add a trailing directory seperator if the user forgot to do that
-						$fixed_directory = self::fixPath($path, \DIRECTORY_SEPERATOR);
+						$fixed_directory = self::fixPath($path, \DIRECTORY_SEPARATOR);
 						foreach($this->_extensions as $extension) {
 							$file_path = $fixed_directory.$file_name.'.'.$extension;
 							if(is_object($this->_eventsManager) === true) {
@@ -536,16 +536,16 @@ class Loader implements EventsAwareInterface
 		}
 
 		//Change the pseudo-seperator by the directory seperator in the class name
-		$ds_class_name = str_replace('_', \DIRECTORY_SEPERATOR, $className);
+		$ds_class_name = str_replace('_', \DIRECTORY_SEPARATOR, $className);
 
 		//And change the namespace seperator by the directory seperator too
-		$ns_class_name = str_replace('\\', \DIRECTORY_SEPERATOR, $class_name);
+		$ns_class_name = str_replace('\\', \DIRECTORY_SEPARATOR, $class_name);
 
 		//Checking in directories
 		if(is_array($this->_directories) === true) {
 			foreach($this->_directories as $directory) {
 				//Add a trailing directory seperator if the user forgot to do that
-				$fixed_directory = self::fixPath($directory, \DIRECTORY_SEPERATOR);
+				$fixed_directory = self::fixPath($directory, \DIRECTORY_SEPARATOR);
 				foreach($this->_extensions as $extension) {
 					//Create a possible path for the file
 					$file_path = $fixed_directory.$ns_class_name.'.'.$extension;

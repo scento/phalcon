@@ -73,9 +73,15 @@ abstract class Adapter implements EventsAwareInterface
 	 * Sets the events manager
 	 *
 	 * @param ManagerInterface $eventsManager
+	 * @throws Exception
 	 */
-	public function setEventsManager(ManagerInterface $eventsManager)
+	public function setEventsManager($eventsManager)
 	{
+		if(is_object($eventsManager) === false ||
+			$eventsManager instanceof ManagerInterface === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+		
 		$this->_eventsManager = $eventsManager;
 	}
 

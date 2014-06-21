@@ -23,7 +23,7 @@ To keep the compatibility with the framework, this legacy layer is licensed unde
 
 You can use this project as a fallback for the original framework.
 
-1. **Native**
+###Native
 
 Add the following code at the top of your bootstrap file:
 ```php
@@ -43,6 +43,6 @@ if(extension_loaded('Phalcon') === false) {
 }
 ```
 
-2. **Composer**
+###Composer
 
 You can include the default autoloader of Composer, which is generated after the execution of `composer install`.

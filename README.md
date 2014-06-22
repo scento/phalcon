@@ -28,16 +28,14 @@ You can use this project as a fallback for the original framework.
 Add the following code at the top of your bootstrap file:
 ```php
 if(extension_loaded('Phalcon') === false) {
-	$path_to_phalcon_php = __DIR__.'/Phalcon/';
-	require($path_to_phalcon_php.'Exception.php');
-	require($path_to_phalcon_php.'Loader/Exception.php');
-	require($path_to_phalcon_php.'Events/EventsAwareInterface.php');
-	require($path_to_phalcon_php.'Text.php');
-	require($path_to_phalcon_php.'Loader.php');
+	$files = array('Exception.php', 'Loader/Exception.php', 'Events/EventsAwareInterface.php', 'Text.php', 'Loader.php');
+	foreach($files as $file) {
+		require(__DIR__.'/src/Phalcon/'.$file);
+	}
 
 	$loader = new \Phalcon\Loader();
 	$loader->registerNamespaces(array(
-		'Phalcon' => $path_to_phalcon_php
+		'Phalcon' => __DIR__.'/src/Phalcon/'
 	));
 	$loader->register();
 }

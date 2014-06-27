@@ -18,7 +18,7 @@ use \Phalcon\DiInterface,
 	\Phalcon\Mvc\Model\RelationInterface,
 	\Phalcon\Mvc\Model\Row,
 	\Phalcon\Mvc\Model\Resultset\Simple,
-	\Phalcon\Mvc\Model\Query\Parser,
+	\Phalcon\Mvc\Model\Query\Lang,
 	\Phalcon\Mvc\Model\Query\Status,
 	\Phalcon\Mvc\Model,
 	\Phalcon\Db\RawValue;
@@ -1699,8 +1699,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 		}
 
 		//This function parses the PHQL statement
-		include_once(__DIR__.'/Query/Parser.php');
-		$ast = Parser::parse($this->_phql);
+		$ast = Lang::parsePHQL($this->_phql);
 
 		$ir_phql = null;
 		$ir_phql_cache = null;

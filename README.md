@@ -13,7 +13,7 @@ It is possible to generate a low-level PHPDoc-based documentation of the entire 
 
 ##Branching
 
-This project will in future use the original Phalcon project's braching system. As long as the version `1.2.6` is not working, all development progress is part of the `master` branch.
+This project will in future use the original Phalcon project's branching system. As long as the version `1.2.6` is not working, all development progress is part of the `master` branch.
 
 ##License
 

@@ -22,10 +22,10 @@ interface ResultInterface
 	 * @param \Phalcon\Db\AdapterInterface $connection
 	 * @param \PDOStatement $result
 	 * @param string|null $sqlStatement
-	 * @param array $bindParams
-	 * @param array $bindTypes
+	 * @param array|null $bindParams
+	 * @param array|null $bindTypes
 	 */
-	public function __construct($connection, $result, $sqlStatement=null, $bindParams=null, $bindTypes=null);
+	public function __construct($connection, $result, $sqlStatement = null, $bindParams = null, $bindTypes = null);
 
 	/**
 	 * Allows to executes the statement again. Some database systems don't support scrollable cursors,

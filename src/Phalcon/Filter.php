@@ -137,19 +137,19 @@ class Filter implements FilterInterface
 
 		/* Predefined filter */
 		switch($filter) {
-			'email':
+			case 'email':
 				return filter_var(str_replace('\'', '', $value), 517);
 				break;
-			'int':
+			case 'int':
 				return filter_var($value, 519);
 				break;
-			'string':
+			case 'string':
 				return filter_var($value, 513);
 				break;
-			'float':
+			case 'float':
 				return filter_var($value, 520, array('flags' => 4096));
 				break;
-			'alphanum':
+			case 'alphanum':
 				$filtered = '';
 				$value = (string)$value;
 				$value_l = strlen($value);
@@ -166,13 +166,13 @@ class Filter implements FilterInterface
 				}
 				return $filtered;
 				break;
-			'trim':
+			case 'trim':
 				return trim($value);
 				break;
-			'striptags':
+			case 'striptags':
 				return strip_tags($value);
 				break;
-			'lower':
+			case 'lower':
 				if(function_exists('mb_strtolower') === true) {
 					return mb_strtolower($value);
 				} else {
@@ -180,7 +180,7 @@ class Filter implements FilterInterface
 					return strtolower($value);
 				}
 				break;
-			'upper':
+			case 'upper':
 				if(function_exists('mb_strtoupper') === true) {
 					return mb_strtoupper($value);
 				} else {

@@ -698,7 +698,7 @@ abstract class Element
 		try {
 			return $this->render();
 		} catch(\Exception $e) {
-			trigger_error((string)$e->getMessage(), \E_USER_ERROR)
+			trigger_error((string)$e->getMessage(), \E_USER_ERROR);
 		}
 	}
 }

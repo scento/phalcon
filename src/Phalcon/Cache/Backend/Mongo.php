@@ -100,7 +100,7 @@ class Mongo extends Backend implements BackendInterface
 				}
 			} else {
 				//Server must be defined otherwise
-				if(isset($this->_options['server'] === false || is_string($this->_options['server']) === false) {
+				if(isset($this->_options['server']) === false || is_string($this->_options['server']) === false) {
 					throw new Exception('The backend requires a valid MongoDB connection string');
 				}
 

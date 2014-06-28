@@ -10,7 +10,7 @@
 */
 namespace Phalcon\CLI;
 
-use \Phalcon\DI\InjectionAwareInterface.
+use \Phalcon\DI\InjectionAwareInterface,
 	\Phalcon\CLI\Router\Exception,
 	\Phalcon\DiInterface;
 

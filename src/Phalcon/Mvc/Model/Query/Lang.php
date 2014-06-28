@@ -33,9 +33,18 @@ abstract class Lang
 	 * Parses a PHQL statement returning an intermediate representation (IR)
 	 *
 	 * @param string $phql
-	 * @return array
+	 * @return array|null
 	 */
 	public static function parsePHQL($phql)
 	{
+		if(is_string($phql) === false) {
+			throw new Exception('PHQL statement must be string');
+		}
+
+		try {
+			return self::PhqlParsePhql($phql);
+		} catch(\Exception $e) {
+			return null;
+		}
 	}
 }

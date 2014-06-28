@@ -118,7 +118,7 @@ class Collection implements Countable, Iterator, Traversable
 	public function add($resource)
 	{
 		if(is_object($resource) === false ||
-			$resource implements Resource === false) {
+			$resource instanceof Resource === false) {
 			throw new Exception('Resource must be an object');
 		}
 

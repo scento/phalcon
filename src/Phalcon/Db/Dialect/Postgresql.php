@@ -12,7 +12,8 @@ namespace Phalcon\Db\Dialect;
 
 use  \Phalcon\Db\Dialect,
 	\Phalcon\Db\DialectInterface,
-	\Phalcon\Db\ColumnInterface;
+	\Phalcon\Db\ColumnInterface,
+	\Phalcon\Db\Exception;
 
 /**
  * Phalcon\Db\Dialect\Postgresql

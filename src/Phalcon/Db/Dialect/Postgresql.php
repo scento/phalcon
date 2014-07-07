@@ -442,7 +442,7 @@ class Postgresql extends Dialect implements DialectInterface
 			$schemaName == true) {
 			return "SELECT viewname AS view_name FROM pg_views WHERE schemaname = '".$schemaName."' ORDER BY view_name";
 		} else {
-			return "SELECT viewname AS view_name FROM pg_views WHERE schemaname = 'public' ORDER BY view_name"
+			return "SELECT viewname AS view_name FROM pg_views WHERE schemaname = 'public' ORDER BY view_name";
 		}
 	}
 

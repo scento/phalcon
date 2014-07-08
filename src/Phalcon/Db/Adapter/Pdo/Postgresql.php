@@ -220,6 +220,7 @@ class Postgresql extends Pdo implements EventsAwareInterface, AdapterInterface
 			//Create a Phalcon\Db\Column to abstract the column
 			$column = new Column($field[0], $definition);
 			$columns[] = $column;
+			$old_column = $field[0];
 		}
 
 		return $columns;

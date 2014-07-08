@@ -113,78 +113,74 @@ class Oracle extends Pdo implements EventsAwareInterface, AdapterInterface
 		$old_column = null;
 		foreach($descibe as $field) {
 			$definition = array('bindType' => 2);
-			$column_size = $field[2];
-			$column_precision = $field[3];
-			$column_scale = $field[4];
-			$column_type = $field[1];
 
 			//Check the column type to get the current Phalcon type
 			while(true) {
-				if(strpos($column_type, 'NUMBER') !== false) {
+				if(strpos($field[1], 'NUMBER') !== false) {
 					$definition['type'] = 3;
 					$definition['isNumeric'] = 1;
-					$definition['size'] = $column_precision;
-					$definition['scale'] = $column_scale;
+					$definition['size'] = $field[3];
+					$definition['scale'] = $field[4];
 					$definition['bindType'] = 32;
 					break;
 				}
 
-				if(strpos($column_type, 'TINYINT(1)') !== false) {
+				if(strpos($field[1], 'TINYINT(1)') !== false) {
 					$definition['type'] = 8;
 					$definition['bindType'] = 5;
 					break;
 				}
 
-				if(strpos($column_type, 'INTEGER') !== false) {
+				if(strpos($field[1], 'INTEGER') !== false) {
 					$definition['type'] = 0;
 					$definition['isNumeric'] = 1;
-					$definition['size'] = $column_precision;
+					$definition['size'] = $field[3];
 					$definition['bindType'] = 1;
 					break;
 				}
 
-				if(strpos($column_type, 'FLOAT') !== false) {
+				if(strpos($field[1], 'FLOAT') !== false) {
 					$definition['type'] = 7;
 					$definition['isNumeric'] = 1;
-					$definition['size'] = $column_size;
-					$definition['scale'] = $column_scale;
+					$definition['size'] = $field[2];
+					$definition['scale'] = $field[4];
 					$definition['bindType'] = 32;
 					break;
 				}
 
-				if(strpos($column_type, 'TIMESTAMP') !== false) {
+				if(strpos($field[1], 'TIMESTAMP') !== false) {
 					$definition['type'] = 1;
 					break;
 				}
 
-				if(strpos($column_type, 'RAW') !== false) {
+				if(strpos($field[1], 'RAW') !== false) {
 					$definition['type'] = 6;
 					break;
 				}
 
-				if(strpos($column_type, 'BLOB') !== false) {
+				if(strpos($field[1], 'BLOB') !== false) {
 					$definition['type'] = 6;
 					break;
 				}
 
-				if(strpos($column_type, 'CLOB') !== false) {
+				if(strpos($field[1], 'CLOB') !== false) {
 					$definition['type'] = 6;
 					break;
 				}
 
-				if(strpos($column_type, 'VARCHAR2') !== false) {
+				if(strpos($field[1], 'VARCHAR2') !== false) {
 					$definition['type'] = 2;
-					$definition['size'] = $column_size;
+					$definition['size'] = $field[2];
 					break;
 				}
 
-				if(strpos($column_type, 'CHAR') !== false) {
+				if(strpos($field[1], 'CHAR') !== false) {
 					$definition['type'] = 5;
-					$definition['size'] = $column_size;
+					$definition['size'] = $field[2];
 					break;
 				}
 
-				if(strpos($column_type, 'text') !== false) {
+				if(strpos($field[1], 'text') !== false) {
 					$definition['type'] = 6;
 					break;
 				}

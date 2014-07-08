@@ -35,7 +35,7 @@ use \Phalcon\Db\Adapter\Pdo,
  * 
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/db/adapter/pdo/sqlite.c
  */
-class Sqlite extendsPdo implements EventsAwareInterface, AdapterInterface
+class Sqlite extends Pdo implements EventsAwareInterface, AdapterInterface
 {
 	/**
 	 * Type
@@ -97,10 +97,9 @@ class Sqlite extendsPdo implements EventsAwareInterface, AdapterInterface
 				is_null($schema) === false)) {
 			throw new Exception('Invalid parameter type.');
 		}
-		
+
 		$columns = array();
-		$dialect = $this->_dialect;
-		$sql = $dialect->describeColumns($table, $schema);
+		$sql =  $this->_dialect->describeColumns($table, $schema);
 
 		//We're using FETCH_NUM to fetch the columns
 		$describe = $this->fetchAll($sql, 3);
@@ -229,19 +228,90 @@ class Sqlite extendsPdo implements EventsAwareInterface, AdapterInterface
 	 * Lists table indexes
 	 *
 	 * @param string $table
-	 * @param string $schema
+	 * @param string|null $schema
 	 * @return \Phalcon\Db\Index[]
+	 * @throws Exception
 	 */
-	public function describeIndexes($table, $schema=null){ }
+	public function describeIndexes($table, $schema = null)
+	{
+		if(is_string($table) === false ||
+			(is_string($schema) === false &&
+			is_null($schema) === false)) {
+			throw new Exception('Invalid parameter type.');
+		}
+
+		$dialect = $this->_dialect;
+
+		//We're using FETCH_NUM to fetch the columns
+		$sql = $dialect->describeIndexes($table, $schema);
+		$describe = $this->fetchAll($sql, 3);
+
+		//Cryptic Guide: 0 - position, 1 - name
+		$indexes = array();
+		foreach($describe as $index) {
+			$key_name = $index[1];
+			if(isset($indexes[$key_name]) === false) {
+				$indexes[$key_name] = array();
+			}
+
+			$sql_index_describe = $dialect->describeIndex($key_name);
+			$describe_index = $this->fetchAll($sql_index_describe, 3);
+
+			foreach($describe_index as $index_column) {
+				$indexes[$key_name][] = $index_column[2];
+			}
+		}
+
+		$index_objects = array();
+		foreach($indexes as $name => $index_columns) {
+			$index = new Index($name, $index_columns);
+			$index_objects[$name] = $index;
+		}
+
+		return $index_objects;
+	}
 
 	/**
 	 * Lists table references
 	 *
 	 * @param string $table
-	 * @param string $schema
+	 * @param string|null $schema
 	 * @return \Phalcon\Db\Reference[]
+	 * @throws Exception
 	 */
-	public function describeReferences($table, $schema=null){ }
+	public function describeReferences($table, $schema = null)
+	{
+		if(is_string($table) === false ||
+			(is_string($schema) === false &&
+			is_null($schema) === false)) {
+			throw new Exception('Invalid parameter type.');
+		}
+
+		$dialect = $this->_dialect;
+
+		//Get the SQL to describe the references
+		$sql = $dialect->describeReferences($table, $schema);
+
+		//We're using FETCH_NUM to fetch the columns
+		$describe = $this->fetchAll($sql, 3);
+
+		//Cryptic Guide: 2 - table, 3 - from, 4 - to
+		$reference_objects = array();
+		foreach($describe as $number => $reference_describe) {
+			$constraint_name = 'foreign_key_'.$number;
+			$referenced_table = $reference_describe[2];
+			$columns = array($reference_describe[3]);
+			$referenced_columns = array($reference_describe[4]);
+
+			$reference_array = array('referencedSchema' => null, 'referencedTable' => $referenced_table, 'columns' => $columns, 'referencedColumns' => $referenced_columns);
+
+			//Every route is abstracted as a Phalcon\Db\Reference instance
+			$reference = new Reference($constraint_name, $reference_array);
+			$reference_objects[$constraint_name] = $reference;
+		}
+
+		return $reference_objects;
+	}
 
 	/**
 	 * Check whether the database system requires an explicit value for identity columns

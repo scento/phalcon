@@ -92,6 +92,12 @@ class Sqlite extendsPdo implements EventsAwareInterface, AdapterInterface
 	 */
 	public function describeColumns($table, $schema = null)
 	{
+		if(is_string($table) === false ||
+			(is_string($schema) === false &&
+				is_null($schema) === false)) {
+			throw new Exception('Invalid parameter type.');
+		}
+		
 		$columns = array();
 		$dialect = $this->_dialect;
 		$sql = $dialect->describeColumns($table, $schema);

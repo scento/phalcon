@@ -97,7 +97,9 @@ class Mysql extends Pdo implements EventsAwareInterface, AdapterInterface
 	 */
 	public function describeColumns($table, $schema = null)
 	{
-		if(is_string($table) === false) {
+		if(is_string($table) === false ||
+			(is_string($schema) === false &&
+				is_null($schema) === false)) {
 			throw new Exception('Invalid parameter type.');
 		}
 

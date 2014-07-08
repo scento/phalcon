@@ -32,6 +32,8 @@ use \Phalcon\Db\Adapter\Pdo,
  * $connection = new Phalcon\Db\Adapter\Pdo\Oracle($config);
  *
  * </code>
+ * 
+ * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/db/adapter/pdo/oracle.c
  */
 class Oracle extends Pdo implements EventsAwareInterface, AdapterInterface
 {

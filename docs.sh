@@ -1,5 +1,5 @@
 #!/bin/bash
-DATA_DIR=`pwd`/Phalcon
+DATA_DIR=`pwd`/src/Phalcon
 
 DOCS_DIR=`pwd`/docs
 DOCS_DIR_PHPUML=`pwd`/docs/phpuml

@@ -11,7 +11,8 @@ namespace Phalcon\Mvc\View\Engine\Volt;
 use \Phalcon\Mvc\View\Engine\Volt\Parser\Exception,
 	\Phalcon\Mvc\View\Engine\Volt\Parser\Evaluation,
 	\Phalcon\Mvc\View\Engine\Volt\Parser\Statement,
-	\Phalcon\Mvc\View\Engine\Volt\Parser\Raw;
+	\Phalcon\Mvc\View\Engine\Volt\Parser\Raw,
+	\Phalcon\Mvc\View\Engine\Volt\Parser\Block;
 
 /**
  * Tokenizer
@@ -35,11 +36,14 @@ class Tokenizer
 		}
 
 		$flags = \PREG_SPLIT_NO_EMPTY|\PREG_SPLIT_OFFSET_CAPTURE|PREG_SPLIT_DELIM_CAPTURE;
-		$matches = preg_split('#(["\'])|({{)|(}})|({%)|(%})|({\#)|(\#})#', $expression, -1, $flags);
+		$regexp = '({%\s*block\s+[\w]+\s*%})|({%\s*endblock\s*%})|(["\'])|({{)|(}})|({%)|(%})|({\#)|(\#})';
+		$matches = preg_split($regexp, $expression, -1, $flags);
 
 		$statements = 0;
 		$evaluations = 0;
 		$comments = 0;
+		$block = false;
+		$block_name = null;
 		$in_quotes = false;
 		$in_single_quotes = false;
 		$line = 1;
@@ -53,6 +57,7 @@ class Tokenizer
 			switch($match[0])
 			{
 				case '{#':
+					//Open Comment
 					if($in_quotes === false &&
 						$in_single_quotes === false) {
 						if($comments === 0) {
@@ -67,6 +72,7 @@ class Tokenizer
 					}
 					break;
 				case '#}':
+					//Close Comment
 					if($in_quotes === false &&
 						$in_single_quotes === false) {
 						$comments--;
@@ -79,6 +85,7 @@ class Tokenizer
 					}
 					break;
 				case '{{':
+					//Open Statement
 					if($in_quotes === false &&
 						$in_single_quotes === false) {
 						if($statements === 0) {
@@ -93,6 +100,7 @@ class Tokenizer
 					}
 					break;
 				case '}}':
+					//Close Statement
 					if($in_quotes === false &&
 						$in_single_quotes === false) {
 						$statements--;
@@ -109,6 +117,7 @@ class Tokenizer
 					}
 					break;
 				case '{%':
+					//Open Evaluation
 					if($in_quotes === false &&
 						$in_single_quotes === false) {
 						if($evaluations === 0) {
@@ -123,6 +132,7 @@ class Tokenizer
 					}
 					break;
 				case '%}':
+					//Close Evaluation
 					if($in_quotes === false &&
 						$in_single_quotes === false) {
 						$evaluations--;
@@ -139,18 +149,54 @@ class Tokenizer
 					}
 					break;
 				case '"':
+					//Open/Close String
 					if($in_single_quotes === false) {
 						$in_quotes = ($in_quotes === true ? false : true);
 					}
 					$buffer .= $match[0];
 					break;
 				case "'":
+					//Open/Close String
 					if($in_quotes === false) {
 						$in_single_quotes = ($in_single_quotes === true ? false : true);
 					}
 					$buffer .= $match[0];
 					break;
 				default:
+					if($in_quotes === false &&
+						$in_single_quotes === false) {
+						$block_matches = array();
+						if(preg_match('#{%\s*block\s+([\w]+)\s*%}#', $match[0], $block_matches) !== false) {
+							//Check for {% block NAME %} expression
+							if($block === true) {
+								throw new Exception('Embedding blocks into other blocks is not supported');
+							}
+
+							$raw = new Raw($buffer);
+							$raw->setLine($line);
+							$raw->setPath($path);
+							$ret[] = $raw->getIntermediate();
+							$buffer = '';
+
+							$block = true;
+							$block_name = $block_matches[1];
+						} elseif(preg_match('#{%\s*endblock\s*%}#', $match[0]) !== false) {
+							//Check for {% endblock %} expression							
+							if($block === false) {
+								throw new Exception('Unexpected token.');
+							}
+
+							$block = false;
+							$block_name = null;
+							$object = new Block($buffer);
+							$object->setLine($line);
+							$object->setPath($path);
+							$object->setName($block_name);
+							$ret[] = $object->getIntermediate();
+							$buffer = '';
+						}
+					}
+
 					$buffer .= $match[0];
 					break;
 			}

@@ -9,12 +9,12 @@
 namespace Phalcon\Mvc\View\Engine\Volt\Parser;
 
 use Phalcon\Mvc\View\Engine\Volt\Parser\Exception,
-	Phalcon\Mvc\View\Engine\Volt\Parser\Block;
+	Phalcon\Mvc\View\Engine\Volt\Parser\Phrase;
 
 /**
  * Raw
 */
-class Raw extends Block
+class Raw extends Phrase
 {
 	/**
 	 * Get Intermediate Expression

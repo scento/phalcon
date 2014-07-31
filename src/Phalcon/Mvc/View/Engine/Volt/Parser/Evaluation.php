@@ -9,11 +9,11 @@
 namespace Phalcon\Mvc\View\Engine\Volt\Parser;
 
 use Phalcon\Mvc\View\Engine\Volt\Parser\Exception,
-	Phalcon\Mvc\View\Engine\Volt\Parser\Block;
+	Phalcon\Mvc\View\Engine\Volt\Parser\Phrase;
 
 /**
  * Evaluation
 */
-class Evaluation extends Block
+class Evaluation extends Phrase
 {
 }

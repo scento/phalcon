@@ -2058,7 +2058,9 @@ class Compiler implements InjectionAwareInterface
 		}
 
 		$current_path = $this->_currentPath;
-		$intermediate = Parser::parseView($viewCode, $current_path);
+
+		$parser = new Parser($viewCode, $current_path);
+		$intermediate = $parser->getIntermediate();
 
 		//The parser must return a valid array
 		if(is_array($intermediate) === true) {
@@ -2489,6 +2491,7 @@ class Compiler implements InjectionAwareInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		return Parser::parseView($viewCode, 'eval code');
+		$parser = new Parser($viewCode, 'eval code');
+		return $parser->getIntermediate();
 	}
 }

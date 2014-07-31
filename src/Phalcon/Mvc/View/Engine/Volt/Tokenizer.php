@@ -36,7 +36,7 @@ class Tokenizer
 		}
 
 		$flags = \PREG_SPLIT_NO_EMPTY|\PREG_SPLIT_OFFSET_CAPTURE|PREG_SPLIT_DELIM_CAPTURE;
-		$regexp = '({%\s*block\s+[\w]+\s*%})|({%\s*endblock\s*%})|(["\'])|({{)|(}})|({%)|(%})|({\#)|(\#})';
+		$regexp = '({%\s*autoescape\s+(true|false)\s*%})|({%\s*endautoescape\s*%})|({%\s*block\s+[\w]+\s*%})|({%\s*endblock\s*%})|(["\'])|({{)|(}})|({%)|(%})|({\#)|(\#})';
 		$matches = preg_split($regexp, $expression, -1, $flags);
 
 		$statements = 0;
@@ -46,6 +46,7 @@ class Tokenizer
 		$in_quotes = false;
 		$in_single_quotes = false;
 		$line = 1;
+		$autoescape = 0;
 		
 		$buffer = '';
 		$ret = array();
@@ -163,8 +164,8 @@ class Tokenizer
 					if($in_quotes === false &&
 						$in_single_quotes === false) {
 						$block_matches = array();
-						if(preg_match('#{%\s*block\s+[\w]+\s*%}#', $match[0], $block_matches) !== false) {
-							//Check for {% block NAME %} expression
+						if(preg_match('#{%\s*block\s+[\w]+\s*%}#', $match[0], $block_matches) != false) {
+							//Check for {% block NAME %}
 							if($block === true) {
 								throw new Exception('Embedding blocks into other blocks is not supported');
 							}
@@ -176,8 +177,8 @@ class Tokenizer
 							$buffer = '';
 
 							$block = true;
-						} elseif(preg_match('#{%\s*endblock\s*%}#', $match[0]) !== false) {
-							//Check for {% endblock %} expression							
+						} elseif(preg_match('#{%\s*endblock\s*%}#', $match[0]) != false) {
+							//Check for {% endblock %}
 							if($block === false) {
 								throw new Exception('Unexpected token.');
 							}
@@ -189,6 +190,29 @@ class Tokenizer
 							$object->setPath($path);
 							$ret[] = $object->getIntermediate();
 							$buffer = '';
+						} elseif(preg_match('#({%\s*autoescape\s+(true|false)\s*%})#', $match[0]) != false) {
+							//Check for {% autoescape BOOL %}
+							if($autoescape === 0) {
+								$raw = new Raw($buffer);
+								$raw->setLine($line);
+								$raw->setPath($path);
+								$ret[] = $evaluation->getIntermediate();
+								$buffer = '';
+							}
+
+							$autoescape++;
+						} elseif(preg_match('#({%\s*endautoescape\s*%})#', $match[0]) != false) {
+							//Check for {% endautoescape %}
+							$autoescape--;
+
+							if($autoescape < 0) {
+								throw new Exception('Unexpected token.');
+							} elseif($autoescape === 0) {
+								$object = new Autoescape($buffer);
+								$object->setLine($line);
+								$object->setPath($path);
+								$ret[] = $object->getIntermediate();
+							}
 						}
 					}
 

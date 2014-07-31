@@ -49,4 +49,31 @@ class Block extends Phrase
 	{
 		return $this->_name;
 	}
+
+	/**
+	 * Get Intermediate
+	 * 
+	 * @return array
+	 * @throws Exception
+	*/
+	public function getIntermediate()
+	{
+		if(is_null($this->_name) === true) {
+			throw new Exception('Blocks without names are unsupported.');
+		}
+
+		$inner = array();
+		$expression = '^{%\s*block\s+\w+\s*%}(.*){%\s*endblock\s*%}$';
+		if(preg_match($expression, $this->_statement, $inner) === false) {
+			throw new Exception('Invalid block statement.');
+		}
+
+		return array(
+			'type' => 307, //PHVOLT_T_BLOCK
+			'name' => $this->getName(),
+			'block_statements' => Tokenizer::run($inner[1]),
+			'file' => $this->_path,
+			'line' => $this->_line
+		);
+	}
 }

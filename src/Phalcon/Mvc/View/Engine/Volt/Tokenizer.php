@@ -153,14 +153,12 @@ class Tokenizer
 					if($in_single_quotes === false) {
 						$in_quotes = ($in_quotes === true ? false : true);
 					}
-					$buffer .= $match[0];
 					break;
 				case "'":
 					//Open/Close String
 					if($in_quotes === false) {
 						$in_single_quotes = ($in_single_quotes === true ? false : true);
 					}
-					$buffer .= $match[0];
 					break;
 				default:
 					if($in_quotes === false &&
@@ -197,9 +195,10 @@ class Tokenizer
 						}
 					}
 
-					$buffer .= $match[0];
 					break;
 			}
+			
+			$buffer .= $match[0];
 		}
 
 		return $ret;

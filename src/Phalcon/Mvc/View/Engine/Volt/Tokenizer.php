@@ -8,10 +8,10 @@
 */
 namespace Phalcon\Mvc\View\Engine\Volt;
 
-use \Phalcon\Mvc\View\Engine\Volt\Parser\Exception;
-use \Phalcon\Mvc\View\Engine\Volt\Parser\Evaluation;
-use \Phalcon\Mvc\View\Engine\Volt\Parser\Statement;
-use \Phalcon\Mvc\View\Engine\Volt\Parser\Raw;
+use \Phalcon\Mvc\View\Engine\Volt\Parser\Exception,
+	\Phalcon\Mvc\View\Engine\Volt\Parser\Evaluation,
+	\Phalcon\Mvc\View\Engine\Volt\Parser\Statement,
+	\Phalcon\Mvc\View\Engine\Volt\Parser\Raw;
 
 /**
  * Tokenizer

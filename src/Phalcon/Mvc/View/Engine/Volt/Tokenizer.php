@@ -13,7 +13,8 @@ use \Phalcon\Mvc\View\Engine\Volt\Parser\Exception,
 	\Phalcon\Mvc\View\Engine\Volt\Parser\Raw,
 	\Phalcon\Mvc\View\Engine\Volt\Parser\Block,
 	\Phalcon\Mvc\View\Engine\Volt\Parser\Autoescape,
-	\Phalcon\Mvc\View\Engine\Volt\Parser\Cache;
+	\Phalcon\Mvc\View\Engine\Volt\Parser\Cache,
+	\Phalcon\Mvc\View\Engine\Volt\Parser\Macro;
 
 /**
  * Tokenizer
@@ -47,6 +48,8 @@ class Tokenizer
 			case 'cache':
 				$obj = new Cache($buffer);
 				break;
+			case 'macro':
+				$obj = new Macro($buffer);
 		}
 		$obj->setLine($line);
 		$obj->setPath($path);
@@ -70,7 +73,7 @@ class Tokenizer
 		}
 
 		$flags = \PREG_SPLIT_NO_EMPTY|\PREG_SPLIT_OFFSET_CAPTURE|PREG_SPLIT_DELIM_CAPTURE;
-		$regexp = '({%\s*endcache\s*%})|({%\s*cache\s+(.*)\s*([\d]*)\s*%})|({%\s*autoescape\s+(true|false)\s*%})|({%\s*endautoescape\s*%})|({%\s*block\s+[\w]+\s*%})|({%\s*endblock\s*%})|(["\'])|({{)|(}})|({\#)|(\#})';
+		$regexp = '({%(?:-?)\s*macro\s*([\w]+)\s*\(((?:\w(?:[,]?)\s*)*\))\s*%})|({%(?:-?)\s*endmacro\s*%})|({%\s*endcache\s*%})|({%\s*cache\s+(.*)\s*([\d]*)\s*%})|({%\s*autoescape\s+(true|false)\s*%})|({%\s*endautoescape\s*%})|({%\s*block\s+[\w]+\s*%})|({%\s*endblock\s*%})|(["\'])|({{)|(}})|({\#)|(\#})';
 		$matches = preg_split($regexp, $expression, -1, $flags);
 
 		$statements = 0;
@@ -78,6 +81,7 @@ class Tokenizer
 		$autoescape = 0;
 
 		$block = false;
+		$macro = false;
 		$in_quotes = false;
 		$in_single_quotes = false;
 
@@ -202,7 +206,7 @@ class Tokenizer
 						} elseif(preg_match('#{%[\s]*cache[\s]+(.*?)([\d]*)[\s]*%}#', $match[0]) != false) {
 							//Check for {% cache EXPR INT %}
 							if($cache === 0) {
-								$et[] = self::createObject('raw', $buffer, $line, $path);
+								$ret[] = self::createObject('raw', $buffer, $line, $path);
 								$buffer = '';
 							}
 
@@ -218,6 +222,26 @@ class Tokenizer
 								$buffer = '';
 							}
 
+						} elseif(preg_match('#{%(?:-?)\s*macro\s*([\w]+)\s*\(((?:\w(?:[,]?)\s*)*\))\s*%}#', $match[0]) != false) {
+							//Check for {% macro NAME(PARAMS) %}
+							if($macro === true) {
+								throw new Exception('Embedding macros into other macros is not allowed');
+							}
+
+
+							$ret[] = self::createObject('raw', $buffer, $line, $path);
+							$buffer = '';
+
+							$block = true;
+						} elseif(preg_match('#({%(?:-?)\s*endmacro\s*%})#', $match[0]) != false) {
+							//Check for {% endmacro %}
+							if($macro === false) {
+								throw new Exception('Unexpected token.');
+							}
+
+							$ret[] = self::createObject('macro', $buffer, $line, $path);
+							$buffer = '';
+							$block = false;
 						}
 					}
 

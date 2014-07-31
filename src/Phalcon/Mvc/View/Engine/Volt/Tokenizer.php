@@ -12,7 +12,9 @@ use \Phalcon\Mvc\View\Engine\Volt\Parser\Exception,
 	\Phalcon\Mvc\View\Engine\Volt\Parser\Evaluation,
 	\Phalcon\Mvc\View\Engine\Volt\Parser\Statement,
 	\Phalcon\Mvc\View\Engine\Volt\Parser\Raw,
-	\Phalcon\Mvc\View\Engine\Volt\Parser\Block;
+	\Phalcon\Mvc\View\Engine\Volt\Parser\Block,
+	\Phalcon\Mvc\View\Engine\Volt\Parser\Autoescape,
+	\Phalcon\Mvc\View\Engine\Volt\Parser\Cache;
 
 /**
  * Tokenizer
@@ -36,7 +38,7 @@ class Tokenizer
 		}
 
 		$flags = \PREG_SPLIT_NO_EMPTY|\PREG_SPLIT_OFFSET_CAPTURE|PREG_SPLIT_DELIM_CAPTURE;
-		$regexp = '({%\s*autoescape\s+(true|false)\s*%})|({%\s*endautoescape\s*%})|({%\s*block\s+[\w]+\s*%})|({%\s*endblock\s*%})|(["\'])|({{)|(}})|({%)|(%})|({\#)|(\#})';
+		$regexp = '({%\s*endcache\s*%})|({%\s*cache\s+(.*)\s*([\d]*)\s*%})|({%\s*autoescape\s+(true|false)\s*%})|({%\s*endautoescape\s*%})|({%\s*block\s+[\w]+\s*%})|({%\s*endblock\s*%})|(["\'])|({{)|(}})|({%)|(%})|({\#)|(\#})';
 		$matches = preg_split($regexp, $expression, -1, $flags);
 
 		$statements = 0;
@@ -139,7 +141,7 @@ class Tokenizer
 
 						if($evaluations < 0) {
 							throw new Exception('Unexpected token.');
-						} elseif($evaluations < 0) {
+						} elseif($evaluations === 0) {
 							$evaluation = new Evaluation($buffer);
 							$evaluation->setLine($line);
 							$evaluation->setPath($path);
@@ -190,18 +192,18 @@ class Tokenizer
 							$object->setPath($path);
 							$ret[] = $object->getIntermediate();
 							$buffer = '';
-						} elseif(preg_match('#({%\s*autoescape\s+(true|false)\s*%})#', $match[0]) != false) {
+						} elseif(preg_match('#{%\s*autoescape\s+(true|false)\s*%}#', $match[0]) != false) {
 							//Check for {% autoescape BOOL %}
 							if($autoescape === 0) {
 								$raw = new Raw($buffer);
 								$raw->setLine($line);
 								$raw->setPath($path);
-								$ret[] = $evaluation->getIntermediate();
+								$ret[] = $raw->getIntermediate();
 								$buffer = '';
 							}
 
 							$autoescape++;
-						} elseif(preg_match('#({%\s*endautoescape\s*%})#', $match[0]) != false) {
+						} elseif(preg_match('#{%\s*endautoescape\s*%}#', $match[0]) != false) {
 							//Check for {% endautoescape %}
 							$autoescape--;
 
@@ -212,6 +214,31 @@ class Tokenizer
 								$object->setLine($line);
 								$object->setPath($path);
 								$ret[] = $object->getIntermediate();
+								$buffer = '';
+							}
+						} elseif(preg_match('#{%[\s]*cache[\s]+(.*?)([\d]*)[\s]*%}#', $match[0]) != false) {
+							//Check for {% cache EXPR INT %}
+							if($cache === 0) {
+								$raw = new Raw($buffer);
+								$raw->setLine($line);
+								$raw->setPath($path);
+								$et[] = $raw->getIntermediate();
+								$buffer = '';
+							}
+
+							$cache++;
+						} elseif(preg_match('#{%[\s]*endcache[\s]*%}#', $match[0]) != false) {
+							//Check for {% endcache %}
+							$cache--;
+
+							if($cache < 0) {
+								throw new Exception('Unexpected token.');
+							} elseif($cache === 0) {
+								$object = new Cache($buffer);
+								$object->setLine($line);
+								$object->setPath($path);
+								$ret[] = $object->getIntermediate();
+								$buffer = '';
 							}
 						}
 					}

@@ -9,7 +9,8 @@
 namespace Phalcon\Mvc\View\Engine\Volt\Parser;
 
 use Phalcon\Mvc\View\Engine\Volt\Parser\Exception,
-	Phalcon\Mvc\View\Engine\Volt\Parser\Phrase;
+	Phalcon\Mvc\View\Engine\Volt\Parser\Phrase,
+	Phalcon\Mvc\View\Engine\Volt\Parser\Statement;
 
 /**
  * Cache Block

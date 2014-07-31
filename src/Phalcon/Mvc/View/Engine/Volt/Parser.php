@@ -116,7 +116,7 @@ class Parser
 	*/
 	public function getIntermediate()
 	{
-		$intermediate = Tokenizer::run($this->_volt);
+		$intermediate = Tokenizer::run($this->_volt, $this->_path);
 		$this->_intermediate = $intermediate;
 		return $intermediate;
 	}

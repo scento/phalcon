@@ -35,7 +35,7 @@ class Tokenizer
 		}
 
 		$flags = \PREG_SPLIT_NO_EMPTY|\PREG_SPLIT_OFFSET_CAPTURE|PREG_SPLIT_DELIM_CAPTURE;
-		$matches = preg_split('#(")|((\{\{)|(\}\}))#', $expression, -1, $flags);
+		$matches = preg_split('#(["\'])|({{)|(}})|({%)|(%})|({\#)|(\#})#', $expression, -1, $flags);
 
 		$statements = 0;
 		$evaluations = 0;

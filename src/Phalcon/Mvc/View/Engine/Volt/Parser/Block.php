@@ -24,10 +24,6 @@ class Block extends Phrase
 	*/
 	public function getIntermediate()
 	{
-		if(is_null($this->_name) === true) {
-			throw new Exception('Blocks without names are unsupported.');
-		}
-
 		$inner = array();
 		$expression = '#^{%[\s]*block[\s]+([\w]+)[\s]*%}(.*){%[\s]*endblock[\s]*%}$#';
 		if(preg_match($expression, $this->_statement, $inner) == false) {

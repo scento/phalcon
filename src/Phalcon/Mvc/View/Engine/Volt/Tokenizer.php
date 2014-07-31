@@ -14,7 +14,8 @@ use \Phalcon\Mvc\View\Engine\Volt\Parser\Exception,
 	\Phalcon\Mvc\View\Engine\Volt\Parser\Block,
 	\Phalcon\Mvc\View\Engine\Volt\Parser\Autoescape,
 	\Phalcon\Mvc\View\Engine\Volt\Parser\Cache,
-	\Phalcon\Mvc\View\Engine\Volt\Parser\Macro;
+	\Phalcon\Mvc\View\Engine\Volt\Parser\Macro,
+	\Phalcon\Mvc\View\Engine\Volt\Parser\ExtendsBlock;
 
 /**
  * Tokenizer
@@ -50,6 +51,8 @@ class Tokenizer
 				break;
 			case 'macro':
 				$obj = new Macro($buffer);
+			case 'extends':
+				$obj = new ExtendsBlock($buffer);
 		}
 		$obj->setLine($line);
 		$obj->setPath($path);
@@ -73,7 +76,7 @@ class Tokenizer
 		}
 
 		$flags = \PREG_SPLIT_NO_EMPTY|\PREG_SPLIT_OFFSET_CAPTURE|PREG_SPLIT_DELIM_CAPTURE;
-		$regexp = '({%(?:-?)\s*macro\s*([\w]+)\s*\(((?:\w(?:[,]?)\s*)*\))\s*%})|({%(?:-?)\s*endmacro\s*%})|({%\s*endcache\s*%})|({%\s*cache\s+(.*)\s*([\d]*)\s*%})|({%\s*autoescape\s+(true|false)\s*%})|({%\s*endautoescape\s*%})|({%\s*block\s+[\w]+\s*%})|({%\s*endblock\s*%})|(["\'])|({{)|(}})|({\#)|(\#})';
+		$regexp = '({%\s*extends\s*"[\' /.\w\-]+"\s*%})|({%(?:-?)\s*macro\s*([\w]+)\s*\(((?:\w(?:[,]?)\s*)*\))\s*%})|({%(?:-?)\s*endmacro\s*%})|({%\s*endcache\s*%})|({%\s*cache\s+(.*)\s*([\d]*)\s*%})|({%\s*autoescape\s+(true|false)\s*%})|({%\s*endautoescape\s*%})|({%\s*block\s+[\w]+\s*%})|({%\s*endblock\s*%})|(["\'])|({{)|(}})|({\#)|(\#})';
 		$matches = preg_split($regexp, $expression, -1, $flags);
 
 		$statements = 0;
@@ -84,6 +87,7 @@ class Tokenizer
 		$macro = false;
 		$in_quotes = false;
 		$in_single_quotes = false;
+		$extends = false;
 
 		$line = 1;
 		
@@ -241,7 +245,19 @@ class Tokenizer
 
 							$ret[] = self::createObject('macro', $buffer, $line, $path);
 							$buffer = '';
-							$block = false;
+							$macro = false;
+						} elseif(preg_match('#{%\s*extends\s*"[\' /.\w\-]+"\s*%}#', $match[0]) != false) {
+							//Check for {% extends "FILE" %}
+							if(count($ret) !== 0) {
+								throw new Exception('Extends statement must be placed at the first line in the template');
+							}
+
+							$ret[] = self::createObject('raw', $buffer, $line, $path);
+							$buffer = '';
+
+							$ret[] = self::createObject('extends', $match[0], $line, $path);
+							$match[0] = '';
+							$extends = true;
 						}
 					}
 

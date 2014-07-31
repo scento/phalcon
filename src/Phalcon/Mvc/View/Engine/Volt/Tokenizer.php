@@ -19,34 +19,6 @@ use \Phalcon\Mvc\View\Engine\Volt\Parser\Raw;
 class Tokenizer
 {
 	/**
-	 * State: Raw
-	 * 
-	 * @var int
-	*/
-	const STATE_RAW = 0;
-
-	/**
-	 * State: String
-	 * 
-	 * @var int
-	*/
-	const STATE_STRING = 1;
-
-	/**
-	 * State: Expression
-	 * 
-	 * @var int
-	*/
-	const STATE_EXPRESSION = 2;
-
-	/**
-	 * State: Evaluation
-	 * 
-	 * @var int
-	*/
-	const STATE_EVALUATION = 3;
-
-	/**
 	 * Tokenize expression
 	 * 
 	 * @param string $expression

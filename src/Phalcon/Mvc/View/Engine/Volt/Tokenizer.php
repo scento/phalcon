@@ -67,6 +67,7 @@ class Tokenizer
 
 		$statements = 0;
 		$evaluations = 0;
+		$comments = 0;
 		$in_quotes = false;
 		$in_single_quotes = false;
 		$line = 1;
@@ -79,8 +80,35 @@ class Tokenizer
 			$line += substr_count($match[0], "\n");
 			switch($match[0])
 			{
+				case '{#':
+					if($in_quotes === false &&
+						$in_single_quotes === false) {
+						if($comments === 0) {
+							$raw = new Raw($buffer);
+							$raw->setLine($line);
+							$raw->setPath($path);
+							$ret[] = $raw->getIntermediate();
+							$buffer = '';
+						}
+
+						$comments++;
+					}
+					break;
+				case '#}':
+					if($in_quotes === false &&
+						$in_single_quotes === false) {
+						$comments--;
+
+						if($comments < 0) {
+							throw new Exception('Unexpected token.');
+						} elseif($comments === 0) {
+							$buffer = '';
+						}
+					}
+					break;
 				case '{{':
-					if($in_string === false) {
+					if($in_quotes === false &&
+						$in_single_quotes === false) {
 						if($statements === 0) {
 							$raw = new Raw($buffer);
 							$raw->setLine($line);
@@ -93,7 +121,8 @@ class Tokenizer
 					}
 					break;
 				case '}}':
-					if($in_string === false) {
+					if($in_quotes === false &&
+						$in_single_quotes === false) {
 						$statements--;
 
 						if($statements < 0) {
@@ -108,7 +137,8 @@ class Tokenizer
 					}
 					break;
 				case '{%':
-					if($in_string === false) {
+					if($in_quotes === false &&
+						$in_single_quotes === false) {
 						if($evaluations === 0) {
 							$raw = new Raw($buffer);
 							$raw->setLine($line);
@@ -121,7 +151,8 @@ class Tokenizer
 					}
 					break;
 				case '%}':
-					if($in_string === false) {
+					if($in_quotes === false &&
+						$in_single_quotes === false) {
 						$evaluations--;
 
 						if($evaluations < 0) {
@@ -136,11 +167,15 @@ class Tokenizer
 					}
 					break;
 				case '"':
-					$in_quotes = ($in_quotes === true ? false : true);
+					if($in_single_quotes === false) {
+						$in_quotes = ($in_quotes === true ? false : true);
+					}
 					$buffer .= $match[0];
 					break;
 				case "'":
-					$in_single_quotes = ($in_single_quotes === true ? false : true);
+					if($in_quotes === false) {
+						$in_single_quotes = ($in_single_quotes === true ? false : true);
+					}
 					$buffer .= $match[0];
 					break;
 				default:

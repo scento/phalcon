@@ -9,7 +9,6 @@
 namespace Phalcon\Mvc\View\Engine\Volt;
 
 use \Phalcon\Mvc\View\Engine\Volt\Parser\Exception,
-	\Phalcon\Mvc\View\Engine\Volt\Parser\Evaluation,
 	\Phalcon\Mvc\View\Engine\Volt\Parser\Statement,
 	\Phalcon\Mvc\View\Engine\Volt\Parser\Raw,
 	\Phalcon\Mvc\View\Engine\Volt\Parser\Block,
@@ -21,6 +20,39 @@ use \Phalcon\Mvc\View\Engine\Volt\Parser\Exception,
 */
 class Tokenizer
 {
+	/**
+	 * Generate representation of phrase
+	 * 
+	 * @param string $type
+	 * @param string $buffer
+	 * @param int $line
+	 * @param string $path
+	 * @return array
+	*/
+	private static function createObject($type, $buffer, $line, $path)
+	{
+		switch($type) {
+			case 'raw':
+				$obj = new Raw($buffer);
+				break;
+			case 'statement':
+				$obj = new Statement($buffer);
+				break;
+			case 'autoescape':
+				$obj = new Autoescape($buffer);
+				break;
+			case 'block':
+				$obj = new Block($buffer);
+				break;
+			case 'cache':
+				$obj = new Cache($buffer);
+				break;
+		}
+		$obj->setLine($line);
+		$obj->setPath($path);
+		return $obj->getIntermediate();
+	}
+
 	/**
 	 * Tokenize expression
 	 * 
@@ -38,17 +70,18 @@ class Tokenizer
 		}
 
 		$flags = \PREG_SPLIT_NO_EMPTY|\PREG_SPLIT_OFFSET_CAPTURE|PREG_SPLIT_DELIM_CAPTURE;
-		$regexp = '({%\s*endcache\s*%})|({%\s*cache\s+(.*)\s*([\d]*)\s*%})|({%\s*autoescape\s+(true|false)\s*%})|({%\s*endautoescape\s*%})|({%\s*block\s+[\w]+\s*%})|({%\s*endblock\s*%})|(["\'])|({{)|(}})|({%)|(%})|({\#)|(\#})';
+		$regexp = '({%\s*endcache\s*%})|({%\s*cache\s+(.*)\s*([\d]*)\s*%})|({%\s*autoescape\s+(true|false)\s*%})|({%\s*endautoescape\s*%})|({%\s*block\s+[\w]+\s*%})|({%\s*endblock\s*%})|(["\'])|({{)|(}})|({\#)|(\#})';
 		$matches = preg_split($regexp, $expression, -1, $flags);
 
 		$statements = 0;
-		$evaluations = 0;
 		$comments = 0;
+		$autoescape = 0;
+
 		$block = false;
 		$in_quotes = false;
 		$in_single_quotes = false;
+
 		$line = 1;
-		$autoescape = 0;
 		
 		$buffer = '';
 		$ret = array();
@@ -63,10 +96,7 @@ class Tokenizer
 					if($in_quotes === false &&
 						$in_single_quotes === false) {
 						if($comments === 0) {
-							$raw = new Raw($buffer);
-							$raw->setLine($line);
-							$raw->setPath($path);
-							$ret[] = $raw->getIntermediate();
+							$raw[] = self::createObject('raw', $buffer, $line, $path);
 							$buffer = '';
 						}
 
@@ -82,6 +112,7 @@ class Tokenizer
 						if($comments < 0) {
 							throw new Exception('Unexpected token.');
 						} elseif($comments === 0) {
+							//Delete comment
 							$buffer = '';
 						}
 					}
@@ -91,10 +122,7 @@ class Tokenizer
 					if($in_quotes === false &&
 						$in_single_quotes === false) {
 						if($statements === 0) {
-							$raw = new Raw($buffer);
-							$raw->setLine($line);
-							$raw->setPath($path);
-							$ret[] = $raw->getIntermediate();
+							$ret[] = self::createObject('raw', $buffer, $line, $path);
 							$buffer = '';
 						}
 
@@ -110,42 +138,7 @@ class Tokenizer
 						if($statements < 0) {
 							throw new Exception('Unexpected token.');
 						} elseif($statements === 0) {
-							$statement = new Statement($buffer);
-							$statement->setLine($line);
-							$statement->setPath($path);
-							$ret[] = $statement->getIntermediate();
-							$buffer = '';
-						}
-					}
-					break;
-				case '{%':
-					//Open Evaluation
-					if($in_quotes === false &&
-						$in_single_quotes === false) {
-						if($evaluations === 0) {
-							$raw = new Raw($buffer);
-							$raw->setLine($line);
-							$raw->setPath($path);
-							$ret[] = $raw->getIntermediate();
-							$buffer = '';
-						}
-
-						$evaluations++;
-					}
-					break;
-				case '%}':
-					//Close Evaluation
-					if($in_quotes === false &&
-						$in_single_quotes === false) {
-						$evaluations--;
-
-						if($evaluations < 0) {
-							throw new Exception('Unexpected token.');
-						} elseif($evaluations === 0) {
-							$evaluation = new Evaluation($buffer);
-							$evaluation->setLine($line);
-							$evaluation->setPath($path);
-							$ret[] = $evaluation->getIntermediate();
+							$ret[] = self::createObject('statement', $buffer, $line, $path);
 							$buffer = '';
 						}
 					}
@@ -165,6 +158,7 @@ class Tokenizer
 				default:
 					if($in_quotes === false &&
 						$in_single_quotes === false) {
+						/* Special Expressions */
 						$block_matches = array();
 						if(preg_match('#{%\s*block\s+[\w]+\s*%}#', $match[0], $block_matches) != false) {
 							//Check for {% block NAME %}
@@ -172,10 +166,7 @@ class Tokenizer
 								throw new Exception('Embedding blocks into other blocks is not supported');
 							}
 
-							$raw = new Raw($buffer);
-							$raw->setLine($line);
-							$raw->setPath($path);
-							$ret[] = $raw->getIntermediate();
+							$ret[] = self::createObject('raw', $buffer, $line, $path);
 							$buffer = '';
 
 							$block = true;
@@ -185,20 +176,14 @@ class Tokenizer
 								throw new Exception('Unexpected token.');
 							}
 
-							$block = false;
-							$block_name = null;
-							$object = new Block($buffer);
-							$object->setLine($line);
-							$object->setPath($path);
-							$ret[] = $object->getIntermediate();
+							$ret[] = self::createObject('block', $buffer, $line, $path);
 							$buffer = '';
+							$block = false;
+
 						} elseif(preg_match('#{%\s*autoescape\s+(true|false)\s*%}#', $match[0]) != false) {
 							//Check for {% autoescape BOOL %}
 							if($autoescape === 0) {
-								$raw = new Raw($buffer);
-								$raw->setLine($line);
-								$raw->setPath($path);
-								$ret[] = $raw->getIntermediate();
+								$ret[] = self::createObject('raw', $buffer, $line, $path);
 								$buffer = '';
 							}
 
@@ -210,19 +195,14 @@ class Tokenizer
 							if($autoescape < 0) {
 								throw new Exception('Unexpected token.');
 							} elseif($autoescape === 0) {
-								$object = new Autoescape($buffer);
-								$object->setLine($line);
-								$object->setPath($path);
-								$ret[] = $object->getIntermediate();
+								$ret[] = self::createObject('autoescape', $buffer, $line, $path);
 								$buffer = '';
 							}
+
 						} elseif(preg_match('#{%[\s]*cache[\s]+(.*?)([\d]*)[\s]*%}#', $match[0]) != false) {
 							//Check for {% cache EXPR INT %}
 							if($cache === 0) {
-								$raw = new Raw($buffer);
-								$raw->setLine($line);
-								$raw->setPath($path);
-								$et[] = $raw->getIntermediate();
+								$et[] = self::createObject('raw', $buffer, $line, $path);
 								$buffer = '';
 							}
 
@@ -234,12 +214,10 @@ class Tokenizer
 							if($cache < 0) {
 								throw new Exception('Unexpected token.');
 							} elseif($cache === 0) {
-								$object = new Cache($buffer);
-								$object->setLine($line);
-								$object->setPath($path);
-								$ret[] = $object->getIntermediate();
+								$ret[] = self::createObject('cache', $buffer, $line, $path);
 								$buffer = '';
 							}
+
 						}
 					}
 

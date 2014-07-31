@@ -43,7 +43,6 @@ class Tokenizer
 		$evaluations = 0;
 		$comments = 0;
 		$block = false;
-		$block_name = null;
 		$in_quotes = false;
 		$in_single_quotes = false;
 		$line = 1;
@@ -164,7 +163,7 @@ class Tokenizer
 					if($in_quotes === false &&
 						$in_single_quotes === false) {
 						$block_matches = array();
-						if(preg_match('#{%\s*block\s+([\w]+)\s*%}#', $match[0], $block_matches) !== false) {
+						if(preg_match('#{%\s*block\s+[\w]+\s*%}#', $match[0], $block_matches) !== false) {
 							//Check for {% block NAME %} expression
 							if($block === true) {
 								throw new Exception('Embedding blocks into other blocks is not supported');
@@ -177,7 +176,6 @@ class Tokenizer
 							$buffer = '';
 
 							$block = true;
-							$block_name = $block_matches[1];
 						} elseif(preg_match('#{%\s*endblock\s*%}#', $match[0]) !== false) {
 							//Check for {% endblock %} expression							
 							if($block === false) {
@@ -189,7 +187,6 @@ class Tokenizer
 							$object = new Block($buffer);
 							$object->setLine($line);
 							$object->setPath($path);
-							$object->setName($block_name);
 							$ret[] = $object->getIntermediate();
 							$buffer = '';
 						}

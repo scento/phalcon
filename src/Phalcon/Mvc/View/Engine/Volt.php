@@ -158,7 +158,7 @@ class Volt extends Engine implements InjectionAwareInterface, EventsAwareInterfa
 	 * Checks if the needle is included in the haystack
 	 *
 	 * @param mixed $needle
-	 * @param string|string $haystack
+	 * @param string|array $haystack
 	 * @return boolean
 	 * @throws Exception
 	 */
@@ -229,6 +229,7 @@ class Volt extends Engine implements InjectionAwareInterface, EventsAwareInterfa
 	 * @param string|array|\Traversable $value
 	 * @param int $start
 	 * @param null|int $end
+	 * @return array|string
 	 * @throws Exception
 	 */
 	public function slice($value, $start, $end = null)

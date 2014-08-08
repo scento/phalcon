@@ -178,7 +178,7 @@ class Model implements AdapterInterface
 		$reminder = $n % $show;
 		$possible_pages = $n / $show;
 
-		if(is_int($remainder) === false) {
+		if(is_int($reminder) === false) {
 			$next = $possible_pages + 1;
 			$pages_total = (int)$next;
 		} else {
@@ -186,7 +186,7 @@ class Model implements AdapterInterface
 		}
 
 		$page->last = $pages_total;
-		$page->total_pages = $pages_total;
+		$page->total_pages = $total_pages;
 		$page->total_items = $n;
 
 		return $page;

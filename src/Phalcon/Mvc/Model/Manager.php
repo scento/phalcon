@@ -309,7 +309,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 			$this->_customEventsManager = array();
 		}
 
-		$this->_customEventsManager[get_class($model)] = $eventsManager;
+		$this->_customEventsManager[strtolower(get_class($model))] = $eventsManager;
 	}
 
 	/**
@@ -327,7 +327,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 		}
 
 		if(is_array($this->_customEventsManager) === true) {
-			$class_name = get_class($model);
+			$class_name = strtolower(get_class($model));
 			if(isset($this->_customEventsManager[$class_name]) === true) {
 				return $this->_customEventsManager[$class_name];
 			}
@@ -350,7 +350,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 			throw new Exception('Invalid parameter type.'); 
 		}
 
-		$class_name = get_class($model);
+		$class_name = strtolower(get_class($model));
 
 		//Models are just initialized once per request
 		if(isset($this->_initialized[$class_name]) === true) {
@@ -464,7 +464,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 			$this->_sources = array();
 		}
 
-		$this->_sources[get_class($model)] = $source;
+		$this->_sources[strtolower(get_class($model))] = $source;
 	}
 
 	/**
@@ -481,7 +481,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 			throw new Exception('Model is not an object');
 		}
 
-		$entity = get_class($model);
+		$entity = strtolower(get_class($model));
 
 		if(is_array($this->_sources) === true) {
 			if(isset($this->_sources[$entity]) === true) {
@@ -519,7 +519,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 			$this->_schemas = array();
 		}
 
-		$this->_schemas[get_class($model)] = $schema;
+		$this->_schemas[strtolower(get_class($model))] = $schema;
 	}
 
 	/**
@@ -536,7 +536,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 			throw new Exception('Model is not an object');
 		}
 
-		$entity = get_class($model);
+		$entity = strtolower(get_class($model));
 
 		if(is_array($this->_schemas) === true) {
 			if(isset($this->_schemas[$entity]) === true) {
@@ -573,7 +573,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 			$this->_writeConnectionServices = array();
 		}
 
-		$entity = get_class($model);
+		$entity = strtolower(get_class($model));
 
 		$this->_readConnectionServices[$entity] = $connectionService;
 		$this->_writeConnectionServices[$entity] = $connectionService;
@@ -601,7 +601,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 			$this->_writeConnectionServices = array();
 		}
 
-		$this->_writeConnectionServices[get_class($model)] = $connectionService;
+		$this->_writeConnectionServices[strtolower(get_class($model))] = $connectionService;
 	}
 
 	/**
@@ -626,7 +626,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 			$this->_readConnectionServices = array();
 		}
 
-		$this->_readConnectionServices[get_class($model)] = $connectionService;
+		$this->_readConnectionServices[strtolower(get_class($model))] = $connectionService;
 	}
 
 	/**
@@ -646,7 +646,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 		$service = 'db';
 
 		if(is_array($this->_writeConnectionServices) === true) {
-			$entity = get_class($model);
+			$entity = strtolower(get_class($model));
 
 			//Check if the model has a custom connection service
 			if(isset($this->_writeConnectionServices[$entity]) === true) {
@@ -684,7 +684,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 		$service = 'db';
 
 		if(is_array($this->_readConnectionServices) === true) {
-			$entity = get_class($model);
+			$entity = strtolower(get_class($model));
 
 			//Check if the model has a custom connection service
 			if(isset($this->_readConnectionServices[$entity]) === true) {
@@ -720,7 +720,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 		}
 
 		if(is_array($this->_readConnectionServices) === true) {
-			$entity_name = get_class($model);
+			$entity_name = strtolower(get_class($model));
 
 			//Check if there is a custom service connection
 			if(isset($this->_readConnectionServices[$entity_name]) === true) {
@@ -746,7 +746,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 		}
 
 		if(is_array($this->_writeConnectionServices) === true) {
-			$entity_name = get_class($model);
+			$entity_name = strtolower(get_class($model));
 
 			//Check if there is a custom service connection
 			if(isset($this->_writeConnectionServices[$entity_name]) === true) {
@@ -774,7 +774,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 			throw new Exception('Invalid parameter type.');
 		}
 		
-		$entity = get_class($model);
+		$entity = strtolower(get_class($model));
 
 		if(is_array($this->_behaviors) === true &&
 			isset($this->_behaviors[$entity]) === true) {
@@ -825,7 +825,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 		}
 
 		if(is_array($this->_behaviors) === true) {
-			$entity = get_class($model);
+			$entity = strtolower(get_class($model));
 			if(isset($this->_behaviors[$entity]) === true) {
 				//Notify all the events on the behavior
 				foreach($this->_behaviors[$entity]  as $behavior) {
@@ -864,7 +864,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 			throw new Exception('The behavior is invalid');
 		}
 
-		$entity = get_class($model);
+		$entity = strtolower(get_class($model));
 
 		//Get the current behaviors
 		if(isset($this->_behaviors[$entity]) === true) {
@@ -899,7 +899,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 			$this->_keepSnapshots = array();
 		}
 
-		$this->_keepSnapshots[get_class($model)] = $keepSnapshots;
+		$this->_keepSnapshots[strtolower(get_class($model))] = $keepSnapshots;
 	}
 
 	/**
@@ -917,7 +917,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 		}
 
 		if(is_array($this->_keepSnapshots) === true) {
-			$entity = get_class($model);
+			$entity = strtolower(get_class($model));
 			if(isset($this->_keepSnapshots[$entity]) === true) {
 				return (bool)$this->_keepSnapshots[$entity];
 			}
@@ -949,7 +949,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 			$this->_keepSnapshots = array();
 		}
  
-		$entity = get_class($model);
+		$entity = strtolower(get_class($model));
 		$this->_dynamicUpdate[$entity] = $dynamicUpdate;
 		$this->_keepSnapshots[$entity] = $dynamicUpdate;
 	}
@@ -969,7 +969,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 		}
 
 		if(is_array($this->_dynamicUpdate) === true) {
-			$entity = get_class($model);
+			$entity = strtolower(get_class($model));
 			if(isset($this->_dynamicUpdate[$entity]) === true) {
 				return (bool)$this->_dynamicUpdate[$entity];
 			}
@@ -999,7 +999,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$entity = get_class($model);
+		$entity = strtolower(get_class($model));
 		$referenced_entity = strtolower($referencedModel);
 		$key_relation = $entity.'$'.$referenced_entity;
 
@@ -1070,7 +1070,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$entity = get_class($model);
+		$entity = strtolower(get_class($model));
 		$referenced_entity = strtolower($referencedModel);
 		$key_relation = $entity.'$'.$referenced_entity;
 
@@ -1141,7 +1141,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$entity = get_class($model);
+		$entity = strtolower(get_class($model));
 		$referenced_entity = strtolower($referencedModel);
 		$key_relation = $entity.'$'.$referenced_entity;
 
@@ -1217,7 +1217,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$entity = get_class($model);
+		$entity = strtolower(get_class($model));
 		$intermediate_entity = strtolower($intermediateModel);
 		$referenced_entity = strtolower($referencedModel);
 		$key_relation = $entity.'$'.$referenced_entity;
@@ -1812,7 +1812,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 		}
 
 		if(is_array($this->_belongsToSingle) === true) {
-			$lower_name = get_class($model);
+			$lower_name = strtolower(get_class($model));
 			if(isset($this->_belongsToSingle[$lower_name]) === true) {
 				return $this->_belongsToSingle[$lower_name];
 			}
@@ -1836,7 +1836,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 		}
 
 		if(is_array($this->_hasManySingle) === true) {
-			$lower_name = get_class($model);
+			$lower_name = strtolower(get_class($model));
 			if(isset($this->_hasManySingle[$lower_name]) === true) {
 				return $this->_hasManySingle[$lower_name];
 			}
@@ -1860,7 +1860,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 		}
 
 		if(is_array($this->_hasOneSingle) === true) {
-			$lower_name = get_class($model);
+			$lower_name = strtolower(get_class($model));
 			if(isset($this->_hasOneSingle[$lower_name]) === true) {
 				return $this->_hasOneSingle[$lower_name];
 			}
@@ -1884,7 +1884,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 		}
 
 		if(is_array($this->_hasManyToManySingle) === true) {
-			$lower_name = get_class($model);
+			$lower_name = strtolower(get_class($model));
 			if(isset($this->_hasManyToManySingle[$lower_name]) === true) {
 				return $this->_hasManyToManySingle[$lower_name];
 			}

@@ -167,7 +167,7 @@ class Manager implements InjectionAwareInterface, EventsAwareInterface
 			$this->_customEventsManager = array();
 		}
 
-		$this->_customEventsManager[get_class($model)] = $eventsManager;
+		$this->_customEventsManager[strtolower(get_class($model))] = $eventsManager;
 	}
 
 	/**
@@ -186,7 +186,7 @@ class Manager implements InjectionAwareInterface, EventsAwareInterface
 
 		
 		if(is_array($this->_customEventsManager) === true) {
-			$c = get_class($model);
+			$c = strtolower(get_class($model));
 			if(isset($this->_customEventsManager[$c]) === true) {
 				return $this->_customEventsManager[$c];
 			}
@@ -210,7 +210,7 @@ class Manager implements InjectionAwareInterface, EventsAwareInterface
 			$this->_initialized = array();
 		}
 
-		$class_name = get_class($model);
+		$class_name = strtolower(get_class($model));
 
 		//Models are just initialized once per request
 		if(isset($this->_initialized[$class_name]) === false) {
@@ -277,7 +277,7 @@ class Manager implements InjectionAwareInterface, EventsAwareInterface
 			$this->_connectionServices = array();
 		}
 
-		$this->_connectionServices[get_class($model)] = $connectionService;
+		$this->_connectionServices[strtolower(get_class($model))] = $connectionService;
 	}
 
 	/**
@@ -298,7 +298,7 @@ class Manager implements InjectionAwareInterface, EventsAwareInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$this->_implicitObjectsIds[get_class($model)] = $useImplicitObjectIds;
+		$this->_implicitObjectsIds[strtolower(get_class($model))] = $useImplicitObjectIds;
 	}
 
 	/**
@@ -314,6 +314,8 @@ class Manager implements InjectionAwareInterface, EventsAwareInterface
 			$model instanceof CollectionInterface === false) {
 			throw new Exception('Invalid parameter type.');
 		}
+
+		$entity_name = strtolower(get_class($model));
 
 		if(is_array($this->_implicitObjectsIds) === false) {
 			$this->_implicitObjectsIds = array();
@@ -341,7 +343,7 @@ class Manager implements InjectionAwareInterface, EventsAwareInterface
 		$service = 'mongo';
 
 		if(is_array($this->_connectionServices) === true) {
-			$entity_name = get_class($model);
+			$entity_name = strtolower(get_class($model));
 
 			//Check if the model has a custom connection service
 			if(isset($this->_connectionServices[$entity_name]) === true) {
@@ -389,7 +391,7 @@ class Manager implements InjectionAwareInterface, EventsAwareInterface
 
 		//A model can have a specific events manager
 		if(is_array($this->_customEventsManager) === true) {
-			$entity_name = get_class($model);
+			$entity_name = strtolower(get_class($model));
 			if(isset($this->_customEventsManager[$entity_name]) === true) {
 				$status = $this->_customEventsManager[$entity_name]->fire('collection:'.$eventName, $model);
 			}

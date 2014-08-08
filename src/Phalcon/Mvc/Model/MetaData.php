@@ -344,7 +344,7 @@ abstract class MetaData implements InjectionAwareInterface
 		$schema = $model->getSchema();
 
 		//Unique key for meta-data is created using class-name-schema-table
-		$key = get_class($model).'-'.$schema.$table;
+		$key = strtolower(get_class($model)).'-'.$schema.$table;
 		if(isset($this->_metaData[$key]) === false) {
 			$this->_initialize($model, $key, $table, $schema);
 		}
@@ -379,7 +379,7 @@ abstract class MetaData implements InjectionAwareInterface
 		$schema = $model->getSchema();
 
 		//Unique key for meta-data is created using class-name-schema-table
-		$key = get_class($model).'-'.$schema.$table;
+		$key = strtolower(get_class($model)).'-'.$schema.$table;
 		if(isset($this->_metaData[$key]) === false) {
 			$this->_initialize($model, $key, $table, $schema);
 		}
@@ -424,7 +424,7 @@ abstract class MetaData implements InjectionAwareInterface
 		$schema = $model->getSchema();
 
 		//Unique key for meta-data is created using class-name-schema-table
-		$key = get_class($model).'-'.$schema.$table;
+		$key = strtolower(get_class($model)).'-'.$schema.$table;
 
 		if(isset($this->_metaData[$key]) === false) {
 			$this->_initialize($model, $key, $table, $schema);
@@ -458,7 +458,7 @@ abstract class MetaData implements InjectionAwareInterface
 			throw new Exception('A model instance is required to retrieve the meta-data');
 		}
 
-		$key_name = get_class($model);
+		$key_name = strtolower(get_class($model));
 
 		if(isset($this->_columnMap[$key_name]) === false) {
 			$this->_initialize($model, null, null, null);
@@ -489,7 +489,7 @@ abstract class MetaData implements InjectionAwareInterface
 			throw new Exception('Index must be a valid integer constant');
 		}
 
-		$key_name = get_class($model);
+		$key_name = strtolower(get_class($model));
 
 		if(isset($this->_columnMap[$key_name]) === false) {
 			$this->_initialize($model, null, null, null);

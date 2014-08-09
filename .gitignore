@@ -1,2 +1,4 @@
 # Documentation
 docs/
+.directory
+phpunit.phar

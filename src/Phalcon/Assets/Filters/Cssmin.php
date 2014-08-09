@@ -54,7 +54,7 @@ class Cssmin
 			return $content;
 		}
 
-		require(__DIR__.'/CssMin/build/CssMin.php');
+		require_once(__DIR__.'/CssMin/build/CssMin.php');
 
 		try {
 			$minify = new \CssMinifier($content);

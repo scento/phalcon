@@ -32,7 +32,7 @@ Add the following code at the top of your bootstrap file:
 if(extension_loaded('Phalcon') === false) {
 	$files = array('Exception.php', 'Loader/Exception.php', 'Events/EventsAwareInterface.php', 'Text.php', 'Loader.php');
 	foreach($files as $file) {
-		require(__DIR__.'/src/Phalcon/'.$file);
+		require_once(__DIR__.'/src/Phalcon/'.$file);
 	}
 
 	$loader = new \Phalcon\Loader();

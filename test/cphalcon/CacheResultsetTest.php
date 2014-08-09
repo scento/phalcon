@@ -35,14 +35,14 @@ class CacheResultsetTest extends PHPUnit_Framework_TestCase
 
 	public function modelsAutoloader($className)
 	{
-		if (file_exists('unit-tests/models/'.$className.'.php')) {
-			require 'unit-tests/models/'.$className.'.php';
+		if (file_exists(__DIR__.'/models/'.$className.'.php')) {
+			require __DIR__.'/models/'.$className.'.php';
 		}
 	}
 
 	protected function _getCache($adapter='File'){
 
-		@unlink('unit-tests/cache/test-resultset');
+		@unlink(__DIR__.'/cache/test-resultset');
 
 		Phalcon\DI::reset();
 
@@ -53,11 +53,11 @@ class CacheResultsetTest extends PHPUnit_Framework_TestCase
 		}, true);
 
 		$di->set('modelsMetadata', function(){
-			return new Phalcon\Mvc\Model\Metadata\Memory();
+			return new Phalcon\Mvc\Model\MetaData\Memory();
 		}, true);
 
 		$di->set('db', function(){
-			require 'unit-tests/config.db.php';
+			require __DIR__.'/config.db.php';
 			return new Phalcon\Db\Adapter\Pdo\Mysql($configMysql);
 		}, true);
 
@@ -68,7 +68,7 @@ class CacheResultsetTest extends PHPUnit_Framework_TestCase
 		switch ($adapter) {
 			case 'File':
 				$cache = new Phalcon\Cache\Backend\File($frontCache, array(
-					'cacheDir' => 'unit-tests/cache/'
+					'cacheDir' => __DIR__.'/cache/'
 				));
 				break;
 			case 'Memcached':
@@ -95,7 +95,7 @@ class CacheResultsetTest extends PHPUnit_Framework_TestCase
 
 		$cache->save('test-resultset', Robots::find(array('order' => 'id')));
 
-		$this->assertTrue(file_exists('unit-tests/cache/test-resultset'));
+		$this->assertTrue(file_exists(__DIR__.'/cache/test-resultset'));
 
 		$robots = $cache->get('test-resultset');
 
@@ -119,7 +119,7 @@ class CacheResultsetTest extends PHPUnit_Framework_TestCase
 			'order' => 'id'
 		)));
 
-		$this->assertTrue(file_exists('unit-tests/cache/test-resultset'));
+		$this->assertTrue(file_exists(__DIR__.'/cache/test-resultset'));
 
 		$robots = $cache->get('test-resultset');
 
@@ -140,7 +140,7 @@ class CacheResultsetTest extends PHPUnit_Framework_TestCase
 
 		$cache->save('test-resultset', $robots);
 
-		$this->assertTrue(file_exists('unit-tests/cache/test-resultset'));
+		$this->assertTrue(file_exists(__DIR__.'/cache/test-resultset'));
 
 		$robots = $cache->get('test-resultset');
 
@@ -161,7 +161,7 @@ class CacheResultsetTest extends PHPUnit_Framework_TestCase
 
 		$cache->save('test-resultset', $robots);
 
-		$this->assertTrue(file_exists('unit-tests/cache/test-resultset'));
+		$this->assertTrue(file_exists(__DIR__.'/cache/test-resultset'));
 
 		$robots = $cache->get('test-resultset');
 
@@ -182,7 +182,7 @@ class CacheResultsetTest extends PHPUnit_Framework_TestCase
 
 		$cache->save('test-resultset', $results);
 
-		$this->assertTrue(file_exists('unit-tests/cache/test-resultset'));
+		$this->assertTrue(file_exists(__DIR__.'/cache/test-resultset'));
 
 		$results = $cache->get('test-resultset');
 

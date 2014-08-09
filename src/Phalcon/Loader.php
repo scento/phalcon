@@ -490,7 +490,7 @@ class Loader implements EventsAwareInterface
 									$this->_eventsManager->fire('load:pathFound', $this, $file_path);
 								}
 
-								require($file_path);
+								require_once($file_path);
 
 								//Return true mean success
 								return true;
@@ -527,7 +527,7 @@ class Loader implements EventsAwareInterface
 									$this->_eventsManager->fire('loader:pathFound', $this, $file_path);
 								}
 
-								require($file_path);
+								require_once($file_path);
 								return true;
 							}
 						}
@@ -564,7 +564,7 @@ class Loader implements EventsAwareInterface
 							$this->_eventsManager->fire('loader:pathFound', $this, $file_path);
 						}
 
-						require($file_path);
+						require_once($file_path);
 
 						//Return true meaning success
 						return true;

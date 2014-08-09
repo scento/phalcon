@@ -14,7 +14,7 @@ $files = array(
 );
 
 foreach($files as $file) {
-	require(__DIR__.'/../src/Phalcon/'.$file);
+	require_once(__DIR__.'/../src/Phalcon/'.$file);
 }
 
 $loader = new \Phalcon\Loader();

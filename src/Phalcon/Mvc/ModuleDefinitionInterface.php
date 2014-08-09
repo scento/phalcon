@@ -19,9 +19,9 @@ interface ModuleDefinitionInterface
 	/**
 	 * Registers an autoloader related to the module
 	 *
-	 * @param \Phalcon\DiInterface $dependencyInjector
+	 * @param \Phalcon\DiInterface|null $dependencyInjector
 	 */
-	public function registerAutoloaders($dependencyInjector);
+	public function registerAutoloaders($dependencyInjector = null);
 
 	/**
 	 * Registers services related to the module

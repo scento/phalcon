@@ -1,9 +1,5 @@
 #!/bin/sh
-sudo apt-get install imagemagick libmagickwand-dev
-sudo pecl config-set preferred_state beta
-sudo pecl install imagick
-sudo pecl config-set preferred_state stable
-
-sudo pear channel-discover pear.pdepend.org
-sudo pear install pdepend/PHP_Depend-beta
+wget http://static.pdepend.org/php/latest/pdepend.phar
+chmod +x pdepend.phar
+mv pdepend.phar /tmp/
 wait

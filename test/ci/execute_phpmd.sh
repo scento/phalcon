@@ -1,4 +1,4 @@
 #!/bin/sh
 echo "phpmd results: "
-phpmd `pwd`/src text codesize,unusedcode,naming,design
+php /tmp/phpmd.phar `pwd`/src text codesize,unusedcode,naming,design
 wait

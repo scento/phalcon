@@ -10,7 +10,7 @@
 */
 namespace Phalcon;
 
-use \Phalcon\Tag\Exception,
+use \Phalcon\Tag\Exception as TagException,
 	\Phalcon\DiInterface,
 	\Phalcon\DI,
 	\Phalcon\EscaperInterface,
@@ -173,14 +173,14 @@ class Tag
 	 * Sets the dependency injector container.
 	 *
 	 * @param \Phalcon\DiInterface $dependencyInjector
-	 * @throws Exception
+	 * @throws TagException
 	 */
 	public static function setDI($dependencyInjector)
 	{
 		//@note there is originally no instanceof check
 		if(is_object($dependencyInjector) === false ||
 			$dependencyInjector instanceof DiInterface === false) {
-			throw new Exception('Parameter dependencyInjector must be an Object');
+			throw new TagException('Parameter dependencyInjector must be an Object');
 		}
 
 		self::$_dependencyInjector = $dependencyInjector;
@@ -200,7 +200,7 @@ class Tag
 	 * Return a URL service from the default DI
 	 *
 	 * @return \Phalcon\Mvc\UrlInterface
-	 * @throws Exception
+	 * @throws TagException
 	 */
 	public static function getUrlService()
 	{
@@ -212,14 +212,14 @@ class Tag
 			}
 
 			if(is_object($dependency_injector) === false) {
-				throw new Exception('A dependency injector container is required to obtain the "url" service');
+				throw new TagException('A dependency injector container is required to obtain the "url" service');
 			}
 
 			$url = $dependency_injector->getShared('url');
 
 			//@note added type check
 			if(is_object($url) === false || $url instanceof UrlInterface === false) {
-				throw new Exception('Invalid url service.');
+				throw new TagException('Invalid url service.');
 			}
 
 			self::$_urlService = $url;
@@ -234,7 +234,7 @@ class Tag
 	 * Returns an Escaper service from the default DI
 	 *
 	 * @return \Phalcon\EscaperInterface
-	 * @throws Exception
+	 * @throws TagException
 	 */
 	public static function getEscaperService()
 	{
@@ -246,7 +246,7 @@ class Tag
 			}
 
 			if(is_object($dependency_injector) === false) {
-				throw new Exception('A dependency injector container is required to obtain the "escaper" service');
+				throw new TagException('A dependency injector container is required to obtain the "escaper" service');
 			}
 
 			$escaper = $dependency_injector->getShared('escaper');
@@ -254,7 +254,7 @@ class Tag
 			//@note added type check
 			if(is_object($escaper) === false || 
 				$escaper instanceof EscaperInterface === false) {
-				throw new Exception('Invalid escaper service.');
+				throw new TagException('Invalid escaper service.');
 			}
 
 			self::$_escaperService = $escaper;
@@ -277,13 +277,13 @@ class Tag
 	 * Set autoescape mode in generated html
 	 *
 	 * @param boolean $autoescape
-	 * @throws Exception
+	 * @throws TagException
 	 */
 	public static function setAutoescape($autoescape)
 	{
 		//@note added type check
 		if(is_bool($autoescape) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		self::$_autoEscape = $autoescape;
@@ -302,18 +302,18 @@ class Tag
 	 *
 	 * @param string $id
 	 * @param scalar $value
-	 * @throws Exception
+	 * @throws TagException
 	 */
 	public static function setDefault($id, $value)
 	{
 		//@note added typecheck for $id
 		if(is_string($id) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		//@note used instead of is_array and is_object is_scalar
 		if(is_null($value) === false && is_scalar($value) === false) {
-			throw new Exception('only scalar values can be assigned to UI components');
+			throw new TagException('only scalar values can be assigned to UI components');
 		}
 
 		if(is_array(self::$_displayValues) === false) {
@@ -335,12 +335,12 @@ class Tag
 	 * </code>
 	 *
 	 * @param array $values
-	 * @throws Exception
+	 * @throws TagException
 	 */
 	public static function setDefaults($values)
 	{
 		if(is_array($values) === false) {
-			throw new Exception('An array is required as default values');
+			throw new TagException('An array is required as default values');
 		}
 
 		self::$_displayValues = $values;
@@ -380,20 +380,20 @@ class Tag
 	 * @param string $name
 	 * @param array|null $params
 	 * @return mixed
-	 * @throws Exception
+	 * @throws TagException
 	 */
 	public static function getValue($name, $params = null)
 	{
 		//@note added type check
 		if(is_string($name) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		if(is_null($params) === true) {
 			$params = array();
 		} elseif(is_array($params) === false) {
 			//@note added type check
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		if(isset($params['value']) === true) {
@@ -542,20 +542,20 @@ class Tag
 	 * @param array $parameters
 	 * @param boolean|null $asValue
 	 * @return string
-	 * @throws Exception
+	 * @throws TagException
 	 */
 	protected static function _inputField($type, $parameters, $as_value = null)
 	{
 		if(is_string($type) === false) {
 			//@note added type check
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		if(is_null($as_value) === true) {
 			$as_value = false;
 		} elseif(is_bool($as_value) === false) {
 			//@note added exception
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 
@@ -866,7 +866,7 @@ class Tag
 	 * @param array $parameters
 	 * @param array|null $data
 	 * @return string
-	 * @throws Exception
+	 * @throws TagException
 	 */
 	public static function selectStatic($parameters, $data = null)
 	{
@@ -874,7 +874,7 @@ class Tag
 			$data = array();
 		} elseif(is_array($data) === false) {
 			//@note added exception
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		return Select::selectField($parameters, $data);
@@ -899,7 +899,7 @@ class Tag
 	 * @param array $parameters
 	 * @param null|array $data
 	 * @return string
-	 * @throws Exception
+	 * @throws TagException
 	 */
 	public static function select($parameters, $data = null)
 	{
@@ -907,7 +907,7 @@ class Tag
 			$data = array();
 		} elseif(is_array($data) === false) {
 			//@note added type-check
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		return Select::selectField($parameters, $data);
@@ -1051,13 +1051,13 @@ class Tag
 	 *</code>
 	 *
 	 * @param string $title
-	 * @throws Exception
+	 * @throws TagException
 	 */
 	public static function setTitle($title)
 	{
 		//@note added type-check
 		if(is_string($title) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		self::$_documentTitle = $title;
@@ -1067,12 +1067,13 @@ class Tag
 	 * Appends a text to current document title
 	 *
 	 * @param string $title
+	 * @throws TagException
 	 */
 	public static function appendTitle($title)
 	{
 		//@note added type-check
 		if(is_string($title) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		self::$_documentTitle = self::$_documentTitle.$title;
@@ -1082,12 +1083,13 @@ class Tag
 	 * Prepends a text to current document title
 	 *
 	 * @param string $title
+	 * @throws TagException
 	 */
 	public static function prependTitle($title)
 	{
 		//@note added type-check
 		if(is_string($title) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		self::$_documentTitle = $title.self::$_documentTitle;
@@ -1137,7 +1139,7 @@ class Tag
 	 * @param array|null $parameters
 	 * @param boolean|null $local
 	 * @return string
-	 * @throws Exception
+	 * @throws TagException
 	 */
 	public static function stylesheetLink($parameters = null, $local = null)
 	{
@@ -1145,7 +1147,7 @@ class Tag
 		if(is_null($local) === true) {
 			$local = false;
 		} elseif(is_bool($local) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		/* Set default values */
@@ -1197,7 +1199,7 @@ class Tag
 	 * @param array|null $parameters
 	 * @param boolean|null $local
 	 * @return string
-	 * @throws Exception
+	 * @throws TagException
 	 */
 	public static function javascriptInclude($parameters = null, $local = null)
 	{
@@ -1205,7 +1207,7 @@ class Tag
 		if(is_null($local) === true) {
 			$local = false;
 		} elseif(is_bool($local) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		/* Set default values */
@@ -1257,7 +1259,7 @@ class Tag
 	 * @param array|null $parameters
 	 * @param boolean|null $local
 	 * @return string
-	 * @throws Exception
+	 * @throws TagException
 	 */
 	public static function image($parameters = null, $local = null)
 	{
@@ -1265,7 +1267,7 @@ class Tag
 		if(is_null($local) === true) {
 			$local = false;
 		} elseif(is_bool($local) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		/* Set default values */
@@ -1311,25 +1313,25 @@ class Tag
 	 * @param string|null $separator
 	 * @param boolean|null $lowercase
 	 * @return string
-	 * @throws Exception
+	 * @throws TagException
 	 */
 	public static function friendlyTitle($text, $separator = null, $lowercase = null)
 	{
 		/* Type check */
 		if(is_string($text) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		if(is_null($separator) === true) {
 			$separator = '-';
 		} elseif(is_string($separator) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		if(is_null($lowercase) === true) {
 			$lowercase = true;
 		} elseif(is_bool($lowercase) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		/* Manipulate text */
@@ -1346,13 +1348,13 @@ class Tag
 	 * Set the document type of content
 	 *
 	 * @param int $doctype
-	 * @throws Exception
+	 * @throws TagException
 	 */
 	public static function setDocType($doctype)
 	{
 		//@note replaced string with integer!
 		if(is_int($doctype) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		self::$_documentType = $doctype;
@@ -1411,31 +1413,31 @@ class Tag
 	 * @param boolean|null $onlyStart
 	 * @param boolean|null $useEol
 	 * @return string
-	 * @throws Exception
+	 * @throws TagException
 	 */
 	public static function tagHtml($tagName, $parameters = null, $selfClose = null, $onlyStart = null, $useEol = null)
 	{
 		/* Type check */
 		if(is_string($tagName) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		if(is_null($selfClose) === true) {
 			$selfClose = false;
 		} elseif(is_bool($selfClose) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		if(is_null($onlyStart) === true) {
 			$onlyStart = false;
 		} elseif(is_bool($onlyStart) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		if(is_null($useEol) === true) {
 			$useEol = false;
 		} elseif(is_bool($useEol) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		if(is_array($parameters) === false) {
@@ -1474,19 +1476,19 @@ class Tag
 	 * @param string $tagName
 	 * @param boolean $useEol
 	 * @return string
-	 * @throws Exception
+	 * @throws TagException
 	 */
 	public static function tagHtmlClose($tagName, $useEol = null)
 	{
 		/* Type check */
 		if(is_string($tagName) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		if(is_null($useEol) === true) {
 			$useEol = false;
 		} elseif(is_bool($useEol) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new TagException('Invalid parameter type.');
 		}
 
 		/* Return string */

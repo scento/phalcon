@@ -10,10 +10,10 @@
 */
 namespace Phalcon\Mvc;
 
-use \Phalcon\DefaultDispatcher,
+use \Phalcon\Dispatcher as DefaultDispatcher,
 	\Phalcon\Events\EventsAwareInterface,
 	\Phalcon\DI\InjectionAwareInterface,
-	\Phalcon\DispatcherInterface,
+	\Phalcon\DispatcherInterface as PhalconDispatcherInterface,
 	\Phalcon\Mvc\DispatcherInterface,
 	\Phalcon\Mvc\Dispatcher\Exception;
 
@@ -42,7 +42,7 @@ use \Phalcon\DefaultDispatcher,
  * 
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/mvc/dispatcher.c
  */
-class Dispatcher extends DefaultDispatcher implements EventsAwareInterface, InjectionAwareInterface, DispatcherInterface, DispatcherInterface
+class Dispatcher extends DefaultDispatcher implements EventsAwareInterface, InjectionAwareInterface, DispatcherInterface, PhalconDispatcherInterface
 {
 	/**
 	 * Exception: No Dependency Injector

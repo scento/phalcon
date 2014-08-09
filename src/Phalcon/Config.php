@@ -12,7 +12,7 @@ namespace Phalcon;
 
 use \ArrayAccess,
 	\Countable,
-	\Phalcon\Config\Exception;
+	\Phalcon\Config\Exception as ConfigException;
 
 /**
  * Phalcon\Config
@@ -54,13 +54,13 @@ class Config implements ArrayAccess, Countable
 	 * \Phalcon\Config constructor
 	 *
 	 * @param array $arrayConfig
-	 * @throws Exception
+	 * @throws ConfigException
 	 */
 	public function __construct($arrayConfig = null)
 	{
 		if(is_array($arrayConfig) === false)
 		{
-			throw new Exception('The configuration must be an Array');
+			throw new ConfigException('The configuration must be an Array');
 		}
 
 		$this->storage = $arrayConfig;
@@ -76,13 +76,13 @@ class Config implements ArrayAccess, Countable
 	 *
 	 * @param string $index
 	 * @return boolean
-	 * @throws Exception
+	 * @throws ConfigException
 	 */
 	public function offsetExists($index)
 	{
 		if(is_string($index) === false)
 		{
-			throw new Exception('Invalid parameter type.');
+			throw new ConfigException('Invalid parameter type.');
 		}
 
 		return isset($this->storage[$index]);
@@ -100,13 +100,13 @@ class Config implements ArrayAccess, Countable
 	 * @param string $index
 	 * @param mixed $defaultValue
 	 * @return mixed
-	 * @throws Exception
+	 * @throws ConfigException
 	 */
 	public function get($index, $defaultValue = null)
 	{
 		if(is_string($index) === false)
 		{
-			throw new Exception('Invalid parameter type.');
+			throw new ConfigException('Invalid parameter type.');
 		}
 
 		return (isset($this->storage[$index]) === true ? $this->storage[$index] : $defaultValue);
@@ -122,13 +122,13 @@ class Config implements ArrayAccess, Countable
 	 *
 	 * @param string $index
 	 * @return string|null
-	 * @throws Exception
+	 * @throws ConfigException
 	 */
 	public function offsetGet($index)
 	{
 		if(is_string($index) === false)
 		{
-			throw new Exception('Invalid parameter type.');
+			throw new ConfigException('Invalid parameter type.');
 		}
 
 		return (isset($this->storage[$index]) === true ? $this->storage[$index] : null);
@@ -144,13 +144,13 @@ class Config implements ArrayAccess, Countable
 	 *
 	 * @param string $index
 	 * @param mixed $value
-	 * @throws Exception
+	 * @throws ConfigException
 	 */
 	public function offsetSet($index, $value)
 	{
 		if(is_string($index) === false)
 		{
-			throw new Exception('Invalid parameter type.');
+			throw new ConfigException('Invalid parameter type.');
 		}
 
 		$this->storage[$index] = $value;
@@ -165,13 +165,13 @@ class Config implements ArrayAccess, Countable
 	 *</code>
 	 *
 	 * @param string $index
-	 * @throws Exception
+	 * @throws ConfigException
 	 */
 	public function offsetUnset($index)
 	{
 		if(is_string($index) === false)
 		{
-			throw new Exception('Invalid parameter type.');
+			throw new ConfigException('Invalid parameter type.');
 		}
 
 		unset($this->storage[$index]);
@@ -190,6 +190,7 @@ class Config implements ArrayAccess, Countable
 	 *
 	 * @param \Phalcon\Config|array $config
 	 * @todo Object should be more specific
+	 * @throws Exception ConfigException
 	 */
 	public function merge($config)
 	{
@@ -200,7 +201,7 @@ class Config implements ArrayAccess, Countable
 		{
 			$this->storage = array_merge($this->storage, $config->toArray());
 		} else {
-			throw new Exception('Invalid parameter type.');
+			throw new ConfigException('Invalid parameter type.');
 		}
 	}
 
@@ -263,13 +264,13 @@ class Config implements ArrayAccess, Countable
 	 * 
 	 * @param string $index
 	 * @return mixed
-	 * @throws Exception
+	 * @throws ConfigException
 	*/
 	public function __get($index)
 	{
 		if(is_string($index) === false)
 		{
-			throw new Exception('Invalid parameter type.');
+			throw new ConfigException('Invalid parameter type.');
 		}
 
 		if(isset($this->storage[$index]) === true)
@@ -285,13 +286,13 @@ class Config implements ArrayAccess, Countable
 	 * 
 	 * @param string $index
 	 * @param mixed $value
-	 * @throws Exception
+	 * @throws ConfigException
 	*/
 	public function __set($index, $value)
 	{
 		if(is_string($index) === false)
 		{
-			throw new Exception('Invalid parameter type.');
+			throw new ConfigException('Invalid parameter type.');
 		}
 
 		$this->storage[$index] = $value;
@@ -302,13 +303,13 @@ class Config implements ArrayAccess, Countable
 	 * 
 	 * @param string $index
 	 * @return boolean
-	 * @throws Exception
+	 * @throws ConfigException
 	*/
 	public function __isset($index)
 	{
 		if(is_string($index) === false)
 		{
-			throw new Exception('Invalid parameter type.');
+			throw new ConfigException('Invalid parameter type.');
 		}
 
 		return isset($this->storage[$index]);
@@ -321,13 +322,13 @@ class Config implements ArrayAccess, Countable
 	 * Phalcon API.
 	 * 
 	 * @param string $index
-	 * @throws Exception
+	 * @throws ConfigException
 	*/
 	public function __unset($index)
 	{
 		if(is_string($index) === false)
 		{
-			throw new Exception('Invalid parameter type.');
+			throw new ConfigException('Invalid parameter type.');
 		}
 
 		unset($this->storage[$index]);

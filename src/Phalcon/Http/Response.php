@@ -13,7 +13,7 @@ namespace Phalcon\Http;
 use \Phalcon\Http\ResponseInterface,
 	\Phalcon\Http\Response\Exception,
 	\Phalcon\Http\Response\HeadersInterface,
-	\Phalcon\http\Response\Headers,
+	\Phalcon\Http\Response\Headers,
 	\Phalcon\Http\Response\CookiesInterface,
 	\Phalcon\Mvc\UrlInterface,
 	\Phalcon\DI\InjectionAwareInterface,

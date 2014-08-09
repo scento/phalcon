@@ -61,9 +61,11 @@ class Memory extends Adapter implements AdapterInterface
 	 * @param \Phalcon\Annotations\Reflection $data
 	 * @throws Exception
 	 */
-	public function write($key, Reflection $data)
+	public function write($key, $data)
 	{
-		if(is_string($key) === false) {
+		if(is_string($key) === false ||
+			is_object($data) === false ||
+			$data instanceof Reflection === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 

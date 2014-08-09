@@ -11,7 +11,7 @@
 namespace Phalcon;
 
 use \Phalcon\CryptInterface,
-	\Phalcon\Crypt\Exception;
+	\Phalcon\Crypt\Exception as CryptException;
 
 /**
  * Phalcon\Crypt
@@ -119,12 +119,12 @@ class Crypt implements CryptInterface
 	 *
 	 * @param string $cipher
 	 * @return \Phalcon\Crypt
-	 * @throws Exception
+	 * @throws CryptException
 	 */
 	public function setCipher($cipher)
 	{
 		if(is_string($cipher) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new CryptException('Invalid parameter type.');
 		}
 
 		$this->_cipher = $cipher;
@@ -147,12 +147,12 @@ class Crypt implements CryptInterface
 	 *
 	 * @param string $cipher
 	 * @return \Phalcon\Crypt
-	 * @throws Exception
+	 * @throws CryptException
 	 */
 	public function setMode($mode)
 	{
 		if(is_string($mode) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new CryptException('Invalid parameter type.');
 		}
 
 		$this->_mode = $mode;
@@ -175,12 +175,12 @@ class Crypt implements CryptInterface
 	 *
 	 * @param string $key
 	 * @return \Phalcon\Crypt
-	 * @throws Exception
+	 * @throws CryptException
 	 */
 	public function setKey($key)
 	{
 		if(is_string($key) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new CryptException('Invalid parameter type.');
 		}
 
 		$this->_key = $key;
@@ -203,12 +203,12 @@ class Crypt implements CryptInterface
 	 *
 	 * @param int scheme Padding scheme
 	 * @return \Phalcon\CryptInterface
-	 * @throws Exception
+	 * @throws CryptException
 	 */
 	public function setPadding($scheme)
 	{
 		if(is_int($scheme) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new CryptException('Invalid parameter type.');
 		}
 
 		$this->_padding = $scheme;
@@ -232,13 +232,13 @@ class Crypt implements CryptInterface
 	 * 
 	 * @param int $length
 	 * @return string
-	 * @throws Exception
+	 * @throws CryptException
 	*/
 	private static function cryptoRand($length)
 	{
 		$bytes = openssl_random_pseudo_bytes($length, $strong);
 		if($strong === false) {
-			throw new Exception('Unable to get secure bytes.');
+			throw new CryptException('Unable to get secure bytes.');
 		}
 
 		return $bytes;
@@ -254,13 +254,13 @@ class Crypt implements CryptInterface
 	 * @param int $paddingType Padding scheme
 	 * @note If the function detects that the text was not padded, it will return it unmodified
 	 * @return string
-	 * @throws Exception
+	 * @throws CryptException
 	*/
 	private static function unpadText($text, $mode, $blockSize, $paddingType)
 	{
 		if(is_string($text) === false || is_string($mode) === false ||
 			is_int($blockSize) === false || is_int($paddingType) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new CryptException('Invalid parameter type.');
 		}
 
 		$text_len = strlen($text);
@@ -322,7 +322,7 @@ class Crypt implements CryptInterface
 
 			if(isset($padding_size) && $padding_size <= $blockSize) {
 				if($padding_size > $text_len) {
-					throw new Exception('Invalid state.');
+					throw new CryptException('Invalid state.');
 				}
 
 				if($padding_size <= $text_len) {
@@ -346,7 +346,7 @@ class Crypt implements CryptInterface
 	 * @param int $blockSize Cipher block size
 	 * @param int $paddingType Padding scheme
 	 * @return string
-	 * @throws Exception
+	 * @throws CryptException
 	 * 
 	 * @see http://www.di-mgt.com.au/cryptopad.html
 	 * @see http://en.wikipedia.org/wiki/Padding_%28cryptography%29
@@ -355,7 +355,7 @@ class Crypt implements CryptInterface
 	{
 		if(is_string($text) === false || is_string($mode) === false ||
 			is_int($blockSize) === false || is_int($paddingType) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new CryptException('Invalid parameter type.');
 		}
 
 		$padding_size = 0;
@@ -405,7 +405,7 @@ class Crypt implements CryptInterface
 			if($padding_size <= $blockSize) {
 				return $text.$padding;
 			} else {
-				throw new Exception('Precondition failed.');
+				throw new CryptException('Precondition failed.');
 			}
 		}
 	}
@@ -420,7 +420,7 @@ class Crypt implements CryptInterface
 	 * @param string $text
 	 * @param string|null $key
 	 * @return string
-	 * @throws Exception
+	 * @throws CryptException
 	 */
 	public function encrypt($text, $key = null)
 	{
@@ -435,7 +435,7 @@ class Crypt implements CryptInterface
 		//are already predefined
 
 		if(function_exists('mcrypt_get_iv_size') === false) {
-			throw new Exception('mcrypt extension is required');
+			throw new CryptException('mcrypt extension is required');
 		}
 
 		if($key === null) {
@@ -445,13 +445,13 @@ class Crypt implements CryptInterface
 		}
 
 		if(empty($encrypt_key) === true) {
-			throw new Exception('Encryption key cannot be empty');
+			throw new CryptException('Encryption key cannot be empty');
 		}
 
 		$iv_size = (int)mcrypt_get_iv_size($this->_cipher, $this->_mode);
 
 		if(strlen($encrypt_key) > $iv_size) {
-			throw new Exception('Size of key too large for this algorithm');
+			throw new CryptException('Size of key too large for this algorithm');
 		}
 
 		//C++ source is always using \MCRYPT_RAND which is sometimes considered
@@ -468,7 +468,7 @@ class Crypt implements CryptInterface
 		$padded = $this->padText($text, $this->_mode, $block_size, $this->_padding);
 
 		if(is_string($padded) === false) {
-			throw new Exception('Invalid type.');
+			throw new CryptException('Invalid type.');
 		}
 
 		return $iv.mcrypt_encrypt($this->_cipher, $encrypt_key, $padded, $this->_mode, $iv);
@@ -484,16 +484,16 @@ class Crypt implements CryptInterface
 	 * @param string $text
 	 * @param string|null $key
 	 * @return string
-	 * @throws Exception
+	 * @throws CryptException
 	 */
 	public function decrypt($text, $key = null)
 	{
 		if(is_string($text) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new CryptException('Invalid parameter type.');
 		}
 
 		if(function_exists('mcrypt_get_iv_size') === false) {
-			throw new Exception('mcrypt extension is required');
+			throw new CryptException('mcrypt extension is required');
 		}
 
 		if(is_null($key) === true) {
@@ -501,28 +501,28 @@ class Crypt implements CryptInterface
 		} elseif(is_string($key) === true) {
 			$decrypt_key = $key;
 		} else {
-			throw new Exception('Invalid parameter type.');
+			throw new CryptException('Invalid parameter type.');
 		}
 
 		if(empty($decrypt_key) === true) {
-			throw new Exception('Decryption key cannot be empty');
+			throw new CryptException('Decryption key cannot be empty');
 		}
 
 		$iv_size = mcrypt_get_iv_size($this->_cipher, $this->_mode);
 		if($iv_size === false) {
-			throw new Exception('Error while determining the IV size.');
+			throw new CryptException('Error while determining the IV size.');
 		} else {
 			$iv_size = (int)$iv_size;
 		}
 
 		$key_size = strlen($decrypt_key);
 		if($key_size > $iv_size) {
-			throw new Exception('Size of key is too large for this algorithm');
+			throw new CryptException('Size of key is too large for this algorithm');
 		}
 
 		$text_size = strlen($text);
 		if($key_size > $text_size) {
-			throw new Exception('Size of IV is larger than text to decrypt');
+			throw new CryptException('Size of IV is larger than text to decrypt');
 		}
 
 		$iv = substr($text, 0, $iv_size);
@@ -533,7 +533,7 @@ class Crypt implements CryptInterface
 		if(is_int($this->_padding) === false || 
 			is_string($this->_mode) === false ||
 			is_string($decrypted) === false) {
-			throw new Exception('Invalid type.');
+			throw new CryptException('Invalid type.');
 		}
 
 		return self::unpadText($decrypted, $this->_mode, $block_size, $this->_padding);
@@ -545,13 +545,13 @@ class Crypt implements CryptInterface
 	 * @param string $text
 	 * @param string|null $key
 	 * @return string
-	 * @throws Exception
+	 * @throws CryptException
 	 */
 	public function encryptBase64($text, $key = null)
 	{
 		if(is_string($text) === false || 
 			(is_string($key) === false && is_null($key) === false)) {
-			throw new Exception('Invalid parameter type.');
+			throw new CryptException('Invalid parameter type.');
 		}
 
 		return base64_encode($this->encrypt($text, $key));
@@ -563,13 +563,13 @@ class Crypt implements CryptInterface
 	 * @param string $text
 	 * @param string|null $key
 	 * @return string
-	 * @throws Exception
+	 * @throws CryptException
 	 */
 	public function decryptBase64($text, $key = null)
 	{
 		if(is_string($text) === false || 
 			(is_string($key) === false && is_null($key) === false)) {
-			throw new Exception('Invalid parameter type.');
+			throw new CryptException('Invalid parameter type.');
 		}
 
 		return $this->decrypt(base64_decode($text), $key);

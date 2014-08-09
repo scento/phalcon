@@ -11,7 +11,7 @@
 namespace Phalcon;
 
 use \Phalcon\EscaperInterface,
-	\Phalcon\Escaper\Exception;
+	\Phalcon\Escaper\Exception as EscaperException;
 
 /**
  * Phalcon\Escaper
@@ -63,12 +63,12 @@ class Escaper implements EscaperInterface
 	 *</code>
 	 *
 	 * @param string $encoding
-	 * @throws Exception
+	 * @throws EscaperException
 	 */
 	public function setEncoding($encoding)
 	{
 		if(is_string($encoding) === false) {
-			throw new Exception('The character set must be string');
+			throw new EscaperException('The character set must be string');
 		}
 
 		$this->_encoding = $encoding;
@@ -92,12 +92,12 @@ class Escaper implements EscaperInterface
 	 *</code>
 	 *
 	 * @param int $quoteType
-	 * @throws Exception
+	 * @throws EscaperException
 	 */
 	public function setHtmlQuoteType($quoteType)
 	{
 		if(is_int($quoteType) === false) {
-			throw new Exception('The quoting type is not valid');
+			throw new EscaperException('The quoting type is not valid');
 		}
 
 		$this->_htmlQuoteType = $quoteType;
@@ -174,16 +174,16 @@ class Escaper implements EscaperInterface
 	 *
 	 * @param string $str
 	 * @return string
-	 * @throws Exception
+	 * @throws EscaperException
 	 */
 	public function normalizeEncoding($str)
 	{
 		if(is_string($str) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new EscaperException('Invalid parameter type.');
 		}
 
 		if(function_exists('mb_convert_encoding') === false) {
-			throw new Exception('Extension\'mbstring\' is required');
+			throw new EscaperException('Extension\'mbstring\' is required');
 		}
 
 		return mb_convert_encoding($str, 'UTF-32', $this->detectEncoding($str));
@@ -314,12 +314,12 @@ class Escaper implements EscaperInterface
 	 *
 	 * @param string $url
 	 * @return string
-	 * @throws Exception
+	 * @throws EscaperException
 	 */
 	public function escapeUrl($url)
 	{
 		if(is_string($url) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new EscaperException('Invalid parameter type.');
 		}
 
 		return rawurlencode($url);

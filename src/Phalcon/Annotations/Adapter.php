@@ -48,9 +48,10 @@ abstract class Adapter
 	 * @param \Phalcon\Annotations\ReaderInterface $reader
 	 * @throws Exception
 	 */
-	public function setReader(ReaderInterface $reader)
+	public function setReader($reader)
 	{
-		if(is_object($reader) === false)
+		if(is_object($reader) === false ||
+			$reader instanceof ReaderInterface === false)
 		{
 			throw new Exception('Invalid annotations reader');
 		}

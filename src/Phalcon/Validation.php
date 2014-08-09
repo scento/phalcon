@@ -13,7 +13,7 @@ namespace Phalcon;
 use \Phalcon\DI\Injectable,
 	\Phalcon\Events\EventsAwareInterface,
 	\Phalcon\DI\InjectionAwareInterface,
-	\Phalcon\Validation\Exception,
+	\Phalcon\Validation\Exception as ValidationException,
 	\Phalcon\Validation\Message\Group,
 	\Phalcon\FilterInterface;
 
@@ -76,12 +76,12 @@ class Validation extends Injectable implements EventsAwareInterface, InjectionAw
 	 * \Phalcon\Validation constructor
 	 *
 	 * @param array|null $validators
-	 * @throws Exception
+	 * @throws ValidationException
 	 */
 	public function __construct($validators = null)
 	{
 		if(is_null($validators) === false && is_array($validators) === false) {
-			throw new Exception('Validators must be an array');
+			throw new ValidationException('Validators must be an array');
 		}
 
 		$this->_validators = $validators;
@@ -97,12 +97,12 @@ class Validation extends Injectable implements EventsAwareInterface, InjectionAw
 	 * @param array|object|null $data
 	 * @param object|null $entity
 	 * @return \Phalcon\Validation\Message\Group|boolean|null
-	 * @throws Exception
+	 * @throws ValidationException
 	 */
 	public function validate($data = null, $entity = null)
 	{
 		if(is_array($this->_validators) === true) {
-			throw new Exception('There are no validators to validate');
+			throw new ValidationException('There are no validators to validate');
 		}
 
 		//Clear pre-calculated values
@@ -126,11 +126,11 @@ class Validation extends Injectable implements EventsAwareInterface, InjectionAw
 		//Validate
 		foreach($this->_validators as $scope) {
 			if(is_array($scope) === false) {
-				throw new Exception('The validator scope is not valid');
+				throw new ValidationException('The validator scope is not valid');
 			}
 
 			if(is_object($scope[1]) === false) {
-				throw new Exception('One of the validators is not valid');
+				throw new ValidationException('One of the validators is not valid');
 			}
 
 			if($scope[1]->validate($this, $scope[0]) === false) {
@@ -154,16 +154,16 @@ class Validation extends Injectable implements EventsAwareInterface, InjectionAw
 	 * @param string $attribute
 	 * @param \Phalcon\Validation\ValidatorInterface
 	 * @return \Phalcon\Validation
-	 * @throws Exception
+	 * @throws ValidationException
 	 */
 	public function add($attribute, $validator)
 	{
 		if(is_string($attribute) === false) {
-			throw new Exception('The attribute must be a string');
+			throw new ValidationException('The attribute must be a string');
 		}
 
 		if(is_object($validator) === false) {
-			throw new Exception('The validator must be an object');
+			throw new ValidationException('The validator must be an object');
 		}
 
 		if(is_array($this->_validators) === false) {
@@ -179,16 +179,16 @@ class Validation extends Injectable implements EventsAwareInterface, InjectionAw
 	 * @param string $attribute
 	 * @param array|string $filters
 	 * @return \Phalcon\Validation
-	 * @throws Exception
+	 * @throws ValidationException
 	 */
 	public function setFilters($attribute, $filters)
 	{
 		if(is_string($attribute) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new ValidationException('Invalid parameter type.');
 		}
 
 		if(is_array($attribute) === false && is_string($attribute) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new ValidationException('Invalid parameter type.');
 		}
 
 		$this->_filters[$attribute] = $filters;
@@ -266,16 +266,16 @@ class Validation extends Injectable implements EventsAwareInterface, InjectionAw
 	 * @param object $entity
 	 * @param object|array $data
 	 * @return \Phalcon\Validation
-	 * @throws Exception
+	 * @throws ValidationException
 	 */
 	public function bind($entity, $data)
 	{
 		if(is_object($entity) === false) {
-			throw new Exception('The entity must be an object');
+			throw new ValidationException('The entity must be an object');
 		}
 
 		if(is_array($data) === false && is_object($data) === false) {
-			throw new Exception('The data to validate must be an array or object');
+			throw new ValidationException('The data to validate must be an array or object');
 		}
 
 		$this->_entity = $entity;
@@ -289,7 +289,7 @@ class Validation extends Injectable implements EventsAwareInterface, InjectionAw
 	 *
 	 * @param string $attribute
 	 * @return mixed
-	 * @throws Exception
+	 * @throws ValidationException
 	 */
 	public function getValue($attribute)
 	{
@@ -320,7 +320,7 @@ class Validation extends Injectable implements EventsAwareInterface, InjectionAw
 				$value = $this->_data->$attribute;
 			}
 		} else {
-			throw new Exception('There is no data to validate');
+			throw new ValidationException('There is no data to validate');
 		}
 
 		if(is_null($value) === false) {
@@ -330,13 +330,13 @@ class Validation extends Injectable implements EventsAwareInterface, InjectionAw
 					if(is_object($dependency_injector) === false) {
 						$dependency_injector = \Phalcon\DI::getDefault();
 						if(is_object($dependency_injector) === false) {
-							throw new Exception('A dependency injector is required to obtain the \'filter\' service');
+							throw new ValidationException('A dependency injector is required to obtain the \'filter\' service');
 						}
 					}
 
 					$filter_service = $dependency_injector->getShared('filter');
 					if(is_object($filter_service) === false || $filter_service instanceof FilterInterface === false) {
-						throw new Exception('Returned \'filter\' service is invalid');
+						throw new ValidationException('Returned \'filter\' service is invalid');
 					}
 
 					return $filter_service->sanitize($value, $this->_filters[$attribute]);

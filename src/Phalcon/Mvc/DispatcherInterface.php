@@ -9,14 +9,12 @@
 */
 namespace Phalcon\Mvc;
 
-use \Phalcon\DispatcherInterface;
-
 /**
  * Phalcon\Mvc\DispatcherInterface initializer
  * 
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/mvc/dispatcherinterface.c
  */
-interface DispatcherInterface extends DispatcherInterface
+interface DispatcherInterface extends \Phalcon\DispatcherInterface
 {
 	/**
 	 * Sets the default controller suffix

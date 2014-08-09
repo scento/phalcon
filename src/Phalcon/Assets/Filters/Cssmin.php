@@ -10,8 +10,7 @@
 */
 namespace Phalcon\Assets\Filters;
 
-use \Phalcon\Assets\Exception,
-	\Phalcon\Assets\Filters\Helper\CssMin;
+use \Phalcon\Assets\Exception;
 
 /**
  * Phalcon\Assets\Filters\Cssmin

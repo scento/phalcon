@@ -12,7 +12,7 @@ namespace Phalcon;
 
 use \Closure,
 	\Phalcon\FilterInterface,
-	\Phalcon\Filter\Exception;
+	\Phalcon\Filter\Exception as FilterException;
 
 /**
  * Phalcon\Filter
@@ -47,16 +47,16 @@ class Filter implements FilterInterface
 	 * @param string $name
 	 * @param object|callable $handler
 	 * @return \Phalcon\Filter
-	 * @throws Exception
+	 * @throws FilterException
 	 */
 	public function add($name, $handler)
 	{
 		if(is_string($name) === false) {
-			throw new Exception('Filter name must be string');
+			throw new FilterException('Filter name must be string');
 		}
 
 		if(is_object($handler) === false) {
-			throw new Exception('Filter must be an object');
+			throw new FilterException('Filter must be an object');
 		}
 
 		if(is_array($this->_filters) === false) {
@@ -117,12 +117,12 @@ class Filter implements FilterInterface
 	 * @param mixed $value
 	 * @param string $filter
 	 * @return mixed
-	 * @throws Exception
+	 * @throws FilterException
 	 */
 	protected function _sanitize($value, $filter)
 	{
 		if(is_string($filter) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new FilterException('Invalid parameter type.');
 		}
 
 		/* User-defined filter */
@@ -189,7 +189,7 @@ class Filter implements FilterInterface
 				}
 		}
 
-		throw new Exception('Sanitize filter '.$filter.' is not supported');
+		throw new FilterException('Sanitize filter '.$filter.' is not supported');
 	}
 
 	/**

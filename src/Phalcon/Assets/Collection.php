@@ -12,7 +12,6 @@ namespace Phalcon\Assets;
 
 use \Countable,
 	\Iterator,
-	\Traversable,
 	\Phalcon\Assets\Exception,
 	\Phalcon\Assets\Resource,
 	\Phalcon\Assets\Resource\Css,
@@ -26,7 +25,7 @@ use \Countable,
  * 
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/assets/collection.c
  */
-class Collection implements Countable, Iterator, Traversable
+class Collection implements Countable, Iterator
 {
 	/**
 	 * Prefix
@@ -243,7 +242,7 @@ class Collection implements Countable, Iterator, Traversable
 			$this->_position = 0;
 		}
 
-		if(isset($this->_resources[$this->_position]) ? 
+		return (isset($this->_resources[$this->_position]) ? 
 			$this->_resources[$this->_position] : null);
 	}
 

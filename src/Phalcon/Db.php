@@ -10,7 +10,7 @@
 */
 namespace Phalcon;
 
-use \Phalcon\Db\Exception;
+use \Phalcon\Db\Exception as DbException;
 
 /**
  * Phalcon\Db
@@ -84,12 +84,12 @@ abstract class Db
 	 * Enables/disables options in the Database component
 	 *
 	 * @param array $options
-	 * @throws Exception
+	 * @throws DbException
 	 */
 	public static function setup($options)
 	{
 		if(is_array($options) === false) {
-			throw new Exception('Options must be an array');
+			throw new DbException('Options must be an array');
 		}
 
 		if(isset($options['escapeSqlIdentifiers']) === true) {

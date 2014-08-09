@@ -10,7 +10,7 @@
 */
 namespace Phalcon;
 
-use \Phalcon\Flash\Exception,
+use \Phalcon\Flash\Exception as FlashException,
 	\Phalcon\FlashInterface;
 
 /**
@@ -75,12 +75,12 @@ abstract class Flash implements FlashInterface
 	 *
 	 * @param boolean $implicitFlush
 	 * @return \Phalcon\FlashInterface
-	 * @throws Exception
+	 * @throws FlashException
 	 */
 	public function setImplicitFlush($implicitFlush)
 	{
 		if(is_bool($implicitFlush) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new FlashException('Invalid parameter type.');
 		}
 
 		$this->_implicitFlush = $implicitFlush;
@@ -91,12 +91,12 @@ abstract class Flash implements FlashInterface
 	 *
 	 * @param boolean $automaticHtml
 	 * @return \Phalcon\FlashInterface
-	 * @throws Exception
+	 * @throws FlashException
 	 */
 	public function setAutomaticHtml($automaticHtml)
 	{
 		if(is_bool($automaticHtml) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new FlashException('Invalid parameter type.');
 		}
 
 		$this->_automaticHtml = $automaticHtml;
@@ -107,7 +107,7 @@ abstract class Flash implements FlashInterface
 	 *
 	 * @param array $cssClasses
 	 * @return \Phalcon\FlashInterface
-	 * @throws Exception
+	 * @throws FlashException
 	 */
 	public function setCssClasses($cssClasses)
 	{
@@ -115,7 +115,7 @@ abstract class Flash implements FlashInterface
 			$this->_cssClasses = $cssClasses;
 		}
 
-		throw new Exception('CSS classes must be an Array');
+		throw new FlashException('CSS classes must be an Array');
 	}
 
 	/**
@@ -188,16 +188,16 @@ abstract class Flash implements FlashInterface
 	 * @param string $type
 	 * @param string|array $message
 	 * @return string|null
-	 * @throws Exception
+	 * @throws FlashException
 	 */
 	public function outputMessage($type, $message)
 	{
 		if(is_string($type) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new FlashException('Invalid parameter type.');
 		}
 
 		if(is_string($message) === false && is_array($message) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new FlashException('Invalid parameter type.');
 		}
 
 		//Generate class tag

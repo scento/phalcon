@@ -15,7 +15,7 @@ use \ArrayAccess,
 	\Phalcon\DI\ServiceInterface,
 	\Phalcon\DI\Service,
 	\Phalcon\DI\InjectionAwareInterface,
-	\Phalcon\DI\Exception;
+	\Phalcon\DI\Exception as DiException;
 
 /**
  * Phalcon\DI
@@ -103,21 +103,21 @@ class DI implements DiInterface
 	 * @param mixed $definition
 	 * @param boolean $shared
 	 * @return \Phalcon\DI\ServiceInterface|null
-	 * @throws Exception
+	 * @throws DiException
 	 */
 	public function set($name, $definition, $shared = false)
 	{
 		if(is_string($name) === false) {
-			throw new Exception('The service name must be a string');
+			throw new DiException('The service name must be a string');
 		}
 
 		if(is_bool($shared) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new DiException('Invalid parameter type.');
 		}
 
 		try {
 			$this->_services[$name] = new Service($name, $definition, $shared);
-		} catch(Exception $e) {
+		} catch(\Exception $e) {
 			$this->_services[$name] = null;
 		}
 		return $this->_services[$name];
@@ -139,12 +139,12 @@ class DI implements DiInterface
 	 * Removes a service in the services container
 	 *
 	 * @param string $name
-	 * @throws Exception
+	 * @throws DiException
 	 */
 	public function remove($name)
 	{
 		if(is_string($name) === false) {
-			throw new Exception('The service name must be a string');
+			throw new DiException('The service name must be a string');
 		}
 
 		unset($this->_services[$name]);
@@ -162,12 +162,12 @@ class DI implements DiInterface
 	 * @param mixed $definition
 	 * @param boolean $shared
 	 * @return \Phalcon\DI\ServiceInterface|null
-	 * @throws Exception
+	 * @throws DiException
 	 */
 	public function attempt($name, $definition, $shared = false)
 	{
 		if(is_string($name) === false) {
-			throw new Exception('The service name must be a string');
+			throw new DiException('The service name must be a string');
 		}
 
 		if(isset($this->_services[$name]) === false) {
@@ -183,17 +183,17 @@ class DI implements DiInterface
 	 * @param string $name
 	 * @param \Phalcon\DI\ServiceInterface $rawDefinition
 	 * @return \Phalcon\DI\ServiceInterface
-	 * @throws Exception
+	 * @throws DiException
 	 */
 	public function setRaw($name, $rawDefinition)
 	{
 		if(is_string($name) === false) {
-			throw new Exception('The service name must be a string');
+			throw new DiException('The service name must be a string');
 		}
 
 		if(is_object($rawDefinition) === false ||
 			$rawDefinition instanceof ServiceInterface === false) {
-			throw new Exception('The service definition must be an object');
+			throw new DiException('The service definition must be an object');
 		}
 
 		$this->_services[$name] = $rawDefinition;
@@ -205,19 +205,19 @@ class DI implements DiInterface
 	 *
 	 * @param string $name
 	 * @return mixed
-	 * @throws Exception
+	 * @throws DiException
 	 */
 	public function getRaw($name)
 	{
 		if(is_string($name) === false) {
-			throw new Exception('The service name must be a string');
+			throw new DiException('The service name must be a string');
 		}
 
 		if(isset($this->_services[$name]) === true) {
 			return $this->_services[$name]->getDefinition();
 		}
 
-		throw new Exception('Service \''.$name.'\' wasn\'t found in the dependency injection container');
+		throw new DiException('Service \''.$name.'\' wasn\'t found in the dependency injection container');
 	}
 
 	/**
@@ -225,18 +225,19 @@ class DI implements DiInterface
 	 *
 	 * @param string $name
 	 * @return \Phalcon\DI\ServiceInterface
+	 * @throws DiException
 	 */
 	public function getService($name)
 	{
 		if(is_string($name) === false) {
-			throw new Exception('The service name must be a string');
+			throw new DiException('The service name must be a string');
 		}
 
 		if(isset($this->_services[$name]) === true) {
 			return $this->_services[$name];
 		}
 
-		throw new Exception('Service \''.$name.'\' wasn\'t found in the dependency injection container');
+		throw new DiException('Service \''.$name.'\' wasn\'t found in the dependency injection container');
 	}
 
 	/**
@@ -245,11 +246,11 @@ class DI implements DiInterface
 	 * @param string $className
 	 * @param array|null $params
 	 * @return object
-	 * @throws Exception
+	 * @throws DiException
 	*/
 	private static function createInstance($className, $params) {
 		if(is_string($className) === false) {
-			throw new Exception('Invalid class name');
+			throw new DiException('Invalid class name');
 		}
 
 		if(is_array($params) === false || empty($params) === true) {
@@ -266,12 +267,12 @@ class DI implements DiInterface
 	 * @param string $name
 	 * @param array|null $parameters
 	 * @return mixed
-	 * @throws Exception
+	 * @throws DiException
 	 */
 	public function get($name, $parameters = null)
 	{
 		if(is_string($name) === false) {
-			throw new Exception('The service name must be a string');
+			throw new DiException('The service name must be a string');
 		}
 
 		if(isset($this->_services[$name]) === true) {
@@ -285,10 +286,10 @@ class DI implements DiInterface
 				} elseif(is_null($parameters) === null) {
 					$instance = self::createInstance($name, null);
 				} else {
-					throw new Exception('Invalid parameter type.');
+					throw new DiException('Invalid parameter type.');
 				}
 			} else {
-				throw new Exception('Service \''.$name.'\' wasn\'t found in the dependency injection container');
+				throw new DiException('Service \''.$name.'\' wasn\'t found in the dependency injection container');
 			}
 		}
 
@@ -306,12 +307,12 @@ class DI implements DiInterface
 	 * @param string $name
 	 * @param array|null $parameters
 	 * @return mixed
-	 * @throws Exception
+	 * @throws DiException
 	 */
 	public function getShared($name, $parameters = null)
 	{
 		if(is_string($name) === false) {
-			throw new Exception('The service alias must be a string');
+			throw new DiException('The service alias must be a string');
 		}
 
 		if(isset($this->_sharedInstances[$name]) === true) {
@@ -334,12 +335,12 @@ class DI implements DiInterface
 	 *
 	 * @param string $name
 	 * @return boolean
-	 * @throws Exception
+	 * @throws DiException
 	 */
 	public function has($name)
 	{
 		if(is_string($name) === false) {
-			throw new Exception('The service alias must be a string');
+			throw new DiException('The service alias must be a string');
 		}
 
 		return isset($this->_services[$name]);
@@ -426,7 +427,7 @@ class DI implements DiInterface
 	 * @param string $method
 	 * @param array|null $arguments
 	 * @return mixed
-	 * @throws Exception
+	 * @throws DiException
 	 */
 	public function __call($method, $arguments = null)
 	{
@@ -451,7 +452,7 @@ class DI implements DiInterface
 			}
 		}
 
-		throw new Exception('Call to undefined method or service \''.$method."'");
+		throw new DiException('Call to undefined method or service \''.$method."'");
 	}
 
 	/**

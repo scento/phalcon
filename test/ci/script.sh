@@ -1,0 +1,3 @@
+#/bin/sh
+
+#Run phpunit...

@@ -11,7 +11,6 @@
 namespace Phalcon\Annotations;
 
 use \Iterator,
-	\Traversable,
 	\Countable,
 	\Phalcon\Annotations\Exception,
 	\Phalcon\Annotations\Annotation;
@@ -36,7 +35,7 @@ use \Iterator,
  * 
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/annotations/collection.c
  */
-class Collection implements Iterator, Traversable, Countable
+class Collection implements Iterator, Countable
 {
 	/**
 	 * Position

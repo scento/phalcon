@@ -84,7 +84,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
 	public function testIniConfig()
 	{
-		$config = new Phalcon\Config\Adapter\Ini('unit-tests/config/config.ini');
+		$config = new Phalcon\Config\Adapter\Ini(__DIR__.'/config/config.ini');
 		$this->assertTrue($this->_compareConfig($this->_config, $config));
 	}
 
@@ -244,7 +244,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
 	public function testIssue829()
 	{
-		$config = new \Phalcon\Config\Adapter\Ini('unit-tests/config/829-no-sections.ini');
+		$config = new \Phalcon\Config\Adapter\Ini(__DIR__.'/config/829-no-sections.ini');
 		$actual = $config->toArray();
 		$expected = array(
 			'hoge' => 'test',
@@ -253,7 +253,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals($actual, $expected);
 
-		$config = new \Phalcon\Config\Adapter\Ini('unit-tests/config/829-with-empty-section.ini');
+		$config = new \Phalcon\Config\Adapter\Ini(__DIR__.'/config/829-with-empty-section.ini');
 		$actual = $config->toArray();
 		$expected = array(
 			'section' => array('hoge' => 'test'),
@@ -266,7 +266,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
 	public function testIniConfigDirective()
 	{
-		$config = new \Phalcon\Config\Adapter\Ini('unit-tests/config/directive.ini');
+		$config = new \Phalcon\Config\Adapter\Ini(__DIR__.'/config/directive.ini');
 		$actual = $config->toArray();
 		$expected = array(
 			'test' => array(

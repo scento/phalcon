@@ -1,16 +1,26 @@
 language: php
 
 php:
-	- 5.3
-	- 5.3.3
-	- 5.4
-	- 5.5
-	- 5.6
+  - 5.3
+  - 5.3.3
+  - 5.4
+  - 5.5
+  - 5.6
 
-before_install: "./test/ci/before_install.sh"
-install: "./test/ci/install.sh"
-before_script: "./test/ci/before_script.sh"
-script: "./test/ci/script.sh"
+services:
+  - monogdb
+  - memcached
+
+before_install:
+  - "./test/ci/setup_beanstalkd.sh"
+  - "./test/ci/setup_memcached.sh"
+
+before_script:
+  - "./test/ci/setup_mysql.sh"
+  - "./test/ci/setup_pgsql.sh"
+  - "./test/ci/setup_sqlite.sh"
+
+script: phpunit --configuration ./test/phpunit.xml --coverage-text
 
 notifications:
-	email: "wenzel@phelix.me"
+  email: "wenzel@phelix.me"

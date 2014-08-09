@@ -12,7 +12,7 @@ namespace Phalcon;
 
 use \Phalcon\Events\EventsAwareInterface,
 	\Phalcon\Events\ManagerInterface,
-	\Phalcon\Loader\Exception,
+	\Phalcon\Loader\Exception as LoaderException,
 	\Phalcon\Text;
 
 /**
@@ -126,14 +126,14 @@ class Loader implements EventsAwareInterface
 	 * Sets the events manager
 	 *
 	 * @param \Phalcon\Events\ManagerInterface $eventsManager
-	 * @throws Exception
+	 * @throws LoaderException
 	 */
 	public function setEventsManager($eventsManager)
 	{
 		//@note Improvement: type checking
 		if(is_object($eventsManager) === false || 
 			$eventsManager instanceof ManagerInterface === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new LoaderException('Invalid parameter type.');
 		}
 
 		$this->_eventsManager = $eventsManager;
@@ -154,11 +154,12 @@ class Loader implements EventsAwareInterface
 	 *
 	 * @param array $extensions
 	 * @return \Phalcon\Loader
+	 * @throws LoaderException
 	 */
 	public function setExtensions($extensions)
 	{
 		if(is_array($extensions) === false) {
-			throw new Exception('Parameter extension must be an array');
+			throw new LoaderException('Parameter extension must be an array');
 		}
 
 		$this->_extensions = $extensions;
@@ -182,18 +183,18 @@ class Loader implements EventsAwareInterface
 	 * @param array $namespaces
 	 * @param boolean|null $merge
 	 * @return \Phalcon\Loader
-	 * @throws Exception
+	 * @throws LoaderException
 	 */
 	public function registerNamespaces($namespaces, $merge = null)
 	{
 		if($merge === null) {
 			$merge = false;
 		} elseif(is_bool($merge) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new LoaderException('Invalid parameter type.');
 		}
 
 		if(is_array($namespaces) === false) {
-			throw new Exception('Parameter namespaces must be an array');
+			throw new LoaderException('Parameter namespaces must be an array');
 		}
 
 		if($merge === true && is_array($this->_namespaces) === true) {
@@ -221,18 +222,18 @@ class Loader implements EventsAwareInterface
 	 * @param array $prefixes
 	 * @param boolean|null $merge
 	 * @return \Phalcon\Loader
-	 * @throws Exception
+	 * @throws LoaderException
 	 */
 	public function registerPrefixes($prefixes, $merge = null)
 	{
 		if($merge === null) {
 			$merge = false;
 		} elseif(is_bool($merge) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new LoaderException('Invalid parameter type.');
 		}
 
 		if(is_array($prefixes) === false) {
-			throw new Exception('Parameter prefixes must be an array');
+			throw new LoaderException('Parameter prefixes must be an array');
 		}
 
 		if($merge === true && is_array($this->_prefixes) === true) {
@@ -260,18 +261,18 @@ class Loader implements EventsAwareInterface
 	 * @param array $directories
 	 * @param boolean|null $merge
 	 * @return \Phalcon\Loader
-	 * @throws Exception
+	 * @throws LoaderException
 	 */
 	public function registerDirs($directories, $merge = null)
 	{
 		if($merge === null) {
 			$merge = false;
 		} elseif(is_bool($merge) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new LoaderException('Invalid parameter type.');
 		}
 
 		if(is_array($directories) === false) {
-			throw new Exception('Parameter directories must be a n array');
+			throw new LoaderException('Parameter directories must be a n array');
 		}
 
 		if($merge === true && is_array($this->_directories) === true) {
@@ -299,18 +300,18 @@ class Loader implements EventsAwareInterface
 	 * @param array $classes
 	 * @param boolean $merge
 	 * @return \Phalcon\Loader
-	 * @throws Exception
+	 * @throws LoaderException
 	 */
 	public function registerClasses($classes, $merge = null)
 	{
 		if($merge === null) {
 			$merge = false;
 		} elseif(is_bool($marge) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new LoaderException('Invalid parameter type.');
 		}
 
 		if(is_array($classes) === false) {
-			throw new Exception('Parameter classes must be an array');
+			throw new LoaderException('Parameter classes must be an array');
 		}
 
 		if($merge === true && is_array($this->_classes) === true) {

@@ -1,5 +1,4 @@
-language:
-	- php
+language: php
 
 php:
 	- 5.3
@@ -12,3 +11,6 @@ before_install: "./test/ci/before_install.sh"
 install: "./test/ci/install.sh"
 before_script: "./test/ci/before_script.sh"
 script: "./test/ci/script.sh"
+
+notifications:
+	email: "wenzel@phelix.me"

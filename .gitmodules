@@ -1,3 +1,6 @@
 [submodule "src/Phalcon/Assets/Filters/JShrink"]
 	path = src/Phalcon/Assets/Filters/JShrink
 	url = https://github.com/tedious/JShrink.git
+[submodule "src/Phalcon/Assets/Filters/CssMin"]
+	path = src/Phalcon/Assets/Filters/CssMin
+	url = https://github.com/natxet/CssMin.git

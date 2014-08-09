@@ -15,13 +15,20 @@ before_install:
   - ./test/ci/setup_beanstalkd.sh
   - ./test/ci/setup_memcached.sh
   - ./test/ci/setup_mongo.sh
+  - ./test/ci/setup_pdepend.sh
+  - ./test/ci/setup_phploc.sh
+  - ./test/ci/setup_phpmd.sh
 
 before_script:
   - ./test/ci/setup_mysql.sh
   - ./test/ci/setup_pgsql.sh
   - ./test/ci/setup_sqlite.sh
 
-script: phpunit --configuration ./test/phpunit.xml --coverage-text
+script:
+  - phpunit --configuration ./test/phpunit.xml --coverage-text
+  - ./test/ci/execute_pdepend.sh
+  - ./test/ci/execute_phploc.sh
+  - ./test/ci/execute_phpmd.sh
 
 notifications:
   email: "wenzel@phelix.me"

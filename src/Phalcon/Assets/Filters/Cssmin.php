@@ -50,9 +50,13 @@ class Cssmin
 		if(is_string($content) === false) {
 			throw new Exception('Style must be a string');
 		}
+		
+		require(__DIR__.'/CssMin/CssMin.php');
+		
+		\CssMin::initialize();
 
 		try {
-			return CssMin::minify($content);
+			return \CssMin::minify($content);
 		} catch(\Exception $e) {
 			if(is_string($e) === true) {
 				throw new Exception($e);

@@ -11,7 +11,7 @@
 namespace Phalcon\Assets\Filters;
 
 use \Phalcon\Assets\Exception,
-	Phalcon\Assets\Filters\Helper\JShrink;
+	JShrink\Minifier;
 
 /**
  * Phalcon\Assets\Filters\Jsmin
@@ -36,9 +36,11 @@ class Jsmin
 		if(is_string($content) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
+		
+		require(__DIR__.'/JShrink/src/JShrink/Minifier.php');
 
 		try {
-			return JShrink::minify($content);
+			return Minifier::minify($content);
 		} catch(\Exception $e) {
 			return null;
 		}

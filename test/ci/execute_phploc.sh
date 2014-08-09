@@ -1,4 +1,4 @@
 #!/bin/sh
 echo "phploc analysis:"
-phploc `pwd`/src
+php /tmp/phploc.phar `pwd`/src
 wait

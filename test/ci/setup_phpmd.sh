@@ -1,4 +1,4 @@
 #!/bin/sh
-pear channel-discover pear.phpmd.org
-pear install phpmd/phpmd
+sudo pear channel-discover pear.phpmd.org
+sudo pear install phpmd/phpmd
 wait

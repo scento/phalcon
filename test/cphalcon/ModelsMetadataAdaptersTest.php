@@ -83,8 +83,8 @@ class ModelsMetadataAdaptersTest extends PHPUnit_Framework_TestCase
 
 	public function modelsAutoloader($className)
 	{
-		if (file_exists('unit-tests/models/' . $className . '.php')) {
-			require 'unit-tests/models/' . $className . '.php';
+		if (file_exists(__DIR__.'/models/' . $className . '.php')) {
+			require __DIR__.'/models/' . $className . '.php';
 		}
 	}
 
@@ -100,7 +100,7 @@ class ModelsMetadataAdaptersTest extends PHPUnit_Framework_TestCase
 		});
 
 		$di->set('db', function(){
-			require 'unit-tests/config.db.php';
+			require __DIR__.'/config.db.php';
 			return new Phalcon\Db\Adapter\Pdo\Mysql($configMysql);
 		});
 
@@ -242,12 +242,12 @@ class ModelsMetadataAdaptersTest extends PHPUnit_Framework_TestCase
 
 		$di->set('modelsMetadata', function(){
 			return new Phalcon\Mvc\Model\Metadata\Files(array(
-				'metaDataDir' => 'unit-tests/cache/',
+				'metaDataDir' => __DIR__.'/cache/',
 			));
 		});
 
-		@unlink('unit-tests/cache/meta-robots-robots.php');
-		@unlink('unit-tests/cache/map-robots.php');
+		@unlink(__DIR__.'/cache/meta-robots-robots.php');
+		@unlink(__DIR__.'/cache/map-robots.php');
 
 		$metaData = $di->getShared('modelsMetadata');
 
@@ -257,8 +257,8 @@ class ModelsMetadataAdaptersTest extends PHPUnit_Framework_TestCase
 
 		Robots::findFirst();
 
-		$this->assertEquals(require 'unit-tests/cache/meta-robots-robots.php', $this->_data['meta-robots-robots']);
-		$this->assertEquals(require 'unit-tests/cache/map-robots.php', $this->_data['map-robots']);
+		$this->assertEquals(require __DIR__.'/cache/meta-robots-robots.php', $this->_data['meta-robots-robots']);
+		$this->assertEquals(require __DIR__.'/cache/map-robots.php', $this->_data['map-robots']);
 
 		$this->assertFalse($metaData->isEmpty());
 

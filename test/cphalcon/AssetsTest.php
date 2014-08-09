@@ -268,7 +268,7 @@ class AssetsTest extends PHPUnit_Framework_TestCase
 
 	public function testFilterSimpleNoJoin()
 	{
-		@unlink('unit-tests/assets/production/combined.js');
+		@unlink(__DIR__.'/assets/production/combined.js');
 
 		Phalcon\DI::reset();
 
@@ -286,11 +286,11 @@ class AssetsTest extends PHPUnit_Framework_TestCase
 
 		$js = $assets->collection('js');
 
-		$js->setTargetPath('unit-tests/assets/production/combined.js');
+		$js->setTargetPath(__DIR__.'/assets/production/combined.js');
 
 		$js->setTargetUri('production/combined.js');
 
-		$js->addJs('unit-tests/assets/jquery.js', false, false);
+		$js->addJs(__DIR__.'/assets/jquery.js', false, false);
 
 		//Basic output
 		$this->assertEquals($assets->outputJs('js'), '<script src="unit-tests/assets/jquery.js" type="text/javascript"></script>' . PHP_EOL);
@@ -312,7 +312,7 @@ class AssetsTest extends PHPUnit_Framework_TestCase
 
 	public function testFilterSimpleJoin()
 	{
-		@unlink('unit-tests/assets/production/combined.js');
+		@unlink(__DIR__.'/assets/production/combined.js');
 
 		Phalcon\DI::reset();
 
@@ -330,11 +330,11 @@ class AssetsTest extends PHPUnit_Framework_TestCase
 
 		$js = $assets->collection('js');
 
-		$js->setTargetPath('unit-tests/assets/production/combined.js');
+		$js->setTargetPath(__DIR__.'/assets/production/combined.js');
 
 		$js->setTargetUri('production/combined.js');
 
-		$js->addJs('unit-tests/assets/jquery.js', false, false);
+		$js->addJs(__DIR__.'/assets/jquery.js', false, false);
 
 		//Basic output
 		$this->assertEquals($assets->outputJs('js'), '<script src="unit-tests/assets/jquery.js" type="text/javascript"></script>' . PHP_EOL);
@@ -355,7 +355,7 @@ class AssetsTest extends PHPUnit_Framework_TestCase
 
 	public function testFilterMultiplesSourcesNoFilter()
 	{
-		@unlink('unit-tests/assets/production/combined-1.js');
+		@unlink(__DIR__.'/assets/production/combined-1.js');
 
 		Phalcon\DI::reset();
 
@@ -373,7 +373,7 @@ class AssetsTest extends PHPUnit_Framework_TestCase
 
 		$js = $assets->collection('js');
 
-		$js->setTargetPath('unit-tests/assets/production/combined-1.js');
+		$js->setTargetPath(__DIR__.'/assets/production/combined-1.js');
 
 		$js->setTargetUri('production/combined.js');
 
@@ -394,7 +394,7 @@ class AssetsTest extends PHPUnit_Framework_TestCase
 
 	public function testFilterMultiplesSourcesFilterNoJoin()
 	{
-		@unlink('unit-tests/assets/production/combined-2.js');
+		@unlink(__DIR__.'/assets/production/combined-2.js');
 
 		Phalcon\DI::reset();
 
@@ -412,15 +412,15 @@ class AssetsTest extends PHPUnit_Framework_TestCase
 
 		$js = $assets->collection('js');
 
-		$js->setTargetPath('unit-tests/assets/production/');
+		$js->setTargetPath(__DIR__.'/assets/production/');
 
-		$jquery = new Phalcon\Assets\Resource\Js('unit-tests/assets/jquery.js', false, false);
+		$jquery = new Phalcon\Assets\Resource\Js(__DIR__.'/assets/jquery.js', false, false);
 
 		$jquery->setTargetUri('jquery.js');
 
 		$js->add($jquery);
 
-		$gs = new Phalcon\Assets\Resource\Js('unit-tests/assets/gs.js');
+		$gs = new Phalcon\Assets\Resource\Js(__DIR__.'/assets/gs.js');
 
 		$gs->setTargetUri('gs.js');
 		$gs->setTargetPath('gs.js');
@@ -444,7 +444,7 @@ class AssetsTest extends PHPUnit_Framework_TestCase
 
 	public function testFilterMultiplesSourcesFilterJoin()
 	{
-		@unlink('unit-tests/assets/production/combined-3.js');
+		@unlink(__DIR__.'/assets/production/combined-3.js');
 
 		Phalcon\DI::reset();
 
@@ -463,15 +463,15 @@ class AssetsTest extends PHPUnit_Framework_TestCase
 		$js = $assets->collection('js');
 
 		$js->setTargetUri('production/combined-3.js');
-		$js->setTargetPath('unit-tests/assets/production/combined-3.js');
+		$js->setTargetPath(__DIR__.'/assets/production/combined-3.js');
 
-		$jquery = new Phalcon\Assets\Resource\Js('unit-tests/assets/jquery.js', false, false);
+		$jquery = new Phalcon\Assets\Resource\Js(__DIR__.'/assets/jquery.js', false, false);
 
 		$jquery->setTargetUri('jquery.js');
 
 		$js->add($jquery);
 
-		$gs = new Phalcon\Assets\Resource\Js('unit-tests/assets/gs.js');
+		$gs = new Phalcon\Assets\Resource\Js(__DIR__.'/assets/gs.js');
 
 		$gs->setTargetUri('gs.js');
 		$gs->setTargetPath('gs.js');

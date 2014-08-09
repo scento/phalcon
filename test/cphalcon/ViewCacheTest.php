@@ -23,7 +23,7 @@ class ViewCacheTest extends PHPUnit_Framework_TestCase
 
 	public function setUp()
 	{
-		$iterator = new DirectoryIterator('unit-tests/cache/');
+		$iterator = new DirectoryIterator(__DIR__.'/cache/');
 		foreach ($iterator as $item) {
 			if (!$item->isDir()) {
 				unlink($item->getPathname());
@@ -41,7 +41,7 @@ class ViewCacheTest extends PHPUnit_Framework_TestCase
 				'lifetime' => 60
 			));
 			return new Phalcon\Cache\Backend\File($frontend, array(
-				'cacheDir' => 'unit-tests/cache/'
+				'cacheDir' => __DIR__.'/cache/'
 			));
 		});
 
@@ -50,7 +50,7 @@ class ViewCacheTest extends PHPUnit_Framework_TestCase
 
 		$view = new Phalcon\Mvc\View();
 		$view->setDI($di);
-		$view->setViewsDir('unit-tests/views/');
+		$view->setViewsDir(__DIR__.'/views/');
 		$view->setVar("date", $date);
 
 		//First hit
@@ -111,7 +111,7 @@ class ViewCacheTest extends PHPUnit_Framework_TestCase
 			));
 
 			return new Phalcon\Cache\Backend\File($frontend, array(
-				'cacheDir' => 'unit-tests/cache/'
+				'cacheDir' => __DIR__.'/cache/'
 			));
 
 		});
@@ -119,7 +119,7 @@ class ViewCacheTest extends PHPUnit_Framework_TestCase
 		$view = new Phalcon\Mvc\View($config);
 		$view->setDI($di);
 
-		$view->setViewsDir('unit-tests/views/');
+		$view->setViewsDir(__DIR__.'/views/');
 
 		$date = date("r");
 

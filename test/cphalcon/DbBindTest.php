@@ -27,7 +27,7 @@ class DbBindTest extends PHPUnit_Framework_TestCase
 	public function testDbBindMysql()
 	{
 
-		require 'unit-tests/config.db.php';
+		require __DIR__.'/config.db.php';
 		if (empty($configMysql)) {
 			$this->markTestSkipped("Skipped");
 			return;
@@ -44,7 +44,7 @@ class DbBindTest extends PHPUnit_Framework_TestCase
 	public function testDbBindPostgresql()
 	{
 
-		require 'unit-tests/config.db.php';
+		require __DIR__.'/config.db.php';
 		if (empty($configPostgresql)) {
 			$this->markTestSkipped("Skipped");
 			return;
@@ -60,7 +60,7 @@ class DbBindTest extends PHPUnit_Framework_TestCase
 	public function testDbBindSqlite()
 	{
 
-		require 'unit-tests/config.db.php';
+		require __DIR__.'/config.db.php';
 		if (empty($configSqlite)) {
 			$this->markTestSkipped("Skipped");
 			return;

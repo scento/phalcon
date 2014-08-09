@@ -34,14 +34,14 @@ class ModelsResultsetCacheStaticTest extends PHPUnit_Framework_TestCase
 	public function modelsAutoloader($className)
 	{
 		$className = str_replace('\\', '/', $className);
-		if (file_exists('unit-tests/models/'.$className.'.php')) {
-			require 'unit-tests/models/'.$className.'.php';
+		if (file_exists(__DIR__.'/models/'.$className.'.php')) {
+			require __DIR__.'/models/'.$className.'.php';
 		}
 	}
 
 	public function setUp()
 	{
-		$iterator = new DirectoryIterator('unit-tests/cache/');
+		$iterator = new DirectoryIterator(__DIR__.'/cache/');
 		foreach ($iterator as $item) {
 			if (!$item->isDir()) {
 				unlink($item->getPathname());
@@ -56,7 +56,7 @@ class ModelsResultsetCacheStaticTest extends PHPUnit_Framework_TestCase
 		$di = new Phalcon\DI();
 
 		$di['db'] = function(){
-			require 'unit-tests/config.db.php';
+			require __DIR__.'/config.db.php';
 			return new Phalcon\Db\Adapter\Pdo\Mysql($configMysql);
 		};
 
@@ -71,7 +71,7 @@ class ModelsResultsetCacheStaticTest extends PHPUnit_Framework_TestCase
 		$di['modelsCache'] = function(){
 			$frontCache = new Phalcon\Cache\Frontend\Data();
 			return new Phalcon\Cache\Backend\File($frontCache, array(
-				'cacheDir' => 'unit-tests/cache/'
+				'cacheDir' => __DIR__.'/cache/'
 			));
 		};
 

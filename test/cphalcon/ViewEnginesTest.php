@@ -93,7 +93,7 @@ class ViewEnginesTest extends PHPUnit_Framework_TestCase
 	protected function _loadMustache()
 	{
 		if (!class_exists('Mustache_Autoloader')) {
-			$path = 'unit-tests/engines/mustache.php/src/Mustache/Autoloader.php';
+			$path = __DIR__.'/engines/mustache.php/src/Mustache/Autoloader.php';
 			if (file_exists($path)) {
 				require $path;
 				Mustache_Autoloader::register();
@@ -108,7 +108,7 @@ class ViewEnginesTest extends PHPUnit_Framework_TestCase
 	protected function _loadTwig()
 	{
 		if (!class_exists('Twig_Autoloader')) {
-			$path = 'unit-tests/engines/Twig/lib/Twig/Autoloader.php';
+			$path = __DIR__.'/engines/Twig/lib/Twig/Autoloader.php';
 			if (file_exists($path)) {
 				require $path;
 				Twig_Autoloader::register();
@@ -131,7 +131,7 @@ class ViewEnginesTest extends PHPUnit_Framework_TestCase
 
 		$view = new Phalcon\Mvc\View();
 		$view->setDI($di);
-		$view->setViewsDir('unit-tests/views/');
+		$view->setViewsDir(__DIR__.'/views/');
 
 		$view->registerEngines(array(
 			'.mhtml' => 'My_Mustache_Engine'
@@ -165,7 +165,7 @@ class ViewEnginesTest extends PHPUnit_Framework_TestCase
 
 		$view = new Phalcon\Mvc\View();
 		$view->setDI($di);
-		$view->setViewsDir('unit-tests/views/');
+		$view->setViewsDir(__DIR__.'/views/');
 
 		$view->registerEngines(array(
 			'.phtml' => 'Phalcon\Mvc\View\Engine\Php',
@@ -192,7 +192,7 @@ class ViewEnginesTest extends PHPUnit_Framework_TestCase
 
 		$view = new Phalcon\Mvc\View();
 		$view->setDI($di);
-		$view->setViewsDir('unit-tests/views/');
+		$view->setViewsDir(__DIR__.'/views/');
 
 		$view->registerEngines(array(
 			'.mhtml' => 'My_Mustache_Engine',
@@ -219,7 +219,7 @@ class ViewEnginesTest extends PHPUnit_Framework_TestCase
 
 		$view = new Phalcon\Mvc\View();
 		$view->setDI($di);
-		$view->setViewsDir('unit-tests/views/');
+		$view->setViewsDir(__DIR__.'/views/');
 
 		$view->registerEngines(array(
 			'.twig' => 'My_Twig_Engine'
@@ -253,7 +253,7 @@ class ViewEnginesTest extends PHPUnit_Framework_TestCase
 
 		$view = new Phalcon\Mvc\View();
 		$view->setDI($di);
-		$view->setViewsDir('unit-tests/views/');
+		$view->setViewsDir(__DIR__.'/views/');
 
 		$view->registerEngines(array(
 			'.phtml' => 'Phalcon\Mvc\View\Engine\Php',
@@ -280,7 +280,7 @@ class ViewEnginesTest extends PHPUnit_Framework_TestCase
 
 		$view = new Phalcon\Mvc\View();
 		$view->setDI($di);
-		$view->setViewsDir('unit-tests/views/');
+		$view->setViewsDir(__DIR__.'/views/');
 
 		$view->registerEngines(array(
 			'.twig' => 'My_Twig_Engine',

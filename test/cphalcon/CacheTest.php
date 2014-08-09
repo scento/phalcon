@@ -26,7 +26,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
 	public function setUp()
 	{
 		date_default_timezone_set('UTC');
-		$iterator = new DirectoryIterator('unit-tests/cache/');
+		$iterator = new DirectoryIterator(__DIR__.'/cache/');
 		foreach ($iterator as $item) {
 			if (!$item->isDir()) {
 				unlink($item->getPathname());
@@ -44,7 +44,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
 		));
 
 		$cache = new Phalcon\Cache\Backend\File($frontCache, array(
-			'cacheDir' => 'unit-tests/cache/',
+			'cacheDir' => __DIR__.'/cache/',
 			'prefix' => 'unit'
 		));
 
@@ -67,7 +67,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
 		ob_end_clean();
 
 		$this->assertEquals($time, $obContent);
-		$this->assertTrue(file_exists('unit-tests/cache/unittestoutput'));
+		$this->assertTrue(file_exists(__DIR__.'/cache/unittestoutput'));
 
 		//Same cache
 		$content = $cache->start('testoutput');
@@ -125,7 +125,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
 		$frontCache = new Phalcon\Cache\Frontend\Data();
 
 		$cache = new Phalcon\Cache\Backend\File($frontCache, array(
-			'cacheDir' => 'unit-tests/cache/'
+			'cacheDir' => __DIR__.'/cache/'
 		));
 
 		$this->assertFalse($cache->isStarted());
@@ -133,7 +133,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
 		//Save
 		$cache->save('test-data', "nothing interesting");
 
-		$this->assertTrue(file_exists('unit-tests/cache/test-data'));
+		$this->assertTrue(file_exists(__DIR__.'/cache/test-data'));
 
 		//Get
 		$cachedContent = $cache->get('test-data');
@@ -175,7 +175,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
 		$frontCache = new Phalcon\Cache\Frontend\Igbinary();
 
 		$cache = new Phalcon\Cache\Backend\File($frontCache, array(
-			'cacheDir' => 'unit-tests/cache/'
+			'cacheDir' => __DIR__.'/cache/'
 		));
 
 		$this->assertFalse($cache->isStarted());
@@ -183,7 +183,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
 		//Save
 		$cache->save('test-data', "nothing interesting");
 
-		$this->assertTrue(file_exists('unit-tests/cache/test-data'));
+		$this->assertTrue(file_exists(__DIR__.'/cache/test-data'));
 
 		//Get
 		$cachedContent = $cache->get('test-data');

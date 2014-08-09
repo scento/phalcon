@@ -29,8 +29,8 @@ class ViewTest extends PHPUnit_Framework_TestCase
 		$view = new View();
 		$view->setBasePath(__DIR__.'/../');
 
-		$view->setViewsDir('unit-tests/views/');
-		$this->assertEquals($view->getViewsDir(), 'unit-tests/views/');
+		$view->setViewsDir(__DIR__.'/views/');
+		$this->assertEquals($view->getViewsDir(), __DIR__.'/views/');
 
 		//Standard Render
 		$view->start();
@@ -108,7 +108,7 @@ class ViewTest extends PHPUnit_Framework_TestCase
 
 		$view = new Phalcon\Mvc\View();
 
-		$view->setViewsDir('unit-tests/views/');
+		$view->setViewsDir(__DIR__.'/views/');
 
 		//Override controller layout
 		$view->start();
@@ -124,8 +124,8 @@ class ViewTest extends PHPUnit_Framework_TestCase
 		$view = new Phalcon\Mvc\View();
 		$view->setBasePath(__DIR__.'/../');
 
-		$view->setViewsDir('unit-tests/views/');
-		$this->assertEquals($view->getViewsDir(), 'unit-tests/views/');
+		$view->setViewsDir(__DIR__.'/views/');
+		$this->assertEquals($view->getViewsDir(), __DIR__.'/views/');
 
 		$view->setParamToView('cool_var', 'le-this');
 
@@ -146,7 +146,7 @@ class ViewTest extends PHPUnit_Framework_TestCase
 	{
 		$view = new Phalcon\Mvc\View();
 
-		$view->setViewsDir('unit-tests/views/');
+		$view->setViewsDir(__DIR__.'/views/');
 
 		$content = $view->getRender('test5', 'index', array('cool_var' => 'le-this'));
 
@@ -157,7 +157,7 @@ class ViewTest extends PHPUnit_Framework_TestCase
 	{
 		$view = new Phalcon\Mvc\View();
 
-		$view->setViewsDir('unit-tests/views/');
+		$view->setViewsDir(__DIR__.'/views/');
 
 		$view->setTemplateAfter('after');
 		$view->setTemplateBefore('before');

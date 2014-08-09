@@ -33,8 +33,8 @@ class ModelsCalculationsTest extends PHPUnit_Framework_TestCase
 
 	public function modelsAutoloader($className)
 	{
-		if (file_exists('unit-tests/models/'.$className.'.php')) {
-			require 'unit-tests/models/'.$className.'.php';
+		if (file_exists(__DIR__.'/models/'.$className.'.php')) {
+			require __DIR__.'/models/'.$className.'.php';
 		}
 	}
 
@@ -58,7 +58,7 @@ class ModelsCalculationsTest extends PHPUnit_Framework_TestCase
 
 	public function testCalculationsMysql()
 	{
-		require 'unit-tests/config.db.php';
+		require __DIR__.'/config.db.php';
 		if (empty($configMysql)) {
 			$this->markTestSkipped("Skipped");
 			return;
@@ -67,7 +67,7 @@ class ModelsCalculationsTest extends PHPUnit_Framework_TestCase
 		$di = $this->_getDI();
 
 		$di->set('db', function(){
-			require 'unit-tests/config.db.php';
+			require __DIR__.'/config.db.php';
 			return new Phalcon\Db\Adapter\Pdo\Mysql($configMysql);
 		});
 
@@ -78,7 +78,7 @@ class ModelsCalculationsTest extends PHPUnit_Framework_TestCase
 
 	public function testCalculationsPostgresql()
 	{
-		require 'unit-tests/config.db.php';
+		require __DIR__.'/config.db.php';
 		if (empty($configPostgresql)) {
 			$this->markTestSkipped("Skipped");
 			return;
@@ -87,7 +87,7 @@ class ModelsCalculationsTest extends PHPUnit_Framework_TestCase
 		$di = $this->_getDI();
 
 		$di->set('db', function(){
-			require 'unit-tests/config.db.php';
+			require __DIR__.'/config.db.php';
 			return new Phalcon\Db\Adapter\Pdo\Postgresql($configPostgresql);
 		});
 
@@ -98,7 +98,7 @@ class ModelsCalculationsTest extends PHPUnit_Framework_TestCase
 
 	public function testCalculationsSqlite()
 	{
-		require 'unit-tests/config.db.php';
+		require __DIR__.'/config.db.php';
 		if (empty($configSqlite)) {
 			$this->markTestSkipped("Skipped");
 			return;
@@ -107,7 +107,7 @@ class ModelsCalculationsTest extends PHPUnit_Framework_TestCase
 		$di = $this->_getDI();
 
 		$di->set('db', function(){
-			require 'unit-tests/config.db.php';
+			require __DIR__.'/config.db.php';
 			return new Phalcon\Db\Adapter\Pdo\Sqlite($configSqlite);
 		});
 

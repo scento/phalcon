@@ -27,7 +27,7 @@ class ControllersTest extends PHPUnit_Framework_TestCase
 
 		$di->set('view', function(){
 			$view = new Phalcon\Mvc\View();
-			$view->setViewsDir('unit-tests/views/');
+			$view->setViewsDir(__DIR__.'/views/');
 			return $view;
 		});
 
@@ -39,7 +39,7 @@ class ControllersTest extends PHPUnit_Framework_TestCase
 			return new Phalcon\Filter();
 		});
 
-		require 'unit-tests/controllers/Test4Controller.php';
+		require __DIR__.'/controllers/Test4Controller.php';
 
 		$controller = new Test4Controller();
 		$controller->setDI($di);

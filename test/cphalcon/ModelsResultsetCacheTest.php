@@ -33,8 +33,8 @@ class ModelsResultsetCacheTest extends PHPUnit_Framework_TestCase
 
 	public function modelsAutoloader($className)
 	{
-		if (file_exists('unit-tests/models/'.$className.'.php')) {
-			require 'unit-tests/models/'.$className.'.php';
+		if (file_exists(__DIR__.'/models/'.$className.'.php')) {
+			require __DIR__.'/models/'.$className.'.php';
 		}
 	}
 
@@ -58,7 +58,7 @@ class ModelsResultsetCacheTest extends PHPUnit_Framework_TestCase
 
 	public function setUp()
 	{
-		$iterator = new DirectoryIterator('unit-tests/cache/');
+		$iterator = new DirectoryIterator(__DIR__.'/cache/');
 		foreach ($iterator as $item) {
 			if (!$item->isDir()) {
 				unlink($item->getPathname());
@@ -68,7 +68,7 @@ class ModelsResultsetCacheTest extends PHPUnit_Framework_TestCase
 
 	private function _prepareTestMysql()
 	{
-		require 'unit-tests/config.db.php';
+		require __DIR__.'/config.db.php';
 		if (empty($configMysql)) {
 			return null;
 		}
@@ -76,7 +76,7 @@ class ModelsResultsetCacheTest extends PHPUnit_Framework_TestCase
 		$di = $this->_getDI();
 
 		$di->set('db', function(){
-			require 'unit-tests/config.db.php';
+			require __DIR__.'/config.db.php';
 			return new Phalcon\Db\Adapter\Pdo\Mysql($configMysql);
 		});
 
@@ -85,7 +85,7 @@ class ModelsResultsetCacheTest extends PHPUnit_Framework_TestCase
 
 	private function _prepareTestPostgresql()
 	{
-		require 'unit-tests/config.db.php';
+		require __DIR__.'/config.db.php';
 		if (empty($configPostgresql)) {
 			return null;
 		}
@@ -93,7 +93,7 @@ class ModelsResultsetCacheTest extends PHPUnit_Framework_TestCase
 		$di = $this->_getDI();
 
 		$di->set('db', function(){
-			require 'unit-tests/config.db.php';
+			require __DIR__.'/config.db.php';
 			return new Phalcon\Db\Adapter\Pdo\Postgresql($configPostgresql);
 		});
 
@@ -102,7 +102,7 @@ class ModelsResultsetCacheTest extends PHPUnit_Framework_TestCase
 
 	private function _prepareTestSqlite()
 	{
-		require 'unit-tests/config.db.php';
+		require __DIR__.'/config.db.php';
 		if (empty($configSqlite)) {
 			return null;
 		}
@@ -110,7 +110,7 @@ class ModelsResultsetCacheTest extends PHPUnit_Framework_TestCase
 		$di = $this->_getDI();
 
 		$di->set('db', function(){
-			require 'unit-tests/config.db.php';
+			require __DIR__.'/config.db.php';
 			return new Phalcon\Db\Adapter\Pdo\Sqlite($configSqlite);
 		});
 
@@ -123,7 +123,7 @@ class ModelsResultsetCacheTest extends PHPUnit_Framework_TestCase
 		$di->set('modelsCache', function(){
 			$frontCache = new Phalcon\Cache\Frontend\Data();
 			return new Phalcon\Cache\Backend\File($frontCache, array(
-				'cacheDir' => 'unit-tests/cache/'
+				'cacheDir' => __DIR__.'/cache/'
 			));
 		}, true);
 
@@ -149,7 +149,7 @@ class ModelsResultsetCacheTest extends PHPUnit_Framework_TestCase
 		$di->set('modelsCache', function(){
 			$frontCache = new Phalcon\Cache\Frontend\Data();
 			return new Phalcon\Cache\Backend\File($frontCache, array(
-				'cacheDir' => 'unit-tests/cache/'
+				'cacheDir' => __DIR__.'/cache/'
 			));
 		}, true);
 
@@ -179,7 +179,7 @@ class ModelsResultsetCacheTest extends PHPUnit_Framework_TestCase
 		$di->set('otherCache', function(){
 			$frontCache = new Phalcon\Cache\Frontend\Data();
 			return new Phalcon\Cache\Backend\File($frontCache, array(
-				'cacheDir' => 'unit-tests/cache/'
+				'cacheDir' => __DIR__.'/cache/'
 			));
 		}, true);
 

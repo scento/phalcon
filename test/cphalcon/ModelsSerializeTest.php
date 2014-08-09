@@ -34,8 +34,8 @@ class ModelsSerializeTest extends PHPUnit_Framework_TestCase
 	public function modelsAutoloader($className)
 	{
 		$className = str_replace('\\', '/', $className);
-		if (file_exists('unit-tests/models/'.$className.'.php')) {
-			require 'unit-tests/models/'.$className.'.php';
+		if (file_exists(__DIR__.'/models/'.$className.'.php')) {
+			require __DIR__.'/models/'.$className.'.php';
 		}
 	}
 
@@ -54,7 +54,7 @@ class ModelsSerializeTest extends PHPUnit_Framework_TestCase
 		}, true);
 
 		$di->set('db', function() {
-			require 'unit-tests/config.db.php';
+			require __DIR__.'/config.db.php';
 			return new Phalcon\Db\Adapter\Pdo\Mysql($configMysql);
 		}, true);
 

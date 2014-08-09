@@ -36,7 +36,7 @@ class ModelsQueryExecuteTest extends PHPUnit_Framework_TestCase
 	public function modelsAutoloader($className)
 	{
 		$className = str_replace("\\", DIRECTORY_SEPARATOR, $className);
-		$path = 'unit-tests/models/'.$className.'.php';
+		$path = __DIR__.'/models/'.$className.'.php';
 		if (file_exists($path)) {
 			require $path;
 		}
@@ -62,7 +62,7 @@ class ModelsQueryExecuteTest extends PHPUnit_Framework_TestCase
 
 	public function testExecuteMysql()
 	{
-		require 'unit-tests/config.db.php';
+		require __DIR__.'/config.db.php';
 		if (empty($configMysql)) {
 			$this->markTestSkipped("Skipped");
 			return;
@@ -71,7 +71,7 @@ class ModelsQueryExecuteTest extends PHPUnit_Framework_TestCase
 		$di = $this->_getDI();
 
 		$di->set('db', function() {
-			require 'unit-tests/config.db.php';
+			require __DIR__.'/config.db.php';
 			return new Phalcon\Db\Adapter\Pdo\Mysql($configMysql);
 		});
 
@@ -88,7 +88,7 @@ class ModelsQueryExecuteTest extends PHPUnit_Framework_TestCase
 
 	public function testExecutePostgresql()
 	{
-		require 'unit-tests/config.db.php';
+		require __DIR__.'/config.db.php';
 		if (empty($configPostgresql)) {
 			$this->markTestSkipped("Skipped");
 			return;
@@ -97,7 +97,7 @@ class ModelsQueryExecuteTest extends PHPUnit_Framework_TestCase
 		$di = $this->_getDI();
 
 		$di->set('db', function() {
-			require 'unit-tests/config.db.php';
+			require __DIR__.'/config.db.php';
 			return new Phalcon\Db\Adapter\Pdo\Postgresql($configPostgresql);
 		});
 
@@ -114,7 +114,7 @@ class ModelsQueryExecuteTest extends PHPUnit_Framework_TestCase
 
 	public function testExecuteSqlite()
 	{
-		require 'unit-tests/config.db.php';
+		require __DIR__.'/config.db.php';
 		if (empty($configSqlite)) {
 			$this->markTestSkipped("Skipped");
 			return;
@@ -123,7 +123,7 @@ class ModelsQueryExecuteTest extends PHPUnit_Framework_TestCase
 		$di = $this->_getDI();
 
 		$di->set('db', function() {
-			require 'unit-tests/config.db.php';
+			require __DIR__.'/config.db.php';
 			return new Phalcon\Db\Adapter\Pdo\Sqlite($configSqlite);
 		});
 

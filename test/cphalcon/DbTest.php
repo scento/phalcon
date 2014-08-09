@@ -24,7 +24,7 @@ class DbTest extends PHPUnit_Framework_TestCase
 
 	public function testDbMysql()
 	{
-		require 'unit-tests/config.db.php';
+		require __DIR__.'/config.db.php';
 
 		if (!empty($configMysql)) {
 			$connection = new Phalcon\Db\Adapter\Pdo\Mysql($configMysql);
@@ -37,7 +37,7 @@ class DbTest extends PHPUnit_Framework_TestCase
 
 	public function testDbPostgresql()
 	{
-		require 'unit-tests/config.db.php';
+		require __DIR__.'/config.db.php';
 
 		if (!empty($configPostgresql)) {
 			$connection = new Phalcon\Db\Adapter\Pdo\Postgresql($configPostgresql);
@@ -50,7 +50,7 @@ class DbTest extends PHPUnit_Framework_TestCase
 
 	public function testDbPostgresqlSchemas()
 	{
-		require 'unit-tests/config.db.php';
+		require __DIR__.'/config.db.php';
 		if (empty($configPostgresql)) {
 			$this->markTestSkipped("Skipped");
 			return;
@@ -87,7 +87,7 @@ class DbTest extends PHPUnit_Framework_TestCase
 
 	public function testDbSqlite()
 	{
-		require 'unit-tests/config.db.php';
+		require __DIR__.'/config.db.php';
 
 		if (!empty($configSqlite)) {
 			$connection = new Phalcon\Db\Adapter\Pdo\Sqlite($configSqlite);

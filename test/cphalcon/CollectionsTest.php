@@ -35,8 +35,8 @@ class CollectionsTest extends PHPUnit_Framework_TestCase
 
 	public function collectionsAutoloader($className)
 	{
-		if (file_exists('unit-tests/collections/' . $className . '.php')) {
-			require 'unit-tests/collections/' . $className . '.php';
+		if (file_exists(__DIR__.'/collections/' . $className . '.php')) {
+			require __DIR__.'/collections/' . $className . '.php';
 		}
 	}
 

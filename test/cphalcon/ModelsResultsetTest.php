@@ -33,8 +33,8 @@ class ModelsResultsetTest extends PHPUnit_Framework_TestCase
 
 	public function modelsAutoloader($className)
 	{
-		if (file_exists('unit-tests/models/'.$className.'.php')) {
-			require 'unit-tests/models/'.$className.'.php';
+		if (file_exists(__DIR__.'/models/'.$className.'.php')) {
+			require __DIR__.'/models/'.$className.'.php';
 		}
 	}
 
@@ -58,7 +58,7 @@ class ModelsResultsetTest extends PHPUnit_Framework_TestCase
 
 	protected function _prepareTestMysql()
 	{
-		require 'unit-tests/config.db.php';
+		require __DIR__.'/config.db.php';
 		if (empty($configMysql)) {
 			return false;
 		}
@@ -66,7 +66,7 @@ class ModelsResultsetTest extends PHPUnit_Framework_TestCase
 		$di = $this->_getDI();
 
 		$di->set('db', function(){
-			require 'unit-tests/config.db.php';
+			require __DIR__.'/config.db.php';
 			return new Phalcon\Db\Adapter\Pdo\Mysql($configMysql);
 		});
 
@@ -75,7 +75,7 @@ class ModelsResultsetTest extends PHPUnit_Framework_TestCase
 
 	protected function _prepareTestPostgresql()
 	{
-		require 'unit-tests/config.db.php';
+		require __DIR__.'/config.db.php';
 		if (empty($configPostgresql)) {
 			return false;
 		}
@@ -83,7 +83,7 @@ class ModelsResultsetTest extends PHPUnit_Framework_TestCase
 		$di = $this->_getDI();
 
 		$di->set('db', function(){
-			require 'unit-tests/config.db.php';
+			require __DIR__.'/config.db.php';
 			return new Phalcon\Db\Adapter\Pdo\Postgresql($configPostgresql);
 		});
 
@@ -92,7 +92,7 @@ class ModelsResultsetTest extends PHPUnit_Framework_TestCase
 
 	protected function _prepareTestSqlite()
 	{
-		require 'unit-tests/config.db.php';
+		require __DIR__.'/config.db.php';
 		if (empty($configSqlite)) {
 			return false;
 		}
@@ -100,7 +100,7 @@ class ModelsResultsetTest extends PHPUnit_Framework_TestCase
 		$di = $this->_getDI();
 
 		$di->set('db', function(){
-			require 'unit-tests/config.db.php';
+			require __DIR__.'/config.db.php';
 			return new Phalcon\Db\Adapter\Pdo\Sqlite($configSqlite);
 		});
 
@@ -304,7 +304,7 @@ class ModelsResultsetTest extends PHPUnit_Framework_TestCase
 
 	public function testSerializeNormalMysql()
 	{
-		require 'unit-tests/config.db.php';
+		require __DIR__.'/config.db.php';
 		if (empty($configMysql)) {
 			$this->markTestSkipped("Skipped");
 			return;

@@ -24,8 +24,8 @@ class TasksCliTest extends PHPUnit_Framework_TestCase
 
 	public function dispatcherAutoloader($className)
 	{
-		if (file_exists('unit-tests/tasks/'.$className.'.php')) {
-			require 'unit-tests/tasks/'.$className.'.php';
+		if (file_exists(__DIR__.'/tasks/'.$className.'.php')) {
+			require __DIR__.'/tasks/'.$className.'.php';
 		}
 	}
 

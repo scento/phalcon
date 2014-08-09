@@ -57,11 +57,11 @@ class AnnotationsAdaptersTest extends PHPUnit_Framework_TestCase
 
 	public function testFilesAdapter()
 	{
-		@unlink('unit-tests/annotations/cache/TestClass.php');
-		@unlink('unit-tests/annotations/cache/User_TestClassNs.php');
+		@unlink(__DIR__.'/annotations/cache/TestClass.php');
+		@unlink(__DIR__.'/annotations/cache/User_TestClassNs.php');
 
 		$adapter = new Phalcon\Annotations\Adapter\Files(array(
-			'annotationsDir' => 'unit-tests/annotations/cache/'
+			'annotationsDir' => __DIR__.'/annotations/cache/'
 		));
 
 		$classAnnotations = $adapter->get('TestClass');

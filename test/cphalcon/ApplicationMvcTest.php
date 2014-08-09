@@ -28,7 +28,7 @@ class ApplicationMvcTest extends PHPUnit_Framework_TestCase
 		$loader = new \Phalcon\Loader();
 
 		$loader->registerDirs(array(
-			'unit-tests/controllers/'
+			__DIR__.'/controllers/'
 		));
 
 		$loader->register();
@@ -39,7 +39,7 @@ class ApplicationMvcTest extends PHPUnit_Framework_TestCase
 
 		$di->set('view', function() {
 			$view = new \Phalcon\Mvc\View();
-			$view->setViewsDir('unit-tests/views/');
+			$view->setViewsDir(__DIR__.'/views/');
 			return $view;
 		});
 
@@ -57,8 +57,8 @@ class ApplicationMvcTest extends PHPUnit_Framework_TestCase
 		$loader = new \Phalcon\Loader();
 
 		$loader->registerNamespaces(array(
-			'Frontend\Controllers' => 'unit-tests/modules/frontend/controllers/',
-			'Backend\Controllers' => 'unit-tests/modules/backend/controllers/'
+			'Frontend\Controllers' => __DIR__.'/modules/frontend/controllers/',
+			'Backend\Controllers' => __DIR__.'/modules/backend/controllers/'
 		));
 
 		$loader->register();
@@ -86,11 +86,11 @@ class ApplicationMvcTest extends PHPUnit_Framework_TestCase
 
 		$application->registerModules(array(
 			'frontend' => array(
-				'path' => 'unit-tests/modules/frontend/Module.php',
+				'path' => __DIR__.'/modules/frontend/Module.php',
 				'className' => 'Frontend\Module',
 			),
 			'backend' => array(
-				'path' => 'unit-tests/modules/backend/Module.php',
+				'path' => __DIR__.'/modules/backend/Module.php',
 				'className' => 'Backend\Module',
 			),
 		));
@@ -109,8 +109,8 @@ class ApplicationMvcTest extends PHPUnit_Framework_TestCase
 		$loader = new \Phalcon\Loader();
 
 		$loader->registerNamespaces(array(
-			'Frontend\Controllers' => 'unit-tests/modules/frontend/controllers/',
-			'Backend\Controllers' => 'unit-tests/modules/backend/controllers/'
+			'Frontend\Controllers' => __DIR__.'/modules/frontend/controllers/',
+			'Backend\Controllers' => __DIR__.'/modules/backend/controllers/'
 		));
 
 		$loader->register();
@@ -148,13 +148,13 @@ class ApplicationMvcTest extends PHPUnit_Framework_TestCase
 			'frontend' => function($di) use ($view) {
 				$di->set('view', function() use ($view) {
 					$view = new \Phalcon\Mvc\View();
-					$view->setViewsDir('unit-tests/modules/frontend/views/');
+					$view->setViewsDir(__DIR__.'/modules/frontend/views/');
 					return $view;
 				});
 			},
 			'backend' => function($di) use ($view) {
 				$di->set('view', function() use($view) {
-					$view->setViewsDir('unit-tests/modules/backend/views/');
+					$view->setViewsDir(__DIR__.'/modules/backend/views/');
 					return $view;
 				});
 			},

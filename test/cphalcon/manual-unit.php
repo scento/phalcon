@@ -178,7 +178,7 @@ try {
 		}
 		PHPUnit_Framework_TestCase::main($className);
 	} else {
-		$xml = simplexml_load_file('unit-tests/phpunit.xml');
+		$xml = simplexml_load_file(__DIR__.'/phpunit.xml');
 		foreach ($xml->testsuites as $suite) {
 			foreach ($suite->testsuite->file as $file) {
 				$fileName = (string) $file;

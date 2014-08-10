@@ -4,6 +4,10 @@ namespace Frontend;
 
 class Module implements \Phalcon\Mvc\ModuleDefinitionInterface
 {
+	public function registerAutoloaders()
+	{
+	}
+
 	public function registerServices($di)
 	{
 		$di->set('view', function() {

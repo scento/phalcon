@@ -24,7 +24,7 @@ before_script:
   - ./test/ci/setup_sqlite.sh
 
 script:
-  - phpunit --configuration ./test/phpunit.xml --coverage-text
+  - phpunit --configuration ./test/phpunit.xml --coverage-text --debug
   - ./test/ci/execute_phploc.sh
   - ./test/ci/execute_phpmd.sh
 

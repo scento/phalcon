@@ -53,7 +53,7 @@ class CacheResultsetTest extends PHPUnit_Framework_TestCase
 		}, true);
 
 		$di->set('modelsMetadata', function(){
-			return new Phalcon\Mvc\Model\Metadata\Memory();
+			return new Phalcon\Mvc\Model\MetaData\Memory();
 		}, true);
 
 		$di->set('db', function(){

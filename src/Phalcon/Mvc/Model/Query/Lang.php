@@ -8,6 +8,9 @@
 */
 namespace Phalcon\Mvc\Model\Query;
 
+use \Phalcon\Mvc\Model\Query\Scanner,
+	\Phalcon\Mvc\Model\Exception;
+
 /**
  * Phalcon\Mvc\Model\Query\Lang
  *
@@ -42,7 +45,8 @@ abstract class Lang
 		}
 
 		try {
-			return self::PhqlParsePhql($phql);
+			$scanner = new Scanner($phql);
+			//@todo implement scanner
 		} catch(\Exception $e) {
 			return null;
 		}

@@ -1171,7 +1171,7 @@ class Tag
 		}
 
 		/* Manipulate values */
-		if($local === false) {
+		if($local === true) {
 			//URLs are generated through the 'url' service
 			$url = self::getUrlService();
 			$params['href'] = $url->getStatic($params['href']);
@@ -1231,7 +1231,7 @@ class Tag
 		}
 
 		/* Manipulate values */
-		if($local === false) {
+		if($local === true) {
 			//URLs are generated through the 'url' service
 			$url = self::getUrlService();
 			$params['src'] = $url->getStatic($params['src']);

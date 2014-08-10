@@ -201,11 +201,11 @@ class AssetsTest extends PHPUnit_Framework_TestCase
 		$filtered = $jsmin->filter('if ( a == b ) {    document . writeln("hello") ; }');
 		$this->assertEquals($filtered, PHP_EOL . 'if(a==b){document.writeln("hello");}');
 
-		$filtered = $jsmin->filter("if ( a == b ) {    document . writeln('\t') ; }");
-		$this->assertEquals($filtered, PHP_EOL . "if(a==b){document.writeln('\t');}");
+		$filtered = $jsmin->filter("if ( a == b ) {    document . writeln('\\t') ; }");
+		$this->assertEquals($filtered, PHP_EOL . "if(a==b){document.writeln('\\t');}");
 
-		$filtered = $jsmin->filter("/** this is a comment */ if ( a == b ) {    document . writeln('\t') ; /** this is a comment */ }");
-		$this->assertEquals($filtered, PHP_EOL . "if(a==b){document.writeln('\t');}");
+		$filtered = $jsmin->filter("/** this is a comment */ if ( a == b ) {    document . writeln('\\t') ; /** this is a comment */ }");
+		$this->assertEquals($filtered, PHP_EOL ."if(a==b){document.writeln('\\t');}");
 
 		$filtered = $jsmin->filter("\t\ta\t\r\n= \n \r\n100;\t");
 		$this->assertEquals($filtered, PHP_EOL . 'a=100;');
@@ -225,22 +225,22 @@ class AssetsTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($filtered, '');
 
 		$filtered = $cssmin->filter(' ');
-		$this->assertEquals($filtered, ' ');
+		$this->assertEquals($filtered, '');
 
 		$filtered = $cssmin->filter('{}}');
-		$this->assertEquals($filtered, '{}}');
+		$this->assertEquals($filtered, '');
 
 		$filtered = $cssmin->filter(".s { d 	:		b; }");
-		$this->assertEquals($filtered, ".s{d : b;}");
+		$this->assertEquals($filtered, ".s{d:b}");
 
 		$filtered = $cssmin->filter(".social-link {display: inline-block; width: 44px; height: 44px; text-align: left; text-indent: -9999px; overflow: hidden; background: url('../images/social-links.png'); }");
-		$this->assertEquals($filtered, ".social-link{display: inline-block;width: 44px;height: 44px;text-align: left;text-indent: -9999px;overflow: hidden;background: url('../images/social-links.png');}");
+		$this->assertEquals($filtered, ".social-link{display:inline-block;width:44px;height:44px;text-align:left;text-indent:-9999px;overflow:hidden;background:url('../images/social-links.png')}");
 
 		$filtered = $cssmin->filter("h2:after 	    { border-width:   	  1px; }");
-		$this->assertEquals($filtered, 'h2:after{border-width: 1px;}');
+		$this->assertEquals($filtered, 'h2:after{border-width:1px}');
 
-		$filtered = $cssmin->filter("h1 > p { font-family: 'Helvetica Neue'; }");
-		$this->assertEquals($filtered, "h1> p{font-family: 'Helvetica Neue';}");
+		$filtered = $cssmin->filter("h1 > p { font-family:'Helvetica Neue'; }");
+		$this->assertEquals($filtered, "h1 > p{font-family:'Helvetica Neue'}");
 
 		$filtered = $cssmin->filter("h2:after,
 		.h2:after {
@@ -252,10 +252,10 @@ class AssetsTest extends PHPUnit_Framework_TestCase
     	position: absolute;
     		bottom: 	0; left: 	0;
 }	");
-		$this->assertEquals($filtered, "h2:after, .h2:after{content: '';display : block;height: 1px;width: 100%;border-color: #c0c0c0;border-style: solid none;border-width: 1px;position: absolute;bottom: 0;left: 0;} ");
+		$this->assertEquals($filtered, "h2:after,.h2:after{content:'';display:block;height:1px;width:100%;border-color:#c0c0c0;border-style:solid none;border-width:1px;position:absolute;bottom:0;left:0}");
 
 		$filtered = $cssmin->filter(".navbar .nav>li>a { color: #111; text-decoration: underline; }");
-		$this->assertEquals($filtered, ".navbar .nav>li>a{color: #111;text-decoration: underline;}");
+		$this->assertEquals($filtered, ".navbar .nav>li>a{color:#111;text-decoration:underline}");
 	}
 
 	public function testNoneFilter()

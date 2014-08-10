@@ -248,7 +248,7 @@ class DI implements DiInterface
 	 * @return object
 	 * @throws DiException
 	*/
-	private static function createInstance($className, $params) {
+	private static function createInstance($className, $params = null) {
 		if(is_string($className) === false) {
 			throw new DiException('Invalid class name');
 		}
@@ -282,11 +282,13 @@ class DI implements DiInterface
 			//Act as builder for any class
 			if(class_exists($name) === true) {
 				if(is_array($parameters) === true) {
-					$instance = self::createInstance($name, $params);
-				} elseif(is_null($parameters) === null) {
-					$instance = self::createInstance($name, null);
+					if(empty($parameters) === false) {
+						$instance = self::createInstance($name, $params);
+					} else {
+						$instance = self::createInstance($name);
+					}
 				} else {
-					throw new DiException('Invalid parameter type.');
+					$instance = self::createInstance($name);
 				}
 			} else {
 				throw new DiException('Service \''.$name.'\' wasn\'t found in the dependency injection container');

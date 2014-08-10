@@ -292,13 +292,14 @@ abstract class Dispatcher implements DispatcherInterface, InjectionAwareInterfac
 	/**
 	 * Sets the module where the controller is (only informative)
 	 *
-	 * @param string $moduleName
+	 * @param string|null $moduleName
 	 */
 	public function setModuleName($moduleName)
 	{
-		if(is_string($moduleName) === false) {
+		if(is_string($moduleName) === false &&
+			is_null($moduleName) === false) {
 			$this->_throwDispatchException('Invalid parameter type.');
-			return null;
+			return;
 		}
 
 		$this->_moduleName = $moduleName;
@@ -317,13 +318,14 @@ abstract class Dispatcher implements DispatcherInterface, InjectionAwareInterfac
 	/**
 	 * Sets the namespace where the controller class is
 	 *
-	 * @param string $namespaceName
+	 * @param string|null $namespaceName
 	 */
 	public function setNamespaceName($namespaceName)
 	{
-		if(is_string($namespaceName) === false) {
+		if(is_string($namespaceName) === false &&
+			is_null($namespaceName) === false) {
 			$this->_throwDispatchException('Invalid parameter type.');
-			return null;
+			return;
 		}
 
 		$this->_namespaceName = $namespaceName;
@@ -382,13 +384,14 @@ abstract class Dispatcher implements DispatcherInterface, InjectionAwareInterfac
 	/**
 	 * Sets the action name to be dispatched
 	 *
-	 * @param string $actionName
+	 * @param string|null $actionName
 	 */
 	public function setActionName($actionName)
 	{
-		if(is_string($actionName) === false) {
+		if(is_string($actionName) === false &&
+			is_null($actionName) === false) {
 			$this->_throwDispatchException('Invalid parameter type.');
-			return null;
+			return;
 		}
 
 		$this->_actionName = $actionName;

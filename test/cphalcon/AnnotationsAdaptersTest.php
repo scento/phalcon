@@ -18,9 +18,9 @@
 	+------------------------------------------------------------------------+
 */
 
-require_once 'annotations/TestClass.php';
-require_once 'annotations/TestClassNs.php';
-require_once 'helpers/xcache.php';
+require_once(__DIR__.'/annotations/TestClass.php');
+require_once(__DIR__.'/annotations/TestClassNs.php');
+require_once(__DIR__.'/helpers/xcache.php');
 
 class AnnotationsAdaptersTest extends PHPUnit_Framework_TestCase
 {

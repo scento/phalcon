@@ -521,9 +521,11 @@ class Router implements RouterInterface, InjectionAwareInterface
 		//Set status properties
 		$this->_wasMatched = false;
 		$this->_matchedRoute = null;
+		
+		$routes = (is_array($this->_routes) === true ? $this->_routes : array());
 
 		//Routes are traversed in reversed order
-		foreach($this->_routes as $route) {
+		foreach($routes as $route) {
 
 			//Look for HTTP method constraints
 			$methods = $route->getHttpMethods();

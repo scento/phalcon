@@ -276,7 +276,7 @@ class Application extends Injectable implements EventsAwareInterface, InjectionA
 				if(isset($module['path']) === true) {
 					if(class_exists($class_name) === false) {
 						if(file_exists($module['path']) === true) {
-							require($module['path']);
+							require_once($module['path']);
 						} else {
 							throw new Exception("Module definition path '".$path."' doesn't exist");
 						}

@@ -99,7 +99,7 @@ class Reader implements ReaderInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		if(class_exists($className) === true)
+		if(class_exists($className) === false)
 		{
 			throw new Exception('Class '.$className.' does not exist');
 		}
@@ -111,6 +111,8 @@ class Reader implements ReaderInterface
 			return array();
 		} else {
 			$annotations = array();
+			$annotations['properties'] = array();
+			$annotations['methods'] = array();
 
 			//Class info
 			if($reflection->getDocComment() !== false)
@@ -122,7 +124,8 @@ class Reader implements ReaderInterface
 			$properties = $reflection->getProperties();
 			foreach($properties as $property)
 			{
-				$annotations['properties'][] = $this->parseDocBlock($method->getDocComment(), $path, $property->getStartLine());
+				//@note we don't set the line since the parser doesn't provides this information
+				$annotations['properties'][] = $this->parseDocBlock($property->getDocComment(), $path, 0);
 			}
 
 			//Class methods
@@ -163,7 +166,7 @@ class Reader implements ReaderInterface
 
 		if(is_null($line) === true) {
 			$file = '';
-		} elseif(is_string($line) === false) {
+		} elseif(is_int($line) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 

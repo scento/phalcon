@@ -453,7 +453,7 @@ class Manager
 			}
 
 			//The target path needs to be a valid file
-			if(is_dir($path_target) === false) {
+			if(is_dir($path_target) === true) {
 				throw new Exception('Path \''.$path_target.'\' is not a valid target path (2)');
 			}
 		}

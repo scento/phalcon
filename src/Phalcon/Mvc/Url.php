@@ -612,7 +612,7 @@ class Url implements UrlInterface, InjectionAwareInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		if(is_null($$this->_staticBaseUri) === false) {
+		if(is_null($this->_staticBaseUri) === false) {
 			return $this->_staticBaseUri.$uri;
 		}
 

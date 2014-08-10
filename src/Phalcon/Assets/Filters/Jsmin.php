@@ -11,7 +11,7 @@
 namespace Phalcon\Assets\Filters;
 
 use \Phalcon\Assets\Exception,
-	JShrink\Minifier;
+	\JShrink\Minifier;
 
 /**
  * Phalcon\Assets\Filters\Jsmin
@@ -34,15 +34,28 @@ class Jsmin
 	public function filter($content)
 	{
 		if(is_string($content) === false) {
-			throw new Exception('Invalid parameter type.');
+			throw new Exception('Script must be a string');
+		}
+
+		if(empty($content) === true) {
+			return '';
 		}
 		
-		require(__DIR__.'/JShrink/src/JShrink/Minifier.php');
+		require_once(__DIR__.'/JShrink/src/JShrink/Minifier.php');
 
 		try {
-			return Minifier::minify($content);
+			return PHP_EOL.Minifier::minify($content);
 		} catch(\Exception $e) {
-			return null;
+			$msg = $e->getMessage();
+			if(strpos($msg, 'Unclosed multiline comment at position') === 0) {
+				throw new Exception('Unterminated comment.');
+			} elseif(strpos($msg, 'Unclosed string at position') === 0) {
+				throw new Exception('Unterminated string literal.');
+			} elseif(strpos($msg, 'Unclosed regex pattern at position') === 0) {
+				throw new Exception('Unterminated Regular Expression literal.');
+			} else {
+				throw new Exception($e->getMessage());
+			}
 		}
 	}
 }

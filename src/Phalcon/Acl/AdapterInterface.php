@@ -35,8 +35,8 @@ interface AdapterInterface
 	/**
 	 * Adds a role to the ACL list. Second parameter lets to inherit access data from other existing role
 	 *
-	 * @param  \Phalcon\Acl\RoleInterface $role
-	 * @param  string $accessInherits
+	 * @param \Phalcon\Acl\RoleInterface|string $role
+	 * @param \Phalcon\Acl\RoleInterface|string|null $accessInherits
 	 * @return boolean
 	 */
 	public function addRole($role, $accessInherits = null);
@@ -45,14 +45,15 @@ interface AdapterInterface
 	 * Do a role inherit from another existing role
 	 *
 	 * @param string $roleName
-	 * @param string $roleToInherit
+	 * @param string|\Phalcon\Acl\RoleInterface $roleToInherit
+	 * @return boolean|null
 	 */
 	public function addInherit($roleName, $roleToInherit);
 
 	/**
 	 * Check whether role exist in the roles list
 	 *
-	 * @param  string $roleName
+	 * @param string $roleName
 	 * @return boolean
 	 */
 	public function isRole($roleName);
@@ -60,7 +61,7 @@ interface AdapterInterface
 	/**
 	 * Check whether resource exist in the resources list
 	 *
-	 * @param  string $resourceName
+	 * @param string $resourceName
 	 * @return boolean
 	 */
 	public function isResource($resourceName);
@@ -71,9 +72,9 @@ interface AdapterInterface
 	 * Access names can be a particular action, by example
 	 * search, update, delete, etc or a list of them
 	 *
-	 * @param   \Phalcon\Acl\ResourceInterface $resource
-	 * @param   array $accessList
-	 * @return  boolean
+	 * @param \Phalcon\Acl\ResourceInterface|string $resource
+	 * @param array|string|null $accessList
+	 * @return boolean
 	 */
 	public function addResource($resource, $accessList = null);
 
@@ -81,7 +82,8 @@ interface AdapterInterface
 	 * Adds access to resources
 	 *
 	 * @param string $resourceName
-	 * @param mixed $accessList
+	 * @param array|string $accessList
+	 * @return boolean
 	 */
 	public function addResourceAccess($resourceName, $accessList);
 
@@ -89,7 +91,7 @@ interface AdapterInterface
 	 * Removes an access from a resource
 	 *
 	 * @param string $resourceName
-	 * @param mixed $accessList
+	 * @param array|string $accessList
 	 */
 	public function dropResourceAccess($resourceName, $accessList);
 
@@ -98,7 +100,7 @@ interface AdapterInterface
 	 *
 	 * @param string $roleName
 	 * @param string $resourceName
-	 * @param mixed $access
+	 * @param string|array $access
 	 */
 	public function allow($roleName, $resourceName, $access);
 
@@ -107,7 +109,7 @@ interface AdapterInterface
 	 *
 	 * @param string $roleName
 	 * @param string $resourceName
-	 * @param mixed $access
+	 * @param string|array $access
 	 * @return boolean
 	 */
 	public function deny($roleName, $resourceName, $access);
@@ -115,9 +117,9 @@ interface AdapterInterface
 	/**
 	 * Check whether a role is allowed to access an action from a resource
 	 *
-	 * @param  string $role
-	 * @param  string $resource
-	 * @param  string $access
+	 * @param string $role
+	 * @param string $resource
+	 * @param string $access
 	 * @return boolean
 	 */
 	public function isAllowed($role, $resource, $access);
@@ -125,35 +127,35 @@ interface AdapterInterface
 	/**
 	 * Returns the role which the list is checking if it's allowed to certain resource/access
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function getActiveRole();
 
 	/**
 	 * Returns the resource which the list is checking if some role can access it
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function getActiveResource();
 
 	/**
 	 * Returns the access which the list is checking if some role can access it
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function getActiveAccess();
 
 	/**
 	 * Return an array with every role registered in the list
 	 *
-	 * @return \Phalcon\Acl\RoleInterface[]
+	 * @return array
 	 */
 	public function getRoles();
 
 	/**
 	 * Return an array with every resource registered in the list
 	 *
-	 * @return \Phalcon\Acl\ResourceInterface[]
+	 * @return array
 	 */
 	public function getResources();
 }

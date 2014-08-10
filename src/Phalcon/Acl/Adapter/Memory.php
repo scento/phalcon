@@ -16,6 +16,7 @@ use \Phalcon\Events\EventsAwareInterface,
 	\Phalcon\Acl\AdapterInterface,
 	\Phalcon\Acl\RoleInterface,
 	\Phalcon\Acl\Role,
+	\Phalcon\Acl\ResourceInterface,
 	\Phalcon\Acl\Resource,
 	\Phalcon\Acl;
 
@@ -182,19 +183,14 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 	 * </code>
 	 *
 	 * @param \Phalcon\Acl\RoleInterface|string $role
-	 * @param object|string|null $accessInherits
+	 * @param \Phalcon\Acl\RoleInterface|string|null $accessInherits
 	 * @return boolean
 	 * @throws Exception
 	 */
 	public function addRole($role, $accessInherits = null)
 	{
-		if(is_null($accessInherits) === false && 
-			is_string($accessInherits) === false && 
-			is_object($accessInherits) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
-
-		if(is_object($role) === true) {
+		if(is_object($role) === true &&
+			$role instanceof RoleInterface === true) {
 			$role_name = $role->getName();
 			$object = $role;
 		} elseif(is_string($role) === true) {
@@ -223,7 +219,7 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 	 * Do a role inherit from another existing role
 	 *
 	 * @param string $roleName
-	 * @param string|\Phalcon\Acl\Role $roleToInherit
+	 * @param string|\Phalcon\Acl\RoleInterface $roleToInherit
 	 * @return boolean|null
 	 * @throws Exception
 	 */
@@ -238,7 +234,7 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 		}
 
 		if(is_object($roleToInherit) === true &&
-			$roleToInherit instanceof Role === true) {
+			$roleToInherit instanceof RoleInterface === true) {
 			$role_inherit_name = $roleToInherit->getName();
 		} elseif(is_string($roleToInherit) === true) {
 			$role_inherit_name = $roleToInherit;
@@ -312,7 +308,7 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 	 * $acl->addResource('customers', array('create', 'search'));
 	 * </code>
 	 *
-	 * @param \Phalcon\Acl\Resource|string $resource
+	 * @param \Phalcon\Acl\ResourceInterface|string $resource
 	 * @param array|string|null $accessList
 	 * @return boolean
 	 * @throws Exception
@@ -320,7 +316,7 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 	public function addResource($resource, $accessList = null)
 	{
 		if(is_object($resource) === true &&
-			$resource instanceof Resource === true) {
+			$resource instanceof ResourceInterface === true) {
 			$resource_name = $resource->getName();
 			$object = $resource;
 		} elseif(is_string($resource) === true) {
@@ -491,15 +487,9 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 	 * @param string $roleName
 	 * @param string $resourceName
 	 * @param string|array $access
-	 * @throws Exception
 	 */
 	public function allow($roleName, $resourceName, $access)
 	{
-		if(is_string($roleName) === false ||
-			is_string($resourceName) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
-
 		return $this->_allowOrDeny($roleName, $resourceName, $access, Acl::ALLOW);
 	}
 
@@ -526,16 +516,9 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 	 * @param string $roleName
 	 * @param string $resourceName
 	 * @param string|array $access
-	 * @return boolean
-	 * @throws Exception
 	 */
 	public function deny($roleName, $resourceName, $access)
 	{
-		if(is_string($roleName) === false || 
-			is_string($resourceName) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
-
 		return $this->_allowOrDeny($roleName, $resourceName, $access, Acl::DENY);
 	}
 

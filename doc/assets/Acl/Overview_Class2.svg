@@ -1,1 +1,1404 @@
-<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="716" height="684"><defs></defs><g><g transform="scale(1,1)"><rect fill="#C0C0C0" stroke="none" x="377" y="17" width="336" height="272" opacity="0.2"></rect></g><g transform="scale(1,1)"><rect fill="#ffffff" stroke="none" x="370" y="10" width="336" height="272"></rect></g><g transform="scale(1,1)"><path fill="none" stroke="#000000" d="M 370 10 L 706 10 L 706 282 L 370 282 L 370 10 Z" stroke-miterlimit="10"></path></g><g transform="scale(1,1)"><path fill="none" stroke="#000000" d="M 370 35 L 706 35" stroke-miterlimit="10"></path></g><g transform="scale(1,1)"><path fill="none" stroke="#000000" d="M 370 133 L 706 133" stroke-miterlimit="10"></path></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="italic" font-weight="bold" text-decoration="none" x="515.5" y="29.5">Adapter</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="375" y="52.5">#_eventsManager: ManagerInterface|null</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="375" y="67.5">#_defaultAccess: int = 1</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="375" y="82.5">#_accessGranted: bool = false</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="375" y="97.5">#_activeRole: string|null</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="375" y="112.5">#_activeResource: string|null</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="375" y="127.5">#_activeAccess: string|null</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="375" y="150.5">+setEventsManager(eventsManager: ManagerInterface)</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="375" y="165.5">+getEventsManager(): ManagerInterface|null</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="375" y="180.5">+setDefaultAction(defaultAccess: int)</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="375" y="195.5">+getDefaultAction(): int</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="375" y="210.5">+getActiveRole(): string|null</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="375" y="225.5">+getActiveResource(): string|null</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="375" y="240.5">+getActiveAccess(): string|null</text></g></g><g transform="scale(1,1)"><rect fill="#C0C0C0" stroke="none" x="21" y="17" width="335" height="130" opacity="0.2"></rect></g><g transform="scale(1,1)"><rect fill="#ffffff" stroke="none" x="14" y="10" width="335" height="130"></rect></g><g transform="scale(1,1)"><path fill="none" stroke="#000000" d="M 14 10 L 349 10 L 349 140 L 14 140 L 14 10 Z" stroke-miterlimit="10"></path></g><g transform="scale(1,1)"><path fill="none" stroke="#000000" d="M 14 35 L 349 35" stroke-miterlimit="10"></path></g><g transform="scale(1,1)"><path fill="none" stroke="#000000" d="M 14 73 L 349 73" stroke-miterlimit="10"></path></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="bold" text-decoration="none" x="154" y="29.5">Resource</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="19" y="52.5">#_name: string|null</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="19" y="67.5">#_description: string|null</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="19" y="90.5">+__construct(name: string, description: string|null = null)</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="19" y="105.5">+getName(): string</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="19" y="120.5">+getDescription(): string|null</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="19" y="135.5">+__toString(): string</text></g></g><g transform="scale(1,1)"><rect fill="#C0C0C0" stroke="none" x="17" y="161" width="335" height="130" opacity="0.2"></rect></g><g transform="scale(1,1)"><rect fill="#ffffff" stroke="none" x="10" y="154" width="335" height="130"></rect></g><g transform="scale(1,1)"><path fill="none" stroke="#000000" d="M 10 154 L 345 154 L 345 284 L 10 284 L 10 154 Z" stroke-miterlimit="10"></path></g><g transform="scale(1,1)"><path fill="none" stroke="#000000" d="M 10 179 L 345 179" stroke-miterlimit="10"></path></g><g transform="scale(1,1)"><path fill="none" stroke="#000000" d="M 10 217 L 345 217" stroke-miterlimit="10"></path></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="bold" text-decoration="none" x="164.5" y="173.5">Role</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="196.5">#_name: string|null</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="211.5">#description: string|null</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="234.5">+__construct(name: string, description: string|null = null)</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="249.5">+getName(): string</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="264.5">+getDescription(): string|null</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="279.5">+__toString(): string</text></g></g><g transform="scale(1,1)"><rect fill="#C0C0C0" stroke="none" x="17" y="305" width="696" height="376" opacity="0.2"></rect></g><g transform="scale(1,1)"><rect fill="#ffffff" stroke="none" x="10" y="298" width="696" height="376"></rect></g><g transform="scale(1,1)"><path fill="none" stroke="#000000" d="M 10 298 L 706 298 L 706 674 L 10 674 L 10 298 Z" stroke-miterlimit="10"></path></g><g transform="scale(1,1)"><path fill="none" stroke="#000000" d="M 10 323 L 706 323" stroke-miterlimit="10"></path></g><g transform="scale(1,1)"><path fill="none" stroke="#000000" d="M 10 436 L 706 436" stroke-miterlimit="10"></path></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="bold" text-decoration="none" x="334.5" y="317.5">Memory</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="340.5">#_rolesNames: array</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="355.5">#_roles: array</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="370.5">#_resourcesNames: array</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="385.5">#_resources: array|null</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="400.5">#_access: array</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="415.5">#_roleInherits: array</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="430.5">#_accessList: array</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="453.5">+__construct()</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="468.5">+addRole(role: RoleInterface|string, accessInherits: object|string|null = null): bool</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="483.5">+addInherit(roleName: string, roleToInherit: string|object): bool|null</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="498.5">+isRole(roleName: string): bool</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="513.5">+isResource(resourceName: string): bool</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="528.5">+addResource(resource: Resource|string, accessList: array|string|null = null): bool</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="543.5">+addResourceAccess(resourceName: string, accessList: array|string): bool</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="558.5">+dropResourceAccess(resourceName: string, accessList: array|string)</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="573.5">+allow(roleName: string, resourceName: string, access: string|array)</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="588.5">+deny(roleName: string, resourceName: string, access: string|array)</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="603.5">+isAllowed(role: string, resource: string, access: string): bool</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="618.5">+getRoles(): array</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="633.5">+getResources(): array</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="648.5">#_allowOrDeny(roleName: string, resourceName: string, access: string|array, action: int)</text></g></g><g transform="scale(1,1)"><g><path fill="none" stroke="none"></path><text fill="#000000" stroke="none" font-family="Arial" font-size="13px" font-style="normal" font-weight="normal" text-decoration="none" x="15" y="663.5">-_checkInheritance(role: string, resource: string, access: string, accessList: string, roleInherits: array|null): int</text></g></g><g transform="scale(1,1)"><path fill="none" stroke="#000000" d="M 15 664 L 645 664" stroke-miterlimit="10"></path></g></g></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="716"
+   height="684"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="Overview_Class2.svg">
+  <metadata
+     id="metadata502">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1014"
+     id="namedview500"
+     showgrid="false"
+     inkscape:zoom="0.69005848"
+     inkscape:cx="624.55878"
+     inkscape:cy="78.327061"
+     inkscape:window-x="-3"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g6" />
+  <defs
+     id="defs4" />
+  <g
+     id="g6">
+    <g
+       transform="scale(1,1)"
+       id="g8">
+      <rect
+         fill="#C0C0C0"
+         stroke="none"
+         x="377"
+         y="17"
+         width="336"
+         height="272"
+         opacity="0.2"
+         id="rect10" />
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g12">
+      <rect
+         fill="#ffffff"
+         stroke="none"
+         x="370"
+         y="10"
+         width="336"
+         height="272"
+         id="rect14" />
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g16">
+      <path
+         fill="none"
+         stroke="#000000"
+         d="M 370 10 L 706 10 L 706 282 L 370 282 L 370 10 Z"
+         stroke-miterlimit="10"
+         id="path18" />
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g20">
+      <path
+         fill="none"
+         stroke="#000000"
+         d="M 370 35 L 706 35"
+         stroke-miterlimit="10"
+         id="path22" />
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g24">
+      <path
+         fill="none"
+         stroke="#000000"
+         d="M 370 133 L 706 133"
+         stroke-miterlimit="10"
+         id="path26" />
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g28">
+      <g
+         id="g30">
+        <path
+           fill="none"
+           stroke="none"
+           id="path32" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="italic"
+           font-weight="bold"
+           text-decoration="none"
+           x="515.5"
+           y="29.5"
+           id="text34">Adapter</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g36">
+      <g
+         id="g38">
+        <path
+           fill="none"
+           stroke="none"
+           id="path40" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="375"
+           y="52.5"
+           id="text42">#_eventsManager: ManagerInterface|null</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g44">
+      <g
+         id="g46">
+        <path
+           fill="none"
+           stroke="none"
+           id="path48" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="375"
+           y="67.5"
+           id="text50">#_defaultAccess: int = 1</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g52">
+      <g
+         id="g54">
+        <path
+           fill="none"
+           stroke="none"
+           id="path56" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="375"
+           y="82.5"
+           id="text58">#_accessGranted: bool = false</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g60">
+      <g
+         id="g62">
+        <path
+           fill="none"
+           stroke="none"
+           id="path64" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="375"
+           y="97.5"
+           id="text66">#_activeRole: string|null</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g68">
+      <g
+         id="g70">
+        <path
+           fill="none"
+           stroke="none"
+           id="path72" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="375"
+           y="112.5"
+           id="text74">#_activeResource: string|null</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g76">
+      <g
+         id="g78">
+        <path
+           fill="none"
+           stroke="none"
+           id="path80" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="375"
+           y="127.5"
+           id="text82">#_activeAccess: string|null</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g84">
+      <g
+         id="g86">
+        <path
+           fill="none"
+           stroke="none"
+           id="path88" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="375"
+           y="150.5"
+           id="text90">+setEventsManager(eventsManager: ManagerInterface)</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g92">
+      <g
+         id="g94">
+        <path
+           fill="none"
+           stroke="none"
+           id="path96" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="375"
+           y="165.5"
+           id="text98">+getEventsManager(): ManagerInterface|null</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g100">
+      <g
+         id="g102">
+        <path
+           fill="none"
+           stroke="none"
+           id="path104" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="375"
+           y="180.5"
+           id="text106">+setDefaultAction(defaultAccess: int)</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g108">
+      <g
+         id="g110">
+        <path
+           fill="none"
+           stroke="none"
+           id="path112" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="375"
+           y="195.5"
+           id="text114">+getDefaultAction(): int</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g116">
+      <g
+         id="g118">
+        <path
+           fill="none"
+           stroke="none"
+           id="path120" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="375"
+           y="210.5"
+           id="text122">+getActiveRole(): string|null</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g124">
+      <g
+         id="g126">
+        <path
+           fill="none"
+           stroke="none"
+           id="path128" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="375"
+           y="225.5"
+           id="text130">+getActiveResource(): string|null</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g132">
+      <g
+         id="g134">
+        <path
+           fill="none"
+           stroke="none"
+           id="path136" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="375"
+           y="240.5"
+           id="text138">+getActiveAccess(): string|null</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g140">
+      <rect
+         fill="#C0C0C0"
+         stroke="none"
+         x="21"
+         y="17"
+         width="335"
+         height="130"
+         opacity="0.2"
+         id="rect142" />
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g144">
+      <rect
+         fill="#ffffff"
+         stroke="none"
+         x="14"
+         y="10"
+         width="335"
+         height="130"
+         id="rect146" />
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g148">
+      <path
+         fill="none"
+         stroke="#000000"
+         d="M 14 10 L 349 10 L 349 140 L 14 140 L 14 10 Z"
+         stroke-miterlimit="10"
+         id="path150" />
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g152">
+      <path
+         fill="none"
+         stroke="#000000"
+         d="M 14 35 L 349 35"
+         stroke-miterlimit="10"
+         id="path154" />
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g156">
+      <path
+         fill="none"
+         stroke="#000000"
+         d="M 14 73 L 349 73"
+         stroke-miterlimit="10"
+         id="path158" />
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g160">
+      <g
+         id="g162">
+        <path
+           fill="none"
+           stroke="none"
+           id="path164" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="bold"
+           text-decoration="none"
+           x="154"
+           y="29.5"
+           id="text166">Resource</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g168">
+      <g
+         id="g170">
+        <path
+           fill="none"
+           stroke="none"
+           id="path172" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="19"
+           y="52.5"
+           id="text174">#_name: string|null</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g176">
+      <g
+         id="g178">
+        <path
+           fill="none"
+           stroke="none"
+           id="path180" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="19"
+           y="67.5"
+           id="text182">#_description: string|null</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g184">
+      <g
+         id="g186">
+        <path
+           fill="none"
+           stroke="none"
+           id="path188" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="19"
+           y="90.5"
+           id="text190">+__construct(name: string, description: string|null = null)</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g192">
+      <g
+         id="g194">
+        <path
+           fill="none"
+           stroke="none"
+           id="path196" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="19"
+           y="105.5"
+           id="text198">+getName(): string</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g200">
+      <g
+         id="g202">
+        <path
+           fill="none"
+           stroke="none"
+           id="path204" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="19"
+           y="120.5"
+           id="text206">+getDescription(): string|null</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g208">
+      <g
+         id="g210">
+        <path
+           fill="none"
+           stroke="none"
+           id="path212" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="19"
+           y="135.5"
+           id="text214">+__toString(): string</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g216">
+      <rect
+         fill="#C0C0C0"
+         stroke="none"
+         x="17"
+         y="161"
+         width="335"
+         height="130"
+         opacity="0.2"
+         id="rect218" />
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g220">
+      <rect
+         fill="#ffffff"
+         stroke="none"
+         x="10"
+         y="154"
+         width="335"
+         height="130"
+         id="rect222" />
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g224">
+      <path
+         fill="none"
+         stroke="#000000"
+         d="M 10 154 L 345 154 L 345 284 L 10 284 L 10 154 Z"
+         stroke-miterlimit="10"
+         id="path226" />
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g228">
+      <path
+         fill="none"
+         stroke="#000000"
+         d="M 10 179 L 345 179"
+         stroke-miterlimit="10"
+         id="path230" />
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g232">
+      <path
+         fill="none"
+         stroke="#000000"
+         d="M 10 217 L 345 217"
+         stroke-miterlimit="10"
+         id="path234" />
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g236">
+      <g
+         id="g238">
+        <path
+           fill="none"
+           stroke="none"
+           id="path240" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="bold"
+           text-decoration="none"
+           x="164.5"
+           y="173.5"
+           id="text242">Role</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g244">
+      <g
+         id="g246">
+        <path
+           fill="none"
+           stroke="none"
+           id="path248" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="196.5"
+           id="text250">#_name: string|null</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g252">
+      <g
+         id="g254">
+        <path
+           fill="none"
+           stroke="none"
+           id="path256" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="211.5"
+           id="text258">#description: string|null</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g260">
+      <g
+         id="g262">
+        <path
+           fill="none"
+           stroke="none"
+           id="path264" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="234.5"
+           id="text266">+__construct(name: string, description: string|null = null)</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g268">
+      <g
+         id="g270">
+        <path
+           fill="none"
+           stroke="none"
+           id="path272" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="249.5"
+           id="text274">+getName(): string</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g276">
+      <g
+         id="g278">
+        <path
+           fill="none"
+           stroke="none"
+           id="path280" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="264.5"
+           id="text282">+getDescription(): string|null</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g284">
+      <g
+         id="g286">
+        <path
+           fill="none"
+           stroke="none"
+           id="path288" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="279.5"
+           id="text290">+__toString(): string</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g292">
+      <rect
+         fill="#C0C0C0"
+         stroke="none"
+         x="17"
+         y="305"
+         width="696"
+         height="376"
+         opacity="0.2"
+         id="rect294" />
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g296">
+      <rect
+         fill="#ffffff"
+         stroke="none"
+         x="10"
+         y="298"
+         width="696"
+         height="376"
+         id="rect298" />
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g300">
+      <path
+         fill="none"
+         stroke="#000000"
+         d="M 10 298 L 706 298 L 706 674 L 10 674 L 10 298 Z"
+         stroke-miterlimit="10"
+         id="path302" />
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g304">
+      <path
+         fill="none"
+         stroke="#000000"
+         d="M 10 323 L 706 323"
+         stroke-miterlimit="10"
+         id="path306" />
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g308">
+      <path
+         fill="none"
+         stroke="#000000"
+         d="M 10 436 L 706 436"
+         stroke-miterlimit="10"
+         id="path310" />
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g312">
+      <g
+         id="g314">
+        <path
+           fill="none"
+           stroke="none"
+           id="path316" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="bold"
+           text-decoration="none"
+           x="334.5"
+           y="317.5"
+           id="text318">Memory</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g320">
+      <g
+         id="g322">
+        <path
+           fill="none"
+           stroke="none"
+           id="path324" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="340.5"
+           id="text326">#_rolesNames: array</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g328">
+      <g
+         id="g330">
+        <path
+           fill="none"
+           stroke="none"
+           id="path332" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="355.5"
+           id="text334">#_roles: array</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g336">
+      <g
+         id="g338">
+        <path
+           fill="none"
+           stroke="none"
+           id="path340" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="370.5"
+           id="text342">#_resourcesNames: array</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g344">
+      <g
+         id="g346">
+        <path
+           fill="none"
+           stroke="none"
+           id="path348" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="385.5"
+           id="text350">#_resources: array|null</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g352">
+      <g
+         id="g354">
+        <path
+           fill="none"
+           stroke="none"
+           id="path356" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="400.5"
+           id="text358">#_access: array</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g360">
+      <g
+         id="g362">
+        <path
+           fill="none"
+           stroke="none"
+           id="path364" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="415.5"
+           id="text366">#_roleInherits: array</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g368">
+      <g
+         id="g370">
+        <path
+           fill="none"
+           stroke="none"
+           id="path372" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="430.5"
+           id="text374">#_accessList: array</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g376">
+      <g
+         id="g378">
+        <path
+           fill="none"
+           stroke="none"
+           id="path380" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="453.5"
+           id="text382">+__construct()</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g384">
+      <g
+         id="g386">
+        <path
+           fill="none"
+           stroke="none"
+           id="path388" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="468.5"
+           id="text390">+addRole(role: RoleInterface|string, accessInherits: object|string|null = null): bool</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g392">
+      <g
+         id="g394">
+        <path
+           fill="none"
+           stroke="none"
+           id="path396" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="483.5"
+           id="text398">+addInherit(roleName: string, roleToInherit: string|object): bool|null</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g400">
+      <g
+         id="g402">
+        <path
+           fill="none"
+           stroke="none"
+           id="path404" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="498.5"
+           id="text406">+isRole(roleName: string): bool</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g408">
+      <g
+         id="g410">
+        <path
+           fill="none"
+           stroke="none"
+           id="path412" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="513.5"
+           id="text414">+isResource(resourceName: string): bool</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g416">
+      <g
+         id="g418">
+        <path
+           fill="none"
+           stroke="none"
+           id="path420" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="528.5"
+           id="text422">+addResource(resource: Resource|string, accessList: array|string|null = null): bool</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g424">
+      <g
+         id="g426">
+        <path
+           fill="none"
+           stroke="none"
+           id="path428" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="543.5"
+           id="text430">+addResourceAccess(resourceName: string, accessList: array|string): bool</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g432">
+      <g
+         id="g434">
+        <path
+           fill="none"
+           stroke="none"
+           id="path436" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="558.5"
+           id="text438">+dropResourceAccess(resourceName: string, accessList: array|string)</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g440">
+      <g
+         id="g442">
+        <path
+           fill="none"
+           stroke="none"
+           id="path444" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="573.5"
+           id="text446">+allow(roleName: string, resourceName: string, access: string|array)</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g448">
+      <g
+         id="g450">
+        <path
+           fill="none"
+           stroke="none"
+           id="path452" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="588.5"
+           id="text454">+deny(roleName: string, resourceName: string, access: string|array)</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g456">
+      <g
+         id="g458">
+        <path
+           fill="none"
+           stroke="none"
+           id="path460" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="603.5"
+           id="text462">+isAllowed(role: string, resource: string, access: string): bool</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g464">
+      <g
+         id="g466">
+        <path
+           fill="none"
+           stroke="none"
+           id="path468" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="618.5"
+           id="text470">+getRoles(): array</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g472">
+      <g
+         id="g474">
+        <path
+           fill="none"
+           stroke="none"
+           id="path476" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="633.5"
+           id="text478">+getResources(): array</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g480">
+      <g
+         id="g482">
+        <path
+           fill="none"
+           stroke="none"
+           id="path484" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="648.5"
+           id="text486">#_allowOrDeny(roleName: string, resourceName: string, access: string|array, action: int)</text>
+      </g>
+    </g>
+    <g
+       transform="scale(1,1)"
+       id="g488">
+      <g
+         id="g490">
+        <path
+           fill="none"
+           stroke="none"
+           id="path492" />
+        <text
+           fill="#000000"
+           stroke="none"
+           font-family="Arial"
+           font-size="13px"
+           font-style="normal"
+           font-weight="normal"
+           text-decoration="none"
+           x="15"
+           y="663.5"
+           id="text494">-_checkInheritance(role: string, resource: string, access: string, accessList: string, roleInherits: array|null): int</text>
+      </g>
+    </g>
+    <g
+       transform="translate(-0.2561764,4.6111752)"
+       id="g496">
+      <path
+         d="m 15,664 630,0"
+         stroke-miterlimit="10"
+         id="path498"
+         inkscape:connector-curvature="0"
+         style="fill:none;stroke:#000000;stroke-miterlimit:10" />
+    </g>
+  </g>
+</svg>

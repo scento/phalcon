@@ -104,58 +104,58 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 	/**
 	 * Roles Names
 	 * 
-	 * @var null|array
+	 * @var array
 	 * @access protected
 	*/
-	protected $_rolesNames = null;
+	protected $_rolesNames;
 
 	/**
 	 * Roles
 	 * 
-	 * @var null|array
+	 * @var array
 	 * @access protected
 	*/
-	protected $_roles = array();
+	protected $_roles;
 
 	/**
 	 * Resource Names
 	 * 
-	 * @var null|array
+	 * @var array
 	 * @access protected
 	*/
-	protected $_resourcesNames = null;
+	protected $_resourcesNames;
 
 	/**
 	 * Resources
 	 * 
-	 * @var null|array
+	 * @var array
 	 * @access protected
 	*/
-	protected $_resources = null;
+	protected $_resources;
 
 	/**
 	 * Access
 	 * 
-	 * @var null|array
+	 * @var array
 	 * @access protected
 	*/
-	protected $_access = null;
+	protected $_access;
 
 	/**
 	 * Role Inherits
 	 * 
-	 * @var null|array
+	 * @var array
 	 * @access protected
 	*/
-	protected $_roleInherits = null;
+	protected $_roleInherits;
 
 	/**
 	 * Access List
 	 * 
-	 * @var null|array
+	 * @var array
 	 * @access protected
 	*/
-	protected $_accessList = null;
+	protected $_accessList;
 
 	/**
 	 * \Phalcon\Acl\Adapter\Memory constructor
@@ -168,10 +168,9 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 		$this->_roleInherits = array();
 		$this->_resources = array();
 
-		$this->_resourcesNames = array('*');
-		$this->_accessList = array('*!*');
+		$this->_resourcesNames = array('*' => true);
+		$this->_accessList = array('*!*' => true);
 	}
-
 
 	/**
 	 * Adds a role to the ACL list. Second parameter allows inheriting access data from other existing role
@@ -189,19 +188,13 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 	 */
 	public function addRole($role, $accessInherits = null)
 	{
-		if(is_array($accessInherits) === false && 
-			is_string($accessInherits) === false && is_null($accessInherits) === false) {
+		if(is_null($accessInherits) === false && 
+			is_string($accessInherits) === false && 
+			is_object($accessInherits) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 
-		if(is_null($accessInherits) === false 
-			&& is_string($accessInherits) === false && is_object($accessInherits) === false)
-		{
-			throw new Exception('Invalid parameter type.');
-		}
-
-		if(is_object($role) === true)
-		{
+		if(is_object($role) === true) {
 			$role_name = $role->getName();
 			$object = $role;
 		} elseif(is_string($role) === true) {
@@ -211,8 +204,7 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		if(isset($this->_rolesNames[$role_name]) === true)
-		{
+		if(isset($this->_rolesNames[$role_name]) === true) {
 			return false;
 		}
 
@@ -220,64 +212,56 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 		$this->_rolesNames[$role_name] = true;
 		$this->_access[$role_name.'!*!*'] = $this->_defaultAccess;
 
-		if(is_null($accessInherits) === false)
-		{
+		if(is_null($accessInherits) === false) {
 			return $this->addInherit($role_name, $accessInherits);
 		}
 
 		return true;
 	}
 
-
 	/**
 	 * Do a role inherit from another existing role
 	 *
 	 * @param string $roleName
-	 * @param string|object $roleToInherit
+	 * @param string|\Phalcon\Acl\Role $roleToInherit
 	 * @return boolean|null
 	 * @throws Exception
 	 */
 	public function addInherit($roleName, $roleToInherit)
 	{
-		if(is_string($roleName) === false)
-		{
+		if(is_string($roleName) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 
-		if(isset($this->_rolesNames[$roleName]) === false)
-		{
-			throw new Exception('Role \''.$roleName.'\' does not exist in the role list');
+		if(isset($this->_rolesNames[$roleName]) === false) {
+			throw new Exception("Role '".$roleName."' does not exist in the role list");
 		}
 
 		if(is_object($roleToInherit) === true &&
-			$roleToInherit instanceof Role === true)
-		{
+			$roleToInherit instanceof Role === true) {
 			$role_inherit_name = $roleToInherit->getName();
-		} elseif(is_string($roleToInherit) === true)
-		{
+		} elseif(is_string($roleToInherit) === true) {
 			$role_inherit_name = $roleToInherit;
 		} else {
 			throw new Exception('Invalid parameter type.');
 		}
 
-		if(isset($this->_rolesNames[$role_inherit_name]) === false)
-		{
-			throw new Exception('Role \''.$role_inherit_name.'\' (to inherit) does not exist in the role list');
+		//Check if the role to inherit is valid
+		if(isset($this->_rolesNames[$role_inherit_name]) === false) {
+			throw new Exception("Role '".$role_inherit_name."' (to inherit) does not exist in the role list");
 		}
 
-		if($role_inherit_name === $role_name)
-		{
+		if($role_inherit_name === $roleName) {
 			return false;
 		}
 
-		if(isset($this->_roleInherits[$role_name]) === false)
-		{
-			$this->_roleInherits[$role_name] = array();
+		if(isset($this->_roleInherits[$roleName]) === false) {
+			$this->_roleInherits[$roleName] = array();
 		}
 
-		$this->_roleInherits[$role_name][] = $role_inherit_name;
+		$this->_roleInherits[$roleName][$role_inherit_name] = 0;
+		return true;
 	}
-
 
 	/**
 	 * Check whether role exist in the roles list
@@ -288,14 +272,12 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 	 */
 	public function isRole($roleName)
 	{
-		if(is_string($roleName) === false)
-		{
+		if(is_string($roleName) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 
 		return isset($this->_rolesNames[$roleName]);
 	}
-
 
 	/**
 	 * Check whether resource exist in the resources list
@@ -306,14 +288,12 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 	 */
 	public function isResource($resourceName)
 	{
-		if(is_string($resourceName) === false)
-		{
+		if(is_string($resourceName) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 
 		return isset($this->_resourcesNames[$resourceName]);
 	}
-
 
 	/**
 	 * Adds a resource to the ACL list
@@ -339,8 +319,8 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 	 */
 	public function addResource($resource, $accessList = null)
 	{
-		if(is_object($resource) === true)
-		{
+		if(is_object($resource) === true &&
+			$resource instanceof Resource === true) {
 			$resource_name = $resource->getName();
 			$object = $resource;
 		} elseif(is_string($resource) === true) {
@@ -350,8 +330,7 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		if(isset($this->_resourcesNames[$resource_name]) === false)
-		{
+		if(isset($this->_resourcesNames[$resource_name]) === false) {
 			$this->_resources[] = $object;
 			$this->_resourcesNames[$resource_name] = true;
 		}
@@ -359,39 +338,35 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 		return $this->addResourceAccess($resource_name, $accessList);	
 	}
 
-
 	/**
 	 * Adds access to resources
 	 *
 	 * @param string $resourceName
 	 * @param array|string $accessList
+	 * @return boolean
 	 * @throws Exception
 	 */
 	public function addResourceAccess($resourceName, $accessList)
 	{
-		if(is_string($resourceName) === false)
-		{
+		if(is_string($resourceName) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 
-		if(isset($this->_resourcesNames[$resourceName]) === false)
-		{
-			throw new Exception('Resource \''.$resourceName.'\' does not exist in ACL');
+		if(isset($this->_resourcesNames[$resourceName]) === false) {
+			throw new Exception("Resource '".$resourceName."' does not exist in ACL");
 		}
 
 		if(is_array($accessList) === true) {
 			foreach($accessList as $access_name)
 			{
 				$key = $resourceName.'!'.$access_name;
-				if(isset($this->_accessList[$key]) === false)
-				{
+				if(isset($this->_accessList[$key]) === false) {
 					$this->_accessList[$key] = true;
 				}
 			}
 		} elseif(is_string($accessList) === true) {
 			$key = $resourceName.'!'.$accessList;
-			if(isset($this->_accessList[$key]) === false)
-			{
+			if(isset($this->_accessList[$key]) === false) {
 				$this->_accessList[$key] = true;
 			}
 		} else {
@@ -400,7 +375,6 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 
 		return true;
 	}
-
 
 	/**
 	 * Removes an access from a resource
@@ -411,14 +385,12 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 	 */
 	public function dropResourceAccess($resourceName, $accessList)
 	{
-		if(is_string($resourceName) === false)
-		{
+		if(is_string($resourceName) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 
 		if(is_array($accessList) === true) {
-			foreach($accessList as $access_name)
-			{
+			foreach($accessList as $access_name) {
 				unset($this->_accessList[$resourceName.'!'.$access_name]);
 			}
 		} elseif(is_string($accessList) === true) {
@@ -427,7 +399,6 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 			throw new Exception('Invalid parameter type.');
 		}
 	}
-
 
 	/**
 	 * Allows or denies the access to a resource
@@ -440,59 +411,55 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 	 */
 	protected function _allowOrDeny($roleName, $resourceName, $access, $action)
 	{
-		if(is_string($roleName) === false || is_string($resourceName) === false 
-			|| is_int($action) === false)
-		{
+		if(is_string($roleName) === false || 
+			is_string($resourceName) === false || 
+			is_int($action) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 
-		if(isset($this->_rolesNames[$roleName]) === false)
-		{
+		if(isset($this->_rolesNames[$roleName]) === false) {
 			throw new Exception('Role "'.$roleName.'" does not exist in ACL');
 		}
 
-		if(isset($this->_resourcesNames[$resourceName]) === false)
-		{
+		if(isset($this->_resourcesNames[$resourceName]) === false) {
 			throw new Exception('Resource "'.$resourceName.'" does not exist in ACL');
 		}
 
 		if(is_array($access) === true) {
-			foreach($access as $name)
-			{
-				if(isset($this->_accessList[$resourceName.'!'.$name]) === false)
-				{
-					throw new Exception('Access \''.$name.'\' does not exist in resource \''.$resourceName.'\'');
+			foreach($access as $name) {
+				if(isset($this->_accessList[$resourceName.'!'.$name]) === false) {
+					throw new Exception("Access '".$name."' does not exist in resource '".$resourceName."'");
 				}
+			}
 
+			foreach($access as $name) {
 				$key = $roleName.'!'.$resourceName.'!'.$name;
-				if(is_string($name) !== '*')
-				{
-					$key = $roleName.'!'.$resourceName.'!*';
-					if(isset($this->_access[$key]) === false)
-					{
-						$this->_access[$key] = $this->_defaultAccess;
+				$this->_access[$key] = $action;
+				if($name !== '*') {
+					$access_key_all = $roleName.'!'.$resourceName.'!*';
+					if(isset($this->_access[$access_key_all]) === false) {
+						$this->_access[$access_key_all] = $this->_defaultAccess;
 					}
 				}
 			}
 
 		} elseif(is_string($access) === true) {
-			if($access !== '*')
-			{
+			if($access !== '*') {
 				$key = $resourceName.'!'.$access;
-				if(isset($this->_accessList[$key]) === false)
-				{
-					throw new Exception('Access \''.$access.'\' does not exist in resource \''.$resourceName.'\'');
+				if(isset($this->_accessList[$key]) === false) {
+					throw new Exception("Access '".$access."' does not exist in resource '".$resourceName."'");
 				}
 			}
 
+			//Define the access action for the specified accessKey
 			$this->_access[$roleName.'!'.$resourceName.'!'.$access] = $action;
 
-			if($access !== '*')
-			{
+			if($access !== '*') {
 				$key = $roleName.'!'.$resourceName.'!*';
 
-				if(isset($this->_access[$key]) === false)
-				{
+				//If there is no default action for all the rest actions on the resource set the
+				//default one
+				if(isset($this->_access[$key]) === false) {
 					$this->_access[$key] = $this->_defaultAccess;
 				}
 			}
@@ -500,7 +467,6 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 			throw new Exception('Invalid parameter type.');
 		}
 	}
-
 
 	/**
 	 * Allow access to a role on a resource
@@ -525,17 +491,17 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 	 * @param string $roleName
 	 * @param string $resourceName
 	 * @param string|array $access
+	 * @throws Exception
 	 */
 	public function allow($roleName, $resourceName, $access)
 	{
-		if(is_string($roleName) === false || is_string($resourceName) === false)
-		{
+		if(is_string($roleName) === false ||
+			is_string($resourceName) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 
 		return $this->_allowOrDeny($roleName, $resourceName, $access, Acl::ALLOW);
 	}
-
 
 	/**
 	 * Deny access to a role on a resource
@@ -559,13 +525,14 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 	 *
 	 * @param string $roleName
 	 * @param string $resourceName
-	 * @param mixed $access
+	 * @param string|array $access
 	 * @return boolean
+	 * @throws Exception
 	 */
 	public function deny($roleName, $resourceName, $access)
 	{
-		if(is_string($roleName) === false || is_string($resourceName) === false)
-		{
+		if(is_string($roleName) === false || 
+			is_string($resourceName) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 
@@ -582,34 +549,40 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 	 * @param array $accessList
 	 * @param array|null $roleInherits
 	 * @return int
+	 * @throws Exception
 	*/
 	private static function _checkInheritance($role, $resource, $access, $accessList, $roleInherits)
 	{
-		if(isset($roleInherits[$role]) === true)
-		{
+		if(is_string($role) === false ||
+			is_string($resource) === false ||
+			is_string($access) === false ||
+			is_array($accessList) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+
+		if(isset($roleInherits[$role]) === true) {
 			$inherited_roles = $roleInherits[$role];
-			if(is_array($inherited_roles) === false)
-			{
+			if(is_array($inherited_roles) === false) {
 				return self::DUNNO;
 			}
 		} else {
 			return self::DUNNO;
 		}
 
-		foreach($inherited_roles as $parent_role)
-		{
+		$access_key = null;
+		foreach($inherited_roles as $parent_role) {
 			$result = self::DUNNO;
 
 			$access_key = $parent_role.'!'.$resource.'!'.$access;
-			if(isset($accessList[$access_key]) === true)
-			{
-				$result = (isset($accessList[$access_key]) === true ? self::YES : self::NO);
+			if(isset($accessList[$access_key]) === true) {
+				$result = ($accessList[$access_key] == true ? self::YES : self::NO);
 				break;
 			}
 
+			$access_key = null;
+
 			$result = self::_checkInheritance($parent_role, $resource, $access, $accessList, $roleInherits);
-			if($result !== self::DUNNO)
-			{
+			if($result !== self::DUNNO) {
 				break;
 			}
 		}
@@ -628,16 +601,17 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 	 * $acl->isAllowed('guests', '*', 'edit');
 	 * </code>
 	 *
-	 * @param  string $role
-	 * @param  string $resource
-	 * @param  string $access
+	 * @param string $role
+	 * @param string $resource
+	 * @param string $access
 	 * @return boolean
+	 * @throws Exception
 	 */
 	public function isAllowed($role, $resource, $access)
 	{
-		if(is_string($role) === false || is_string($resource) === false ||
-			is_string($access) === false)
-		{
+		if(is_string($role) === false || 
+			is_string($resource) === false ||
+			is_string($access) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 
@@ -646,105 +620,98 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 		$this->_activeAccess = $access;
 
 		//Call the events manager
-		if(is_object($this->_eventsManager) === true)
-		{
+		if(is_object($this->_eventsManager) === true) {
 			$status = $this->_eventsManager->fire('acl:beforeCheckAccess', $this);
-			if($status == false)
-			{
+			if($status == false) {
 				return $status;
 			}
 		}
 
 		//Check if the role exists
-		if(isset($this->_rolesNames[$role]) === false)
-		{
+		if(isset($this->_rolesNames[$role]) === false) {
 			return $this->_defaultAccess;
 		}
 
 		$access_key = $role.'!'.$resource.'!'.$access;
 
 		//Check if there is a direct combination for role-resource-access
-		if(isset($this->_access[$access_key]) === true)
-		{
-			$allow_access = ($this->_access[$access_key] === true ? self::YES : self::NO);
+		if(isset($this->_access[$access_key]) === true) {
+			$allow_access = ($this->_access[$access_key] == true ? self::YES : self::NO);
 		} else {
 			$allow_access = self::DUNNO;
 		}
 
 		//Check in the inherits roles
-		if($allow_access === self::DUNNO)
-		{
+		if($allow_access === self::DUNNO) {
 			$allow_access = $this->_checkInheritance($role, $resource, $access, $this->_access, $this->_roleInherits);
 		}
 
 		//If access wasn't found yet, try role-resource-*
-		if($allow_access === self::DUNNO)
-		{
+		if($allow_access === self::DUNNO) {
 			$access_key = $role.'!'.$resource.'!*';
 
-			if(isset($this->_access[$access_key]) === true)
-			{
-				$allow_access = ($this->_access[$access_key] === true ? self::YES : self::NO);
+			//In the direct role
+			if(isset($this->_access[$access_key]) === true) {
+				$allow_access = ($this->_access[$access_key] == true ? self::YES : self::NO);
 			} else {
 				$allow_access = self::DUNNO;
 			}
 
 			//Check in inherits roles
-			if($allow_access === self::DUNNO)
-			{
-				$allow_access = $this->_checkInheritance($role, $resource, '*', $this->_access, $this->_roleInherits);
+			if($allow_access === self::DUNNO) {
+				$allow_access = self::_checkInheritance($role, $resource, '*', $this->_access, $this->_roleInherits);
 			}
 		}
 
 		//If access wasn't found yet, try role-*-*
-		if($allow_access === self::DUNNO)
-		{
+		if($allow_access === self::DUNNO) {
 			$access_key = $role.'!*!*';
 
-			if(isset($this->_access[$access_key]) === true)
-			{
-				$allow_access = ($this->_access[$access_key] === true ? self::YES : self::NO);
+			//Try in the direct role
+			if(isset($this->_access[$access_key]) === true) {
+				$allow_access = ($this->_access[$access_key] == true ? self::YES : self::NO);
 			} else {
 				$allow_access = self::DUNNO;
 			}
 
-			if($allow_access === self::DUNNO)
-			{
-				$allow_access = $this->_checkInheritance($role, '*', '*', $this->_access, $this->_roleInherits);
+			if($allow_access === self::DUNNO) {
+				$allow_access = self::_checkInheritance($role, '*', '*', $this->_access, $this->_roleInherits);
 			}
 		}
 
-		//Set accessGranted to false if $allow_access is DUNNO
-		$this->_accessGranted = ($allow_access === self::DUNNO ? false : (self::YES == $allow_access));
-
-		if(is_object($this->_eventsManager) === true)
-		{
-			$this->_eventsManager->fire('acl:afterCheckAccess', $this, $this->_accessGranted);
+		if($allow_access === self::DUNNO) {
+			$have_access = false;
+		} else {
+			$have_access = (self::YES === $allow_access ? true : false);
 		}
 
-		return $this->_accessGranted;
-	}
+		//Set accessGranted to false if $allow_access is DUNNO
+		$this->_accessGranted = $have_access;
 
+		if(is_object($this->_eventsManager) === true) {
+			$this->_eventsManager->fire('acl:afterCheckAccess', $this, $have_access);
+		}
+
+		return $have_access;
+	}
 
 	/**
 	 * Return an array with every role registered in the list
 	 *
-	 * @return array[\Phalcon\Acl\Role]
+	 * @return array
 	 */
 	public function getRoles()
 	{
 		return $this->_roles;
 	}
 
-
 	/**
 	 * Return an array with every resource registered in the list
 	 *
-	 * @return array[\Phalcon\Acl\Resource]
+	 * @return array
 	 */
 	public function getResources()
 	{
 		return $this->_resources;
 	}
-
 }

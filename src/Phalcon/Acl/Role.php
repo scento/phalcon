@@ -28,7 +28,7 @@ class Role implements RoleInterface
 	 * @var string
 	 * @access protected
 	*/
-	protected $_name = null;
+	protected $_name;
 
 	/**
 	 * Description
@@ -42,29 +42,27 @@ class Role implements RoleInterface
 	 * \Phalcon\Acl\Role description
 	 *
 	 * @param string $name
-	 * @param string $description
+	 * @param string|null $description
+	 * @throws Exception
 	 */
 	public function __construct($name, $description = null)
 	{
-		if(is_string($name) === false)
-		{
+		if(is_string($name) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 
-		if(is_string($description) === false && is_null($description) === false)
-		{
+		if(is_string($description) === false &&
+			is_null($description) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 
-		if($name === '*')
-		{
+		if($name === '*') {
 			throw new Exception('Role name cannot be "*"');
 		}
 
 		$this->_name = $name;
 
-		if(is_null($description) === false)
-		{
+		if(is_null($description) === false) {
 			$this->_description = $description;
 		}
 	}

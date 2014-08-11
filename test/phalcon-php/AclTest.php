@@ -467,10 +467,11 @@ class AclTest extends PHPUnit_Framework_TestCase
 	public function testEventsManagerInteraction()
 	{
 		$events = new Phalcon\Events\Manager();
-		$events->attach('acl:beforeCheckAccess', function($event, $component, $object) {
-			$this->assertEquals($component->getActiveRole(), 'Role');
-			$this->assertEquals($component->getActiveResource(), 'Resource');
-			$this->assertEquals($component->getActiveAccess(), 'index');
+		$self = $this;
+		$events->attach('acl:beforeCheckAccess', function($event, $component, $object) use($self) {
+			$self->assertEquals($component->getActiveRole(), 'Role');
+			$self->assertEquals($component->getActiveResource(), 'Resource');
+			$self->assertEquals($component->getActiveAccess(), 'index');
 			return false;
 		});
 

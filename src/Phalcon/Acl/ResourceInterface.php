@@ -20,7 +20,7 @@ interface ResourceInterface
 	 * \Phalcon\Acl\ResourceInterface constructor
 	 *
 	 * @param string $name
-	 * @param string $description
+	 * @param string|null $description
 	 */
 	public function __construct($name, $description = null);
 

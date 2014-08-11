@@ -8,16 +8,17 @@ den `Memory`-Adapter, welcher die Zugriffskontrolliste als PHP-Objekt im Zwische
 Anfrage vorhält.
 
 ##Codebeispiele
+Im Folgenden finden sich einige Codebeispiele zur Erläuterung der Implementierung.
 
-**Allgemeine Nutzung**
+###Allgemeine Nutzung
 ```php
 	$acl = new Phalcon\Acl\Adapter\Memory();
 	
 	//Standardmäßig Zugriff auf Ressourcen verhindern
 	$acl->setDefaultAction(Phalcon\Acl::DENY);
 	
-	/* Rollen */
 	
+	/* Rollen */
 	//Rollen mit optionaler Beschreibung erstellen
 	$role_admin = new Phalcon\Acl\Role('Administrators', 'root access');
 	$role_user = new Phalcon\Acl\Role('Users');
@@ -29,8 +30,8 @@ Anfrage vorhält.
 	//Rollen direkt erstellen
 	$acl->addRole('Guests');
 	
-	/* Ressourcen */
 	
+	/* Ressourcen */
 	//Ressource mit optionaler Beschreibung erstellen
 	$resource_blog = new Phalcon\Acl\Resource('Blog', 'It is like news.');
 	
@@ -40,8 +41,8 @@ Anfrage vorhält.
 	//Ressource direkt hinzufügen
 	$acl->addResource('Legal', array('imprint', 'privacy');
 	
-	/* Zugriffe */
 	
+	/* Zugriffe */
 	//Allgemeiner Zugriff auf alle 'Legal'-Ressourcen
 	$acl->allow('Administrators', 'Legal', '*');
 	$acl->allow('Users', 'Legal', '*');
@@ -53,8 +54,8 @@ Anfrage vorhält.
 	//'Administrators' haben Vollzugriff
 	$acl->allow('Administrators', '*', '*');
 	
-	/* Abfrage */
 	
+	/* Abfrage */
 	//Dürfen 'Administrators' auf 'Legal::imprint' zugreifen?
 	if($acl->isAllowed('Administrators', 'Legal', 'imprint') == true) {
 		echo 'Zugriff gestattet.';

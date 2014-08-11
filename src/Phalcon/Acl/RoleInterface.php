@@ -20,7 +20,7 @@ interface RoleInterface
 	 * \Phalcon\Acl\Role constructor
 	 *
 	 * @param string $name
-	 * @param string $description
+	 * @param string|null $description
 	 */
 	public function __construct($name, $description = null);
 
@@ -34,7 +34,7 @@ interface RoleInterface
 	/**
 	 * Returns role description
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function getDescription();
 

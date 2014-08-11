@@ -7,6 +7,62 @@ Berechtigungen und speichert diese adapterspezifisch. Das Basisprojekt von Phalc
 den `Memory`-Adapter, welcher die Zugriffskontrolliste als PHP-Objekt im Zwischenspeicher für eine 
 Anfrage vorhält.
 
+##Codebeispiele
+
+**Allgemeine Nutzung**
+```php
+	$acl = new Phalcon\Acl\Adapter\Memory();
+	
+	//Standardmäßig Zugriff auf Ressourcen verhindern
+	$acl->setDefaultAction(Phalcon\Acl::DENY);
+	
+	/* Rollen */
+	
+	//Rollen mit optionaler Beschreibung erstellen
+	$role_admin = new Phalcon\Acl\Role('Administrators', 'root access');
+	$role_user = new Phalcon\Acl\Role('Users');
+	
+	//Rollen zur ACL hinzufügen
+	$acl->addRole($role_admin);
+	$acl->addRole($role_user);
+	
+	//Rollen direkt erstellen
+	$acl->addRole('Guests');
+	
+	/* Ressourcen */
+	
+	//Ressource mit optionaler Beschreibung erstellen
+	$resource_blog = new Phalcon\Acl\Resource('Blog', 'It is like news.');
+	
+	//Ressource mit Aktionen zur ACL hinzufügen
+	$acl->addResource($resource_blog, array('list', 'show', 'create', 'edit', 'delete'));
+	
+	//Ressource direkt hinzufügen
+	$acl->addResource('Legal', array('imprint', 'privacy');
+	
+	/* Zugriffe */
+	
+	//Allgemeiner Zugriff auf alle 'Legal'-Ressourcen
+	$acl->allow('Administrators', 'Legal', '*');
+	$acl->allow('Users', 'Legal', '*');
+	$acl->allow('Guests', 'Legal', '*');
+	
+	//'Users 'dürfen auf einzelne Aktionen zugreifen
+	$acl->allow('Users', 'Blog', array('list', 'show'));
+	
+	//'Administrators' haben Vollzugriff
+	$acl->allow('Administrators', '*', '*');
+	
+	/* Abfrage */
+	
+	//Dürfen 'Administrators' auf 'Legal::imprint' zugreifen?
+	if($acl->isAllowed('Administrators', 'Legal', 'imprint') == true) {
+		echo 'Zugriff gestattet.';
+	} else {
+		echo 'Zugriff verweigert.';
+	}
+```
+
 ##Bekannte Probleme
 * Phalcon 0.5.3
 	- [Fehler bei der Vererbung von Zugriffsrechten](https://github.com/phalcon/cphalcon/issues/65)

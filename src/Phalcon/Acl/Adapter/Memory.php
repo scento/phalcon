@@ -338,7 +338,7 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 	 * Adds access to resources
 	 *
 	 * @param string $resourceName
-	 * @param array|string $accessList
+	 * @param array|string|null $accessList
 	 * @return boolean
 	 * @throws Exception
 	 */
@@ -365,7 +365,7 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 			if(isset($this->_accessList[$key]) === false) {
 				$this->_accessList[$key] = true;
 			}
-		} else {
+		} elseif(is_null($accessList) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 

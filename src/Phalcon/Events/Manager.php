@@ -214,6 +214,9 @@ class Manager implements ManagerInterface
 			throw new Exception('The event is not valid');
 		}
 
+		$status = null;
+		$arguments = null;
+
 		$event_name = $event->getType();
 		if(is_string($event_name) === false) {
 			//@note missing "is"
@@ -372,6 +375,7 @@ class Manager implements ManagerInterface
 			$this->_responses = null;
 		}
 
+		$event = null;
 		//Check if events are grouped by type
 		if(isset($this->_events[$event_parts[0]]) === true) {
 			$fire_events = $this->_events[$event_parts[0]];

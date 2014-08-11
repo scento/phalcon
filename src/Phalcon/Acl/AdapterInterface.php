@@ -9,8 +9,6 @@
 */
 namespace Phalcon\Acl;
 
-use \Phalcon\Acl\RoleInterface;
-
 /**
  * Phalcon\Acl\AdapterInterface initializer
  * 
@@ -82,7 +80,7 @@ interface AdapterInterface
 	 * Adds access to resources
 	 *
 	 * @param string $resourceName
-	 * @param array|string $accessList
+	 * @param array|string|null $accessList
 	 * @return boolean
 	 */
 	public function addResourceAccess($resourceName, $accessList);

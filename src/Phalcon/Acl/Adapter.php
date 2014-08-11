@@ -26,7 +26,7 @@ abstract class Adapter implements EventsAwareInterface
 	/**
 	 * Events Manager
 	 * 
-	 * @var null|ManagerInterface
+	 * @var ManagerInterface|null
 	 * @access protected
 	*/
 	protected $_eventsManager = null;
@@ -50,7 +50,7 @@ abstract class Adapter implements EventsAwareInterface
 	/**
 	 * Active Role
 	 * 
-	 * @var null|string
+	 * @var string|null
 	 * @access protected
 	*/
 	protected $_activeRole = null;
@@ -58,21 +58,23 @@ abstract class Adapter implements EventsAwareInterface
 	/**
 	 * Active Resources
 	 * 
-	 * @var null|string
+	 * @var string|null
+	 * @access protected
 	*/
 	protected $_activeResource = null;
 
 	/**
 	 * Active Access
 	 * 
-	 * @var null|string
+	 * @var string|null
+	 * @access protected
 	*/
 	protected $_activeAccess = null;
 
 	/**
 	 * Sets the events manager
 	 *
-	 * @param ManagerInterface $eventsManager
+	 * @param \Phalcon\Events\ManagerInterface $eventsManager
 	 * @throws Exception
 	 */
 	public function setEventsManager($eventsManager)
@@ -88,7 +90,7 @@ abstract class Adapter implements EventsAwareInterface
 	/**
 	 * Returns the internal event manager
 	 *
-	 * @return ManagerInterface|null
+	 * @return \Phalcon\Events\ManagerInterface|null
 	 */
 	public function getEventsManager()
 	{
@@ -103,8 +105,7 @@ abstract class Adapter implements EventsAwareInterface
 	 */
 	public function setDefaultAction($defaultAccess)
 	{
-		if(is_int($defaultAccess) === false)
-		{
+		if(is_int($defaultAccess) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 

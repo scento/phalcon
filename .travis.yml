@@ -23,6 +23,7 @@ before_script:
   - ./test/ci/setup_pgsql.sh
   - ./test/ci/setup_sqlite.sh
   - mkdir -p build/logs
+  - export COVERALLS_SERVICE_NAME=travis-ci
 
 script:
   - phpunit --configuration ./test/phpunit.xml --coverage-clover build/logs/clover.xml --debug

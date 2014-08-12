@@ -7,6 +7,27 @@
 class AclTest extends PHPUnit_Framework_TestCase
 {
 	/**
+	 * Helper function for exception testing
+	 * 
+	 * @param callable $trigger
+	 * @param array $params
+	 * @param string $exception
+	*/
+	private function assertException($trigger, $params, $exception)
+	{
+		$thrown = false;
+		try {
+			call_user_func_array($trigger, $params);
+		} catch(\Exception $e) {
+			$thrown = true;
+		}
+
+		$this->assertEquals($thrown, true);
+
+		return $thrown;
+	}
+
+	/**
 	 * Simple
 	*/
 	public function testSimple()
@@ -568,617 +589,117 @@ class AclTest extends PHPUnit_Framework_TestCase
 			'Role B'
 		);
 	}
-	/**
-	 * Adapter::setEventsManager parameter validation
-	*/
-	public function testAdapterEventsManagerParameter()
-	{
-		$adapter = new Phalcon\Acl\Adapter\Memory();
-		$exceptions = 0;
-
-		//string
-		try {$adapter->setEventsManager('test');} 
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//int
-		try {$adapter->setEventsManager(123);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//double
-		try {$adapter->setEventsManager(123.456);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//array
-		try {$adapter->setEventsManager(array('test'));}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//empty array
-		try {$adapter->setEventsManager(array());}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//wrong object
-		try {$adapter->setEventsManager(new \stdClass());}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//null
-		try {$adapter->setEventsManager(null);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//boolean
-		try {$adapter->setEventsManager(false);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		$this->assertEquals($exceptions, 8);
-	}
 
 	/**
-	 * Adapter::setDefaultAction parameter validation
+	 * Is Role
 	*/
-	public function testAdapterDefaultActionParameter()
-	{
-		$adapter = new Phalcon\Acl\Adapter\Memory();
-		$exceptions = 0;
-
-		//string
-		try {$adapter->setDefaultAction('test');} 
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//double
-		try {$adapter->setDefaultAction(123.456);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//array
-		try {$adapter->setDefaultAction(array('test'));}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//empty array
-		try {$adapter->setDefaultAction(array());}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//object
-		try {$adapter->setDefaultAction(new \stdClass());}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//null
-		try {$adapter->setDefaultAction(null);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//boolean
-		try {$adapter->setDefaultAction(false);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		$this->assertEquals($exceptions, 7);
-	}
-
-	/**
-	 * Resource::__construct parameter validation
-	*/
-	public function testResourceParameter()
-	{
-		$exceptions = 0;
-
-		//int
-		try {$res = new Phalcon\Acl\Resource(123);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//double
-		try {$res = new Phalcon\Acl\Resource(123.456);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//array
-		try {$res = new Phalcon\Acl\Resource(array(123));}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//empty array
-		try {$res = new Phalcon\Acl\Resource(array());}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//boolean
-		try {$res = new Phalcon\Acl\Resource(false);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//object
-		try {$res = new Phalcon\Acl\Resource(new \stdClass);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//null
-		try {$res = new Phalcon\Acl\Resource(null);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//star
-		try {$res = new Phalcon\Acl\Resource('*');}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		$this->assertEquals($exceptions, 8);
-
-		$exceptions = 0;
-
-		//int
-		try {$res = new Phalcon\Acl\Resource('Resource', 123);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//double
-		try {$res = new Phalcon\Acl\Resource('Resource', 123.456);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//array
-		try {$res = new Phalcon\Acl\Resource('Resource', array(123));}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//empty array
-		try {$res = new Phalcon\Acl\Resource('Resource', array());}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//boolean
-		try {$res = new Phalcon\Acl\Resource('Resource', false);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//object
-		try {$res = new Phalcon\Acl\Resource('Resource', new \stdClass);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		$this->assertEquals($exceptions, 6);
-	}
-
-	/**
-	 * Role::__construct parameter validation
-	*/
-	public function testRoleParameter()
-	{
-		$exceptions = 0;
-
-		//int
-		try {$res = new Phalcon\Acl\Role(123);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//double
-		try {$res = new Phalcon\Acl\Role(123.456);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//array
-		try {$res = new Phalcon\Acl\Role(array(123));}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//empty array
-		try {$res = new Phalcon\Acl\Role(array());}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//boolean
-		try {$res = new Phalcon\Acl\Role(false);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//object
-		try {$res = new Phalcon\Acl\Role(new \stdClass);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//null
-		try {$res = new Phalcon\Acl\Role(null);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//star
-		try {$res = new Phalcon\Acl\Role('*');}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		$this->assertEquals($exceptions, 8);
-
-		$exceptions = 0;
-
-		//int
-		try {$res = new Phalcon\Acl\Role('Role', 123);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//double
-		try {$res = new Phalcon\Acl\Role('Role', 123.456);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//array
-		try {$res = new Phalcon\Acl\Role('Role', array(123));}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//empty array
-		try {$res = new Phalcon\Acl\Role('Role', array());}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//boolean
-		try {$res = new Phalcon\Acl\Role('Role', false);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		//object
-		try {$res = new Phalcon\Acl\Role('Role', new \stdClass);}
-		catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-
-		$this->assertEquals($exceptions, 6);
-	}
-
-	/**
-	 * Memory::_allowOrDeny parameter validation
-	*/
-	public function testMemoryAllowOrDenyParameter()
-	{
-		$acl = new Phalcon\Acl\Adapter\Memory();
-
-		$tests = array(
-			'int' => 123,
-			'double' => 123.456,
-			'array' => array('test'),
-			'empty_array' => array(),
-			'bool' => false,
-			'object' => new \stdClass(),
-			'string' => 'test',
-			'null' => null
-		);
-
-		$exceptions = 0;
-		foreach($tests as $name => $test) {
-			if($name === 'string') {continue;}
-			foreach($tests as $second) {
-				foreach($tests as $third) {
-					try {$acl->allow($test, $second, $third);}
-					catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-				}
-			}
-		}
-		$this->assertEquals($exceptions, 448);
-
-
-		$exceptions = 0;
-		foreach($tests as $name => $test) {
-			if($name === 'string') {continue;}
-			foreach($tests as $second) {
-				foreach($tests as $third) {
-					try {$acl->allow($second, $test, $third);}
-					catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-				}
-			}
-		}
-		$this->assertEquals($exceptions, 448);
-
-
-		$exceptions = 0;
-		foreach($tests as $name => $test) {
-			if($name === 'string' ||
-				$name === 'array' ||
-				$name === 'empty_array') {continue;}
-			foreach($tests as $second) {
-				foreach($tests as $third) {
-					try {$acl->allow($second, $third, $test);}
-					catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-				}
-			}
-		}
-		$this->assertEquals($exceptions, 320);
-	}
-
-	/**
-	 * Memory::addRole parameter validation
-	*/
-	public function testMemoryAddRoleParameter()
-	{
-		$acl = new Phalcon\Acl\Adapter\Memory();
-
-		$tests = array(
-			'int' => 123,
-			'double' => 123.456,
-			'array' => array('test'),
-			'empty_array' => array(),
-			'bool' => false,
-			'object' => new \stdClass(),
-			'string' => 'test',
-			'null' => null
-		);
-
-		$exceptions = 0;
-		foreach($tests as $name => $test) {
-			if($name === 'string') {continue;}
-			foreach($tests as $second) {
-				try {$acl->addRole($test, $second);}
-				catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-			}
-		}
-		$this->assertEquals($exceptions, 56);
-
-
-		$exceptions = 0;
-		foreach($tests as $name => $test) {
-			if($name === 'string' ||
-				$name === 'null') {continue;}
-			foreach($tests as $second) {
-				try {$acl->addRole($second, $test);}
-				catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-			}
-		}
-		$this->assertEquals($exceptions, 43);
-	}
-
-	/**
-	 * Memory::addInherit test
-	*/
-	public function testMemoryAddInherit()
+	public function testIsRole()
 	{
 		$acl = new Phalcon\Acl\Adapter\Memory();
 		$acl->addRole('Role');
-		$this->assertEquals($acl->addInherit('Role', 'Role'), false);
-		$this->assertEquals($acl->addInherit('Role', 
-			new Phalcon\Acl\Role('Role')
-		), false);
 
-
-		$this->setExpectedException('Phalcon\Acl\Exception');
-		$acl->addInherit('Role', 'Role 2');
-	}
-
-	/**
-	 * Memory::addInherit parameter validation
-	*/
-	public function testMemoryAddInheritParameter()
-	{
-		$acl = new Phalcon\Acl\Adapter\Memory();
-
-		$tests = array(
-			'int' => 123,
-			'double' => 123.456,
-			'array' => array('test'),
-			'empty_array' => array(),
-			'bool' => false,
-			'object' => new \stdClass(),
-			'string' => 'test',
-			'null' => null
+		$this->assertEquals(
+			$acl->isRole('Role'),
+			true
 		);
-
-		$exceptions = 0;
-		foreach($tests as $name => $test) {
-			if($name === 'string') {continue;}
-			foreach($tests as $second) {
-				try {$acl->addInherit($test, $second);}
-				catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-			}
-		}
-		$this->assertEquals($exceptions, 56);
-
-
-		$exceptions = 0;
-		foreach($tests as $name => $test) {
-			if($name === 'string') {continue;}
-			foreach($tests as $second) {
-				try {$acl->addInherit($second, $test);}
-				catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-			}
-		}
-		$this->assertEquals($exceptions, 56);
-	}
-
-	/**
-	 * Memory::isRole parameter validation
-	*/
-	public function testMemoryIsRoleParameter()
-	{
-		$acl = new Phalcon\Acl\Adapter\Memory();
-
-		$tests = array(
-			'int' => 123,
-			'double' => 123.456,
-			'array' => array('test'),
-			'empty_array' => array(),
-			'bool' => false,
-			'object' => new \stdClass(),
-			'null' => null
+		$this->assertEquals(
+			$acl->isRole('Another'),
+			false
 		);
-
-		$exceptions = 0;
-		foreach($tests as $name => $test) {
-			try {$acl->isRole($test);}
-			catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-		}
-
-		$this->assertEquals($exceptions, 7);
 	}
 
 	/**
-	 * Memory::isResource parameter validation
+	 * Is Resource
 	*/
-	public function testMemoryIsResourceParameter()
-	{
-		$acl = new Phalcon\Acl\Adapter\Memory();
-
-		$tests = array(
-			'int' => 123,
-			'double' => 123.456,
-			'array' => array('test'),
-			'empty_array' => array(),
-			'bool' => false,
-			'object' => new \stdClass(),
-			'null' => null
-		);
-
-		$exceptions = 0;
-		foreach($tests as $name => $test) {
-			try {$acl->isResource($test);}
-			catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-		}
-
-		$this->assertEquals($exceptions, 7);
-	}
-
-	/**
-	 * Memory::addResource parameter validation
-	*/
-	public function testMemoryAddResourceParameter()
-	{
-		$acl = new Phalcon\Acl\Adapter\Memory();
-
-		$tests = array(
-			'int' => 123,
-			'double' => 123.456,
-			'array' => array('test'),
-			'empty_array' => array(),
-			'bool' => false,
-			'object' => new \stdClass(),
-			'string' => 'test',
-			'null' => null
-		);
-
-		$exceptions = 0;
-		foreach($tests as $name => $test) {
-			if($name === 'string') {continue;}
-			foreach($tests as $second) {
-				try {$acl->addResource($test, $second);}
-				catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-			}
-		}
-		$this->assertEquals($exceptions, 56);
-
-
-		$exceptions = 0;
-		foreach($tests as $name => $test) {
-			if($name === 'string' ||
-				$name === 'array' ||
-				$name === 'empty_array' ||
-				$name === 'null') {continue;}
-			foreach($tests as $second) {
-				try {$acl->addResource($second, $test);}
-				catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-			}
-		}
-		$this->assertEquals($exceptions, 32);
-	}
-
-	/**
-	 * Memory::addResourceAccess test
-	*/
-	public function testMemoryAddResourceAccess()
+	public function testIsResource()
 	{
 		$acl = new Phalcon\Acl\Adapter\Memory();
 		$acl->addResource('Resource');
-		$acl->addResourceAccess('Resource', array('index', 'show'));
-		$acl->addResourceAccess('Resource', 'edit');
-		$acl->addResourceAccess('Resource', null);
 
-		$acl->addRole('Role');
-		$acl->deny('Role', 'Resource', 'edit');
-		$this->assertEquals($acl->isAllowed('Role', 'Resource', 'edit'),
-			Phalcon\Acl::DENY);
+		$this->assertEquals(
+			$acl->isResource('Resource'),
+			true
+		);
+		$this->assertEquals(
+			$acl->isResource('Another'),
+			false
+		);
 	}
 
 	/**
-	 * Memory::addResourceAccess parameter validation
+	 * Allow or Deny
 	*/
-	public function testMemoryAddResourceAccessParameter()
+	public function testAllowOrDeny()
 	{
 		$acl = new Phalcon\Acl\Adapter\Memory();
 
-		$tests = array(
-			'int' => 123,
-			'double' => 123.456,
-			'array' => array('test'),
-			'empty_array' => array(),
-			'bool' => false,
-			'object' => new \stdClass(),
-			'string' => 'test',
-			'null' => null
+		//Invalid first param
+		$this->assertException(array($acl, 'allow'), array(123, 'resource', 'access'),
+			'Phalcon\Acl\Exception');
+
+		//Invalid second param
+		$this->assertException(array($acl, 'allow'), array('role', 123, 'access'),
+			'Phalcon\Acl\Exception');
+
+		//Invalid role
+		$this->assertException(array($acl, 'allow'), array('role', 'resource', 'access'),
+			'Phalcon\Acl\Exception');
+		$acl->addRole('role');
+
+		//Invalid resource
+		$this->assertException(array($acl, 'allow'), array('role', 'resource', 'access'),
+			'Phalcon\Acl\Exception');
+		$acl->addResource('resource', array('index', 'show'));
+
+		//Invalid access (string)
+		$this->assertException(array($acl, 'allow'), array('role', 'resource', 'coffee'),
+			'Phalcon\Acl\Exception');
+
+		//Invalid access (array)
+		$this->assertException(array($acl, 'allow'), array('role', 'resource', array('index', 'coffee')),
+			'Phalcon\Acl\Exception');
+
+		//Valid access (array)
+		$acl->allow('role', 'resource', array('index'));
+		$this->assertEquals($acl->isAllowed('role', 'resource', 'index'), true);
+
+		//valid access (string)
+		$acl->allow('role', 'resource', 'show');
+		$this->assertEquals($acl->isAllowed('role', 'resource', 'show'), true);
+	}
+
+	/**
+	 * Memory::isAllowed
+	*/
+	public function testIsAllowed()
+	{
+		$acl = new Phalcon\Acl\Adapter\Memory();
+
+		$acl->setDefaultAction(Phalcon\Acl::ALLOW);
+
+		$this->assertEquals(
+			$acl->isAllowed('role', 'resource', 'access'),
+			Phalcon\Acl::ALLOW
 		);
 
-		$exceptions = 0;
-		foreach($tests as $name => $test) {
-			if($name === 'string') {continue;}
-			foreach($tests as $second) {
-				try {$acl->addResourceAccess($test, $second);}
-				catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-			}
-		}
-		$this->assertEquals($exceptions, 56);
+		$acl->setDefaultAction(Phalcon\Acl::DENY);
 
-
-		$exceptions = 0;
-		foreach($tests as $name => $test) {
-			if($name === 'string' ||
-				$name === 'array' ||
-				$name === 'empty_array' ||
-				$name === 'null') {continue;}
-			foreach($tests as $second) {
-				try {$acl->addResourceAccess($second, $test);}
-				catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-			}
-		}
-		$this->assertEquals($exceptions, 32);
-	}
-
-	/**
-	 * Memory::dropResourceAccess test
-	*/
-	public function testMemoryDropResourceAccess()
-	{
-		$acl = new Phalcon\Acl\Adapter\Memory();
-		$acl->addResource('Resource');
-		$acl->addResourceAccess('Resource', array('index', 'show'));
-		$acl->addResourceAccess('Resource', 'edit');
-
-		$acl->addRole('Role');
-		$acl->deny('Role', 'Resource', 'index');
-		$acl->deny('Role', 'Resource', 'edit');
-		$this->assertEquals($acl->isAllowed('Role', 'Resource', 'edit'),
-			Phalcon\Acl::DENY);
-
-		$exceptions = 0;
-		try {
-			$acl->dropResourceAccess('Resource', 'edit');
-			$acl->addRole('Role 2');
-			$acl->deny('Role 2', 'Resource', 'edit');
-		} catch(Phalcon\Acl\Exception $e) {
-			$exceptions++;
-		}
-
-		$acl->addResourceAccess('Resource', 'edit');
-
-		try {
-			$acl->dropResourceAccess('Resource', array('edit'));
-			$acl->addRole('Role 3');
-			$acl->deny('Role 3', 'Resource', 'edit');
-		} catch(Phalcon\Acl\Exception $e) {
-			$exceptions++;
-		}
-
-		$this->assertEquals($exceptions, 2);
-	}
-
-	/**
-	 * Memory::dropResourceAccess parameter validation
-	*/
-	public function testMemoryDropResourceAccessParameter()
-	{
-		$acl = new Phalcon\Acl\Adapter\Memory();
-
-		$tests = array(
-			'int' => 123,
-			'double' => 123.456,
-			'array' => array('test'),
-			'empty_array' => array(),
-			'bool' => false,
-			'object' => new \stdClass(),
-			'string' => 'test',
-			'null' => null
+		$this->assertEquals(
+			$acl->isAllowed('role', 'resource', 'access'),
+			Phalcon\Acl::DENY
 		);
 
-		$exceptions = 0;
-		foreach($tests as $name => $test) {
-			if($name === 'string') {continue;}
-			foreach($tests as $second) {
-				try {$acl->dropResourceAccess($test, $second);}
-				catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-			}
-		}
-		$this->assertEquals($exceptions, 56);
+		$this->assertException(array($acl, 'isAllowed'), array(123, 'resource', 'access'), 
+			'Phalcon\Acl\Exception');
+		$this->assertException(array($acl, 'isAllowed'), array('role', 123, 'access'), 
+			'Phalcon\Acl\Exception');
+		$this->assertException(array($acl, 'isAllowed'), array('role', 'resource', 123), 
+			'Phalcon\Acl\Exception');
 
-
-		$exceptions = 0;
-		foreach($tests as $name => $test) {
-			if($name === 'string' ||
-				$name === 'array' ||
-				$name === 'empty_array'){continue;}
-			foreach($tests as $second) {
-				try {$acl->dropResourceAccess($second, $test);}
-				catch(Phalcon\Acl\Exception $e) {$exceptions++;}
-			}
-		}
-		$this->assertEquals($exceptions, 40);
+		$acl->addRole('Role');
+		$this->assertEquals(
+			$acl->isAllowed('Role', 'None', 'Index'),
+			Phalcon\Acl::DENY
+		);
 	}
 }

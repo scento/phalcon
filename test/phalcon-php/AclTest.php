@@ -655,8 +655,12 @@ class AclTest extends PHPUnit_Framework_TestCase
 		$this->assertException(array($acl, 'allow'), array('role', 'resource', 'coffee'),
 			'Phalcon\Acl\Exception');
 
-		//Invalid access (array)
+		//Invalid third param
 		$this->assertException(array($acl, 'allow'), array('role', 'resource', array('index', 'coffee')),
+			'Phalcon\Acl\Exception');
+
+		//Invalid access (int)
+		$this->assertException(array($acl, 'allow'), array('role', 'resource', 1234),
 			'Phalcon\Acl\Exception');
 
 		//Valid access (array)
@@ -697,9 +701,14 @@ class AclTest extends PHPUnit_Framework_TestCase
 			'Phalcon\Acl\Exception');
 
 		$acl->addRole('Role');
+		$acl->addRole('Role 2');
+		$acl->addInherit('Role 2', 'Role');
+		$acl->addResource('Index', array('test'));
+		$acl->allow('Role', '*', '*');
+
 		$this->assertEquals(
 			$acl->isAllowed('Role', 'None', 'Index'),
-			Phalcon\Acl::DENY
+			false
 		);
 	}
 }

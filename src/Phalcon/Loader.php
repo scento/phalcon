@@ -45,66 +45,66 @@ class Loader implements EventsAwareInterface
 	/**
 	 * Events Manager
 	 * 
-	 * @var null|Phalcon\Events\ManagerInterface
+	 * @var Phalcon\Events\ManagerInterface|null
 	 * @access protected
 	*/
-	protected $_eventsManager = null;
+	protected $_eventsManager;
 
 	/**
 	 * Found Path
 	 * 
-	 * @var null|string
+	 * @var string|null
 	 * @access protected
 	*/
-	protected $_foundPath = null;
+	protected $_foundPath;
 
 	/**
 	 * Checked Path
 	 * 
-	 * @var null|string
+	 * @var string|null
 	 * @access protected
 	*/
-	protected $_checkedPath = null;
+	protected $_checkedPath;
 
 	/**
 	 * Prefixes
 	 * 
-	 * @var null|array
+	 * @var array|null
 	 * @access protected
 	*/
-	protected $_prefixes = null;
+	protected $_prefixes;
 
 	/**
 	 * Classes
 	 * 
-	 * @var null|array
+	 * @var array|null
 	 * @access protected
 	*/
-	protected $_classes = null;
+	protected $_classes;
 
 	/**
 	 * Extensions
 	 * 
-	 * @var null|array
+	 * @var array|null
 	 * @access protected
 	*/
-	protected $_extensions = null;
+	protected $_extensions;
 
 	/**
 	 * Namespaces
 	 * 
-	 * @var null|array
+	 * @var array|null
 	 * @access protected
 	*/
-	protected $_namespaces = null;
+	protected $_namespaces;
 
 	/**
 	 * Directories
 	 * 
-	 * @var null|array
+	 * @var array|null
 	 * @access protected
 	*/
-	protected $_directories = null; 
+	protected $_directories; 
 
 	/**
 	 * Registered
@@ -126,11 +126,10 @@ class Loader implements EventsAwareInterface
 	 * Sets the events manager
 	 *
 	 * @param \Phalcon\Events\ManagerInterface $eventsManager
-	 * @throws LoaderException
+	 * @throws \Phalcon\Loader\Exception
 	 */
 	public function setEventsManager($eventsManager)
 	{
-		//@note Improvement: type checking
 		if(is_object($eventsManager) === false || 
 			$eventsManager instanceof ManagerInterface === false) {
 			throw new LoaderException('Invalid parameter type.');
@@ -154,7 +153,7 @@ class Loader implements EventsAwareInterface
 	 *
 	 * @param array $extensions
 	 * @return \Phalcon\Loader
-	 * @throws LoaderException
+	 * @throws \Phalcon\Loader\Exception
 	 */
 	public function setExtensions($extensions)
 	{
@@ -183,11 +182,11 @@ class Loader implements EventsAwareInterface
 	 * @param array $namespaces
 	 * @param boolean|null $merge
 	 * @return \Phalcon\Loader
-	 * @throws LoaderException
+	 * @throws \Phalcon\Loader\Exception
 	 */
 	public function registerNamespaces($namespaces, $merge = null)
 	{
-		if($merge === null) {
+		if(is_null($merge) === true) {
 			$merge = false;
 		} elseif(is_bool($merge) === false) {
 			throw new LoaderException('Invalid parameter type.');
@@ -222,11 +221,11 @@ class Loader implements EventsAwareInterface
 	 * @param array $prefixes
 	 * @param boolean|null $merge
 	 * @return \Phalcon\Loader
-	 * @throws LoaderException
+	 * @throws \Phalcon\Loader\Exception
 	 */
 	public function registerPrefixes($prefixes, $merge = null)
 	{
-		if($merge === null) {
+		if(is_null($merge) === true) {
 			$merge = false;
 		} elseif(is_bool($merge) === false) {
 			throw new LoaderException('Invalid parameter type.');
@@ -261,18 +260,18 @@ class Loader implements EventsAwareInterface
 	 * @param array $directories
 	 * @param boolean|null $merge
 	 * @return \Phalcon\Loader
-	 * @throws LoaderException
+	 * @throws \Phalcon\Loader\Exception
 	 */
 	public function registerDirs($directories, $merge = null)
 	{
-		if($merge === null) {
+		if(is_null($merge) === true) {
 			$merge = false;
 		} elseif(is_bool($merge) === false) {
 			throw new LoaderException('Invalid parameter type.');
 		}
 
 		if(is_array($directories) === false) {
-			throw new LoaderException('Parameter directories must be a n array');
+			throw new LoaderException('Parameter directories must be an array');
 		}
 
 		if($merge === true && is_array($this->_directories) === true) {
@@ -287,7 +286,7 @@ class Loader implements EventsAwareInterface
 	/**
 	 * Return current directories registered in the autoloader
 	 *
-	 * @param array|null
+	 * @return array|null
 	 */
 	public function getDirs()
 	{
@@ -298,13 +297,13 @@ class Loader implements EventsAwareInterface
 	 * Register classes and their locations
 	 *
 	 * @param array $classes
-	 * @param boolean $merge
+	 * @param boolean|null $merge
 	 * @return \Phalcon\Loader
-	 * @throws LoaderException
+	 * @throws \Phalcon\Loader\Exception
 	 */
 	public function registerClasses($classes, $merge = null)
 	{
-		if($merge === null) {
+		if(is_null($merge) === true) {
 			$merge = false;
 		} elseif(is_bool($marge) === false) {
 			throw new LoaderException('Invalid parameter type.');
@@ -326,7 +325,7 @@ class Loader implements EventsAwareInterface
 	/**
 	 * Return the current class-map registered in the autoloader
 	 *
-	 * @param array|null
+	 * @return array|null
 	 */
 	public function getClasses()
 	{
@@ -373,28 +372,33 @@ class Loader implements EventsAwareInterface
 	 * @param string $virtualSeperator
 	 * @param string|null $seperator
 	 * @return string|boolean
+	 * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/kernel/file.c#L213
 	*/
 	private static function possibleAutoloadFilePath($prefix, $className, $virtualSeperator, $seperator = null)
 	{
-		if(is_string($prefix) === false || is_string($className) === false
-		 || is_string($virtualSeperator) === false) {
+		if(is_string($prefix) === false ||
+			is_string($className) === false ||
+			is_string($virtualSeperator) === false ||
+			(is_string($seperator) === false &&
+			is_null($seperator) === false)) {
 			return false;
 		}
 
-		$l = strlen($prefix);
-		if($l === 0 || $l > strlen($className)) {
+		$length = strlen($prefix);
+		if($length === 0 || $length > strlen($className)) {
 			return false;
 		}
 
-		if(is_null($seperator) === false && is_string($seperator) === true &&
-			$prefix[$l-1] === $seperator[0]) {
-			$l--;
+		if(is_null($seperator) === false && 
+			is_string($seperator) === true &&
+			$prefix[$length-1] === $seperator[0]) {
+			$length--;
 		}
 
-		$virtual_str = '';
+		$virtualStr = '';
 
-		$lc = strlen($className);
-		for($i = $l + 1; $i < $lc; ++$i) {
+		$lengthClassName = strlen($className);
+		for($i = $length + 1; $i < $lengthClassName; ++$i) {
 			$ch = ord($className[$i]);
 
 			//Anticipated end of string
@@ -402,28 +406,30 @@ class Loader implements EventsAwareInterface
 				break;
 			}
 
-			//Replace namespace seperator by directory seperator
+			//Replace namespace seperator by directory seperator (\)
 			if($ch === 92) {
-				$virtual_str .= $virtualSeperator;
+				$virtualStr .= $virtualSeperator;
 				continue;
 			}
 
 			//Basic alphanumeric characters
-			if($ch === 95 || ($ch >= 48 && $ch <= 57) || ($ch >= 97 && $ch <= 122) ||
-				($ch >= 65 && $ch <= 90)) {
-				$virtual_str .= $className[$i];
+			if($ch === 95 || // _
+				($ch >= 48 && $ch <= 57) || // >="0" && <= "9"
+				($ch >= 97 && $ch <= 122) || // >="a" && <= "z"
+				($ch >= 65 && $ch <= 90)) { // >= "A" && <= "Z"
+				$virtualStr .= $className[$i];
 				continue;
 			}
 
 			//Multibyte characters?
 			if($ch > 127) {
-				$virtual_str .= $className[$i];
+				$virtualStr .= $className[$i];
 				continue;
 			}
 		}
 
-		if(empty($virtual_str) === false) {
-			return $virtual_str;
+		if(empty($virtualStr) === false) {
+			return $virtualStr;
 		} else {
 			return false;
 		}
@@ -435,19 +441,24 @@ class Loader implements EventsAwareInterface
 	 * @param string $path
 	 * @param string $directorySeperator
 	 * @return string|null
+	 * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/kernel/file.c#L106
 	*/
 	private static function fixPath($path, $directorySeperator)
 	{
-		if(is_string($path) === false || is_string($directorySeperator) === false) {
-			return null;
+		if(is_string($path) === false ||
+			is_string($directorySeperator) === false) {
+			return;
 		}
 
-		$pl = strlen($path);
+		//@note we assume $directorySeparator is a char and not a string
 
-		if($pl > 0 && empty($directorySeperator) === false) {
-			if($path[$pl-1] !== '\\' && $path[$pl-1] !== '/') {
-				return $path.$directorySeperator;
-			}
+		$pathLength = strlen($path);
+
+		if(empty($pathLength) === false && 
+			empty($directorySeperator) === false &&
+			$path[$pathLength-1] !== '\\' &&
+			$path[$pathLength-1] !== '/') {
+			return $path.$directorySeperator;
 		}
 
 		return $path;
@@ -461,38 +472,58 @@ class Loader implements EventsAwareInterface
 	 */
 	public function autoLoad($className)
 	{
-		//Checking in namespaces
+		$eventsManager = $this->_eventsManager;
+		if(is_object($eventsManager) === true) {
+			$eventsManager->fire('loader:beforeCheckClass', $this, $className);
+		}
+
+		/* First we check for static paths */
+		if(is_array($this->_classes) === true &&
+			isset($this->_classes[$className]) === true) {
+
+			$filePath = $this->_classes[$className];
+			if(is_object($eventsManager) === true) {
+				$this->_foundPath = $filePath;
+				$eventsManager->fire('loader:pathFound', $this, $filePath);
+			}
+
+			require_once($filePath);
+			return true;
+		}
+
+		$extensions = $this->_extensions;
+
+		/* Checking in namespaces */
 		if(is_array($this->_namespaces) === true) {
-			foreach($this->_namespaces as $ns_prefix => $directory) {
+			foreach($this->_namespaces as $nsPrefix => $directory) {
 				//The class name must start with the current namespace
-				if(Text::startsWith($className, $ns_prefix, null) === true) {
-					//get the possible file path
-					$file_name = self::possibleAutoloadFilePath($ns_prefix, $className, \DIRECTORY_SEPARATOR);
-					if($file_name !== false) {
-						//Add a trailing directory seperator if the user forgot to do that
-						$fixed_directory = self::fixPath($directory, \DIRECTORY_SEPARATOR);
+				if(Text::startsWith($className, $nsPrefix) === true) {
+					//Get the possible file path
+					$fileName = self::possibleAutoloadFilePath($nsPrefix, $className, \DIRECTORY_SEPARATOR, null);
+					if($fileName !== false) {
+						//Add a trailing directory separator is the user forgot to do that
+						$fixedDirectory = self::fixPath($directory, \DIRECTORY_SEPARATOR);
 
-						foreach($this->_extensions as $extension) {
-							$file_path = $fixed_directory.$file_name.'.'.$extension;
+						foreach($extensions as $extension) {
+							$filePath = $fixedDirectory.$fileName.'.'.$extension;
 
-							//Check if a events manager is available
-							//@note no class check
-							if(is_object($this->_eventsManager) === true) {
-								$this->_checkedPath = $file_path;
+							//Check if an events manager is available
+							if(is_object($eventsManager) === true) {
+								$this->_checkedPath = $filePath;
 								$eventsManager->fire('loader:beforeCheckPath', $this);
 							}
 
-							//This is probably a good path, lets check if the file exists
-							if(file_exists($file_path) === true) {
-								if(is_object($this->_eventsManager) === true) {
-									$this->_foundPath = $file_path;
+							//This is probably a good path, let's check if the file exists
+							if(file_exists($filePath) === true) {
+								if(is_object($eventsManager) === true) {
+									$this->_foundPath = $filePath;
 
-									$this->_eventsManager->fire('load:pathFound', $this, $file_path);
+									$eventsManager->fire('loader:pathFound', $this, $filePath);
 								}
 
-								require_once($file_path);
+								require_once($filePath);
 
-								//Return true mean success
+								//Return true means success
 								return true;
 							}
 						}
@@ -501,33 +532,35 @@ class Loader implements EventsAwareInterface
 			}
 		}
 
-		//Checking in prefixes
-		if(is_array($this->_prefixes) === true) {
-			foreach($this->_prefixes as $prefix => $directory) {
+		/* Checking in prefixes */
+		$prefixes = $this->_prefixes;
+		if(is_array($prefixes) === true) {
+			foreach($prefixes as $prefix => $directory) {
 				//The class name starts with the prefix?
-				if(Text::startsWith($className, $prefix, null) === true) {
+				if(Text::startsWith($className, $prefix) === true) {
 					//Get the possible file path
-					$file_name = self::possibleAutoloadFilePath($prefix, $className, '_');
-					if($file_name !== false) {
-						//Add a trailing directory seperator if the user forgot to do that
-						$fixed_directory = self::fixPath($path, \DIRECTORY_SEPARATOR);
-						foreach($this->_extensions as $extension) {
-							$file_path = $fixed_directory.$file_name.'.'.$extension;
-							if(is_object($this->_eventsManager) === true) {
-								$this->_checkedPath = $file_path;
+					$fileName = self::possibleAutoloadFilePath($fileName, $prefix, $className, \DIRECTORY_SEPARATOR, '_');
+					if($fileName !== false) {
+						//Add a trailing directory separator is the user forgot to do that
+						$fixedDirectory = self::fixPath($directory, \DIRECTORY_SEPARATOR);
 
-								$this->_eventsManager->fire('load:beforeCheckPath', $this, $file_path);
+						foreach($extensions as $extension) {
+							$filePath = $fixedDirectory.$fileName.'.'.$extension;
+
+							if(is_object($eventsManager) === true) {
+								$this->_checkedPath = $filePath;
+								$eventsManager->fire('loader:beforeCheckPath', $this, $filePath);
 							}
 
-							if(file_exists($file_path) === true) {
+							if(file_exists($filePath) === true) {
 								//Call 'pathFound' event
-								if(is_object($this->_eventsManager) === true) {
-									$this->_foundPath = $file_path;
-
-									$this->_eventsManager->fire('loader:pathFound', $this, $file_path);
+								if(is_object($eventsManager) === true) {
+									$this->_foundPath = $filePath;
+									$eventsManager->fire('loader:pathFound', $this, $filePath);
 								}
 
-								require_once($file_path);
+								require_once($filePath);
+
 								return true;
 							}
 						}
@@ -536,37 +569,39 @@ class Loader implements EventsAwareInterface
 			}
 		}
 
-		//Change the pseudo-seperator by the directory seperator in the class name
-		$ds_class_name = str_replace('_', \DIRECTORY_SEPARATOR, $className);
+		//Change the pseudo-separator by the directory separator in the class name
+		$dsClassName = str_replace('_', \DIRECTORY_SEPARATOR, $className);
 
-		//And change the namespace seperator by the directory seperator too
-		$ns_class_name = str_replace('\\', \DIRECTORY_SEPARATOR, $className);
+		//And change the namespace separator by directory separator too
+		$nsClassName = str_replace('\\', \DIRECTORY_SEPARATOR, $dsClassName);
 
-		//Checking in directories
-		if(is_array($this->_directories) === true) {
-			foreach($this->_directories as $directory) {
-				//Add a trailing directory seperator if the user forgot to do that
-				$fixed_directory = self::fixPath($directory, \DIRECTORY_SEPARATOR);
-				foreach($this->_extensions as $extension) {
+		/* Checking in directories */
+		$directories = $this->_directories;
+		if(is_array($directories) === true) {
+			foreach($directories as $directory) {
+				//Add a trailing directory separator if the user forgot to do that
+				$fixedDirectory = self::fixPath($directory, \DIRECTORY_SEPARATOR);
+
+				foreach($extensions as $extension) {
 					//Create a possible path for the file
-					$file_path = $fixed_directory.$ns_class_name.'.'.$extension;
+					$filePath = $fixedDirectory.$nsClassName.'.'.$extension;
 
-					if(is_object($this->_eventsManager) === true) {
-						$this->_checkedPath = $file_path;
-						$this->_eventsManager->fire('loader:beforeCheckPath', $this, $file_path);
+					if(is_object($eventsManager) === true) {
+						$this->_checkedPath = $filePath;
+						$eventsManager->fire('loader:beforeCheckPath', $this, $filePath);
 					}
 
 					//Check in every directory if the class exists here
-					if(file_exists($file_path) === true) {
+					if(file_exists($filePath) === true) {
 						//Call 'pathFound' event
-						if(is_object($this->_eventsManager) === true) {
-							$this->_foundPath = $file_path;
-							$this->_eventsManager->fire('loader:pathFound', $this, $file_path);
+						if(is_object($eventsManager) === true) {
+							$this->_foundPath = $filePath;
+							$eventsManager->fire('loader:pathFound', $this, $filePath);
 						}
 
-						require_once($file_path);
+						require_once($filePath);
 
-						//Return true meaning success
+						//Returning true means success
 						return true;
 					}
 				}
@@ -574,11 +609,11 @@ class Loader implements EventsAwareInterface
 		}
 
 		//Call 'afterCheckClass' event
-		if(is_object($this->_eventsManager) === true) {
-			$this->_eventsManager->fire('loader:afterCheckClass', $this, $className);
+		if(is_object($eventsManager) === true) {
+			$eventsManager->fire('loader:afterCheckClass', $this, $className);
 		}
 
-		//Cannot find the class return false
+		//Cannot find the class - return false
 		return false;
 	}
 

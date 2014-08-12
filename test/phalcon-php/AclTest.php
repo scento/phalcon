@@ -568,7 +568,6 @@ class AclTest extends PHPUnit_Framework_TestCase
 			'Role B'
 		);
 	}
-
 	/**
 	 * Adapter::setEventsManager parameter validation
 	*/

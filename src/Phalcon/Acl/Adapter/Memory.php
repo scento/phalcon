@@ -12,7 +12,7 @@ namespace Phalcon\Acl\Adapter;
 
 use \Phalcon\Events\EventsAwareInterface,
 	\Phalcon\Acl\Exception,
-	\Phalcon\Acl\Adapter,	
+	\Phalcon\Acl\Adapter,
 	\Phalcon\Acl\AdapterInterface,
 	\Phalcon\Acl\RoleInterface,
 	\Phalcon\Acl\Role,
@@ -622,63 +622,63 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 
 		//Check if there is a direct combination for role-resource-access
 		if(isset($this->_access[$accessKey]) === true) {
-			$allow_access = ($this->_access[$accessKey] == true ? self::YES : self::NO);
+			$allowAccess = ($this->_access[$accessKey] == true ? self::YES : self::NO);
 		} else {
-			$allow_access = self::DUNNO;
+			$allowAccess = self::DUNNO;
 		}
 
 		//Check in the inherits roles
-		if($allow_access === self::DUNNO) {
-			$allow_access = self::_checkInheritance($role, $resource, $access, $this->_access, $this->_roleInherits);
+		if($allowAccess === self::DUNNO) {
+			$allowAccess = self::_checkInheritance($role, $resource, $access, $this->_access, $this->_roleInherits);
 		}
 
 		//If access wasn't found yet, try role-resource-*
-		if($allow_access === self::DUNNO) {
+		if($allowAccess === self::DUNNO) {
 			$accessKey = $role.'!'.$resource.'!*';
 
 			//In the direct role
 			if(isset($this->_access[$accessKey]) === true) {
-				$allow_access = ($this->_access[$accessKey] == true ? self::YES : self::NO);
+				$allowAccess = ($this->_access[$accessKey] == true ? self::YES : self::NO);
 			} else {
-				$allow_access = self::DUNNO;
+				$allowAccess = self::DUNNO;
 			}
 
 			//Check in inherits roles
-			if($allow_access === self::DUNNO) {
-				$allow_access = self::_checkInheritance($role, $resource, '*', $this->_access, $this->_roleInherits);
+			if($allowAccess === self::DUNNO) {
+				$allowAccess = self::_checkInheritance($role, $resource, '*', $this->_access, $this->_roleInherits);
 			}
 		}
 
 		//If access wasn't found yet, try role-*-*
-		if($allow_access === self::DUNNO) {
+		if($allowAccess === self::DUNNO) {
 			$accessKey = $role.'!*!*';
 
 			//Try in the direct role
 			if(isset($this->_access[$accessKey]) === true) {
-				$allow_access = ($this->_access[$accessKey] == true ? self::YES : self::NO);
+				$allowAccess = ($this->_access[$accessKey] == true ? self::YES : self::NO);
 			} else {
-				$allow_access = self::DUNNO;
+				$allowAccess = self::DUNNO;
 			}
 
-			if($allow_access === self::DUNNO) {
-				$allow_access = self::_checkInheritance($role, '*', '*', $this->_access, $this->_roleInherits);
+			if($allowAccess === self::DUNNO) {
+				$allowAccess = self::_checkInheritance($role, '*', '*', $this->_access, $this->_roleInherits);
 			}
 		}
 
-		if($allow_access === self::DUNNO) {
-			$have_access = false;
+		if($allowAccess === self::DUNNO) {
+			$haveAccess = false;
 		} else {
-			$have_access = (self::YES === $allow_access ? true : false);
+			$haveAccess = (self::YES === $haveAccess ? true : false);
 		}
 
-		//Set accessGranted to false if $allow_access is DUNNO
-		$this->_accessGranted = $have_access;
+		//Set accessGranted to false if $allowAccess is DUNNO
+		$this->_accessGranted = $haveAccess;
 
 		if(is_object($this->_eventsManager) === true) {
-			$this->_eventsManager->fire('acl:afterCheckAccess', $this, $have_access);
+			$this->_eventsManager->fire('acl:afterCheckAccess', $this, $haveAccess);
 		}
 
-		return $have_access;
+		return $haveAccess;
 	}
 
 	/**

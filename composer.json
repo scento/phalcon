@@ -20,7 +20,8 @@
 		"pdepend/pdepend": "@stable",
 		"phpmd/phpmd": "@stable",
 		"phploc/phploc": "@stable",
-		"sebastian/phpcpd": "@stable"
+		"sebastian/phpcpd": "@stable",
+		"satooshi/php-coveralls": "dev-master"
 	},
 	"autoload": {
 		"psr-4": {

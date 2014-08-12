@@ -668,7 +668,7 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 		if($allowAccess === self::DUNNO) {
 			$haveAccess = false;
 		} else {
-			$haveAccess = (self::YES === $haveAccess ? true : false);
+			$haveAccess = (self::YES === $allowAccess ? true : false);
 		}
 
 		//Set accessGranted to false if $allowAccess is DUNNO

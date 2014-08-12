@@ -708,7 +708,7 @@ class AclTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals(
 			$acl->isAllowed('Role', 'None', 'Index'),
-			false
+			true
 		);
 	}
 }

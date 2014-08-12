@@ -45,10 +45,10 @@ class Memory extends Adapter implements AdapterInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$lowercased_key = strtolower($key);
+		$lowercasedKey = strtolower($key);
 
-		if(isset($this->_data[$lowercased_key]) === true) {
-			return $this->_data[$lowercased_key];
+		if(isset($this->_data[$lowercasedKey]) === true) {
+			return $this->_data[$lowercasedKey];
 		} else {
 			return null;
 		}

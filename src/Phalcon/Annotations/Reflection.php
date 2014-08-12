@@ -106,10 +106,10 @@ class Reflection
 				$this->_methodAnnotations = array();
 
 				if(empty($this->_reflectionData['methods']) === false) {
-					foreach($this->_reflectionData['methods'] as $method_name => $reflection_method)
+					foreach($this->_reflectionData['methods'] as $methodName => $reflectionMethod)
 					{
-						$collection = new Collection($reflection_method);
-						$this->_methodAnnotations[$method_name] = $collection;
+						$collection = new Collection($reflectionMethod);
+						$this->_methodAnnotations[$methodName] = $collection;
 					}
 
 					return $this->_methodAnnotations;
@@ -134,9 +134,9 @@ class Reflection
 			if(isset($this->_reflectionData['properties']) === true) {
 				$this->_propertyAnnotations = array();
 				if(empty($this->_reflectionData['properties']) === false) {
-					foreach($this->_reflectionData['properties'] as $property => $reflection_property)
+					foreach($this->_reflectionData['properties'] as $property => $reflectionPproperty)
 					{
-						$collection = new Collection($reflection_property);
+						$collection = new Collection($reflectioProperty);
 						$this->_propertyAnnotations[$property] = $collection;
 					}
 

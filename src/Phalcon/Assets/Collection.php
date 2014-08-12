@@ -560,13 +560,13 @@ class Collection implements Countable, Iterator
 		}
 
 		//A base path for resources can be set in the assets manager
-		$complete_path = $basePath.$this->_targetPath;
+		$completePath = $basePath.$this->_targetPath;
 
 		//Get the real template path, the target path can optionally don't exist
-		if(file_exists($complete_path) === true) {
-			return realpath($complete_path);
+		if(file_exists($completePath) === true) {
+			return realpath($completePath);
 		}
 
-		return $complete_path;
+		return $completePath;
 	}
 }

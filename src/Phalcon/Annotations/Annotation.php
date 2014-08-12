@@ -125,24 +125,24 @@ class Annotation
 
 		if(isset($reflectionData['arguments']) === true)
 		{
-			$expr_arguments = $reflectionData['arguments'];
+			$exprArguments = $reflectionData['arguments'];
 
 			$arguments = array();
 
-			foreach($expr_arguments as $argument)
+			foreach($exprArguments as $argument)
 			{
 				$expr = (string)$argument['expr'];
-				$resolved_argument = $this->getExpression($expr);
+				$resolvedArgument = $this->getExpression($expr);
 				if(isset($argument['name']) === true)
 				{
-					$arguments[$argument['name']] = $resolved_argument;
+					$arguments[$argument['name']] = $resolvedArgument;
 				} else {
-					$arguments[] = $resolved_argument;
+					$arguments[] = $resolvedArgument;
 				}
 			}
 
 			$this->_arguments = $arguments;
-			$this->_exprArguments = $expr_arguments;
+			$this->_exprArguments = $exprArguments;
 		}
 	}
 
@@ -190,13 +190,13 @@ class Annotation
 			case PHANNOT_T_ARRAY:
 				foreach($expr['items'] as $item)
 				{
-					$resolved_item = $this->getExpression((string)$item);
+					$resolvedItem = $this->getExpression((string)$item);
 
 					if(isset($item['name']) === true)
 					{
-						return array($item['name'] => $resolved_item);
+						return array($item['name'] => $resolvedItem);
 					} else {
-						return array($resolved_item);
+						return array($resolvedItem);
 					}
 				}
 				break;

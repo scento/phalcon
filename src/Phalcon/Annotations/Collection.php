@@ -64,9 +64,9 @@ class Collection implements Iterator, Countable
 		if(is_array($reflectionData) === true) {
 			$annotations = array();
 
-			foreach($reflectionData as $annotation_data)
+			foreach($reflectionData as $annotationData)
 			{
-				$annotations[] = new Annotation($annotation_data);
+				$annotations[] = new Annotation($annotationData);
 			}
 
 			$this->_annotations = $annotations;
@@ -170,8 +170,8 @@ class Collection implements Iterator, Countable
 		{
 			foreach($this->_annotations as $annotation)
 			{
-				$annotation_name = $annotation->getName();
-				if($name == $annotation_name)
+				$annotationName = $annotation->getName();
+				if($name == $annotationName)
 				{
 					return $annotation;
 				}
@@ -201,8 +201,8 @@ class Collection implements Iterator, Countable
 
 			foreach($this->_annotations as $annotation)
 			{
-				$annotation_name = $annotation->getName();
-				if($name == $annotation_name)
+				$annotationName = $annotation->getName();
+				if($name == $annotationName)
 				{
 					$found[] = $annotation;
 				}
@@ -230,8 +230,8 @@ class Collection implements Iterator, Countable
 		{
 			foreach($this->_annotations as $annotation)
 			{
-				$annotation_name = $annotation->getName();
-				if($name == $annotation_name)
+				$annotationName = $annotation->getName();
+				if($name == $annotationName)
 				{
 					return true;
 				}

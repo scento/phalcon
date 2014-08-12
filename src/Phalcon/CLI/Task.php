@@ -51,6 +51,6 @@ class Task extends Injectable implements EventsAwareInterface, InjectionAwareInt
 	 */
 	final public function __construct()
 	{
-		//Marvel at the original code...
+		//Look at the original code...
 	}
 }

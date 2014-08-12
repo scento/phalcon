@@ -233,29 +233,29 @@ class Reader implements ReaderInterface
 		$raw = substr($raw, 1, $l-1);
 		$l = $l - 2;
 
-		$open_braces = 0;
-		$open_brackets = 0;
+		$openBraces = 0;
+		$openBrackets = 0;
 		$breakpoints = array();
 
 		for($i = 0; $i < $l; ++$i) {
 			switch($raw[$i]) {
 				case ',':
-					if($open_braces === 0 &&
-						$open_brackets === 0) {
+					if($openBraces === 0 &&
+						$openBrackets === 0) {
 						$breakpoints[] = $i+1;
 					}
 					break;
 				case '[':
-					++$open_brackets;
+					++$openBrackets;
 					break;
 				case ']':
-					--$open_brackets;
+					--$openBrackets;
 					break;
 				case '{':
-					++$open_braces;
+					++$openBraces;
 					break;
 				case '}':
-					--$open_braces;
+					--$openBraces;
 					break;
 				case '(':
 					throw new Exception('Syntax error, unexpected token.');
@@ -268,30 +268,30 @@ class Reader implements ReaderInterface
 
 		$breakpoints[] = $l+1;
 
-		if($open_braces !== 0 || $open_brackets !== 0) {
+		if($openBraces !== 0 || $openBrackets !== 0) {
 			throw new Exception('Syntax error, unexpected token.');
 		}
 
 		$parameters = array();
-		$last_break = 0;
+		$lastBreak = 0;
 
 		foreach($breakpoints as $break) {
-			$str = substr($raw, $last_break, $break-$last_break-1);
-			$pos_c = strpos($str, ':');
-			$pos_e = strpos($str, '=');
+			$str = substr($raw, $lastBreak, $break-$lastBreak-1);
+			$posC = strpos($str, ':');
+			$posE = strpos($str, '=');
 
-			if($pos_c !== false && $pos_e === false) {
+			if($posC !== false && $posE === false) {
 				$parameters[] = explode(':', $str, 2);
-			} elseif($pos_e !== false && $pos_c === false) {
+			} elseif($posE !== false && $posC === false) {
 				$parameters[] = explode('=', $str, 2);
-			} elseif($pos_c !== false && $pos_e !== false && $pos_c < $pos_e) {
+			} elseif($posC !== false && $posE !== false && $posC < $posE) {
 				$parameters[] = explode(':', $str, 2);
-			} elseif($pos_e !== false && $pos_e !== false && $pos_e < $pos_c) {
+			} elseif($posE !== false && $posE !== false && $posE < $posC) {
 				$parameters[] = explode('=', $str, 2);
 			} else {
 				$parameters[] = $str;
 			}
-			$last_break = $break;
+			$lastBreak = $break;
 		}
 
 		return $parameters;
@@ -312,29 +312,29 @@ class Reader implements ReaderInterface
 		$raw = substr($raw, 1, $l-1);
 		$l = $l - 2;
 
-		$open_braces = 0;
-		$open_brackets = 0;
+		$openBraces = 0;
+		$openBrackets = 0;
 		$breakpoints = array();
 
 		for($i = 0; $i < $l; ++$i) {
 			switch($raw[$i]) {
 				case ',':
-					if($open_braces === 0 &&
-						$open_brackets === 0) {
+					if($openBraces === 0 &&
+						$openBrackets === 0) {
 						$breakpoints[] = $i+1;
 					}
 					break;
 				case '[':
-					++$open_brackets;
+					++$openBrackets;
 					break;
 				case ']':
-					--$open_brackets;
+					--$openBrackets;
 					break;
 				case '{':
-					++$open_braces;
+					++$openBraces;
 					break;
 				case '}':
-					--$open_braces;
+					--$openBraces;
 					break;
 				case '(':
 					throw new Exception('Syntax error, unexpected token.');
@@ -347,16 +347,16 @@ class Reader implements ReaderInterface
 
 		$breakpoints[] = $l+1;
 
-		if($open_braces !== 0 || $open_brackets !== 0) {
+		if($openBraces !== 0 || $openBrackets !== 0) {
 			throw new Exception('Syntax error, unexpected token.');
 		}
 
 		$parameters = array();
-		$last_break = 0;
+		$lastBreak = 0;
 
 		foreach($breakpoints as $break) {
-			$parameters[] = substr($raw, $last_break, $break-$last_break-1);
-			$last_break = $break;
+			$parameters[] = substr($raw, $lastBreak, $break-$lastBreak-1);
+			$lastBreak = $break;
 		}
 
 		return $parameters;

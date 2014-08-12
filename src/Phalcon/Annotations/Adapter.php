@@ -83,34 +83,34 @@ abstract class Adapter
 	public function get($className)
 	{
 		if(is_object($className) === true) {
-			$real_class_name = get_class($className);
+			$realClassName = get_class($className);
 		} elseif(is_string($className) === true) {
-			$real_class_name = $className;
+			$realClassName = $className;
 		} else {
 			throw new Exception('Invalid parameter type.');
 		}
 
-		if(isset($this->_annotations[$real_class_name]) === true)
+		if(isset($this->_annotations[$realClassName]) === true)
 		{
-			return $this->_annotations[$real_class_name];
+			return $this->_annotations[$realClassName];
 		}
 
 		//Try to read the annotations from the adapter
-		$class_annotations = $this->read($real_class_name);
-		if(is_null($class_annotations) === true)
+		$classAnnotations = $this->read($realClassName);
+		if(is_null($classAnnotations) === true)
 		{
 			$reader = $this->getReader();
-			$parsed_annotations = $reader->parse($real_class_name);
+			$parsedAnnotations = $reader->parse($realClassName);
 
-			if(is_array($parsed_annotations) === true)
+			if(is_array($parsedAnnotations) === true)
 			{
-				$class_annotations = new Reflection($parsed_annotations);
-				$this->_annotations[$real_class_name] = $class_annotations;
-				$this->write($real_class_name, $class_annotations);
+				$classAnnotations = new Reflection($parsedAnnotations);
+				$this->_annotations[$realClassName] = $classAnnotations;
+				$this->write($realClassName, $classAnnotations);
 			}
 		}
 
-		return $class_annotations;
+		return $classAnnotations;
 	}
 
 	/**
@@ -146,11 +146,11 @@ abstract class Adapter
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$class_annotations = $this->get($className);
+		$classAnnotations = $this->get($className);
 
-		if(is_object($class_annotations) === true)
+		if(is_object($classAnnotations) === true)
 		{
-			$methods = $class_annotations->getMethodsAnnotations();
+			$methods = $classAnnotations->getMethodsAnnotations();
 			if(is_array($methods) === true)
 			{
 				foreach($methods as $name => $method)
@@ -174,11 +174,11 @@ abstract class Adapter
 	 */
 	public function getProperties($className)
 	{
-		$class_annotations = $this->get($className);
+		$classAnnotations = $this->get($className);
 
-		if(is_object($class_annotations) === true)
+		if(is_object($classAnnotations) === true)
 		{
-			return $class_annotations->getPropertiesAnnotations();
+			return $classAnnotations->getPropertiesAnnotations();
 		}
 
 		return array();
@@ -199,11 +199,11 @@ abstract class Adapter
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$class_annotations = $this->get($className);
+		$classAnnotations = $this->get($className);
 
-		if(is_object($class_annotations) === true)
+		if(is_object($classAnnotations) === true)
 		{
-			$properties = $class_annotations->getPropertiesAnnotations();
+			$properties = $classAnnotations->getPropertiesAnnotations();
 			if(is_array($properties) === true)
 			{
 				foreach($properties as $name => $property)

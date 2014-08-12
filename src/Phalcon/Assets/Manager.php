@@ -413,18 +413,18 @@ class Manager
 		}
 
 		/* Set default values */
-		$path_source = '';
-		$path_target = '';
+		$pathSource = '';
+		$pathTarget = '';
 		$output = '';
 		
 		/* Read options */
 		if(is_array($this->_options) === true) {
 			if(isset($this->_options['sourceBasePath']) === true) {
-				$path_source = $this->_options['source'];
+				$pathSource = $this->_options['source'];
 			}
 
 			if(isset($this->_options['targetBasePath']) === true) {
-				$path_target = $this->_options['targetBasePath'];
+				$pathTarget = $this->_options['targetBasePath'];
 			}
 		}
 
@@ -434,34 +434,34 @@ class Manager
 		$prefix = $collection->getPrefix();
 		$join = $collection->getJoin();
 
-		$path_source_collection = $collection->getSourcePath();
-		if(empty($path_source_collection) === false) {
-			$path_source = $path_source.$path_source_collection;
+		$pathSourceCollection = $collection->getSourcePath();
+		if(empty($pathSourceCollection) === false) {
+			$pathSource = $pathSource.$pathSourceCollection;
 		}
-		unset($path_source_collection);
+		unset($pathSourceCollection);
 
-		$path_target_collection = $collection->getTargetPath();
-		if(empty($path_target_collection) === false) {
-			$path_target = $path_target.$path_target_collection;
+		$pathTargetCollection = $collection->getTargetPath();
+		if(empty($pathTargetCollection) === false) {
+			$pathTarget = $pathTarget.$pathTargetCollection;
 		}
 
 		/* Check for join conditions? */
 		if($join === true) {
 			//We need a valid final target path
-			if(empty($path_target) === true) {
-				throw new Exception('Path \''.$path_target.'\' is not a valid target path (1)');
+			if(empty($pathTarget) === true) {
+				throw new Exception('Path \''.$pathTarget.'\' is not a valid target path (1)');
 			}
 
 			//The target path needs to be a valid file
-			if(is_dir($path_target) === true) {
-				throw new Exception('Path \''.$path_target.'\' is not a valid target path (2)');
+			if(is_dir($pathTarget) === true) {
+				throw new Exception('Path \''.$pathTarget.'\' is not a valid target path (2)');
 			}
 		}
 
 		/* Handle each resource */
 		foreach($resources as $resource) {
 			/* Set default values */
-			$filter_needed = false;
+			$filterNeeded = false;
 
 			/* Get resource properties */
 			$local = $resource->getLocal();
@@ -473,30 +473,30 @@ class Manager
 				//Get the real source path
 				if($join === true) {
 					if($local === true) {
-						$path_source = $resource->getRealSourcePath($path_source);
-						if(is_null($path_source) === false) {
-							throw new Exception('Resource \''.$path_source->getPath().'\' does not have a valid source path');
+						$pathSource = $resource->getRealSourcePath($pathSource);
+						if(is_null($pathSource) === false) {
+							throw new Exception('Resource \''.$pathSource->getPath().'\' does not have a valid source path');
 						}
 					} else {
-						$path_source = $resource->getPath();
-						$filter_needed = true;
+						$pathSource = $resource->getPath();
+						$filterNeeded = true;
 					}
 
 					//Get the real target path
-					$path_target = $resource->getRealTargetPath($path_target);
-					if(empty($path_target) === true) {
-						throw new Exception('Resource \''.$path_source.'\' does not have a valid target path');
+					$pathTarget = $resource->getRealTargetPath($pathTarget);
+					if(empty($pathTarget) === true) {
+						throw new Exception('Resource \''.$pathSource.'\' does not have a valid target path');
 					}
 
 					//Validate paths
 					if($local === true) {
-						if($path_target == $path_source) {
-							throw new Exception('Resource \''.$path_target.'\' have the same source and target paths');
+						if($pathTarget == $pathSource) {
+							throw new Exception('Resource \''.$pathTarget.'\' have the same source and target paths');
 						}
 
-						if(file_exists($path_target) === false ||
-							filemtime($path_target) >= filemtime($path_source)) {
-							$filter_needed = true;
+						if(file_exists($pathTarget) === false ||
+							filemtime($pathTarget) >= filemtime($pathSource)) {
+							$filterNeeded = true;
 						}
 					}
 				}
@@ -536,9 +536,9 @@ class Manager
 			}
 
 			/* Filter content */
-			if($filter_needed === true) {
+			if($filterNeeded === true) {
 				//Get the resource's content
-				$content = $resource->getContent($path_source);
+				$content = $resource->getContent($pathSource);
 
 				//Check if the resource must be filterd
 				if($resource->getFilter() == true) {
@@ -566,7 +566,7 @@ class Manager
 				if($join !== true) {
 					//Write the file using file-put-contents. This respects the openbase-dir
 					//also writes to streams
-					file_put_contents($path_target, $content);
+					file_put_contents($pathTarget, $content);
 				}
 			}
 
@@ -615,10 +615,10 @@ class Manager
 			if($join === true) {
 				//Write the file using file-put-contents. This respects the openbase-dir
 				//also writes to streams
-				file_put_contents($path_target, $content);
+				file_put_contents($pathTarget, $content);
 
 				//Generate the HTML using the original path in the resource
-				$target_uri = (is_null($prefix) === false ? $prefix : '').$collection->getTargetUri();
+				$targetUri = (is_null($prefix) === false ? $prefix : '').$collection->getTargetUri();
 
 				//Gets extra HTML attributes in the resource
 				$attributes = $resource->getAttributes();

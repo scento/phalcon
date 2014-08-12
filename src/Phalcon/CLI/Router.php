@@ -205,31 +205,31 @@ class Router implements InjectionAwareInterface
 
 		//Check for a module
 		if(isset($arguments['module']) === true) {
-			$module_name = $arguments['module'];
+			$moduleName = $arguments['module'];
 			unset($arguments['module']);
 		} else {
-			$module_name = null;
+			$moduleName = null;
 		}
 
 		//Check for a task
 		if(isset($arguments['task']) === true) {
-			$task_name = $arguments['task'];
+			$taskName = $arguments['task'];
 			unset($arguments['task']);
 		} else {
-			$task_name = null;
+			$taskName = null;
 		}
 
 		//Check for an action
 		if(isset($arguments['action']) === true) {
-			$action_name = $arguments['action'];
+			$actionName = $arguments['action'];
 			unset($arguments['task']);
 		} else {
-			$action_name = null;
+			$actionName = null;
 		}
 
-		$this->_module = $module_name;
-		$this->_task = $task_name;
-		$this->_action = $action_name;
+		$this->_module = $moduleName;
+		$this->_task = $taskName;
+		$this->_action = $actionName;
 		$this->_params = $arguments;
 	}
 

@@ -215,61 +215,61 @@ class Console implements InjectionAwareInterface, EventsAwareInterface
 
 		$router = $this->_dependencyInjector->getShared('router');
 		$router->handle($arguments);
-		$module_name = $router->getModuleName();
+		$moduleName = $router->getModuleName();
 		
-		if(isset($module_name) === true) {
+		if(isset($moduleName) === true) {
 
 			//Event: console:beforeStartModule
 			if(is_object($this->_eventsManager) === true) {
-				if($this->_eventsManager->fire('console:beforeStartModule', $this, $module_name) === false) {
+				if($this->_eventsManager->fire('console:beforeStartModule', $this, $moduleName) === false) {
 					return false;
 				}
 			}
 
 			//Validate module structure
 			if(is_array($this->_modules) === false ||
-				isset($this->_modules[$module_name]) === false) {
-				throw new Exception('Module \''.$module_name.'\' isn\'t registered in the console container');
+				isset($this->_modules[$moduleName]) === false) {
+				throw new Exception('Module \''.$moduleName.'\' isn\'t registered in the console container');
 			}
 
-			if(is_array($this->_modules[$module_name]) === false) {
+			if(is_array($this->_modules[$moduleName]) === false) {
 				throw new Exception('Invalid module definition path');
 			}
 
 			//Require ['path']
-			if(isset($this->_modules[$module_name]['path']) === true) {
-				if(file_exists($this->_modules[$module_name]['path']) === true) {
-					require($this->_modules[$module_name]['path']);
+			if(isset($this->_modules[$moduleName]['path']) === true) {
+				if(file_exists($this->_modules[$moduleName]['path']) === true) {
+					require($this->_modules[$moduleName]['path']);
 				} else {
-					throw new Exception('Module definiton path \''.$this->_modules[$module_name]['path'].'" doesn\'t exist');
+					throw new Exception('Module definiton path \''.$this->_modules[$moduleName]['path'].'" doesn\'t exist');
 				}
 			}
 
 			//Get class name
-			if(isset($this->_modules[$module_name]['className']) === true) {
-				$class_name = $this->_modules[$module_name]['className'];
+			if(isset($this->_modules[$moduleName]['className']) === true) {
+				$className = $this->_modules[$moduleName]['className'];
 			} else {
-				$class_name = 'Module';
+				$className = 'Module';
 			}
 
-			//Prepare $module_object
-			$module_object = $this->_dependencyInjector->get($class_name);
-			$module_object->registerAutoloaders();
-			$module_object->registerServices($dependencyInjector);
+			//Prepare $moduleObject
+			$moduleObject = $this->_dependencyInjector->get($className);
+			$moduleObject->registerAutoloaders();
+			$moduleObject->registerServices($dependencyInjector);
 
 			//Event: console:afterStartModule
 			if(is_object($this->_eventsManager) === true) {
-				$this->_moduleObject = $module_object;
+				$this->_moduleObject = $moduleObject;
 
-				if($this->_eventsManager->fire('console:afterStartModule', $this, $module_name) === false) {
+				if($this->_eventsManager->fire('console:afterStartModule', $this, $moduleName) === false) {
 					return false;
 				}
 			}
 		}
 
 		//Get route
-		$task_name = $router->getTaskName();
-		$action_name = $router->getActionName();
+		$taskName = $router->getTaskName();
+		$actionName = $router->getActionName();
 		$params = $router->getParams();
 
 		//Get dispatcher
@@ -279,8 +279,8 @@ class Console implements InjectionAwareInterface, EventsAwareInterface
 		}
 
 		//Set route
-		$dispatcher->setTaskName($task_name);
-		$dispatcher->setActionName($action_name);
+		$dispatcher->setTaskName($taskName);
+		$dispatcher->setActionName($actionName);
 		$dispatcher->setParams($params);
 
 		//Event: console:beforeHandleTask

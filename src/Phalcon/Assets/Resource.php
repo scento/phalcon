@@ -373,27 +373,27 @@ class Resource
 
 		/* Get source path */
 		if(empty($this->_sourcePath) === true) {
-			$source_path = $this->_path;
+			$sourcePath = $this->_path;
 		} else {
-			$source_path = $this->_sourcePath;
+			$sourcePath = $this->_sourcePath;
 		}
 
 		//A base path for resources can be set in the assets manager
-		$complete_path = $basePath.$source_path;
+		$completePath = $basePath.$sourcePath;
 
 		//Local resources are loaded from the local disk
 		if($local === true) {
-			if(file_exists($complete_path) === false) {
-				throw new Exception('Resource\'s content for "'.$complete_path.'" cannot be loaded');
+			if(file_exists($completePath) === false) {
+				throw new Exception('Resource\'s content for "'.$completePath.'" cannot be loaded');
 			}
 		}
 
 		//Use file_get_contents to respect the openbase_dir
 		//Access urls must be enabled
-		$content = file_get_contents($complete_path);
+		$content = file_get_contents($completePath);
 
 		if($content === false) {
-			throw new Exception('Resource\'s content for "'.$complete_path.'" cannot be read');
+			throw new Exception('Resource\'s content for "'.$completePath.'" cannot be read');
 		}
 
 		return $content;
@@ -429,20 +429,20 @@ class Resource
 		}
 
 		if(empty($this->_sourcePath) === true) {
-			$source_path = $this->_path;
+			$sourcePath = $this->_path;
 		} else {
-			$source_path = $this->_sourcePath;
+			$sourcePath = $this->_sourcePath;
 		}
 
 		if($this->_local === true) {
 			//A base path for resources can be set in the assets manager
-			$complete_path = $basePath.$source_path;
+			$completePath = $basePath.$sourcePath;
 
 			//Get the real template path
-			return (string)realpath($complete_path);
+			return (string)realpath($completePath);
 		}
 
-		return (string)$source_path;
+		return (string)$sourcePath;
 	}
 
 	/**
@@ -460,20 +460,20 @@ class Resource
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$target_path = (empty($this->_targetPath) === false ? $this->_targetPath : $this->_path);
+		$targetPath = (empty($this->_targetPath) === false ? $this->_targetPath : $this->_path);
 
 		if($this->_local === true) {
 			//A base path for resource can be set in the assets manager
-			$complete_path = $basePath.$target_path;
+			$completePath = $basePath.$targetPath;
 
 			//Get the real template path, the target path can optionally don't exist
-			if(file_exists($complete_path) === true) {
-				return realpath($complete_path);
+			if(file_exists($completePath) === true) {
+				return realpath($completePath);
 			}
 
-			return $complete_path;
+			return $completePath;
 		}
 
-		return $target_path;
+		return $targetPath;
 	}
 }

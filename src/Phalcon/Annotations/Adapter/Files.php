@@ -61,17 +61,17 @@ class Files extends Adapter implements AdapterInterface
 	 * Normalize Path
 	 * 
 	 * @param string $key
-	 * @param string $virtual_seperator
+	 * @param string $virtualSeperator
 	 * @return string
 	*/
-	private function prepareVirtualPath($key, $virtual_seperator)
+	private function prepareVirtualPath($key, $virtualSeperator)
 	{
 		$keylen = strlen($key);
 		for($i = 0; $i < $keylen; ++$i)
 		{
 			$c = $key[$i];
 			if($c === '/' || $c === '\\' || $c === ':' || ctype_print($c) === false) {
-				$key[$i] = $virtual_seperator;
+				$key[$i] = $virtualSeperator;
 			}
 		}
 

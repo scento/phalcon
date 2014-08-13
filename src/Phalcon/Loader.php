@@ -85,7 +85,7 @@ class Loader implements EventsAwareInterface
 	/**
 	 * Extensions
 	 * 
-	 * @var array|null
+	 * @var array
 	 * @access protected
 	*/
 	protected $_extensions;
@@ -169,7 +169,7 @@ class Loader implements EventsAwareInterface
 	/**
 	 * Return file extensions registered in the loader
 	 *
-	 * @return array|null
+	 * @return array
 	 */
 	public function getExtensions()
 	{
@@ -305,7 +305,7 @@ class Loader implements EventsAwareInterface
 	{
 		if(is_null($merge) === true) {
 			$merge = false;
-		} elseif(is_bool($marge) === false) {
+		} elseif(is_bool($merge) === false) {
 			throw new LoaderException('Invalid parameter type.');
 		}
 

@@ -4,7 +4,7 @@
  *
  * @author Wenzel Pünter <wenzel@phelix.me>
 */
-class AclParamsTest extends PHPUnit_Framework_TestCase
+class AclParamsTest extends BaseTest
 {
 	/**
 	 * Adapter::setEventsManager parameter validation

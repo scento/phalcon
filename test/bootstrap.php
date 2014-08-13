@@ -5,6 +5,8 @@
  * @author Wenzel Pünter <wenzel@phelix.me>
 */
 
+require_once(__DIR__.'/phalcon-php/BaseTest.php');
+
 $files = array(
 	'Exception.php',
 	'Loader/Exception.php',

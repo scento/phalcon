@@ -4,29 +4,8 @@
  *
  * @author Wenzel Pünter <wenzel@phelix.me>
 */
-class AclTest extends PHPUnit_Framework_TestCase
+class AclTest extends BaseTest
 {
-	/**
-	 * Helper function for exception testing
-	 * 
-	 * @param callable $trigger
-	 * @param array $params
-	 * @param string $exception
-	*/
-	private function assertException($trigger, $params, $exception)
-	{
-		$thrown = false;
-		try {
-			call_user_func_array($trigger, $params);
-		} catch(\Exception $e) {
-			$thrown = true;
-		}
-
-		$this->assertEquals($thrown, true);
-
-		return $thrown;
-	}
-
 	/**
 	 * Simple
 	*/

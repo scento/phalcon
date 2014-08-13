@@ -169,7 +169,7 @@ class Loader implements EventsAwareInterface
 	/**
 	 * Return file extensions registered in the loader
 	 *
-	 * @return null|array
+	 * @return array|null
 	 */
 	public function getExtensions()
 	{

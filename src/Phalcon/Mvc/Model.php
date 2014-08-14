@@ -1152,7 +1152,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 			if(isset($params['group']) === true) {
 				$columns = $params['group'].', '.$function.'('.$params['group'].') AS '.$alias;
 			} else {
-				$columns = $funciton.'('.$group_column.') AS '.$alias;
+				$columns = $function.'('.$group_column.') AS '.$alias;
 			}
 		}
 

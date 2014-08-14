@@ -1774,7 +1774,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 	 */
 	public function cache($cacheOptions)
 	{
-		if(is_array($cache) === false) {
+		if(is_array($cacheOptions) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 

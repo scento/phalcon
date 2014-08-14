@@ -83,7 +83,7 @@ class Regex extends Validator implements ValidatorInterface
 
 		if($failed === true) {
 			//Check if the develop has defined a custom message
-			$message = $this_>getOption('message');
+			$message = $this->getOption('message');
 			if(isset($message) === false) {
 				$message = "Value of field '".$field_name."' doesn't match regular expression";
 			}

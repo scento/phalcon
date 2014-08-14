@@ -153,7 +153,7 @@ class Output implements FrontendInterface
 			ob_end_clean();
 		}
 
-		$this_>_buffering = false;
+		$this->_buffering = false;
 	}
 
 	/**

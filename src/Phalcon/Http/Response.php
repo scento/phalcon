@@ -299,7 +299,7 @@ class Response implements ResponseInterface, InjectionAwareInterface
 	 */
 	public function resetHeaders()
 	{
-		$this_>getHeaders()->reset();
+		$this->getHeaders()->reset();
 
 		return $this;
 	}

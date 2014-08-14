@@ -530,7 +530,7 @@ class Tag
 			$link_text = '';
 		}
 
-		$params['href'] = $this->getUrlService()->get($action);
+		$params['href'] = self::getUrlService()->get($action);
 
 		return '<a'.self::writeAttributes($params).'>'.$link_text.'</a>';
 	}
@@ -587,7 +587,7 @@ class Tag
 				}
 			}
 
-			$params['value'] = $this->getValue($params[0], $params);
+			$params['value'] = self::getValue($params[0], $params);
 		} else {
 			//Use the 'id' as value if the user hadn't set it
 			if(isset($params['value']) === false) {
@@ -648,14 +648,14 @@ class Tag
 		if(isset($params['value']) === true) {
 			$current_value = $params['value'];
 			unset($params['value']);
-			$value = $this->getValue($params[0], $params);
+			$value = self::getValue($params[0], $params);
 			if($value != null && $current_value === $value) {
 				$params['checked'] = 'checked';
 			}
 
 			$params['value'] = $current_value;
 		} else {
-			$value = $this->getValue($params[0], $params);
+			$value = self::getValue($params[0], $params);
 
 			//Evaluate the value in POST
 			if($value == true) {
@@ -688,7 +688,7 @@ class Tag
 	 */
 	public static function textField($parameters)
 	{
-		return $this->_inputField('text', $parameters);
+		return self::_inputField('text', $parameters);
 	}
 
 	/**
@@ -703,7 +703,7 @@ class Tag
 	 */
 	public static function numericField($parameters)
 	{
-		return $this->_inputField('number', $parameters);
+		return self::_inputField('number', $parameters);
 	}
 
 	/**
@@ -718,7 +718,7 @@ class Tag
 	 */
 	public static function emailField($parameters)
 	{
-		return $this->_inputField('email', $parameters);
+		return self::_inputField('email', $parameters);
 	}
 
 	/**
@@ -733,7 +733,7 @@ class Tag
 	 */
 	public static function dateField($parameters)
 	{
-		return $this->_inputField('date', $parameters);
+		return self::_inputField('date', $parameters);
 	}
 
 	/**
@@ -748,7 +748,7 @@ class Tag
 	 */
 	public static function passwordField($parameters)
 	{
-		return $this->_inputField('password', $parameters);
+		return self::_inputField('password', $parameters);
 	}
 
 	/**
@@ -763,7 +763,7 @@ class Tag
 	 */
 	public static function hiddenField($parameters)
 	{
-		return $this->_inputField('hidden', $parameters);
+		return self::_inputField('hidden', $parameters);
 	}
 
 	/**
@@ -778,7 +778,7 @@ class Tag
 	 */
 	public static function fileField($parameters)
 	{
-		return $this->_inputField('file', $parameters);
+		return self::_inputField('file', $parameters);
 	}
 
 	/**
@@ -793,7 +793,7 @@ class Tag
 	 */
 	public static function checkField($parameters)
 	{
-		return $this->_inputFieldChecked('checkbox', $parameters);
+		return self::_inputFieldChecked('checkbox', $parameters);
 	}
 
 	/**
@@ -813,7 +813,7 @@ class Tag
 	 */
 	public static function radioField($parameters)
 	{
-		return $this->_inputFieldChecked('radio', $parameters);
+		return self::_inputFieldChecked('radio', $parameters);
 	}
 
 	/**
@@ -833,7 +833,7 @@ class Tag
 	 */
 	public static function imageInput($parameters)
 	{
-		return $this->_inputField('image', $parameters, true);
+		return self::_inputField('image', $parameters, true);
 	}
 
 	/**
@@ -853,7 +853,7 @@ class Tag
 	 */
 	public static function submitButton($parameters)
 	{
-		return $this->_inputField('submit', $parameters, true);
+		return self::_inputField('submit', $parameters, true);
 	}
 
 	/**
@@ -961,9 +961,9 @@ class Tag
 		}
 
 		if(is_null($escaper) === false) {
-			$escaped = $escaper->escapeHtmlAttr($this->getValue($params[0], $params));
+			$escaped = $escaper->escapeHtmlAttr(self::getValue($params[0], $params));
 		} else {
-			$escaped = $this->getValue($params[0], $params);
+			$escaped = self::getValue($params[0], $params);
 		}
 
 		return '<textarea'.self::writeAttributes($params).'>'.$escaped.'</textarea>';

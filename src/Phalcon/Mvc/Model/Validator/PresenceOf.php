@@ -68,7 +68,7 @@ class PresenceOf extends Validator implements ValidatorInterface
 
 		if(empty($value) === true) {
 			//Check if the developer has defined a custom message
-			$message = $this_>getOption('message');
+			$message = $this->getOption('message');
 			if(isset($message) === false) {
 				$message = "'".$field_name."' is required";
 			}

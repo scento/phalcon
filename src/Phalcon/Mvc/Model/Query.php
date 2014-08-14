@@ -301,7 +301,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 	 */
 	public function setUniqueRow($uniqueRow)
 	{
-		if(is_object($uniqueRow) === false) {
+		if(is_bool($uniqueRow) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 

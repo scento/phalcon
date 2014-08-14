@@ -951,7 +951,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 		}
 
 		//Return only the first row
-		$query->setUniqueRow(1);
+		$query->setUniqueRow(true);
 
 		//Execute the query passing the bind-params and casting-types
 		return $query->execute($bind_params, $bind_types);

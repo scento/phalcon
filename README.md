@@ -4,6 +4,12 @@
 
 Phalcon-PHP is a free replacement for the [Phalcon Web Framework](https://github.com/phalcon/cphalcon), delivered as a set of PHP classes based on the [Phalcon Devtools](https://github.com/phalcon/phalcon-devtools). This project allows the usage of the Phalcon API in environments without the possibility to set up the phalcon extension (e.g. shared hosting) by providing a compatibility layer.
 
+##Current tasks
+  * Volt Parser (Scanner + Tokenizer)
+  * PHQL Parser (Scanner + Tokenizer)
+  * Unit Tests
+  * Documentation
+
 ##Development
 
 The current project **is not usable for any purpose** and still requires a lot of implementation. As the base for all developments, this project is using the `phalcon-devtools/ide/1.2.6` tree as a starting point.

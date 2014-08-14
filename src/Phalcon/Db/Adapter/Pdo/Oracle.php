@@ -241,7 +241,8 @@ class Oracle extends Pdo implements EventsAwareInterface, AdapterInterface
 		}
 
 		//@note no $sequenceName = null handeling
-		return $this->fetchAll('SELECT '.$sequenceName.'.CURRVAL FROM dual', 3)[0];
+		$fetchAll = $this->fetchAll('SELECT '.$sequenceName.'.CURRVAL FROM dual', 3);
+		return $fetchAll[0];
 	}
 
 	/**

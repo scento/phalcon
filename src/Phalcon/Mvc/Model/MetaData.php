@@ -375,7 +375,7 @@ abstract class MetaData implements InjectionAwareInterface
 			throw new Exception('Index must be a valid integer constant');
 		}
 
-		$table = $model->getSoruce();
+		$table = $model->getSource();
 		$schema = $model->getSchema();
 
 		//Unique key for meta-data is created using class-name-schema-table

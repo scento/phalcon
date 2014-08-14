@@ -937,6 +937,9 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 		$builder->limit(1);
 		$query = $builder->getQuery();
 
+		$bind_params = null;
+		$bind_types = null;
+		
 		//Check for bind parameters
 		if(isset($params['bind']) === true) {
 			$bind_params = $params['bind'];

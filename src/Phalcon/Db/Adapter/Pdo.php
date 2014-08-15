@@ -137,7 +137,7 @@ abstract class Pdo extends Adapter implements EventsAwareInterface
 				$dns_parts[] = $key.'='.$value;
 			}
 
-			$dns_attributes = implode(', ', $dns_parts);
+			$dns_attributes = implode(';', $dns_parts);
 		} else {
 			$dns_attributes = $descriptor['dns'];
 		}

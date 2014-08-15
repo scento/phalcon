@@ -175,7 +175,7 @@ class Annotation
 			case self::PHANNOT_T_INTEGER:
 			case self::PHANNOT_T_DOUBLE:
 			case self::PHANNOT_T_STRING:
-			case self::PHANNOT_T_IDENTIFER:
+			case self::PHANNOT_T_IDENTIFIER:
 				return (string)$expr['value'];
 				break;
 			case self::PHANNOT_T_NULL:

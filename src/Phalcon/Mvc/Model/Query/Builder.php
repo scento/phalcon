@@ -961,7 +961,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 	 */
 	public function getGroupBy()
 	{
-		return $this->_gorup;
+		return $this->_group;
 	}
 
 	/**
@@ -1152,7 +1152,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 				$phql .= ' GROUP BY '.implode(', ', $groupItems);
 			} else {
 				if(is_null($group) === true) {
-					$phql .= 'GROUP BY '.$gorup;
+					$phql .= 'GROUP BY '.$group;
 				} else {
 					if(strpos($group, '.') !== false) {
 						$phql .= ' GROUP BY '.$group;

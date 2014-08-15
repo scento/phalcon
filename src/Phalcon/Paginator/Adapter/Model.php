@@ -93,12 +93,12 @@ class Model implements AdapterInterface
 	 */
 	public function getPaginate()
 	{
-		$page_number = $this->_page;
+		$pageNumber = $this->_page;
 		$show = $this->_limitRows;
 		$items = $this->_config['data'];
 
-		if(is_int($page_number) === false) {
-			$page_number = 1;
+		if(is_int($pageNumber) === false) {
+			$pageNumber = 1;
 		}
 
 		if($show < 0) {
@@ -106,16 +106,16 @@ class Model implements AdapterInterface
 		}
 
 		$n =  count($items);
-		$last_show_page = $page_number - 1;
-		$start = $show * $last_show_page;
-		$possible_pages = $n / $show;
-		$total_pages = ceil($possible_pages);
+		$lastShowPage = $pageNumber - 1;
+		$start = $show * $lastShowPage;
+		$possiblePages = $n / $show;
+		$totalPages = ceil($possiblePages);
 
 		if(is_object($items) === false) {
 			throw new Exception('Invalid data for paginator');
 		}
 
-		$page_items = array();
+		$pageItems = array();
 		$page = new stdClass();
 
 		if($n > 0) {
@@ -124,15 +124,15 @@ class Model implements AdapterInterface
 				$items->seek($start);
 			} else {
 				$items->seek(0);
-				$page_number = 1;
-				$last_show_page = 0;
+				$pageNumber = 1;
+				$lastShowPage = 0;
 				$start = 0;
 			}
 
 			//The record must be iterable
 			$i = 1;
 			while($items->valid() === true) {
-				$page_items[] = $items->current();
+				$pageItems[] = $items->current();
 
 				if($i > $show) {
 					break;
@@ -144,49 +144,49 @@ class Model implements AdapterInterface
 		}
 
 		//Add items to page object
-		$page->items = $page_items;
+		$page->items = $pageItems;
 
-		$maximum_pages = $start + $show;
-		if($maximum_pages < $n) {
-			$next = $page_number + 1;
+		$maximumPages = $start + $show;
+		if($maximumPages < $n) {
+			$next = $pageNumber + 1;
 		} else {
-			if($maximum_pages === $n) {
+			if($maximumPages === $n) {
 				$next = $n;
 			} else {
-				$possible_pages = $n / $show;
-				$additional_page = $possible_pages + 1;
-				$next = (int)$additional_page;
+				$possiblePages = $n / $show;
+				$additionalPage = $possiblePages + 1;
+				$next = (int)$additionalPage;
 			}
 		}
 
-		if($next > $total_pages) {
-			$next = $total_pages;
+		if($next > $totalPages) {
+			$next = $totalPages;
 		}
 
 		$page->next = $next;
 
-		if($page_number > 0) {
-			$before = $page_number - 1;
+		if($pageNumber > 0) {
+			$before = $pageNumber - 1;
 		} else {
 			$before = 1;
 		}
 
 		$page->first = 1;
 		$page->before = $before;
-		$page->current = $page_number;
+		$page->current = $pageNumber;
 
 		$reminder = $n % $show;
-		$possible_pages = $n / $show;
+		$possiblePages = $n / $show;
 
 		if(is_int($reminder) === false) {
-			$next = $possible_pages + 1;
-			$pages_total = (int)$next;
+			$next = $possiblePages + 1;
+			$pagesTotal = (int)$next;
 		} else {
-			$pages_total = $possible_pages;
+			$pagesTotal = $possiblePages;
 		}
 
-		$page->last = $pages_total;
-		$page->total_pages = $total_pages;
+		$page->last = $pagesTotal;
+		$page->total_pages = $totalPages;
 		$page->total_items = $n;
 
 		return $page;

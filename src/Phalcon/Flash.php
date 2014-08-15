@@ -204,12 +204,12 @@ abstract class Flash implements FlashInterface
 		if($this->_automaticHtml === true) {
 			if(isset($this->_cssClasses[$type]) === true) {
 				if(is_array($this->_cssClasses[$type]) === true) {
-					$css_classes = ' class="'.implode(' ', $this->_cssClasses[$type]).'"';
+					$cssClasses = ' class="'.implode(' ', $this->_cssClasses[$type]).'"';
 				} else {
-					$css_classes = ' class="'.$this->_cssClasses[$type].'"';
+					$cssClasses = ' class="'.$this->_cssClasses[$type].'"';
 				}
 			} else {
-				$css_classes = '';
+				$cssClasses = '';
 			}
 		}
 
@@ -221,15 +221,15 @@ abstract class Flash implements FlashInterface
 
 			foreach($message as $msg) {
 				if($this->_automaticHtml === true) {
-					$html_message = '<div'.$css_classes.'>'.$msg.'</div>';
+					$htmlMessage = '<div'.$cssClasses.'>'.$msg.'</div>';
 				} else {
-					$html_message = $msg;
+					$htmlMessage = $msg;
 				}
 
 				if($this->_implicitFlush === true) {
-					echo $html_message;
+					echo $htmlMessage;
 				} else {
-					$content .= $html_message;
+					$content .= $htmlMessage;
 				}
 			}
 
@@ -238,15 +238,15 @@ abstract class Flash implements FlashInterface
 			}
 		} else {
 			if($this->_automaticHtml === true) {
-				$html_message = '<div'.$css_classes.'>'.$message.'</div>';
+				$htmlMessage = '<div'.$cssClasses.'>'.$message.'</div>';
 			} else {
-				$html_message = $message;
+				$htmlMessage = $message;
 			}
 
 			if($this->_implicitFlush === true) {
-				echo $html_message;
+				echo $htmlMessage;
 			} else {
-				return $html_message;
+				return $htmlMessage;
 			}
 		}
 

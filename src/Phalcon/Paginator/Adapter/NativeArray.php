@@ -117,31 +117,31 @@ class NativeArray implements AdapterInterface
 
 		//@note no is_null check for $this->_limitRows
 		$show = $this->_limitRows;
-		$page_number = $this->_page;
+		$pageNumber = $this->_page;
 
-		if(is_null($page_number) === true) {
-			$page_number = 0;
+		if(is_null($pageNumber) === true) {
+			$pageNumber = 0;
 		}
 
 		$number = count($items);
 
-		$rounded_total = $number / $show;
-		$total_pages = (int)$rounded_total;
+		$roundedTotal = $number / $show;
+		$totalPages = (int)$roundedTotal;
 
 		//Increase total pages if it wasn't iteger
-		if($total_pages !== $rounded_total) {
-			$total_pages++;
+		if($totalPages !== $roundedTotal) {
+			$totalPages++;
 		}
 
 		/* Generate stdClass object */
 		$page = new stdClass();
-		$page->items = array_slice($items, ($show * ($page_number - 1)), $show);
+		$page->items = array_slice($items, ($show * ($pageNumber - 1)), $show);
 		$page->first = 1;
-		$page->last = $total_pages;
-		$page->next = ($page_number < $total_pages ? $page_number + 1 : $total_pages);
-		$page->before = ($page_number > 1 ? $page_number - 1 : 1);
-		$page->current = $page_number;
-		$page->total_pages = $total_pages;
+		$page->last = $totalPages;
+		$page->next = ($pageNumber < $totalPages ? $pageNumber + 1 : $totalPages);
+		$page->before = ($pageNumber > 1 ? $pageNumber - 1 : 1);
+		$page->current = $pageNumber;
+		$page->total_pages = $totalPages;
 		$page->total_items = $number;
 
 		return $page;

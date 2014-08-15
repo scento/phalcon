@@ -263,56 +263,56 @@ class Crypt implements CryptInterface
 			throw new CryptException('Invalid parameter type.');
 		}
 
-		$text_len = strlen($text);
+		$textLen = strlen($text);
 
-		if(($text_len % $blockSize === 0) && ($mode === 'ecb' || $mode === 'cbc')) {
+		if(($textLen % $blockSize === 0) && ($mode === 'ecb' || $mode === 'cbc')) {
 			switch($paddingType) {
 				case self::PADDING_ANSI_X_923:
-					if(ord($text[$text_len-1]) <= $blockSize) {
-						$padding_size = ord($text[$text_len-1]);
-						$padding = str_repeat(chr(0), ($padding_size -1));
-						$padding[$padding_size - 1] = $padding_size;
+					if(ord($text[$textLen-1]) <= $blockSize) {
+						$paddingSize = ord($text[$textLen-1]);
+						$padding = str_repeat(chr(0), ($paddingSize -1));
+						$padding[$paddingSize - 1] = $paddingSize;
 
-						if(strncmp($padding, $text.($text_len-$padding_size), $padding_size)) {
-							$padding_size = 0;
+						if(strncmp($padding, $text.($textLen-$paddingSize), $paddingSize)) {
+							$paddingSize = 0;
 						}
 					}
 					break;
 				case self::PADDING_PKCS7:
-					if($text[$text_len-1] <= $blockSize) {
-						$padding_size = ord($text[$text_len-1]);
-						$padding = str_repeat($padding_size, $padding_size);
-						if(strncmp($padding, $text.($text_len-$padding_size), $padding_size)) {
-							$padding_size = 0;
+					if($text[$textLen-1] <= $blockSize) {
+						$paddingSize = ord($text[$textLen-1]);
+						$padding = str_repeat($paddingSize, $paddingSize);
+						if(strncmp($padding, $text.($textLen-$paddingSize), $paddingSize)) {
+							$paddingSize = 0;
 						}
 					}
 					break;
 				case self::PADDING_ISO_10126:
-					$padding_size = ord($text[$text_len-1]);
+					$paddingSize = ord($text[$textLen-1]);
 					break;
 				case self::PADDING_ISO_IEC_7816_4:
-					$padding_size = 0;
-					$i = $text_len - 1;
-					while($i > 0 && $text[$i] === chr(0x00) && $padding_size < $blockSize) {
-						++$padding_size;
+					$paddingSize = 0;
+					$i = $textLen - 1;
+					while($i > 0 && $text[$i] === chr(0x00) && $paddingSize < $blockSize) {
+						++$paddingSize;
 						--$i;
 					}
 
-					$padding_size = ($text[$i] === chr(0x80)) ? ($padding_size + 1) : 0;
+					$paddingSize = ($text[$i] === chr(0x80)) ? ($paddingSize + 1) : 0;
 					break;
 				case self::PADDING_ZERO:
-					$padding_size = 0;
-					$i = $text_len - 1;
-					while($i >= 0 && $text[$i] === chr(0x00) && $padding_size <= $blockSize) {
-						++$padding_size;
+					$paddingSize = 0;
+					$i = $textLen - 1;
+					while($i >= 0 && $text[$i] === chr(0x00) && $paddingSize <= $blockSize) {
+						++$paddingSize;
 						--$i;
 					}
 					break;
 				case self::PADDING_SPACE:
-					$padding_size = 0;
-					$i = $text_len - 1;
-					while($i >= 0 && $text[$i] === chr(0x20) && $padding_size <= $blockSize) {
-						++$padding_size;
+					$paddingSize = 0;
+					$i = $textLen - 1;
+					while($i >= 0 && $text[$i] === chr(0x20) && $paddingSize <= $blockSize) {
+						++$paddingSize;
 						--$i;
 					}
 					break;
@@ -320,18 +320,18 @@ class Crypt implements CryptInterface
 					break;
 			}
 
-			if(isset($padding_size) && $padding_size <= $blockSize) {
-				if($padding_size > $text_len) {
+			if(isset($paddingSize) && $paddingSize <= $blockSize) {
+				if($paddingSize > $textLen) {
 					throw new CryptException('Invalid state.');
 				}
 
-				if($padding_size <= $text_len) {
-					return substr($text, 0, ($text_len - $padding_size));
+				if($paddingSize <= $textLen) {
+					return substr($text, 0, ($textLen - $paddingSize));
 				} else {
 					return '';
 				}
 			} else {
-				$padding_size = 0;
+				$paddingSize = 0;
 			}
 		}
 
@@ -358,39 +358,39 @@ class Crypt implements CryptInterface
 			throw new CryptException('Invalid parameter type.');
 		}
 
-		$padding_size = 0;
+		$paddingSize = 0;
 		$padding = '';
 
 		if($mode === 'ecb' || $mode === 'cbc') {
-			$padding_size = $blockSize - (strlen($text) % $blockSize);
+			$paddingSize = $blockSize - (strlen($text) % $blockSize);
 
 			switch($paddingType) {
 				case self::PADDING_ANSI_X_923:
-       				$padding = str_repeat(chr(0), $padding_size - 1).chr($padding_size);
+       				$padding = str_repeat(chr(0), $paddingSize - 1).chr($paddingSize);
 					break;
 
 				case self::PADDING_PKCS7:
-					$padding = str_repeat(chr($padding_size), $padding_size);
+					$padding = str_repeat(chr($paddingSize), $paddingSize);
 					break;
 
 				case self::PADDING_ISO_10126:
-					$padding = self::cryptoRand($padding_size - 1).chr($padding_size);
+					$padding = self::cryptoRand($paddingSize - 1).chr($paddingSize);
 					break;
 
 				case self::PADDING_ISO_IEC_7816_4:
-					$padding = chr(0x80).str_repeat(chr(0), ($padding_size - 1));
+					$padding = chr(0x80).str_repeat(chr(0), ($paddingSize - 1));
 					break;
 
 				case self::PADDING_ZERO:
-					if($padding_size === $blockSize) {
+					if($paddingSize === $blockSize) {
 						$padding = '';
 					} else {
-						$padding = str_repeat(chr(0), $padding_size);
+						$padding = str_repeat(chr(0), $paddingSize);
 					}
 					break;
 
 				case self::PADDING_SPACE:
-					$padding = str_repeat(chr(0x20), $padding_size);
+					$padding = str_repeat(chr(0x20), $paddingSize);
 					break;
 
 				default:
@@ -399,10 +399,10 @@ class Crypt implements CryptInterface
 			}
 		}
 
-		if($padding_size === 0) {
+		if($paddingSize === 0) {
 			return $text;
 		} else {
-			if($padding_size <= $blockSize) {
+			if($paddingSize <= $blockSize) {
 				return $text.$padding;
 			} else {
 				throw new CryptException('Precondition failed.');
@@ -439,18 +439,18 @@ class Crypt implements CryptInterface
 		}
 
 		if($key === null) {
-			$encrypt_key = $this->_key;
+			$encryptKey = $this->_key;
 		} else {
-			$encrypt_key = (string)$key;
+			$encryptKey = (string)$key;
 		}
 
-		if(empty($encrypt_key) === true) {
+		if(empty($encryptKey) === true) {
 			throw new CryptException('Encryption key cannot be empty');
 		}
 
-		$iv_size = (int)mcrypt_get_iv_size($this->_cipher, $this->_mode);
+		$ivSize = (int)mcrypt_get_iv_size($this->_cipher, $this->_mode);
 
-		if(strlen($encrypt_key) > $iv_size) {
+		if(strlen($encryptKey) > $ivSize) {
 			throw new CryptException('Size of key too large for this algorithm');
 		}
 
@@ -458,20 +458,20 @@ class Crypt implements CryptInterface
 		//as insecure. This might be because of windows compatibility with
 		//PHP < 5.3.0
 		if(\DIRECTORY_SEPARATOR === '/' && version_compare(\PHP_VERSION, '5.3.0', '<') === true) {
-			$iv = (string)mcrypt_create_iv($iv_size, \MCRYPT_RAND);
+			$iv = (string)mcrypt_create_iv($ivSize, \MCRYPT_RAND);
 		} else {
-			$iv = (string)mcrypt_create_iv($iv_size, \ MCRYPT_DEV_URANDOM);
+			$iv = (string)mcrypt_create_iv($ivSize, \ MCRYPT_DEV_URANDOM);
 		}
 
-		$block_size = (int)mcrypt_get_block_size($this->_cipher, $this->_mode);
+		$blockSize = (int)mcrypt_get_block_size($this->_cipher, $this->_mode);
 
-		$padded = $this->padText($text, $this->_mode, $block_size, $this->_padding);
+		$padded = $this->padText($text, $this->_mode, $blockSize, $this->_padding);
 
 		if(is_string($padded) === false) {
 			throw new CryptException('Invalid type.');
 		}
 
-		return $iv.mcrypt_encrypt($this->_cipher, $encrypt_key, $padded, $this->_mode, $iv);
+		return $iv.mcrypt_encrypt($this->_cipher, $encryptKey, $padded, $this->_mode, $iv);
 	}
 
 	/**
@@ -497,38 +497,38 @@ class Crypt implements CryptInterface
 		}
 
 		if(is_null($key) === true) {
-			$decrypt_key = $this->_key;
+			$decryptKey = $this->_key;
 		} elseif(is_string($key) === true) {
-			$decrypt_key = $key;
+			$decryptKey = $key;
 		} else {
 			throw new CryptException('Invalid parameter type.');
 		}
 
-		if(empty($decrypt_key) === true) {
+		if(empty($decryptKey) === true) {
 			throw new CryptException('Decryption key cannot be empty');
 		}
 
-		$iv_size = mcrypt_get_iv_size($this->_cipher, $this->_mode);
-		if($iv_size === false) {
+		$ivSize = mcrypt_get_iv_size($this->_cipher, $this->_mode);
+		if($ivSize === false) {
 			throw new CryptException('Error while determining the IV size.');
 		} else {
-			$iv_size = (int)$iv_size;
+			$ivSize = (int)$ivSize;
 		}
 
-		$key_size = strlen($decrypt_key);
-		if($key_size > $iv_size) {
+		$keySize = strlen($decryptKey);
+		if($keySize > $ivSize) {
 			throw new CryptException('Size of key is too large for this algorithm');
 		}
 
-		$text_size = strlen($text);
-		if($key_size > $text_size) {
+		$textSize = strlen($text);
+		if($keySize > $textSize) {
 			throw new CryptException('Size of IV is larger than text to decrypt');
 		}
 
-		$iv = substr($text, 0, $iv_size);
-		$text_to_decipher = substr($text, $iv_size);
-		$decrypted = (string)mcrypt_decrypt($this->_cipher, $decrypt_key, $text_to_decipher, $this->_mode, $iv);
-		$block_size = (int)mcrypt_get_block_size($this->_cipher, $this->_mode);
+		$iv = substr($text, 0, $ivSize);
+		$textToDecipher = substr($text, $ivSize);
+		$decrypted = (string)mcrypt_decrypt($this->_cipher, $decryptKey, $textToDecipher, $this->_mode, $iv);
+		$blockSize = (int)mcrypt_get_block_size($this->_cipher, $this->_mode);
 
 		if(is_int($this->_padding) === false || 
 			is_string($this->_mode) === false ||
@@ -536,7 +536,7 @@ class Crypt implements CryptInterface
 			throw new CryptException('Invalid type.');
 		}
 
-		return self::unpadText($decrypted, $this->_mode, $block_size, $this->_padding);
+		return self::unpadText($decrypted, $this->_mode, $blockSize, $this->_padding);
 	}
 
 	/**

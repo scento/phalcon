@@ -81,8 +81,8 @@ class Version
 	{
 		$version = self::_getVersion();
 
-		$real_medium = sprintf('%02s', $version[1]);
-		$real_minor = sprintf('%02s', $version[2]);
-		return $version[0].$real_medium.$real_minor.$version[3].$version[4];
+		$realMedium = sprintf('%02s', $version[1]);
+		$realMinor = sprintf('%02s', $version[2]);
+		return $version[0].$realMedium.$realMinor.$version[3].$version[4];
 	}
 }

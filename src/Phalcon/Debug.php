@@ -281,21 +281,21 @@ class Debug
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$number_arguments = count($argument);
+		$numberArguments = count($argument);
 		if($n < 3) {
-			if($number_arguments > 0) {
-				if($number_arguments < 10) {
+			if($numberArguments > 0) {
+				if($numberArguments < 10) {
 					$dump = array();
 					foreach($argument as $k => $v) {
 						//@note There is no validation of the key elements!
 
 						if(is_scalar($v) === true) {
 							if($v === '') {
-								$var_dump = '['.$k.'] =&gt; (empty string)';
+								$varDump = '['.$k.'] =&gt; (empty string)';
 							} else {
-								$var_dump = '['.$k.'] = &gt; '.$this->_escapeString($v);
+								$varDump = '['.$k.'] = &gt; '.$this->_escapeString($v);
 							}
-							$dump[] = $var_dump;
+							$dump[] = $varDump;
 						} else {
 							if(is_array($v) === true) {
 								$dump[] = '['.$k.'] =&gt; Array('.$this->_getArrayDump($v, 1).')';
@@ -316,7 +316,7 @@ class Debug
 					return implode(', ', $dump);
 				}
 
-				return $number_arguments;
+				return $numberArguments;
 			}
 		}
 	}
@@ -341,17 +341,17 @@ class Debug
 		}
 
 		if(is_object($variable) === true) {
-			$class_name = get_class($variable);
+			$className = get_class($variable);
 			if(method_exists($variable, 'dump') === true) {
-				$dumped_object = $variable->dump();
-				if(is_array($dumped_object) === true) {
-					$array_dump = $this->_getArrayDump($dumped_object);
-					$dump = 'Object('.$class_name.': '.$array_dump.')';
+				$dumpedObject = $variable->dump();
+				if(is_array($dumpedObject) === true) {
+					$arrayDump = $this->_getArrayDump($dumpedObject);
+					$dump = 'Object('.$className.': '.$arrayDump.')';
 				} else {
 					throw new Exception('Invalid dump return value.');
 				}
 			} else {
-				$dump = 'Object('.$class_name.')</span>';
+				$dump = 'Object('.$className.')</span>';
 			}
 
 			return $dump;
@@ -500,54 +500,54 @@ class Debug
 			if($this->_showFiles === true) {
 				//@note No exception handeling?!
 				$lines = file($trace['file']);
-				$number_lines = count($lines);
+				$numberLines = count($lines);
 
 				if($this->_showFileFragment === true) {
 
 					//Get first line
-					$first_line = (int)$trace['line'] - 7;
-					if($first_line < 1) {
-						$first_line = 1;
+					$firstLine = (int)$trace['line'] - 7;
+					if($firstLine < 1) {
+						$firstLine = 1;
 					}
 
 					//Take five lines after the current exception's line
 					//@todo add an option for this
-					$last_line = (int)$trace['line'] + 5;
-					if($last_line > $number_lines) {
-						$last_line = $number_lines;
+					$lastLine = (int)$trace['line'] + 5;
+					if($lastLine > $numberLines) {
+						$lastLine = $numberLines;
 					}
 
-					$html .= '<pre class=\'prettyprint highlight:'.$first_line.':'.$trace['line'].' linenums:'.$first_line.'\'>';
+					$html .= '<pre class=\'prettyprint highlight:'.$firstLine.':'.$trace['line'].' linenums:'.$firstLine.'\'>';
 				} else {
-					//@note $first_line and $last_line are not set
-					$first_line = 0;
-					$last_line = 0;
+					//@note $firstLine and $lastLine are not set
+					$firstLine = 0;
+					$lastLine = 0;
 
 					$html .= '<pre class\'prettyprint highlight:0:'.$trace['line'].' linenums error-scroll\'>';
 				}
 
 				//We assume the file is utf-8 encoded
 				//@todo add an option for this
-				$i = $first_line;
+				$i = $firstLine;
 
-				while($i > $last_line) {
-					$current_line = $lines[$i - 1];
+				while($i > $lastLine) {
+					$currentLine = $lines[$i - 1];
 
-					if($this->_showFileFragment === true && $i == $first_line) {
-						$timmed = rtrim($current_line);
+					if($this->_showFileFragment === true && $i == $firstLine) {
+						$timmed = rtrim($currentLine);
 
 						/* Is comment */
 						//@note Use '1' instead of 'true'
-						if(preg_match('#\\*\\/$#', $current_line) === 1) {
+						if(preg_match('#\\*\\/$#', $currentLine) === 1) {
 							//@note Strange whitespace between * and /....
-							$current_line = str_replace('* /', ' ', $current_line);
+							$currentLine = str_replace('* /', ' ', $currentLine);
 						}
 					}
 
-					if($current_line === '\n' || $current_line === '\r\n') {
+					if($currentLine === '\n' || $currentLine === '\r\n') {
 						$html .= '&nbsp;\n';
 					} else {
-						$escaped_line = htmlentities(str_replace('\t', '  ', $current_line), 2, 'UTF-8');
+						$escapedLine = htmlentities(str_replace('\t', '  ', $currentLine), 2, 'UTF-8');
 					}
 
 					++$i;
@@ -584,11 +584,11 @@ class Debug
 			But then they the value is only copied
 		*/
 
-		$class_name = get_class($exception);
+		$className = get_class($exception);
 		$message =  $exception->getMessage();
 
 
-		$html = '<html><head><meta http-equiv="Content-Type" content="text/html; charset="utf-8" /><title>'.$class_name.': '.$message.'</title>'.$this->getCssSources().'</head><body>'.$this->getVersion().'<div align="center"><div class="error-main"><h1>'.$class_name.': '.$message.'</h1><span class="error-file">'.$exception->getFile().' ('.$exception->getLine().')</span></div>';
+		$html = '<html><head><meta http-equiv="Content-Type" content="text/html; charset="utf-8" /><title>'.$className.': '.$message.'</title>'.$this->getCssSources().'</head><body>'.$this->getVersion().'<div align="center"><div class="error-main"><h1>'.$className.': '.$message.'</h1><span class="error-file">'.$exception->getFile().' ('.$exception->getLine().')</span></div>';
 
 		if($this->_showBackTrace === true) {
 			$html .= '<div class="error-info"><div id="tabs"><ul><li><a href="#error-tabs-1">Backtrace</a></li><li><a href="#error-tabs-2">Request</a></li><li><a href="#error-tabs-3">Server</a></li><li><a href="#error-tabs-4">Included Files</a></li><li><a href="#error-tabs-5">Memory</a></li>';
@@ -598,33 +598,33 @@ class Debug
 			$html .= '</ul><div id="error-tabs-1"><table cellspacing="0" align="center" width="100%">';
 
 			$trace = $exception->getTrace();
-			foreach($trace as $n => $trace_item) {
-				$html .= $this->showTraceItem($n, $trace_item);
+			foreach($trace as $n => $traceItem) {
+				$html .= $this->showTraceItem($n, $traceItem);
 			}
 
 			$html .= '</table></div><div id="error-tabs-2"><table cellspacing="0" align="center" class="superglobal-detail"><tr><th>Key</th><th>Value</th></tr>';
 
 			//@note $_REQUEST contains unfiltered data, but there is no escaping
 			$r = $_REQUEST;
-			foreach($r as $key_request => $value) {
-				$html .= '<tr><td class="key">'.$key_request.'</td><td>'.$value.'</td></tr>';
+			foreach($r as $keyRequest => $value) {
+				$html .= '<tr><td class="key">'.$keyRequest.'</td><td>'.$value.'</td></tr>';
 			}
 
 			$html .= '</table></div><div id="error-tabs-3"><table cellspacing="0" align="center" class="superglobal-detail"><tr><th>Key</th><th>Value</th></tr>';
 
 			//@note $_SERVER contains unfiltered data, but there is no escaping
 			$r = $_SERVER;
-			foreach($r as $key_server => $value) {
-				$html .= '<tr><td class="key">'.$key_server.'</td><td>'.$this->_getVarDump($value).'</td></tr>';
+			foreach($r as $keyServer => $value) {
+				$html .= '<tr><td class="key">'.$keyServer.'</td><td>'.$this->_getVarDump($value).'</td></tr>';
 			}
 
 			$html .= '</table></div><div id="error-tabs-4"><table cellspacing="0" align="center" class="superglobal-detail"><tr><th>#</th><th>Path</th></tr>';
 
 			//@note paths are not escaped
 			$files = get_included_files();
-			foreach($files as $key_file => $value) {
+			foreach($files as $keyFile => $value) {
 				//@note "td" opening element for key was changed to "th"
-				$html .= '<tr><th>'.$key_file.'</th><td>'.$value.'</td></tr>';
+				$html .= '<tr><th>'.$keyFile.'</th><td>'.$value.'</td></tr>';
 			}
 
 			$html .= '</table></div><div id="error-tabs-5"><table cellspacing="0" align="center" class="superglobal-detail"><tr><th colspan="2">Memory</th></tr><tr><td>Usage</td><td>'.(string)memory_get_usage().'</td></tr></table></div>';
@@ -632,9 +632,9 @@ class Debug
 			if(is_array($this->_data) === true) {
 				$html .= '<div id="error-tabs-6"><table cellspacing="0" align="center" class="superglobal-detail"><tr><th>Key</th><th>Value</th></tr>';
 
-				foreach($this->_data as $key_var => $data_var) {
-					//@note the c code is wrong, $data_var is never int but an array!
-					$html .= '<tr><td class="key">'.$key_var.'</td><td>'.$this->_getVarDump((int)$data_var).'</td></tr>';
+				foreach($this->_data as $keyVar => $dataVar) {
+					//@note the c code is wrong, $dataVar is never int but an array!
+					$html .= '<tr><td class="key">'.$keyVar.'</td><td>'.$this->_getVarDump((int)$dataVar).'</td></tr>';
 				}
 
 				$html .= '</table></div>';

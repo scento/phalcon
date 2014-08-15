@@ -162,11 +162,11 @@ class Security implements InjectionAwareInterface
 	{
 		$filtered = '';
 		$value = (string)$value;
-		$value_l = strlen($value);
-		$zero_char = chr(0);
+		$valueLength = strlen($value);
+		$zeroChar = chr(0);
 
-		for($i = 0; $i < $value_l; ++$i) {
-			if($value[$i] == $zero_char) {
+		for($i = 0; $i < $valueLength; ++$i) {
+			if($value[$i] == $zeroChar) {
 				break;
 			}
 
@@ -191,26 +191,26 @@ class Security implements InjectionAwareInterface
 			throw new SecException('Openssl extension must be loaded');
 		}
 
-		$safe_bytes = '';
+		$safeBytes = '';
 
-		while(strlen($safe_bytes) < 22) {
-			$random_bytes = openssl_random_pseudo_bytes($this->_numberBytes);
+		while(strlen($safeBytes) < 22) {
+			$randomBytes = openssl_random_pseudo_bytes($this->_numberBytes);
 
 			//@note added check
-			if($random_bytes === false) {
+			if($randomBytes === false) {
 				throw new FlashException('Error while generating random bytes.');
 			}
 
-			$base64bytes = base64_encode($random_bytes);
+			$base64bytes = base64_encode($randomBytes);
 
-			$safe_bytes = self::filterAlnum($base64bytes);
+			$safeBytes = self::filterAlnum($base64bytes);
 
-			if(empty($safe_bytes) === true) {
+			if(empty($safeBytes) === true) {
 				continue;
 			}
 		}
 
-		return $safe_bytes;
+		return $safeBytes;
 	}
 
 	/**
@@ -234,8 +234,8 @@ class Security implements InjectionAwareInterface
 		}
 
 		$factor = sprintf('%02s', $workFactor);
-		$salt_bytes = $this->getSaltBytes();
-		$salt = '$2a$'.$factor.'$'.$salt_bytes;
+		$saltBytes = $this->getSaltBytes();
+		$salt = '$2a$'.$factor.'$'.$saltBytes;
 		return crypt($password, $salt);
 	}
 
@@ -324,11 +324,11 @@ class Security implements InjectionAwareInterface
 			throw new SecException('Openssl extension must be loaded');
 		}
 
-		$random_bytes = openssl_random_pseudo_bytes($numberBytes);
-		$base64bytes = base64_encode($random_bytes);
-		$safe_bytes = self::filterAlnum($base64bytes);
+		$randomBytes = openssl_random_pseudo_bytes($numberBytes);
+		$base64bytes = base64_encode($randomBytes);
+		$safeBytes = self::filterAlnum($base64bytes);
 
-		//@warning no length check for $safe_bytes
+		//@warning no length check for $safeBytes
 
 		if(is_object($this->_dependencyInjector) === false) {
 			throw new FlashException('A dependency injection container is required to access the \'session\' service');
@@ -340,7 +340,7 @@ class Security implements InjectionAwareInterface
 			throw new FlashException('Session service is unavailable.');
 		}
 
-		$session->set('$PHALCON/CSRF/KEY$', $safe_bytes);
+		$session->set('$PHALCON/CSRF/KEY$', $safeBytes);
 	}
 
 	/**
@@ -362,10 +362,10 @@ class Security implements InjectionAwareInterface
 			throw new SecException('Openssl extension must be loaded');
 		}
 
-		$random_bytes = openssl_random_pseudo_bytes($numberBytes);
+		$randomBytes = openssl_random_pseudo_bytes($numberBytes);
 
 		//@note MD5 is weak
-		$token = md5($random_bytes);
+		$token = md5($randomBytes);
 
 		if(is_object($this->_dependencyInjector) === false) {
 			throw new FlashException('A dependency injection container is required to access the \'session\' service');
@@ -429,10 +429,10 @@ class Security implements InjectionAwareInterface
 			$tokenValue = $request->getPost($tokenKey);
 		}
 
-		$session_token = $session->get('$PHALCON/CSRF$');
+		$sessionToken = $session->get('$PHALCON/CSRF$');
 
 		//The value is the same?
-		return ($tokenValue === $session_token ? true : false);
+		return ($tokenValue === $sessionToken ? true : false);
 	}
 
 	/**

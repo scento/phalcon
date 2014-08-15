@@ -80,14 +80,14 @@ class Filter implements FilterInterface
 			if(is_null($value) === false) {
 				foreach($filters as $filter) {
 					if(is_array($value) === true) {
-						$array_value = array();
+						$arrayValue = array();
 
-						foreach($value as $item_key => $item_value) {
-							//@note no type check of $item_key
-							$array_value[$item_key] = $this->_sanitize($item_value, $filter);
+						foreach($value as $itemKey => $itemValue) {
+							//@note no type check of $itemKey
+							$arrayValue[$itemKey] = $this->_sanitize($itemValue, $filter);
 						}
 
-						$value = $array_value;
+						$value = $arrayValue;
 					} else {
 						$value = $this->_sanitize($value, $filter);
 					}
@@ -99,16 +99,16 @@ class Filter implements FilterInterface
 
 		//Apply a single filter value
 		if(is_array($value) === true) {
-			$sanizited_value = array();
-			foreach($value as $key => $item_value) {
+			$sanizitedValue = array();
+			foreach($value as $key => $itemValue) {
 				//@note no type check of $key
-				$sanizited_value[$key] = $this->_sanitize($item_value, $filters);
+				$sanizitedValue[$key] = $this->_sanitize($itemValue, $filters);
 			}
 		} else {
-			$sanizited_value = $this->_sanitize($value, $filters);
+			$sanizitedValue = $this->_sanitize($value, $filters);
 		}
 
-		return $sanizited_value;
+		return $sanizitedValue;
 	}
 
 	/**
@@ -127,12 +127,12 @@ class Filter implements FilterInterface
 
 		/* User-defined filter */
 		if(isset($filters[$filter]) === true) {
-			$filter_object = $this->_filters[$filter];
-			if($filter_object instanceof \Closure) {
-				return call_user_func_array($filter_object, array($value));
+			$filterObject = $this->_filters[$filter];
+			if($filterObject instanceof \Closure) {
+				return call_user_func_array($filterObject, array($value));
 			}
 
-			return $filter_object->filter($value);
+			return $filterObject->filter($value);
 		}
 
 		/* Predefined filter */
@@ -152,11 +152,11 @@ class Filter implements FilterInterface
 			case 'alphanum':
 				$filtered = '';
 				$value = (string)$value;
-				$value_l = strlen($value);
-				$zero_char = chr(0);
+				$valueLength = strlen($value);
+				$zeroChar = chr(0);
 
-				for($i = 0; $i < $value_l; ++$i) {
-					if($value[$i] == $zero_char) {
+				for($i = 0; $i < $valueLength; ++$i) {
+					if($value[$i] == $zeroChar) {
 						break;
 					}
 

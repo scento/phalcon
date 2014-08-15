@@ -538,7 +538,7 @@ abstract class Dispatcher implements DispatcherInterface, InjectionAwareInterfac
 			}
 		}
 
-		$number_dispatches = 0;
+		$numberDispatches = 0;
 		$this->_finished = false;
 
 		while(true) {
@@ -546,10 +546,10 @@ abstract class Dispatcher implements DispatcherInterface, InjectionAwareInterfac
 			if($this->_finished === true) {
 				break;
 			}
-			++$number_dispatches;
+			++$numberDispatches;
 
 			//Throw an exception after 256 consecutive forwards
-			if($number_dispatches >= 256) {
+			if($numberDispatches >= 256) {
 				$this->_throwDispatchException('Dispatcher has detected a cyclic routing causing stability problems', self::EXCEPTION_CYCLIC_ROUTING);
 				break;
 			}
@@ -586,30 +586,30 @@ abstract class Dispatcher implements DispatcherInterface, InjectionAwareInterfac
 			//We don't camelize the classes if they are in namespaces
 			$p = strpos($this->_handlerName, '\\');
 			if($p === false) {
-				$camelized_class = Text::camelize($this->_handlerName);
+				$camelizedClass = Text::camelize($this->_handlerName);
 			} elseif($p === 0) {
 				//@note this only handles one leading slash
-				$camelized_class = substr($this->_handlerName, strlen($this->_handlerName)+1);
+				$camelizedClass = substr($this->_handlerName, strlen($this->_handlerName)+1);
 			} else {
-				$camelized_class = $this->_handlerName;
+				$camelizedClass = $this->_handlerName;
 			}
 
 			//Create the complete controller class name prepending the namespace
 			if(is_null($this->_namespaceName) === false) {
 				if(strrpos($this->_namespaceName, '\\') === (strlen($this->_namespaceName)-1)) {
-					$handler_class = $this->_namespaceName.$camelized_class.$this->_handlerSuffix;
+					$handlerClass = $this->_namespaceName.$camelizedClass.$this->_handlerSuffix;
 				} else {
-					$handler_class = $this->_namespaceName.'\\'.$camelized_class.$this->_handlerSuffix;
+					$handlerClass = $this->_namespaceName.'\\'.$camelizedClass.$this->_handlerSuffix;
 				}
 			} else {
-				$handler_class = $camelized_class.$this->_handlerSuffix;
+				$handlerClass = $camelizedClass.$this->_handlerSuffix;
 			}
 
 			//Handlers are retrieved as shared instances from the Service Container
-			if($this->_dependencyInjector->has($handler_class) === false) {
+			if($this->_dependencyInjector->has($handlerClass) === false) {
 				//Check using autoloading
-				if(class_exists($handler_class) === false) {
-					if($this->_throwDispatchException($handler_class.' handler class cannot be loaded', self::EXCEPTION_HANDLER_NOT_FOUND) === false) {
+				if(class_exists($handlerClass) === false) {
+					if($this->_throwDispatchException($handlerClass.' handler class cannot be loaded', self::EXCEPTION_HANDLER_NOT_FOUND) === false) {
 						if($this->_finished === false) {
 							continue;
 						}
@@ -620,7 +620,7 @@ abstract class Dispatcher implements DispatcherInterface, InjectionAwareInterfac
 			}
 
 			//Handlers must be only objects
-			$handler = $this->_dependencyInjector->getShared($handler_class);
+			$handler = $this->_dependencyInjector->getShared($handlerClass);
 			if(is_object($handler) === false) {
 				if($this->_throwDispatchException('Invalid handler returned from the services container', self::EXCEPTION_INVALID_HANDLER) === false) {
 					if($this->_finished === false) {
@@ -632,14 +632,14 @@ abstract class Dispatcher implements DispatcherInterface, InjectionAwareInterfac
 			}
 
 			//If the object was recently created in the DI we initialize it
-			$was_fresh = $this->_dependencyInjector->wasFreshInstance();
+			$wasFresh = $this->_dependencyInjector->wasFreshInstance();
 
 			$this->_activeHandler = $handler;
 
 			//Check if the method exists in the handler
-			$action_method = $this->_actionName.$this->_actionSuffix;
+			$actionMethod = $this->_actionName.$this->_actionSuffix;
 
-			if(method_exists($handler, $action_method) === false) {
+			if(method_exists($handler, $actionMethod) === false) {
 				//Call beforeNotFoundAction
 				if(is_object($this->_eventsManager) === true) {
 					if($this->_eventsManager->fire('dispatch:beforeNotFoundAction', $this) === false) {
@@ -696,7 +696,7 @@ abstract class Dispatcher implements DispatcherInterface, InjectionAwareInterfac
 			}
 
 			//Call the 'initialize' method just once per request
-			if($was_fresh === true) {
+			if($wasFresh === true) {
 				if(method_exists($handler, 'initialize') === true) {
 					$handler->initialize();
 				}
@@ -707,7 +707,7 @@ abstract class Dispatcher implements DispatcherInterface, InjectionAwareInterfac
 			if(is_object($this->_eventsManager) === true) {
 				try {
 					//Call the method allowing exceptions
-					$m = new ReflectionMethod($handler, $action_method);
+					$m = new ReflectionMethod($handler, $actionMethod);
 					$value = $m->invokeArgs($handler, $this->_params);
 				} catch(\Exception $e) {
 					//Copy the exception to rethrow it later if needed
@@ -727,7 +727,7 @@ abstract class Dispatcher implements DispatcherInterface, InjectionAwareInterfac
 				$this->_returnedValue = $value;
 			} else {
 				//Call the method handling exceptions as normal
-				$this->_returnedValue = call_user_func_array(array($handler, $action_method), $this->_params);
+				$this->_returnedValue = call_user_func_array(array($handler, $actionMethod), $this->_params);
 			}
 
 			$this->_lastHandler = $handler;
@@ -850,23 +850,23 @@ abstract class Dispatcher implements DispatcherInterface, InjectionAwareInterfac
 		//We don't camelize the classes if they are in namespaces
 		$p = strpos($this->_handlerName, '\\');
 		if($p === false) {
-			$camelized_class = Text::camelize($this->_handlerName);
+			$camelizedClass = Text::camelize($this->_handlerName);
 		} elseif($p === 0) {
 			//@note this only handles one leading slash
-			$camelized_class = substr($this->_handlerName, strlen($this->_handlerName)+1);
+			$camelizedClass = substr($this->_handlerName, strlen($this->_handlerName)+1);
 		} else {
-			$camelized_class = $this->_handlerName;
+			$camelizedClass = $this->_handlerName;
 		}
 
 		//Create the complete controller class name prepending the namespace
 		if(is_null($this->_namespaceName) === false) {
 			if(strrpos($this->_namespaceName, '\\') === (strlen($this->_namespaceName)-1)) {
-				return $this->_namespaceName.$camelized_class.$this->_handlerSuffix;
+				return $this->_namespaceName.$camelizedClass.$this->_handlerSuffix;
 			} else {
-				return $this->_namespaceName.'\\'.$camelized_class.$this->_handlerSuffix;
+				return $this->_namespaceName.'\\'.$camelizedClass.$this->_handlerSuffix;
 			}
 		} else {
-			return $camelized_class.$this->_handlerSuffix;
+			return $camelizedClass.$this->_handlerSuffix;
 		}
 	}
 }

@@ -123,11 +123,11 @@ class Beanstalk
 
 		/* Data is automatically serialized before be sent to the server */
 		$serialized = serialize($data);
-		$serialized_length = strlen($serialized);
+		$serializedLength = strlen($serialized);
 
 		/* Create the command */
 		$this->write('put '.$options['priority'].' '.$options['delay'].' '.
-			$options['ttr'].' '.$serialized_length);
+			$options['ttr'].' '.$serializedLength);
 		$this->write($serialized);
 
 		/* Response */
@@ -170,8 +170,8 @@ class Beanstalk
 			//The job is in the first position
 			//Next is the job length
 			//The body is serialized
-			$serialized_body = $this->read($response[2]);
-			$body = unserialize($serialized_body);
+			$serializedBody = $this->read($response[2]);
+			$body = unserialize($serializedBody);
 
 			//Create a beanstalk job abstraction
 			return new Job($this, $response[1], $body);

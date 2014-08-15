@@ -53,12 +53,12 @@ class Confirmation extends Validator implements ValidatorInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$with_attribute = $this->getOption('with');
+		$withAttribute = $this->getOption('with');
 		$value = $validator->getValue($attribute);
-		if($value !== $with_attribute) {
+		if($value !== $withAttribute) {
 			$message = $this->getOption('message');
 			if(empty($message) === true) {
-				$message = 'Value of \''.$attribute.'\' and \''.$with_attribute.'\' don\'t match';
+				$message = 'Value of \''.$attribute.'\' and \''.$withAttribute.'\' don\'t match';
 			}
 
 			$validator->appendMessage(new Message($message, $attribute, 'Confirmation'));

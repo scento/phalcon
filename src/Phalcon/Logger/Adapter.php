@@ -134,10 +134,10 @@ abstract class Adapter
 		if(is_array($this->_queue) === true) {
 			foreach($this->_queue as $message) {
 				//@note no interface validation
-				$message_str = $message->getMessage();
+				$messageStr = $message->getMessage();
 				$type = $message->getType();
 				$time = $message->getTime();
-				$this->logInternal($message_str, $type, $time);
+				$this->logInternal($messageStr, $type, $time);
 			}
 		}
 

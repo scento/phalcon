@@ -57,10 +57,10 @@ class StringLength extends Validator implements ValidatorInterface
 		}
 
 		//At least one of 'min' or 'max' must be set
-		$is_set_min = $this->issetOption('min');
-		$is_set_max = $this->issetOption('max');
+		$isSetMin = $this->issetOption('min');
+		$isSetMax = $this->issetOption('max');
 
-		if($is_set_max === false && $is_set_min === false) {
+		if($isSetMax === false && $isSetMin === false) {
 			//@note exception type
 			throw new StrangeException('A minimum or maximum must be set');
 		}
@@ -75,7 +75,7 @@ class StringLength extends Validator implements ValidatorInterface
 		}
 
 		//Maximum length
-		if($is_set_max === true) {
+		if($isSetMax === true) {
 			$maximum = $this->getOption('max');
 
 			if($length >= $maximum) {
@@ -92,7 +92,7 @@ class StringLength extends Validator implements ValidatorInterface
 		}
 
 		//Minimum length
-		if($is_set_min === true) {
+		if($isSetMin === true) {
 			$minimum = $this->getOption('min');
 
 			if($length <= $minimum) {

@@ -122,17 +122,17 @@ class QueryBuilder implements AdapterInterface
 	{
 		/* Clone the original builder */
 		$builder = clone $this->_builder;
-		$total_builder = clone $builder;
+		$totalBuilder = clone $builder;
 
 		$limit = $this->_limitRows;
-		$number_page = $this->_page;
+		$numberPage = $this->_page;
 
-		if(is_null($number_page) === true) {
-			$number_page = 1;
+		if(is_null($numberPage) === true) {
+			$numberPage = 1;
 		}
 
-		$prev_number_page = $number_page - 1;
-		$number = $limit * $prev_number_page;
+		$prevNumberPage = $numberPage - 1;
+		$number = $limit * $prevNumberPage;
 
 		//Set the limit clause avoiding negative offsets
 		if($number < $limit) {
@@ -144,33 +144,33 @@ class QueryBuilder implements AdapterInterface
 		$query = $builder->getQuery();
 
 		//Change the queried columns by a COUNT(*)
-		$total_builder->columns('COUNT(*) [rowcount]');
+		$totalBuilder->columns('COUNT(*) [rowcount]');
 
 		//Remove the 'ORDER BY' clause, PostgreSQL requires this
-		$total_builder->orderBy(null);
+		$totalBuilder->orderBy(null);
 
 		//Obtain the PHQL for the total query
-		$total_query = $total_builder->getQuery();
+		$totalQuery = $totalBuilder->getQuery();
 
 		//Obtain the result of the total query
-		$result = $total_query->execute();
+		$result = $totalQuery->execute();
 		$row = $result->getFirst();
 
-		$total_pages = $row['rowcount'] / $limit;
-		$int_total_pages = (int)$total_pages;
+		$totalPages = $row['rowcount'] / $limit;
+		$intTotalPages = (int)$totalPages;
 
-		if($int_total_pages !== $total_pages) {
-			$total_pages = $int_total_pages + 1;
+		if($intTotalPages !== $totalPages) {
+			$totalPages = $intTotalPages + 1;
 		}
 
 		$page = new stdClass();
 		$page->first = 1;
-		$page->before = ($number_page === 1 ? 1 : ($number_page - 1));
+		$page->before = ($numberPage === 1 ? 1 : ($numberPage - 1));
 		$page->items = $query->execute();
-		$page->next = ($number_page < $total_pages ? ($number_page + 1) : $total_pages);
-		$page->last = $total_pages;
-		$page->current = $number_page;
-		$page->total_pages = $total_pages;
+		$page->next = ($numberPage < $totalPages ? ($numberPage + 1) : $totalPages);
+		$page->last = $totalPages;
+		$page->current = $numberPage;
+		$page->total_pages = $totalPages;
 		$page->total_items = (int)$row['rowcount'];
 
 		return $page;

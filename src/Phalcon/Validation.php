@@ -330,20 +330,20 @@ class Validation extends Injectable implements EventsAwareInterface, InjectionAw
 		if(is_null($value) === false) {
 			if(is_array($this->_filters) === true && isset($this->_filters[$attribute])) {
 				if(isset($this->_filters[$attribute]) === true) {
-					$dependency_injector = $this->getDi();
-					if(is_object($dependency_injector) === false) {
-						$dependency_injector = \Phalcon\DI::getDefault();
-						if(is_object($dependency_injector) === false) {
+					$dependencyInjector = $this->getDi();
+					if(is_object($dependencyInjector) === false) {
+						$dependencyInjector = \Phalcon\DI::getDefault();
+						if(is_object($dependencyInjector) === false) {
 							throw new ValidationException('A dependency injector is required to obtain the \'filter\' service');
 						}
 					}
 
-					$filter_service = $dependency_injector->getShared('filter');
-					if(is_object($filter_service) === false || $filter_service instanceof FilterInterface === false) {
+					$filterService = $dependencyInjector->getShared('filter');
+					if(is_object($filterService) === false || $filterService instanceof FilterInterface === false) {
 						throw new ValidationException('Returned \'filter\' service is invalid');
 					}
 
-					return $filter_service->sanitize($value, $this->_filters[$attribute]);
+					return $filterService->sanitize($value, $this->_filters[$attribute]);
 				}
 			}
 

@@ -59,9 +59,9 @@ class Regex extends Validator implements ValidatorInterface
 		$pattern = $this->getOption('pattern');
 
 		//Check if the value matches using preg_match in the PHP userland
-		$match_pattern = preg_match($pattern, $value, $matches);
+		$matchPattern = preg_match($pattern, $value, $matches);
 
-		if($match_pattern === true) {
+		if($matchPattern === true) {
 			$failed = ($matches[0] !== $value);
 		} else {
 			$failed = true;

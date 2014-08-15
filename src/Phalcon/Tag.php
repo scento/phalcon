@@ -206,16 +206,16 @@ class Tag
 	{
 		if(is_object(self::$_urlService) === false) {
 			if(is_object(self::$_dependencyInjector) === false) {
-				$dependency_injector = DI::getDefault();
+				$dependencyInjector = DI::getDefault();
 			} else {
-				$dependency_injector = self::$_dependencyInjector;
+				$dependencyInjector = self::$_dependencyInjector;
 			}
 
-			if(is_object($dependency_injector) === false) {
+			if(is_object($dependencyInjector) === false) {
 				throw new TagException('A dependency injector container is required to obtain the "url" service');
 			}
 
-			$url = $dependency_injector->getShared('url');
+			$url = $dependencyInjector->getShared('url');
 
 			//@note added type check
 			if(is_object($url) === false || $url instanceof UrlInterface === false) {
@@ -240,16 +240,16 @@ class Tag
 	{
 		$escaper = self::$_escaperService;
 		if(is_object($escaper) === false) {
-			$dependency_injector = self::$_dependencyInjector;
-			if(is_object($dependency_injector) === false) {
-				$dependency_injector = DI::getDefault();
+			$dependencyInjector = self::$_dependencyInjector;
+			if(is_object($dependencyInjector) === false) {
+				$dependencyInjector = DI::getDefault();
 			}
 
-			if(is_object($dependency_injector) === false) {
+			if(is_object($dependencyInjector) === false) {
 				throw new TagException('A dependency injector container is required to obtain the "escaper" service');
 			}
 
-			$escaper = $dependency_injector->getShared('escaper');
+			$escaper = $dependencyInjector->getShared('escaper');
 
 			//@note added type check
 			if(is_object($escaper) === false || 
@@ -522,17 +522,17 @@ class Tag
 
 		//link text
 		if(isset($params[1]) === true) {
-			$link_text = $params[1];
+			$linkText = $params[1];
 		} elseif(isset($params['text']) === true) {
-			$link_text = $params['text'];
+			$linkText = $params['text'];
 			unset($params['text']);
 		} else {
-			$link_text = '';
+			$linkText = '';
 		}
 
 		$params['href'] = self::getUrlService()->get($action);
 
-		return '<a'.self::writeAttributes($params).'>'.$link_text.'</a>';
+		return '<a'.self::writeAttributes($params).'>'.$linkText.'</a>';
 	}
 
 	/**
@@ -544,16 +544,16 @@ class Tag
 	 * @return string
 	 * @throws TagException
 	 */
-	protected static function _inputField($type, $parameters, $as_value = null)
+	protected static function _inputField($type, $parameters, $asValue = null)
 	{
 		if(is_string($type) === false) {
 			//@note added type check
 			throw new TagException('Invalid parameter type.');
 		}
 
-		if(is_null($as_value) === true) {
-			$as_value = false;
-		} elseif(is_bool($as_value) === false) {
+		if(is_null($asValue) === true) {
+			$asValue = false;
+		} elseif(is_bool($asValue) === false) {
 			//@note added exception
 			throw new TagException('Invalid parameter type.');
 		}
@@ -565,7 +565,7 @@ class Tag
 			$params = array($parameters);
 		}
 
-		if($as_value === false) {
+		if($asValue === false) {
 			if(isset($params[0]) === false) {
 				//@note no isset check
 				$id = $params['id'];
@@ -646,14 +646,14 @@ class Tag
 
 		//Automatically check inputs
 		if(isset($params['value']) === true) {
-			$current_value = $params['value'];
+			$currentValue = $params['value'];
 			unset($params['value']);
 			$value = self::getValue($params[0], $params);
-			if($value != null && $current_value === $value) {
+			if($value != null && $currentValue === $value) {
 				$params['checked'] = 'checked';
 			}
 
-			$params['value'] = $current_value;
+			$params['value'] = $currentValue;
 		} else {
 			$value = self::getValue($params[0], $params);
 
@@ -999,12 +999,12 @@ class Tag
 		}
 
 		if(isset($params[0]) === true) {
-			$params_action = $params[0];
+			$paramsAction = $params[0];
 		} else {
 			if(isset($params['action']) === true) {
-				$params_action = (string)$params['action'];
+				$paramsAction = (string)$params['action'];
 			} else {
-				$params_action = null;
+				$paramsAction = null;
 			}
 		}
 
@@ -1015,9 +1015,9 @@ class Tag
 
 		$action = '';
 
-		if(is_null($params_action) === false) {
+		if(is_null($paramsAction) === false) {
 			$url = self::getUrlService();
-			$action = $url->get($params_action);
+			$action = $url->get($paramsAction);
 		}
 
 		//Check for extra parameters
@@ -1447,23 +1447,23 @@ class Tag
 		}
 
 		/* Process data */
-		$local_code = '<'.$tagName.self::writeAttributes($params);
+		$localCode = '<'.$tagName.self::writeAttributes($params);
 
 		if(self::$_documentType > 5) {
 			if($selfClose === true) {
-				$local_code .= ' />';
+				$localCode .= ' />';
 			} else {
-				$local_code .= '>';
+				$localCode .= '>';
 			}
 		} else {
 			if($onlyStart === true) {
-				$local_code .= '>';
+				$localCode .= '>';
 			} else {
-				$local_code .= '></'.$tagName.'>';
+				$localCode .= '></'.$tagName.'>';
 			}
 		}
 
-		return ($useEol === true ? $local_code."\n" : $local_code);
+		return ($useEol === true ? $localCode."\n" : $localCode);
 	}
 
 	/**

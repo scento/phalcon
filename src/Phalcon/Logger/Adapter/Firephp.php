@@ -98,28 +98,28 @@ class Firephp extends Adapter implements AdapterInterface
 			self::$_initialized = true;
 		}
 
-		$applied_format = $this->_formatter->format($message, $type, $time);
-		if(is_string($applied_format) === false) {
+		$appliedFormat = $this->_formatter->format($message, $type, $time);
+		if(is_string($appliedFormat) === false) {
 			throw new Exception('The formatted message is not valid');
 		}
 
 		$index = self::$_index;
-		$size = strlen($applied_format);
+		$size = strlen($appliedFormat);
 		$offset = 0;
 
 		//We need to send the data in chunks not exceeding 5,000 bytes.
 		while($size > 0) {
 			$str = 'X-Wf-1-1-1-'.$index.': ';
-			$num_bytes = ($size > 4500 ? 4500 : $size);
+			$numBytes = ($size > 4500 ? 4500 : $size);
 
 			if($offset !== 0) {
 				$str .= '|';
 			}
 
-			$str .= substr($applied_format, $offset, $offset + 4500);
+			$str .= substr($appliedFormat, $offset, $offset + 4500);
 
-			$size -= $num_bytes;
-			$offset += $num_bytes;
+			$size -= $numBytes;
+			$offset += $numBytes;
 
 			if($size > 0) {
 				$str .= "|\\";

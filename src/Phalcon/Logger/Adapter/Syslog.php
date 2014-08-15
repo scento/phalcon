@@ -105,13 +105,13 @@ class Syslog extends Adapter implements AdapterInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$applied_format = $this->getFormatter()->format($message, $type, $time);
-		if(is_array($applied_format) === false) {
+		$appliedFormat = $this->getFormatter()->format($message, $type, $time);
+		if(is_array($appliedFormat) === false) {
 			throw new Exception('The formatted message is not valid');
 		}
 
 		//@note no return value check
-		syslog($applied_format[0], $applied_format[1]);
+		syslog($appliedFormat[0], $appliedFormat[1]);
 	}
 
 	/**

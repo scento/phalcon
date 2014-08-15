@@ -71,25 +71,25 @@ abstract class Select
 		}
 
 		/* Empty */
-		$use_empty = false;
+		$useEmpty = false;
 		if(isset($parameters['useEmpty']) === true) {
 			/* Empty Value */
 			if(isset($parameters['emptyValue']) === false) {
-				$empty_value = '';
+				$emptyValue = '';
 			} else {
-				$empty_value = $parameters['emptyValue'];
+				$emptyValue = $parameters['emptyValue'];
 				unset($parameters['emptyValue']);
 			}
 
 			/* Empty Text */
 			if(isset($parameters['emptyText']) === false) {
-				$empty_text = 'Choose...';
+				$emptyText = 'Choose...';
 			} else {
-				$empty_text = $parameters['emptyText'];
+				$emptyText = $parameters['emptyText'];
 				unset($parameters['emptyText']);
 			}
 
-			$use_empty = $parameters['useEmpty'];
+			$useEmpty = $parameters['useEmpty'];
 			unset($parameters['useEmpty']);
 		}
 
@@ -108,9 +108,9 @@ abstract class Select
 
 		$code .= '>'.\PHP_EOL;
 
-		if($use_empty === true) {
+		if($useEmpty === true) {
 			//Create an empty value
-			$code .= '\t<option value="'.$empty_value.'">'.$empty_text.'</option>'.\PHP_EOL;
+			$code .= '\t<option value="'.$emptyValue.'">'.$emptyText.'</option>'.\PHP_EOL;
 		}
 
 		if(isset($parameters[1]) === true) {
@@ -184,42 +184,42 @@ abstract class Select
 					/* Object */
 					if(method_exists($option, 'readAttribute') === true) {
 						//Read the value attribute from the model
-						$option_value = $option->readAttribute(0);
+						$optionValue = $option->readAttribute(0);
 
 						//Read the text attribute from the model
-						$option_text = $option->readAttribute(1);
+						$optionText = $option->readAttribute(1);
 					} else {
 						//Read the value directly from the model/object
-						$option_value = $option[0];
+						$optionValue = $option[0];
 
 						//Read the text directly from the model/object
-						$option_text = $option[1];
+						$optionText = $option[1];
 					}
 				} elseif(is_array($option) === true) {
 					/* Array */
 
 					//Read the value directly from the array
-					$option_value = $option[0];
+					$optionValue = $option[0];
 
 					//Read the text directly from the array
-					$option_text = $option[1];
+					$optionText = $option[1];
 				} else {
 					throw new Exception('Resultset returned an invalid value');
 				}
 
 				//If the value is equal to the option's value we mark it as selected
-				$option_value = htmlspecialchars($option_value);
+				$optionValue = htmlspecialchars($optionValue);
 				if(is_array($value) === true) {
-					if(in_array($option_value, $value) === true) {
-						$code .= '\t<option selected="selected" value="'.$option_value.'">'.$option_text.$closeOption;
+					if(in_array($optionValue, $value) === true) {
+						$code .= '\t<option selected="selected" value="'.$optionValue.'">'.$optionText.$closeOption;
 					} else {
-						$code .= '\t<option value="'.$option_value.'">'.$option_text.$closeOption;
+						$code .= '\t<option value="'.$optionValue.'">'.$optionText.$closeOption;
 					}
 				} else {
-					if($option_value === $value) {
-						$code .= '\t<option selected="selected" value="'.$option_value.'">'.$option_text.$closeOption;
+					if($optionValue === $value) {
+						$code .= '\t<option selected="selected" value="'.$optionValue.'">'.$optionText.$closeOption;
 					} else {
-						$code .= '\t<option value="'.$option_value.'">'.$option_text.$closeOption;
+						$code .= '\t<option value="'.$optionValue.'">'.$optionText.$closeOption;
 					}
 				}
 			} elseif(is_object($using) === true &&
@@ -257,20 +257,20 @@ abstract class Select
 		/* Loop through resultset */
 		$code = '';
 
-		foreach ($resultset as $option_value => $option_text) {
-			$option_value = htmlspecialchars($option_value);
+		foreach ($resultset as $optionValue => $optionText) {
+			$optionValue = htmlspecialchars($optionValue);
 
 			if(is_array($value) === true) {
-				if(in_array($option_value, $value) === true) {
-					$code .= '\t<option selected="selected" value="'.$option_value.'">'.$option_text.$closeOption;
+				if(in_array($optionValue, $value) === true) {
+					$code .= '\t<option selected="selected" value="'.$optionValue.'">'.$optionText.$closeOption;
 				} else {
-					$code .= '\t<option value="'.$option_value.'">'.$option_text.$closeOption;
+					$code .= '\t<option value="'.$optionValue.'">'.$optionText.$closeOption;
 				}
 			} else {
-				if($option_value === $value) {
-					$code .= '\t<option selected="selected" value="'.$option_value.'">'.$option_text.$closeOption;
+				if($optionValue === $value) {
+					$code .= '\t<option selected="selected" value="'.$optionValue.'">'.$optionText.$closeOption;
 				} else {
-					$code .= '\t<option value="'.$option_value.'">'.$option_text.$closeOption;
+					$code .= '\t<option value="'.$optionValue.'">'.$optionText.$closeOption;
 				}
 			}
 		}

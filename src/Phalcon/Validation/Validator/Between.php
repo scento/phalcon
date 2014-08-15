@@ -55,12 +55,12 @@ class Between extends Validator implements ValidatorInterface
 		$maximum = $this->getOption('maximum');
 
 		if($value <= $minimum || $value >= $maximum) {
-			$message_str = $this->getOption('message');
-			if(empty($message_str) === true) {
-				$message_str = $attribute.' is not between a valid range';
+			$messageStr = $this->getOption('message');
+			if(empty($messageStr) === true) {
+				$messageStr = $attribute.' is not between a valid range';
 			}
 
-			$validator->appendMessage(new Message($message_str, $attribute, 'Between'));
+			$validator->appendMessage(new Message($messageStr, $attribute, 'Between'));
 
 			return false;
 		}

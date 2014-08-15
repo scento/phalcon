@@ -306,6 +306,8 @@ class Validation extends Injectable implements EventsAwareInterface, InjectionAw
 			}
 		}
 
+		$value = null;
+
 		//Check if there is a calculated value
 		if(isset($this->_values[$attribute]) === true) {
 			return $this->_values[$attribute];

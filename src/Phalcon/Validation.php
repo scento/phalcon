@@ -101,7 +101,7 @@ class Validation extends Injectable implements EventsAwareInterface, InjectionAw
 	 */
 	public function validate($data = null, $entity = null)
 	{
-		if(is_array($this->_validators) === true) {
+		if(is_array($this->_validators) === false) {
 			throw new ValidationException('There are no validators to validate');
 		}
 

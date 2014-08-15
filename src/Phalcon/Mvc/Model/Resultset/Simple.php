@@ -134,17 +134,17 @@ SeekableIterator, Iterator, ResultsetInterface
 
 		//Use only fetch assoc
 		$result->setFetchMode(1);
-		$row_count = $result->numRows();
+		$rowCount = $result->numRows();
 
 		//Check if it's a big resultset
-		if($limit < $row_count) {
+		if($limit < $rowCount) {
 			$this->_type = 1;
 		} else {
 			$this->_type = 0;
 		}
 
 		//Update the row-count
-		$this->_count = $row_count;
+		$this->_count = $rowCount;
 	}
 
 	/**

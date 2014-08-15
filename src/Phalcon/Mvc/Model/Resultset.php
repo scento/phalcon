@@ -562,14 +562,14 @@ abstract class Resultset implements ResultsetInterface, Iterator, SeekableIterat
 		while($this->valid()) {
 			$record = $this->current();
 			$parameters[0] = $record;
-			$processed_record = call_user_func_array($filter, $parameters);
+			$processedRecord = call_user_func_array($filter, $parameters);
 
 			//Only add processed records to 'records' if the returned value is an array/object
-			if(is_object($processed_record) === false && is_array($processed_record) === false) {
+			if(is_object($processedRecord) === false && is_array($processedRecord) === false) {
 				continue;
 			}
 
-			$records[] = $processed_record;
+			$records[] = $processedRecord;
 			$this->next();
 		}
 

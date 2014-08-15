@@ -1152,7 +1152,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 				$phql .= ' GROUP BY '.implode(', ', $groupItems);
 			} else {
 				if(is_null($group) === true) {
-					$phql .= 'GROUP BY '.$group;
+					$phql .= ' GROUP BY '.$group;
 				} else {
 					if(strpos($group, '.') !== false) {
 						$phql .= ' GROUP BY '.$group;

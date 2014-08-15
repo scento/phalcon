@@ -184,44 +184,44 @@ abstract class MetaData implements InjectionAwareInterface
 		}
 
 		$strategy = null;
-		$class_name = get_class($model);
+		$className = get_class($model);
 
 		if(is_null($key) === false) {
 			//Check for $key in local metadata db
-			$meta_data = $this->_metaData;
-			if(isset($meta_data[$key]) === false) {
+			$metaData = $this->_metaData;
+			if(isset($metaData[$key]) === false) {
 				//The meta-data is read from the adapter always
-				$prefix_key = 'meta-'.$key;
-				$data = $this->read($prefix_key);
+				$prefixKey = 'meta-'.$key;
+				$data = $this->read($prefixKey);
 
 				if(is_null($data) === false) {
 					//Store the adapters metadata locally
-					if(is_array($meta_data) === false) {
-						$meta_data = array();
+					if(is_array($metaData) === false) {
+						$metaData = array();
 					}
 
-					$meta_data[$key] = $data;
-					$this->_metaData = $meta_data;
+					$metaData[$key] = $data;
+					$this->_metaData = $metaData;
 				} else {
 					//Check if there is a method 'metaData' in the model to retrieve meta-data form it
 					if(method_exists($model, 'metaData') === true) {
-						$model_metadata = $model->metaData();
-						if(is_array($model_metadata) === false) {
-							throw new Exception('Invalid meta-data for model '.$class_name);
+						$modelMetadata = $model->metaData();
+						if(is_array($modelMetadata) === false) {
+							throw new Exception('Invalid meta-data for model '.$className);
 						}
 					} else {
 						//Get the meta-data extraction strategy
 						$strategy = $this->getStrategy();
 
 						//Get the meta-data
-						$model_metadata = $strategy->getMetaData($model, $this->_dependencyInjector);
+						$modelMetadata = $strategy->getMetaData($model, $this->_dependencyInjector);
 					}
 
 					//Store the meta-data locally
-					$this->_metaData[$key] = $model_metadata;
+					$this->_metaData[$key] = $modelMetadata;
 
 					//Store the meta-data in the adapter
-					$this->write($prefix_key, $model_metadata);
+					$this->write($prefixKey, $modelMetadata);
 				}
 			}
 		}
@@ -232,23 +232,23 @@ abstract class MetaData implements InjectionAwareInterface
 			return;
 		}
 
-		$key_name = strtolower($class_name);
+		$keyName = strtolower($className);
 
 		if(is_array($this->_columnMap) === false) {
 			$this->_columnMap = array();
 		}
 
-		if(isset($this->_columnMap[$key_name]) === true) {
+		if(isset($this->_columnMap[$keyName]) === true) {
 			return;
 		}
 
 		//Create the map key name
-		$prefix_key = 'map-'.$key_name;
+		$prefixKey = 'map-'.$keyName;
 
 		//Check if the meta-data is already in the adapter
-		$data = $this->read($prefix_key);
+		$data = $this->read($prefixKey);
 		if(is_null($data) === false) {
-			$this->_columnMap[$key_name] = $data;
+			$this->_columnMap[$keyName] = $data;
 			return;
 		}
 
@@ -258,13 +258,13 @@ abstract class MetaData implements InjectionAwareInterface
 		}
 
 		//Get the meta-data
-		$model_column_map = $strategy->getColumnMaps($model, $dependency_injector);
+		$modelColumnMap = $strategy->getColumnMaps($model, $dependencyInjector);
 
 		//Update the column map locally
-		$this->_columnMap[$key_name] = $model_column_map;
+		$this->_columnMap[$keyName] = $modelColumnMap;
 
 		//Write the data to the adapter
-		$this->write($prefix_key, $model_column_map);
+		$this->write($prefixKey, $modelColumnMap);
 	}
 
 	/**
@@ -458,13 +458,13 @@ abstract class MetaData implements InjectionAwareInterface
 			throw new Exception('A model instance is required to retrieve the meta-data');
 		}
 
-		$key_name = strtolower(get_class($model));
+		$keyName = strtolower(get_class($model));
 
-		if(isset($this->_columnMap[$key_name]) === false) {
+		if(isset($this->_columnMap[$keyName]) === false) {
 			$this->_initialize($model, null, null, null);
 		}
 
-		return $this->_columnMap[$key_name];
+		return $this->_columnMap[$keyName];
 	}
 
 	/**
@@ -489,13 +489,13 @@ abstract class MetaData implements InjectionAwareInterface
 			throw new Exception('Index must be a valid integer constant');
 		}
 
-		$key_name = strtolower(get_class($model));
+		$keyName = strtolower(get_class($model));
 
-		if(isset($this->_columnMap[$key_name]) === false) {
+		if(isset($this->_columnMap[$keyName]) === false) {
 			$this->_initialize($model, null, null, null);
 		}
 
-		return $this->_columnMap[$key_name][$index];
+		return $this->_columnMap[$keyName][$index];
 	}
 
 	/**
@@ -843,12 +843,12 @@ abstract class MetaData implements InjectionAwareInterface
 			throw new Exception('Attribute must be a string');
 		}
 
-		$column_map = $this->getReverseColumnMap($model);
-		if(is_array($column_map) === true) {
-			return isset($column_map[$attribute]);
+		$columnMap = $this->getReverseColumnMap($model);
+		if(is_array($columnMap) === true) {
+			return isset($columnMap[$attribute]);
 		} else {
-			$meta_data = $this->readMetaData($model);
-			return isset($meta_data[4][$attribute]);
+			$metaData = $this->readMetaData($model);
+			return isset($metaData[4][$attribute]);
 		}
 	}
 

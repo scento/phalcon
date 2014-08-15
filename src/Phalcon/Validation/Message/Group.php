@@ -12,6 +12,7 @@ namespace Phalcon\Validation\Message;
 
 use \Phalcon\Validation\Message,
 	\Phalcon\Validation\MessageInterface,
+	\Phalcon\Validation\Exception,
 	\Countable,
 	\ArrayAccess,
 	\Iterator;

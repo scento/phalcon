@@ -434,22 +434,22 @@ class DI implements DiInterface
 	public function __call($method, $arguments = null)
 	{
 		if(strpos($method, 'get') === 0) {
-			$service_name = substr($method, 3);
+			$serviceName = substr($method, 3);
 
-			$possible_service = lcfirst($service_name);
-			if(isset($this->_services[$possible_service]) === true) {
+			$possibleService = lcfirst($serviceName);
+			if(isset($this->_services[$possibleService]) === true) {
 				if(empty($arguments) === false) {
-					return $this->get($possible_service, $arguments);
+					return $this->get($possibleService, $arguments);
 				}
-				return $this->get($possible_service);
+				return $this->get($possibleService);
 			}
 		}
 
 		if(strpos($method, 'set') === 0) {
 			if(isset($arguments[0]) === true) {
-				$service_name = substr($method, 3);
+				$serviceName = substr($method, 3);
 
-				$this->set(lcfirst($service_name), $arguments[0]);
+				$this->set(lcfirst($serviceName), $arguments[0]);
 				return null;
 			}
 		}
@@ -465,7 +465,7 @@ class DI implements DiInterface
 	public static function setDefault($dependencyInjector)
 	{
 		if($dependencyInjector instanceof DiInterface) {
-			self::$_default = $dependency_injector;	
+			self::$_default = $dependencyInjector;	
 		}
 	}
 

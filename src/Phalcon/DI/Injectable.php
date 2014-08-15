@@ -111,31 +111,31 @@ abstract class Injectable implements InjectionAwareInterface, EventsAwareInterfa
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$dependency_injector = $this->_dependencyInjector;
-		if(is_object($dependency_injector) === false) {
-			$dependency_injector = DI::getDefault();
+		$dependencyInjector = $this->_dependencyInjector;
+		if(is_object($dependencyInjector) === false) {
+			$dependencyInjector = DI::getDefault();
 
-			if(is_object($dependency_injector) === false) {
+			if(is_object($dependencyInjector) === false) {
 				throw new Exception('A dependency injector object is required to access the application services');
 			}
 		}
 
 		//Fallback to the PHP userland if the cache is not available
-		if($dependency_injector->has($propertyName) === true) {
-			$service = $dependency_injector->getShared($propertyName);
+		if($dependencyInjector->has($propertyName) === true) {
+			$service = $dependencyInjector->getShared($propertyName);
 			$this->$propertyName = $service;
 			return $service;
 		}
 
 		//Dependency Injector
 		if($propertyName === 'di') {
-			$this->di = $dependency_injector;
-			return $dependency_injector;
+			$this->di = $dependencyInjector;
+			return $dependencyInjector;
 		}
 
 		//Accessing the persistent property will create a session bag in any class
 		if($propertyName === 'persistent') {
-			$persistent = $dependency_injector->get('sessionBag', array(get_class($this)));
+			$persistent = $dependencyInjector->get('sessionBag', array(get_class($this)));
 			$this->persistent = $persistent;
 			return $persistent;
 		}

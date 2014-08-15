@@ -113,13 +113,13 @@ class Builder
 			throw new Exception('Definition arguemnts must be an array');
 		}
 
-		$build_arguments = array();
+		$buildArguments = array();
 
 		foreach($arguments as $position => $argument) {
-			$build_arguments[] = $this->_buildParameter($dependencyInjector, $position, $argument);
+			$buildArguments[] = $this->_buildParameter($dependencyInjector, $position, $argument);
 		}
 
-		return $build_arguments;
+		return $buildArguments;
 	}
 
 	/**
@@ -168,12 +168,12 @@ class Builder
 			//Check if the argument has constructor arguments
 			if(isset($definition['arguments']) === true) {
 				//Resolve the constructor parameters
-				$build_arguments = $this->_buildParameters($dependencyInjector, $definition['arguments']);
+				$buildArguments = $this->_buildParameters($dependencyInjector, $definition['arguments']);
 
 				//Create the instance based on the parameters
 				try {
 					$mirror = new ReflectionClass($definition['className']);
-					$instance = $mirror->newInstanceArgs($build_arguments);
+					$instance = $mirror->newInstanceArgs($buildArguments);
 				} catch(\Exception $e) {
 					return null;
 				}
@@ -197,21 +197,21 @@ class Builder
 			}
 
 			//The method call has parameters
-			foreach($definition['calls'] as $method_position => $method) {
+			foreach($definition['calls'] as $methodPosition => $method) {
 				//The call parameter must be an array of array
 				if(is_array($method) === false) {
-					throw new Exception('Method call must be an array on position '.$method_position);
+					throw new Exception('Method call must be an array on position '.$methodPosition);
 				}
 
 				//A param 'method' is required
 				if(isset($method['method']) === false) {
-					throw new Exception('The method name is required on position '.$method_position);
+					throw new Exception('The method name is required on position '.$methodPosition);
 				}
 
 				//Create the method call
 				if(isset($method['arguments']) === true) {
 					if(is_array($method['arguments']) === false) {
-						throw new Exception('Call arguments must be an array '.$method_position);
+						throw new Exception('Call arguments must be an array '.$methodPosition);
 					}
 
 					if(empty($arguments) === false) {
@@ -238,20 +238,20 @@ class Builder
 			}
 
 			//The method call has parameters
-			foreach($definition['properties'] as $property_position => $property) {
+			foreach($definition['properties'] as $propertyPosition => $property) {
 				//The call parameter must be an array of arrays
 				if(is_array($property) === false) {
-					throw new Exception('Property must be an array on position '.$property_position);
+					throw new Exception('Property must be an array on position '.$propertyPosition);
 				}
 
 				//A param 'name' is required
 				if(isset($property['name']) === false) {
-					throw new Exception('The property name is required on position '.$property_position);
+					throw new Exception('The property name is required on position '.$propertyPosition);
 				}
 
 				//A param 'value' is required
 				if(isset($property['value']) === false) {
-					throw new Exception('The property value is required on position '.$property_position);
+					throw new Exception('The property value is required on position '.$propertyPosition);
 				}
 
 				//Update the public property
@@ -259,7 +259,7 @@ class Builder
 				if($reflection->isPublic() === true) {
 					$reflection->setAccessible(true);
 					$reflection->setValue($instance, 
-						$this->_buildParameter($dependencyInjector, $property_position, 
+						$this->_buildParameter($dependencyInjector, $propertyPosition, 
 						$property['value']));
 					$reflection->setAccessible(false);
 				} else {

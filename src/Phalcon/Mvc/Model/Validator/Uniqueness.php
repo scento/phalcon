@@ -147,18 +147,18 @@ class Uniqueness extends Validator implements ValidatorInterface
 				//Rename the column if there is a column map
 				if(is_array($columnMap) === true) {
 					if(isset($columnMap[$primaryField]) === true) {
-						$attribute_field = $columnMap[$primaryField];
+						$attributeField = $columnMap[$primaryField];
 					} else {
 						throw new Exception("Column '".$primaryField.'" isn\'t part of the column map');
 					}
 				} else {
-					$attribute_field = $primaryField;
+					$attributeField = $primaryField;
 				}
 
 				//Create a condition based on the renamed primary key
 				$value = $record->readAttribute($primaryField);
 
-				$conditions[] = '['.$attribute_field.'] <> ?'.$number;
+				$conditions[] = '['.$attributeField.'] <> ?'.$number;
 				$bindParams[] = $value;
 				$bindTypes[] = $bindDataTypes[$primaryField];
 				$number++;

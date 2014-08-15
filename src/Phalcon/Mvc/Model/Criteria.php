@@ -432,21 +432,21 @@ InjectionAwareInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$hidden_param = $this->_hiddenParamNumber;
-		$next_hidden_param = $hidden_param++;
+		$hiddenParam = $this->_hiddenParamNumber;
+		$nextHiddenParam = $hiddenParam++;
 
 		//Minimum key with auto bind-params
-		$minimum_key = 'phb'.$hidden_param;
+		$minimumKey = 'phb'.$hiddenParam;
 
 		//Maximum key with auto bind-params
-		$maximum_key = 'phb'.$next_hidden_param;
+		$maximumKey = 'phb'.$nextHiddenParam;
 
 		//Create a standard BETWEEN condition with bind params
-		$conditions = $expr.' BETWEEN :'.$minimum_key.': AND :'.$maximum_key.':';
+		$conditions = $expr.' BETWEEN :'.$minimumKey.': AND :'.$maximumKey.':';
 
 		//Append the BETWEEN to the current conditions using 'AND'
-		$this->addWhere($condition, array($minimum_key, $maximum_key));
-		$this->_hiddenParamNumber = $next_hidden_param;
+		$this->addWhere($condition, array($minimumKey, $maximumKey));
+		$this->_hiddenParamNumber = $nextHiddenParam;
 
 		return $this;
 	}
@@ -470,21 +470,21 @@ InjectionAwareInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$hidden_param = $this->_hiddenParamNumber;
-		$next_hidden_param = $hidden_param++;
+		$hiddenParam = $this->_hiddenParamNumber;
+		$nextHiddenParam = $hiddenParam++;
 
 		//Minimum key with auto bind-params
-		$minimum_key = 'phb'.$hidden_param;
+		$minimumKey = 'phb'.$hiddenParam;
 
 		//Maximum key with auto bind-params
-		$maximum_key = 'phb'.$next_hidden_param;
+		$maximumKey = 'phb'.$nextHiddenParam;
 
 		//Create a standard BETWEEN condition with bind params
-		$conditions = $expr.' NOT BETWEEN :'.$minimum_key.': AND :'.$maximum_key.':';
+		$conditions = $expr.' NOT BETWEEN :'.$minimumKey.': AND :'.$maximumKey.':';
 
 		//Append the BETWEEN to the current conditions using 'AND'
-		$this->addWhere($condition, array($minimum_key, $maximum_key));
-		$this->_hiddenParamNumber = $next_hidden_param;	
+		$this->addWhere($condition, array($minimumKey, $maximumKey));
+		$this->_hiddenParamNumber = $nextHiddenParam;	
 
 		return $this;
 	}
@@ -511,26 +511,26 @@ InjectionAwareInterface
 			throw new Exception('Values must be an array');
 		}
 
-		$hidden_param = $this->_hiddenParamNumber;
-		$bind_params = array();
-		$bind_key = array();
+		$hiddenParam = $this->_hiddenParamNumber;
+		$bindParams = array();
+		$bindKeys = array();
 
 		foreach($values as $value) {
 			//Key with auto bind-params
-			$key = 'phi'.$hidden_param;
-			$bind_keys[] = $key;
-			$bind_params[$key] = ':'.$key.':';
-			$hidden_param++;
+			$key = 'phi'.$hiddenParam;
+			$bindKeys[] = $key;
+			$bindParams[$key] = ':'.$key.':';
+			$hiddenParam++;
 		}
 
-		$joined_keys = implode(', ', $bind_keys);
+		$joinedKeys = implode(', ', $bindKeys);
 
 		//Create a standard IN condition with bind params
-		$conditions = $expr.' IN ('.$joined_keys.')';
+		$conditions = $expr.' IN ('.$joinedKeys.')';
 
 		//Append the IN to the current conditions using 'AND'
-		$this->andWhere($conditions, $bind_params);
-		$this->_hiddenParamNumber = $hidden_param;
+		$this->andWhere($conditions, $bindParams);
+		$this->_hiddenParamNumber = $hiddenParam;
 
 		return $this;
 	}
@@ -553,26 +553,26 @@ InjectionAwareInterface
 			throw new Exception('Values must be an array');
 		}
 
-		$hidden_param = $this->_hiddenParamNumber;
-		$bind_params = array();
-		$bind_keys = array();
+		$hiddenParam = $this->_hiddenParamNumber;
+		$bindParams = array();
+		$bindKeys = array();
 
 		foreach($values as $value) {
 			//Key with auto bind-params
-			$key = 'phi'.$hidden_param;
-			$bind_keys[] = ':'.$key.':';
-			$bind_params[$key] = $value;
-			$hidden_param++;
+			$key = 'phi'.$hiddenParam;
+			$bindKeys[] = ':'.$key.':';
+			$bindParams[$key] = $value;
+			$hiddenParam++;
 		}
 
-		$joined_keys = implode(', ', $bind_keys);
+		$joinedKeys = implode(', ', $bindKeys);
 
 		//Create a standard NOT IN condition with bind params
-		$conditions = $expr.' NOT IN ('.$joined_keys.')';
+		$conditions = $expr.' NOT IN ('.$joinedKeys.')';
 
 		//Append the IN to the current conditions using 'AND'
-		$this->andWhere($conditions, $bind_params);
-		$this->_hiddenParamNumber = $hidden_param;
+		$this->andWhere($conditions, $bindParams);
+		$this->_hiddenParamNumber = $hiddenParam;
 
 		return $this;
 	}
@@ -790,16 +790,16 @@ InjectionAwareInterface
 
 		if(empty($data) === false) {
 			$conditions = array();
-			$meta_data = $dependencyInjector->getShared('modelsMetadata');
+			$metaData = $dependencyInjector->getShared('modelsMetadata');
 			$model = new $modelName();
-			$data_types = $meta_data->getDataTypes($model);
+			$dataTypes = $metaData->getDataTypes($model);
 			$bind = array();
 
 			//We look for attributes in the array passed as data
 			foreach($data as $field => $value) {
-				if(isset($data_types[$field]) === true &&
+				if(isset($dataTypes[$field]) === true &&
 					is_null($value) === false && $value !== '') {
-					if($data_types[$field] === 2) {
+					if($dataTypes[$field] === 2) {
 						//For varchar types we use LIKE operator
 						$condition = $field.' LIKE :'.$field.':';
 						$bind[$field] = '%'.$value.'%';

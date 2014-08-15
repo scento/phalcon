@@ -187,33 +187,33 @@ SeekableIterator, Iterator, ResultsetInterface
 		}
 
 		//Set records as dirty state PERSISTENT by default
-		$dirty_state = 0;
+		$dirtyState = 0;
 
 		//Get current hydration mode
-		$hydrate_mode = $this->_hydrateMode;
+		$hydrateMode = $this->_hydrateMode;
 
 		//Tell if the resultset is keeping snapshots
-		$keep_snapshots = $this->_keepSnapshots;
+		$keepSnapshots = $this->_keepSnapshots;
 
 		//Get the resultset column map
-		$column_map = $this->_columnMap;
+		$columnMap = $this->_columnMap;
 
 		//Hydrate based on the current hydration
-		switch((int)$hydrate_mode) {
+		switch((int)$hydrateMode) {
 			case 0:
 				//$this->model is the base entity
 				$model = $this->_model;
 
 				//Perform the standard hydration based on objects
-				$active_row = Model::cloneResultMap($model, $row, $column_map, $dirty_state, $keep_snapshots);
+				$activeRow = Model::cloneResultMap($model, $row, $columnMap, $dirtyState, $keepSnapshots);
 				break;
 			default:
 				//Other kinds of hydrations
-				$active_row = Model::cloneResultMapHydrate($row, $column_map, $hydrate_mode);
+				$activeRow = Model::cloneResultMapHydrate($row, $columnMap, $hydrateMode);
 				break;
 		}
 
-		$this->_activeRow = $active_row;
+		$this->_activeRow = $activeRow;
 		return true;
 	}
 
@@ -237,10 +237,10 @@ SeekableIterator, Iterator, ResultsetInterface
 		if($this->_type === 1) {
 			$result = $this->_result;
 			if(is_object($result) === true) {
-				$active_row = $this->_activeRow;
+				$activeRow = $this->_activeRow;
 
 				//Check if we need to re-execute the query
-				if(is_null($active_row) === false) {
+				if(is_null($activeRow) === false) {
 					$result->execute();
 				}
 
@@ -254,10 +254,10 @@ SeekableIterator, Iterator, ResultsetInterface
 			if(is_array($records) === false) {
 				$result = $this->_result;
 				if(is_object($result) === true) {
-					$active_row = $this->_activeRow;
+					$activeRow = $this->_activeRow;
 
 					//Check if we need to re-execute the query
-					if(is_null($active_row) === false) {
+					if(is_null($activeRow) === false) {
 						$result->execute();
 					}
 
@@ -276,31 +276,31 @@ SeekableIterator, Iterator, ResultsetInterface
 		//We need to rename the whole set here, this could be slow
 		if($renameColumns === true) {
 			//Get the resultset column map
-			$column_map = $this->_columnMap;
-			if(is_array($column_map) === false) {
+			$columnMap = $this->_columnMap;
+			if(is_array($columnMap) === false) {
 				return $records;
 			}
 
-			$renamed_records = array();
+			$renamedRecords = array();
 			if(is_array($records) === true) {
 				foreach($records as $record) {
 					$renamed = array();
 					foreach($record as $key => $value) {
 						//Check if the key is part of the column map
-						if(isset($column_map[$key]) === false) {
+						if(isset($columnMap[$key]) === false) {
 							throw new Exception("Column '".$key."' is not part of the column map");
 						}
 
 						//Add the value renamed
-						$renamed[$column_map[$key]] = $value;
+						$renamed[$columnMap[$key]] = $value;
 					}
 
 					//Append the renamed records to the main array
-					$renamed_records[] = $renamed;
+					$renamedRecords[] = $renamed;
 				}
 			}
 
-			return $renamed_records;
+			return $renamedRecords;
 		}
 
 		return $records;

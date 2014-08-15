@@ -53,8 +53,6 @@ class ExclusionIn extends Validator implements ValidatorInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$value = $validator->getValue($attribute);
-
 		//A domain is an array with a list of valid values
 		$domain = $this->getOption('domain');
 		if(is_array($domain) === false) {
@@ -65,7 +63,7 @@ class ExclusionIn extends Validator implements ValidatorInterface
 		if(in_array($value, $domain) === true) {
 			$message = $this->getOption('message');
 			if(empty($message) === true) {
-				$message = "Value of field '".$attribute."' must not be part of list: ".implode(', ', $domain);
+				$message = "Value of field '".$attribute."' must not be part of list: ".implode(', '.$domain);
 			}
 
 			$validator->appendMessage(new Message($message, $attribute, 'ExclusionIn'));

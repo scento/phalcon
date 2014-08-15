@@ -12,7 +12,6 @@ namespace Phalcon\Validation\Message;
 
 use \Phalcon\Validation\Message,
 	\Phalcon\Validation\MessageInterface,
-	\Phalcon\Validation\Exception,
 	\Countable,
 	\ArrayAccess,
 	\Iterator;
@@ -69,6 +68,10 @@ class Group implements Countable, ArrayAccess, Iterator
 	 */
 	public function offsetGet($index)
 	{
+		if(is_string($index) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+
 		if(isset($this->_messages[$index]) === true) {
 			return $this->_messages[$index];
 		}
@@ -89,6 +92,10 @@ class Group implements Countable, ArrayAccess, Iterator
 	 */
 	public function offsetSet($index, $message)
 	{
+		if(is_string($index) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+
 		if(is_object($message) === false &&
 			$message instanceof Message === false) {
 			throw new Exception('The message must be an object');
@@ -110,6 +117,10 @@ class Group implements Countable, ArrayAccess, Iterator
 	 */
 	public function offsetExists($index)
 	{
+		if(is_string($index) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+
 		return isset($this->_messages[$index]);
 	}
 
@@ -125,6 +136,10 @@ class Group implements Countable, ArrayAccess, Iterator
 	 */
 	public function offsetUnset($index)
 	{
+		if(is_string($index) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+
 		unset($this->_messages[$index]);
 	}
 

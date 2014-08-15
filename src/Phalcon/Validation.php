@@ -171,6 +171,8 @@ class Validation extends Injectable implements EventsAwareInterface, InjectionAw
 		}
 
 		$this->_validators[] = array($attribute, $validator);
+
+		return $this;
 	}
 
 	/**

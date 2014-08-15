@@ -1130,7 +1130,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 		//Only append conditions if it's a string
 		if(is_string($conditions) === true &&
 			empty($conditions) === false) {
-			$phql .= 'WHERE '.$conditions;
+			$phql .= ' WHERE '.$conditions;
 		}
 
 		//Process group parameters

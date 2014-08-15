@@ -58,8 +58,8 @@ class Inclusionin extends Validator implements ValidatorInterface
 			throw new Exception('Invalid parameter type.');
 		}
 		
-		$field_name = $this->getOption('field');
-		if(is_string($field_name) === false) {
+		$fieldName = $this->getOption('field');
+		if(is_string($fieldName) === false) {
 			throw new Exception('Field name must be a string');
 		}
 
@@ -73,17 +73,17 @@ class Inclusionin extends Validator implements ValidatorInterface
 			throw new Exception("Option 'domain' must be an array");
 		}
 
-		$value = $record->readAttribute($field_name);
+		$value = $record->readAttribute($fieldName);
 
 		//We check if the value is contained in the array using "in_array"
 		if(in_array($value, $domain) === false) {
 			//Check if the developer has defined a custom message
 			$message = $this->getOption('message');
 			if(isset($message) === false) {
-				$message = "Value of field '".$field_name."' must not be part of list: ".implode(', ', $domain);
+				$message = "Value of field '".$fieldName."' must not be part of list: ".implode(', ', $domain);
 			}
 
-			$this->appendMessage($message, $field_name, 'Inclusion');
+			$this->appendMessage($message, $fieldName, 'Inclusion');
 			return false;
 		}
 

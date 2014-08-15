@@ -58,22 +58,22 @@ class PresenceOf extends Validator implements ValidatorInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$field_name = $this->getOption('field');
-		if(is_string($field_name) === false) {
+		$fieldName = $this->getOption('field');
+		if(is_string($fieldName) === false) {
 			throw new Exception('Field name must be a string');
 		}
 
 		//A value is numm when it is identical to null or a empty string
-		$value = $record->readAttribute($field_name);
+		$value = $record->readAttribute($fieldName);
 
 		if(empty($value) === true) {
 			//Check if the developer has defined a custom message
 			$message = $this->getOption('message');
 			if(isset($message) === false) {
-				$message = "'".$field_name."' is required";
+				$message = "'".$fieldName."' is required";
 			}
 
-			$this->appendMessage($message, $field_name, 'PresenceOf');
+			$this->appendMessage($message, $fieldName, 'PresenceOf');
 			return false;
 		}
 

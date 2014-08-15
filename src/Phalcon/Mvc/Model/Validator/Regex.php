@@ -58,8 +58,8 @@ class Regex extends Validator implements ValidatorInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$field_name = $this->getOption('field');
-		if(is_string($field_name) === false) {
+		$fieldName = $this->getOption('field');
+		if(is_string($fieldName) === false) {
 			throw new Exception('Field name must be a string');
 		}
 
@@ -69,7 +69,7 @@ class Regex extends Validator implements ValidatorInterface
 		}
 		$pattern = $this->getOption('pattern');
 
-		$value = $this->readAttribute($field_name);
+		$value = $this->readAttribute($fieldName);
 
 		$failed = false;
 		$matches = null;
@@ -85,10 +85,10 @@ class Regex extends Validator implements ValidatorInterface
 			//Check if the develop has defined a custom message
 			$message = $this->getOption('message');
 			if(isset($message) === false) {
-				$message = "Value of field '".$field_name."' doesn't match regular expression";
+				$message = "Value of field '".$fieldName."' doesn't match regular expression";
 			}
 
-			$this->appendMessage($message, $field_name, 'Regex');
+			$this->appendMessage($message, $fieldName, 'Regex');
 			return false;
 		}
 

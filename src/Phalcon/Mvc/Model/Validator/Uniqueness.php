@@ -59,72 +59,72 @@ class Uniqueness extends Validator implements ValidatorInterface
 		}
 
 		$field = $this->getOption('field');
-		$dependency_injector = $record->getDi();
-		$meta_data = $dependency_injector->getShared('modelsManager');
+		$dependencyInjector = $record->getDi();
+		$metaData = $dependencyInjector->getShared('modelsManager');
 
 		//PostgreSQL check if the compared constant has the same type as the column, so we
 		//make cast to the data passed to match those column types
-		$bind_types = array();
-		$bid_data_types = $meta_data->getBindTypes($record);
+		$bindTypes = array();
+		$bindDataTypes = $metaData->getBindTypes($record);
 		if(isset($GLOBALS['_PHALCON_ORM_COLUMN_RENAMING']) === true &&
 			$GLOBALS['_PHALCON_ORM_COLUMN_RENAMING'] === true) {
-			$column_map = $meta_data->getReverseColumnMap($record);
+			$columnMap = $metaData->getReverseColumnMap($record);
 		} else {
-			$column_map = array();
+			$columnMap = array();
 		}
 
 		$conditions = array();
-		$bind_params = array();
+		$bindParams = array();
 		$number = 0;
 
 		if(is_array($field) === true) {
 			//The field can be an arary of values
-			foreach($field as $compose_field) {
+			foreach($field as $composeField) {
 				//The reversed column map is used in the case to get the real column name
-				if(is_array($column_map) === true) {
-					if(isset($column_map[$compose_field]) === true) {
-						$column_field = $column_map[$compose_field];
+				if(is_array($columnMap) === true) {
+					if(isset($columnMap[$composeField]) === true) {
+						$columnField = $columnMap[$composeField];
 					} else {
-						throw new Exception("Column '".$compose_field.'" isn\'t part of the column map');
+						throw new Exception("Column '".$composeField.'" isn\'t part of the column map');
 					}
 				} else {
-					$column_field = $compose_field;
+					$columnField = $composeField;
 				}
 
 				//Some database system require that we pass the values using bind casting
-				if(isset($bind_data_types[$column_field]) === false) {
-					throw new Exception("Column '".$column_field.'" isn\'t part of the table columns');
+				if(isset($bindDataTypes[$columnField]) === false) {
+					throw new Exception("Column '".$columnField.'" isn\'t part of the table columns');
 				}
 
 				//The attribute could be "protected" so we read using "readattribute"
-				$value = $record->readattribute($compose_field);
-				$conditions[] = '['.$compose_field.'] = ?'.$number;
-				$bind_params[] = $value;
-				$bind_types[] = $bind_data_types[$column_field];
+				$value = $record->readattribute($composeField);
+				$conditions[] = '['.$composeField.'] = ?'.$number;
+				$bindParams[] = $value;
+				$bindTypes[] = $bindDataTypes[$columnField];
 				$number++;
 			}
 		} else {
 			//The reversed column map is used in this case to get the real column name
-			if(is_array($column_map) === true) {
-				if(isset($column_map[$field]) === true) {
-					$column_field = $column_map[$field];
+			if(is_array($columnMap) === true) {
+				if(isset($columnMap[$field]) === true) {
+					$columnField = $columnMap[$field];
 				} else {
 					throw new Exception("Column '".$field.'" isn\'t part of the column map');
 				}
 			} else {
-				$column_field = $field;
+				$columnField = $field;
 			}
 
 			//Some database systems require that we pass the values using bind casting
-			if(isset($bind_data_types[$column_field]) === false) {
-				throw new Exception("Column '".$column_field.'" isn\'t part of the table columns');
+			if(isset($bindDataTypes[$columnField]) === false) {
+				throw new Exception("Column '".$columnField.'" isn\'t part of the table columns');
 			}
 
 			//We're checking the uniqueness with only one field
 			$value = $record->readAttribute($field);
 			$conditions[] = '['.$field.'] = ?0';
-			$bind_params[] = $value;
-			$bind_types[] = $bind_data_types[$column_field];
+			$bindParams[] = $value;
+			$bindTypes[] = $bindDataTypes[$columnField];
 			$number++;
 		}
 
@@ -133,46 +133,46 @@ class Uniqueness extends Validator implements ValidatorInterface
 			//We build a query with the primary key attributes
 			if(isset($GLOBALS['_PHALCON_ORM_COLUMN_RENAMING']) === true &&
 				$GLOBALS['_PHALCON_ORM_COLUMN_RENAMING'] === true) {
-				$column_map = $meta_data->getColumnMap($record);
+				$columnMap = $metaData->getColumnMap($record);
 			} else {
-				$column_map = null;
+				$columnMap = null;
 			}
 
-			$primary_fields = $meta_data->getPrimaryKeyAttributes($record);
-			foreach($primary_fields as $primary_field) {
-				if(isset($bind_data_types[$primary_field]) === false) {
-					throw new Exception("Column '".$primary_field.'" isn\'t part of the table columns');
+			$primaryFields = $metaData->getPrimaryKeyAttributes($record);
+			foreach($primaryFields as $primaryField) {
+				if(isset($bindDataTypes[$primaryField]) === false) {
+					throw new Exception("Column '".$primaryField.'" isn\'t part of the table columns');
 				}
 
 				//Rename the column if there is a column map
-				if(is_array($column_map) === true) {
-					if(isset($column_map[$primary_field]) === true) {
-						$attribute_field = $column_map[$primary_field];
+				if(is_array($columnMap) === true) {
+					if(isset($columnMap[$primaryField]) === true) {
+						$attribute_field = $columnMap[$primaryField];
 					} else {
-						throw new Exception("Column '".$primary_field.'" isn\'t part of the column map');
+						throw new Exception("Column '".$primaryField.'" isn\'t part of the column map');
 					}
 				} else {
-					$attribute_field = $primary_field;
+					$attribute_field = $primaryField;
 				}
 
 				//Create a condition based on the renamed primary key
-				$value = $record->readAttribute($primary_field);
+				$value = $record->readAttribute($primaryField);
 
 				$conditions[] = '['.$attribute_field.'] <> ?'.$number;
-				$bind_params[] = $value;
-				$bind_types[] = $bind_data_types[$primary_field];
+				$bindParams[] = $value;
+				$bindTypes[] = $bindDataTypes[$primaryField];
 				$number++;
 			}
 		}
 
-		$join_conditions = implode(' AND ', $conditions);
+		$joinConditions = implode(' AND ', $conditions);
 
 		//We don't trust the user, so we pass the parameters as bound parameters
-		$params = array('di' => $dependency_injector, 'conditions' => $join_conditions, 'bind' => $bind_params, 'bindTypes' => $bind_types);
-		$class_name = get_class($record);
+		$params = array('di' => $dependencyInjector, 'conditions' => $joinConditions, 'bind' => $bindParams, 'bindTypes' => $bindTypes);
+		$className = get_class($record);
 
 		//Check using a standard count
-		$number = $class_name::count($params);
+		$number = $className::count($params);
 		if($number !== 0) {
 			//Check if the developer has defined a custom message
 			$message = $this->getOption('message');

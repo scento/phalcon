@@ -131,7 +131,7 @@ class Annotation
 
 			foreach($exprArguments as $argument)
 			{
-				$expr = (string)$argument['expr'];
+				$expr = $argument['expr'];
 				$resolvedArgument = $this->getExpression($expr);
 				if(isset($argument['name']) === true)
 				{

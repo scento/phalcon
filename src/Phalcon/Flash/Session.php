@@ -162,26 +162,26 @@ class Session extends Flash implements FlashInterface, InjectionAwareInterface
 			$remove = true;
 		}
 
-		$do_remove = $remove;
+		$doRemove = $remove;
 		if(is_string($type) === true) {
-			$do_remove = false;
+			$doRemove = false;
 		} elseif(is_null($type) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$messages = $this->_getSessionMessages($do_remove);
+		$messages = $this->_getSessionMessages($doRemove);
 
 		if(is_array($messages) === true) {
 			if(is_null($type) === false) {
 				if(isset($messages[$type]) === true) {
-					$return_messages = $messages[$type];
+					$returnMessages = $messages[$type];
 
 					if($remove === true) {
 						unset($messages[$type]);
 						$this->_setSessionMessages($messages);
 					}
 
-					return $return_messages;
+					return $returnMessages;
 				}
 
 				return array();

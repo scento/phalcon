@@ -80,14 +80,14 @@ class Profiler
 	 */
 	public function startProfile($sqlStatement)
 	{
-		$active_profile = new Item();
-		$active_profile->setSqlStatement($sqlStatement);
-		$active_profile->setInitialTime(microtime(true));
+		$activeProfile = new Item();
+		$activeProfile->setSqlStatement($sqlStatement);
+		$activeProfile->setInitialTime(microtime(true));
 		if(method_exists($this, 'beforeStartProfile') === true) {
-			$this->beforeStartProfile($active_profile);
+			$this->beforeStartProfile($activeProfile);
 		}
 
-		$this->_activeProfile = $active_profile;
+		$this->_activeProfile = $activeProfile;
 
 		return $this;
 	}
@@ -99,20 +99,20 @@ class Profiler
 	 */
 	public function stopProfile()
 	{
-		$final_time = microtime(true);
+		$finalTime = microtime(true);
 
-		$active_profile = $this->_activeProfile;
-		$this->_activeProfile->setFinalTime($final_time);
-		$difference = $final_time - $active_profile->getInitialTime();
+		$activeProfile = $this->_activeProfile;
+		$this->_activeProfile->setFinalTime($finalTime);
+		$difference = $finalTime - $activeProfile->getInitialTime();
 		$this->_totalSeconds = $this->_totalSeconds + $difference;
 
 		if(is_array($this->_allProfiles) === false) {
 			$this->_allProfiles = array();
 		}
-		$this->_allProfiles[] = $active_profile;
+		$this->_allProfiles[] = $activeProfile;
 
 		if(method_exists($this, 'afterEndProfile') === true) {
-			$this->afterEndProfile($active_profile);
+			$this->afterEndProfile($activeProfile);
 		}
 
 		return $this;

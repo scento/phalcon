@@ -113,20 +113,20 @@ class Postgresql extends Pdo implements EventsAwareInterface, AdapterInterface
 		$describe = $this->fetchAll($sql, 3);
 
 		//0: name, 1: type, 3: numeric size, 4: null, 5: key, 6: extra, 7: position
-		$old_column = null;
+		$oldColumn = null;
 		foreach($describe as $field) {
 			$definition = array('bindType' => 2);
-			$column_type = $field[1];
+			$columnType = $field[1];
 
 			//Check the column type to get the correct Phalcon type
 			while(true) {
-				if(strpos($column_type, 'smallint(1)') !== false) {
+				if(strpos($columnType, 'smallint(1)') !== false) {
 					$definition['type'] = 8;
 					$definition['bindType'] = 5;
 					break;
 				}
 
-				if(strpos($column_type, 'int') !== false) {
+				if(strpos($columnType, 'int') !== false) {
 					$definition['type'] = 0;
 					$definition['isNumeric'] = true;
 					$definition['size'] = $field[3];
@@ -134,19 +134,19 @@ class Postgresql extends Pdo implements EventsAwareInterface, AdapterInterface
 					break;
 				}
 
-				if(strpos($column_type, 'varying') !== false) {
+				if(strpos($columnType, 'varying') !== false) {
 					$definition['type'] = 2;
 					$definition['size'] = $field[2];
 					break;
 				}
 
-				if(strpos($column_type, 'date') !== false) {
+				if(strpos($columnType, 'date') !== false) {
 					$definition['type'] = 1;
 					$definition['size'] = 0;
 					break;
 				}
 
-				if(strpos($column_type, 'numeric') !== false) {
+				if(strpos($columnType, 'numeric') !== false) {
 					$definition['type'] = 3;
 					$definition['isNumeric'] = true;
 					$definition['size'] = $field[3];
@@ -155,25 +155,25 @@ class Postgresql extends Pdo implements EventsAwareInterface, AdapterInterface
 					break;
 				}
 
-				if(strpos($column_type, 'char') !== false) {
+				if(strpos($columnType, 'char') !== false) {
 					$definition['type'] = 5;
 					$definition['size'] = $field[2];
 					break;
 				}
 
-				if(strpos($column_type, 'timestamp') !== false) {
+				if(strpos($columnType, 'timestamp') !== false) {
 					$definition['type'] = 4;
 					$definition['size'] = 0;
 					break;
 				}
 
-				if(strpos($column_type, 'text') !== false) {
+				if(strpos($columnType, 'text') !== false) {
 					$definition['type'] = 6;
 					$definition['size'] = $field[2];
 					break;
 				}
 
-				if(strpos($column_type, 'float') !== false) {
+				if(strpos($columnType, 'float') !== false) {
 					$definition['type'] = 7;
 					$definition['isNumeric'] = true;
 					$definition['size'] = $field[3];
@@ -181,14 +181,14 @@ class Postgresql extends Pdo implements EventsAwareInterface, AdapterInterface
 					break;
 				}
 
-				if(strpos($column_type, 'bool') !== false) {
+				if(strpos($columnType, 'bool') !== false) {
 					$definition['type'] = 8;
 					$definition['size'] = 0;
 					$definition['bindType'] = 5;
 					break;
 				}
 
-				if(strpos($column_type, 'uuid') !== false) {
+				if(strpos($columnType, 'uuid') !== false) {
 					$definition['type'] = 5;
 					$definition['size'] = 36;
 					break;
@@ -198,14 +198,14 @@ class Postgresql extends Pdo implements EventsAwareInterface, AdapterInterface
 				break;
 			}
 
-			if(strpos($column_type, 'unsigned') !== false) {
+			if(strpos($columnType, 'unsigned') !== false) {
 				$definition['unsigned'] = true;
 			}
 
-			if(is_null($old_column) === true) {
+			if(is_null($oldColumn) === true) {
 				$definition['first'] = true;
 			} else {
-				$definition['after'] = $old_column;
+				$definition['after'] = $oldColumn;
 			}
 
 			//Check if the field is primary key
@@ -226,7 +226,7 @@ class Postgresql extends Pdo implements EventsAwareInterface, AdapterInterface
 			//Create a Phalcon\Db\Column to abstract the column
 			$column = new Column($field[0], $definition);
 			$columns[] = $column;
-			$old_column = $field[0];
+			$oldColumn = $field[0];
 		}
 
 		return $columns;

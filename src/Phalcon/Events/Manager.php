@@ -84,24 +84,24 @@ class Manager implements ManagerInterface
 		if(isset($this->_events[$eventType]) === false) {
 			if($this->_enablePriorities === true) {
 				//Create a SplPriorityQueue to store the events with priorities
-				$priority_queue = new SplPriorityQueue();
-				$priority_queue->setExtractFlags(1);
-				$this->_events[$eventType] = $priority_queue;
+				$priorityQueue = new SplPriorityQueue();
+				$priorityQueue->setExtractFlags(1);
+				$this->_events[$eventType] = $priorityQueue;
 			} else {
 				$this->_events[$eventType] = array();
 			}
 		}
 
-		$priority_queue = $this->_events[$eventType];
+		$priorityQueue = $this->_events[$eventType];
 
 		//Insert the handler in the queue
-		if(is_object($priority_queue) === true) {
-			$priority_queue->insert($handler, $priority);
+		if(is_object($priorityQueue) === true) {
+			$priorityQueue->insert($handler, $priority);
 		} else {
-			$priority_queue[] = $handler;
+			$priorityQueue[] = $handler;
 
 			//Append the events to the queue
-			$this->_events[$eventType] = $priority_queue;
+			$this->_events[$eventType] = $priorityQueue;
 		}
 	}
 
@@ -217,8 +217,8 @@ class Manager implements ManagerInterface
 		$status = null;
 		$arguments = null;
 
-		$event_name = $event->getType();
-		if(is_string($event_name) === false) {
+		$eventName = $event->getType();
+		if(is_string($eventName) === false) {
 			//@note missing "is"
 			throw new Exception('The event type not vaid');
 		}
@@ -266,9 +266,9 @@ class Manager implements ManagerInterface
 
 					} else {
 						//Check if the listener has implemented an event with the same name
-						if(method_exists($handler, $event_name) === true) {
+						if(method_exists($handler, $eventName) === true) {
 							//Call the function in the PHP userland
-							$status = $handler->$event_name($event, $source, $data);
+							$status = $handler->$eventName($event, $source, $data);
 
 							//Collect the responses
 							if($this->_collect === true) {
@@ -314,9 +314,9 @@ class Manager implements ManagerInterface
 						}
 					} else {
 						//Ćheck if the listener has implemented an event with the same name
-						if(method_exists($handler, $event_name) === true) {
+						if(method_exists($handler, $eventName) === true) {
 							//Call the function in the PHP userland
-							$status = $handler->$event_name($event, $source, $data);
+							$status = $handler->$eventName($event, $source, $data);
 
 							//Collect the responses
 							if($this->_collect === true) {
@@ -367,8 +367,8 @@ class Manager implements ManagerInterface
 			throw new Exception('Invalid event type '.$eventType);
 		}
 
-		$event_parts = explode(':', $eventType);
-		//@note no isset check for $event_parts[0], $event_parts[1]
+		$eventParts = explode(':', $eventType);
+		//@note no isset check for $eventParts[0], $eventParts[1]
 
 		//Responses must be traces?
 		if($this->_collect === true) {
@@ -377,28 +377,28 @@ class Manager implements ManagerInterface
 
 		$event = null;
 		//Check if events are grouped by type
-		if(isset($this->_events[$event_parts[0]]) === true) {
-			$fire_events = $this->_events[$event_parts[0]];
+		if(isset($this->_events[$eventParts[0]]) === true) {
+			$fireEvents = $this->_events[$eventParts[0]];
 
-			if(is_array($fire_events) === true || is_object($fire_events) === true) {
+			if(is_array($fireEvents) === true || is_object($fireEvents) === true) {
 				//Create the event context
-				$event = new Event($event_parts[1], $source, $data, $cancelable);
-				$status = $this->fireQueue($fire_events, $event);
+				$event = new Event($eventParts[1], $source, $data, $cancelable);
+				$status = $this->fireQueue($fireEvents, $event);
 			}
 		}
 
 		//Check if there are listeners for the event type itself
 		if(isset($this->_events[$eventType]) === true) {
-			$fire_events = $this->_events[$eventType];
+			$fireEvents = $this->_events[$eventType];
 
-			if(is_array($fire_events) === true || is_object($fire_events) === true) {
+			if(is_array($fireEvents) === true || is_object($fireEvents) === true) {
 				//Create the event if it wasn't created before
 				if(is_null($event) === true) {
-					$event = new Event($event_parts[1], $source, $data, $cancelable);
+					$event = new Event($eventParts[1], $source, $data, $cancelable);
 				}
 
 				//Call the events queue
-				$status = $this->fireQueue($fire_events, $event);
+				$status = $this->fireQueue($fireEvents, $event);
 			}
 		}
 

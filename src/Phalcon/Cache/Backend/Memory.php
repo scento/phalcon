@@ -115,16 +115,16 @@ class Memory extends Backend implements BackendInterface
 		}
 
 		/* Store data */
-		$prepared_content = $this->_frontend->beforeStore($content);
-		$this->_data[$keyName] = $prepared_content;
+		$preparedContent = $this->_frontend->beforeStore($content);
+		$this->_data[$keyName] = $preparedContent;
 
 		/* Handle buffer */
-		$is_buffering = $this->_frontend->isBuffering();
+		$isBuffering = $this->_frontend->isBuffering();
 		if($stopBuffer === true) {
 			$this->_frontend->stop();
 		}
 
-		if($is_buffering === true) {
+		if($isBuffering === true) {
 			echo $content;
 		}
 

@@ -208,9 +208,9 @@ class File implements FileInterface
 	*/
 	public function isUploadedFile()
 	{
-		$tmp_name = $this->getTempName();
-		if(is_string($tmp_name) === true) {
-			return is_uploaded_file($tmp_name);
+		$tmpName = $this->getTempName();
+		if(is_string($tmpName) === true) {
+			return is_uploaded_file($tmpName);
 		}
 		
 		return false;

@@ -115,8 +115,8 @@ class Mongo extends Backend implements BackendInterface
 			}
 
 			//Make the connection and get the collection
-			$mongo_database = $mongo->selectDB($this->_options['db']);
-			$this->_collection = $mongo_database->selectCollection($this->_options['collection']);
+			$mongoDatabase = $mongo->selectDB($this->_options['db']);
+			$this->_collection = $mongoDatabase->selectCollection($this->_options['collection']);
 		}
 
 		return $this->_collection;
@@ -207,26 +207,26 @@ class Mongo extends Backend implements BackendInterface
 		}
 
 		/* Store */
-		$prepared_content = $this->_frontend->beforeStore($content);
+		$preparedContent = $this->_frontend->beforeStore($content);
 		$collection = $this->_getCollection();
 		$ttl = time() + $lifetime;
 		$document = $collection->findOne(array('key' => $keyName));
 		if(is_array($document) === true) {
 			$document['time'] = $ttl;
-			$document['data'] = $prepared_content;
+			$document['data'] = $preparedContent;
 			$collection->save($document);
 		} else {
-			$collection->save(array('key' => $keyName, 'time' => $ttl, 'data' => $prepared_content));
+			$collection->save(array('key' => $keyName, 'time' => $ttl, 'data' => $preparedContent));
 		}
 
 		/* Handle buffer */
-		$is_buffering = $this->_frontend->isBuffering();
+		$isBuffering = $this->_frontend->isBuffering();
 
 		if($stopBuffer === true) {
 			$this->_frontend->stop();
 		}
 
-		if($is_buffering === true) {
+		if($isBuffering === true) {
 			echo $content;
 		}
 

@@ -165,11 +165,11 @@ class Cookies implements CookiesInterface, InjectionAwareInterface
 		//Check if the cookie needs to be updated
 		if(isset($this->_cookies[$name]) === false) {
 			//@note no validation
-			$dependency_injector = $this->_dependencyInjector;
+			$dependencyInjector = $this->_dependencyInjector;
 			$cookie = new Cookie($name, $value, $expire, $path, $secure, $domain, $httpOnly);
 
 			//Pass the DI to created cookies
-			$cookie->setDi($dependency_injector);
+			$cookie->setDi($dependencyInjector);
 
 			//Enable encryption in the cookie
 			if($this->_useEncryption === true) {
@@ -191,12 +191,12 @@ class Cookies implements CookiesInterface, InjectionAwareInterface
 
 		//Register the cookies bag in the response
 		if($this->_registered === false) {
-			$dependency_injector = $this->_dependencyInjector;
-			if(is_object($dependency_injector) === false) {
+			$dependencyInjector = $this->_dependencyInjector;
+			if(is_object($dependencyInjector) === false) {
 				throw new Exception("A dependency injection object is required to access the 'response' service");
 			}
 
-			$response = $dependency_injector->getShared('response');
+			$response = $dependencyInjector->getShared('response');
 			if(is_object($response) === false ||
 				$response instanceof ResponseInterface === false) {
 				throw new Exception('Wrong response service.');
@@ -236,10 +236,10 @@ class Cookies implements CookiesInterface, InjectionAwareInterface
 		//Create the cookie if it does not exist
 		$cookie = new Cookie($name);
 
-		$dependency_injector = $this->_dependencyInjector;
-		if(is_object($dependency_injector) === true) {
+		$dependencyInjector = $this->_dependencyInjector;
+		if(is_object($dependencyInjector) === true) {
 			//Pass the DI to created cookies
-			$cookie->setDi($dependency_injector);
+			$cookie->setDi($dependencyInjector);
 
 			//Enable encryption in the cookie
 			if($this->_useEncryption === true) {

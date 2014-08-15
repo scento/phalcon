@@ -110,7 +110,7 @@ class Oracle extends Pdo implements EventsAwareInterface, AdapterInterface
 	 	*  0:column_name, 1:data_type, 2:data_length, 3:data_precision, 4:data_scale,
 		* 5:nullable, 6:constraint_type, 7:default, 8:position;
 		*/
-		$old_column = null;
+		$oldColumn = null;
 		foreach($descibe as $field) {
 			$definition = array('bindType' => 2);
 
@@ -189,10 +189,10 @@ class Oracle extends Pdo implements EventsAwareInterface, AdapterInterface
 				break;
 			}
 
-			if(is_null($old_column) === true) {
+			if(is_null($oldColumn) === true) {
 				$definition['first'] = true;
 			} else {
-				$definition['after'] = $old_column;
+				$definition['after'] = $oldColumn;
 			}
 
 			//Check if the field is primary key
@@ -208,7 +208,7 @@ class Oracle extends Pdo implements EventsAwareInterface, AdapterInterface
 			//Create a Phalcon\Db\Column to abstract the column
 			$column = new Column($field[0], $definition);
 			$columns[] = $column;
-			$old_column = $field[0];
+			$oldColumn = $field[0];
 		}
 
 		return $columns;

@@ -135,11 +135,11 @@ class Memcache extends Backend implements BackendInterface
 
 		/* Get data */
 		$this->_lastKey = $this->_prefix.$keyName;
-		$cached_content = $this->_memcache->get($this->_lastKey);
-		if($cached_content === false) {
+		$cachedContent = $this->_memcache->get($this->_lastKey);
+		if($cachedContent === false) {
 			return null;
 		}
-		return $this->_frontend->afterRetrieve($cached_content);
+		return $this->_frontend->afterRetrieve($cachedContent);
 	}
 
 	/**
@@ -188,10 +188,10 @@ class Memcache extends Backend implements BackendInterface
 		}
 
 		//Prepare the content in the frontend
-		$prepared_content = $this->_frontend->beforeStore($content);
+		$preparedContent = $this->_frontend->beforeStore($content);
 
 		//We store without flags
-		if($this->_memcache->set($keyName, $prepared_content, 0, $lifetime) === false) {
+		if($this->_memcache->set($keyName, $preparedContent, 0, $lifetime) === false) {
 			throw new Exception('Failed storing data in memcached');
 		}
 
@@ -211,12 +211,12 @@ class Memcache extends Backend implements BackendInterface
 
 
 		/* Handle buffer */
-		$is_buffering = $this->_frontend->isBuffering();
+		$isBuffering = $this->_frontend->isBuffering();
 		if($stopBuffer === true) {
 			$this->_frontend->stop();
 		}
 
-		if($is_buffering === true) {
+		if($isBuffering === true) {
 			echo $content;
 		}
 
@@ -241,17 +241,17 @@ class Memcache extends Backend implements BackendInterface
 			$this->_connect();
 		}
 
-		$prefixed_key = $this->_prefix.$keyName;
+		$prefixedKey = $this->_prefix.$keyName;
 
 		/* Update stats key */
 		$keys = $this->_memcache->get($this->_options['statsKey']);
 		if(is_array($keys) === true) {
-			unset($keys[$prefixed_key]);
+			unset($keys[$prefixedKey]);
 			$this->_memcache->set($this->_options['statsKey']);
 		}
 
 		/* Delete the key from memcached */
-		return $this->_memcache->delete($prefixed_key);
+		return $this->_memcache->delete($prefixedKey);
 	}
 
 	/**
@@ -277,17 +277,17 @@ class Memcache extends Backend implements BackendInterface
 
 			if(isset($prefix) === true) {
 				//Use prefix
-				$prefixed_keys = array();
+				$prefixedKeys = array();
 				foreach($keys as $key => $ttl) {
 					if(Text::startsWith($key, $prefix) === false) {
 						continue;
 					}
 
-					$prefixed_keys[] = $key;
+					$prefixedKeys[] = $key;
 				}
 			} else {
 				//Don't use prefix
-				$prefixed_keys = array_keys($keys);
+				$prefixedKeys = array_keys($keys);
 			}
 		}
 

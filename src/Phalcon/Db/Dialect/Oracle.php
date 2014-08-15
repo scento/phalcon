@@ -506,42 +506,42 @@ class Oracle extends Dialect implements DialectInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$escape_identifiers = (isset($GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS']) === true &&
+		$escapeIdentifiers = (isset($GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS']) === true &&
 			$GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS'] === true ? true : false);
 
 		if(is_array($table) === true) {
 			//The index '0' is the table name
-			if($escape_identifiers === true) {
-				$sql_table = $escapeChar.$table[0].$escapeChar;
+			if($escapeIdentifiers === true) {
+				$sqlTable = $escapeChar.$table[0].$escapeChar;
 			} else {
-				$sql_table = $table[0];
+				$sqlTable = $table[0];
 			}
 
 			//The index '1' is the schema name
 			if(is_null($table[1]) === false) {
-				if($escape_identifiers === true) {
-					$sql_schema = $escapeChar.$table[1].$escapeChar.'.'.$sql_table;
+				if($escapeIdentifiers === true) {
+					$sqlSchema = $escapeChar.$table[1].$escapeChar.'.'.$sqlTable;
 				} else {
-					$sql_schema = $table[1].'.'.$sql_table;
+					$sqlSchema = $table[1].'.'.$sqlTable;
 				}
 			} else {
-				$sql_schema = $sql_table;
+				$sqlSchema = $sqlTable;
 			}
 
 			//The index '2' is the table alias
 			if(isset($table[2]) === true) {
-				if($escape_identifiers === true) {
-					$sql_table_alias = $sql_schema.' '.$escapeChar.$table[2].$escapeChar;
+				if($escapeIdentifiers === true) {
+					$sqlTableAlias = $sqlSchema.' '.$escapeChar.$table[2].$escapeChar;
 				} else {
-					$sql_table_alias = $sql_schema.' '.$table[2];
+					$sqlTableAlias = $sqlSchema.' '.$table[2];
 				}
 			} else {
-				$sql_table_alias = $sql_schema;
+				$sqlTableAlias = $sqlSchema;
 			}
 
-			return $sql_table_alias;
+			return $sqlTableAlias;
 		} elseif(is_string($table) === true) {
-			if($escape_identifiers === true) {
+			if($escapeIdentifiers === true) {
 				return $escapeChar.$table.$escapeChar;
 			} else {
 				return $table;
@@ -598,118 +598,118 @@ class Oracle extends Dialect implements DialectInterface
 			throw new Exception("The index 'columns' is required in the definition array");
 		}
 
-		$escape_identifiers = (isset($GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS']) === true &&
+		$escapeIdentifiers = (isset($GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS']) === true &&
 			$GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS'] === true ? true : false);
 
-		if($escape_identifiers === true) {
-			$esacpe_char = $this->_escapeChar;
+		if($escapeIdentifiers === true) {
+			$escapeChar = $this->_escapeChar;
 		} else {
-			$escape_char = null;
+			$escapeChar = null;
 		}
 
 		if(is_array($definition['columns']) === true) {
-			$selected_columns = array();
+			$selectedColumns = array();
 			foreach($definition['columns'] as $column) {
 
 				//Escape column name
-				$column_item = $column[0];
-				if(is_array($column_item) === true) {
-					$column_sql = $this->getSqlExpression($column_item, $escape_char);
+				$columnItem = $column[0];
+				if(is_array($columnItem) === true) {
+					$columnSql = $this->getSqlExpression($columnItem, $escapeChar);
 				} else {
-					if($column_item === '*') {
-						$column_sql = $column_item;
+					if($columnItem === '*') {
+						$columnSql = $columnItem;
 					} else {
-						if($escape_identifiers === true) {
-							$column_sql = $escape_char.$column_item.$esacpe_char;
+						if($escapeIdentifiers === true) {
+							$columnSql = $escapeChar.$columnItem.$esacpeChar;
 						} else {
-							$column_sql = $column_item;
+							$columnSql = $columnItem;
 						}
 					}
 				}
 
 				//Escape column domain
 				if(isset($column[1]) === true) {
-					$column_domain = $column[1];
-					if($column_domain == true) {
-						if($escape_identifiers === true) {
-							$column_domain_sql = $escape_char.$column_domain.$escape_char.'.'.$column_sql;
+					$columnDomain = $column[1];
+					if($columnDomain == true) {
+						if($escapeIdentifiers === true) {
+							$columnDomainSql = $escapeChar.$columnDomain.$escapeChar.'.'.$columnSql;
 						} else {
-							$column_domain_sql = $column_domain.'.'.$column_sql;
+							$columnDomainSql = $columnDomain.'.'.$columnSql;
 						}
 					} else {
-						$column_domain_sql = $column_sql;
+						$columnDomainSql = $columnSql;
 					}
 				} else {
-					$column_domain_sql = $column_sql;
+					$columnDomainSql = $columnSql;
 				}
 
 				//Esacpe column alias
 				if(isset($column[2]) === true) {
-					$column_alias = $column[2];
-					if($column_alias == true) {
-						if($escape_identifiers === true) {
-							$column_alias_sql = $column_domain_sql.' '.$esacpe_char.$column_alias.$esacpe_char;
+					$columnAlias = $column[2];
+					if($columnAlias == true) {
+						if($escapeIdentifiers === true) {
+							$columnAliasSql = $columnDomainSql.' '.$escapeChar.$columnAlias.$escapeChar;
 						} else {
-							$column_alias_sql = $column_domain_sql.' '.$column_alias;
+							$columnAliasSql = $columnDomainSql.' '.$columnAlias;
 						}
 					} else {
-						$column_alias_sql = $column_domain_sql;
+						$columnAliasSql = $columnDomainSql;
 					}
 				} else {
-					$column_alias_sql = $column_domain_sql;
+					$columnAliasSql = $columnDomainSql;
 				}
 
-				$selected_columns[] = $column_alias_sql;
+				$selectedColumns[] = $columnAliasSql;
 			}
 
-			$columns_sql = implode(', ', $selected_columns);
+			$columnsSql = implode(', ', $selectedColumns);
 		} else { //@note better check for string and add exception fallback
-			$columns_sql = $columns;
+			$columnsSql = $columns;
 		}
 
 		//Check and esacpe tables
 		if(is_array($definition['tables']) === true) {
-			$selected_tables = array();
+			$selectedTables = array();
 
 			foreach($definition['tables'] as $table) {
-				$selected_tables[] = $this->getSqlTable($table, $escape_char);
+				$selectedTables[] = $this->getSqlTable($table, $escapeChar);
 			}
 
-			$tables_sql = implode(', ', $selected_tables);
+			$tablesSql = implode(', ', $selectedTables);
 		} else { //@note better check for string and add exception
-			$tables_sql = $tables;
+			$tablesSql = $tables;
 		}
 
-		$sql = 'SELECT '.$columns_sql.' FROM '.$tables_sql;
+		$sql = 'SELECT '.$columnsSql.' FROM '.$tablesSql;
 
 		//Check for joins
 		if(isset($definition['joins']) === true) {
 			foreach($definition['joins'] as $join) {
-				$sql_join = ' '.$join['type'].' JOIN '.$this->getSqlTable($join['source'], $escape_char);
+				$sqlJoin = ' '.$join['type'].' JOIN '.$this->getSqlTable($join['source'], $escapeChar);
 
 				//Check if the join has conditions
 				if(isset($join['conditions']) === true) {
-					$join_conditions_array = $join['conditions'];
-					if(count($join_conditions_array) > 0) {
-						$join_expressions = array();
-						foreach($join_conditions_array as $join_condition) {
-							$join_expression = $this->getSqlExpression($join_condition, $escape_char);
-							$join_expressions[] = $join_expression;
+					$joinConditionsArray = $join['conditions'];
+					if(count($joinConditionsArray) > 0) {
+						$joinExpressions = array();
+						foreach($joinConditionsArray as $joinCondition) {
+							$joinExpression = $this->getSqlExpression($joinCondition, $escapeChar);
+							$joinExpressions[] = $joinExpression;
 						}
 
-						$join_conditions = implode(' AND ', $join_expressions);
-						$sql_join .= ' ON '.$join_conditions;
+						$joinConditions = implode(' AND ', $joinExpressions);
+						$sqlJoin .= ' ON '.$joinConditions;
 					}
 				}
 
-				$sql .= $sql_join;
+				$sql .= $sqlJoin;
 			}
 		}
 
 		//Check for a WHERE clause
 		if(isset($definition['where']) === true) {
 			if(is_array($definition['where']) === true) {
-				$sql .= ' WHERE '.$this->getSqlExpression($definition['where'], $escape_char);
+				$sql .= ' WHERE '.$this->getSqlExpression($definition['where'], $escapeChar);
 			} else { //@note better check for string and add exception fallback
 				$sql .= ' WHERE '.$definition['where'];
 			}
@@ -717,37 +717,37 @@ class Oracle extends Dialect implements DialectInterface
 
 		//Check for a GROUP clause
 		if(isset($definition['group']) === true) {
-			$group_items = array();
-			foreach($definition['group'] as $group_field) {
-				$group_items[] = $this->getSqlExpression($group_field, $esacpe_char);
+			$groupItems = array();
+			foreach($definition['group'] as $groupField) {
+				$groupItems[] = $this->getSqlExpression($groupField, $esacpeChar);
 			}
 
-			$group_sql = implode(', ', $gorup_items);
-			$sql .= ' GROUP BY '.$group_sql;
+			$groupSql = implode(', ', $gorupItems);
+			$sql .= ' GROUP BY '.$groupSql;
 
 			//Check for a HAVING clause
 			if(isset($definition['having']) === true) {
-				$sql .= ' HAVING '.$this->getSqlExpression($definition['having'], $escape_char);
+				$sql .= ' HAVING '.$this->getSqlExpression($definition['having'], $escapeChar);
 			}
 		}
 
 		//Check for a ORDER clause
 		if(isset($definition['order']) === true) {
-			$order_items = aray();
-			foreach($definition['order'] as $order_item) {
-				$order_sql_item = $this->getSqlExpression($order_item[0], $escape_char);
+			$orderItems = aray();
+			foreach($definition['order'] as $orderItem) {
+				$orderSqlItem = $this->getSqlExpression($orderItem[0], $escapeChar);
 
 				//In the numeric position 1 could be a ASC/DESC clause
-				if(isset($order_item[1]) === true) {
-					$order_sql_item_type = $oder_sql_item.' '.$order_item[1];
+				if(isset($orderItem[1]) === true) {
+					$orderSqlItemType = $oderSqlItem.' '.$orderItem[1];
 				} else {
-					$oder_sql_item_type = $order_sql_item;
+					$orderSqlItemType = $oderSqlItem;
 				}
 
-				$order_items[] = $oder_sql_item_type;
+				$orderItems[] = $orderSqlItemType;
 			}
 
-			$sql .= ' ORDER BY '.implode(', ', $order_items);
+			$sql .= ' ORDER BY '.implode(', ', $orderItems);
 		}
 
 		/*
@@ -757,14 +757,14 @@ class Oracle extends Dialect implements DialectInterface
 		* this puts an extra column into the query result set.
 		*/
 		if(isset($definition['limit']) === true) {
-			$limit_value = $definition['limit'];
-			if(is_array($limit_value) === true) {
-				$number = $limit_value['number'];
-				$offset = (isset($limit_value['offset']) === true ? $limit_value['offset'] : 0);
+			$limitValue = $definition['limit'];
+			if(is_array($limitValue) === true) {
+				$number = $limitValue['number'];
+				$offset = (isset($limitValue['offset']) === true ? $limitValue['offset'] : 0);
 
 				$sql = "SELECT Z2.* FROM (SELECT Z1.*, ROWNUM DB_ROWNUM FROM ( ".$sql." ) Z1 ) Z2 WHERE Z2.DB_ROWNUM BETWEEN ".($offset + 1)." AND ".($offset + $number);
 			} else {
-				$sql = "SELECT Z2.* FROM (SELECT Z1.*, ROWNUM DB_ROWNUM FROM ( ".$sql." ) Z1 ) Z2 WHERE Z2.DB_ROWNUM BETWEEN 1 AND ".(int)$limit_value;
+				$sql = "SELECT Z2.* FROM (SELECT Z1.*, ROWNUM DB_ROWNUM FROM ( ".$sql." ) Z1 ) Z2 WHERE Z2.DB_ROWNUM BETWEEN 1 AND ".(int)$limitValue;
 			}
 		}
 

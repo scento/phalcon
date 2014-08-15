@@ -74,22 +74,22 @@ class Mysql extends Dialect implements DialectInterface
 			 	return 'TEXT';
 			 	break;
 			 case 7:
-			 	$column_sql = 'FLOAT';
+			 	$columnSql = 'FLOAT';
 
 			 	$scale = $column->getScale();
 			 	if($size == true) {
-			 		$column_sql .= '('.$size;
+			 		$columnSql .= '('.$size;
 			 		if($scale == true) {
-			 			$column_sql .= ','.$scale.')';
+			 			$columnSql .= ','.$scale.')';
 			 		} else {
-			 			$column_sql .= ')';
+			 			$columnSql .= ')';
 			 		}
 			 	}
 
 			 	if($column->isUnsigned() === true) {
-			 		$column_sql .= ' UNSIGNED';
+			 		$columnSql .= ' UNSIGNED';
 			 	}
-			 	return $column_sql;
+			 	return $columnSql;
 			 	break;
 			 case 8:
 			 	return 'TINYINT(1)';
@@ -136,9 +136,9 @@ class Mysql extends Dialect implements DialectInterface
 		if($column->isFirst() === true) {
 			$sql .= ' FIRST';
 		} else {
-			$after_position = $column->getAfterPosition();
-			if($after_position == true) {
-				$sql .= ' AFTER '.$after_position;
+			$afterPosition = $column->getAfterPosition();
+			if($afterPosition == true) {
+				$sql .= ' AFTER '.$afterPosition;
 			}
 		}
 
@@ -350,9 +350,9 @@ class Mysql extends Dialect implements DialectInterface
 		$this->getColumnList($reference->getColumns()).') REFERENCES ';
 
 		//Add the schema
-		$referenced_schema = $reference->getReferencedSchema();
-		if(is_string($referenced_schema) === true) {
-			$sql .= '`'.$referenced_schema.'`.';
+		$referencedSchema = $reference->getReferencedSchema();
+		if(is_string($referencedSchema) === true) {
+			$sql .= '`'.$referencedSchema.'`.';
 		}
 
 		return $sql.'`'.$reference->getReferencedTable().'`('.
@@ -399,31 +399,31 @@ class Mysql extends Dialect implements DialectInterface
 		}
 
 		if(isset($definition['options']) === true) {
-			$table_options = array();
+			$tableOptions = array();
 			$options = $definition['options'];
 
 			//Check if there is an ENGINE option
 			if(isset($options['ENGINE']) === true &&
 				$options['ENGINE'] == true) {
-				$table_options[] = 'ENGINE='.$options['ENGINE'];
+				$tableOptions[] = 'ENGINE='.$options['ENGINE'];
 			}
 
 			//Check if there is a n AUTO_INCREMENT option
 			if(isset($options['AUTO_INCREMENT']) === true &&
 				$options['AUTO_INCREMENT'] == true) {
-				$table_options[] = 'AUTO_INCREMENT='.$options['AUTO_INCREMENT'];
+				$tableOptions[] = 'AUTO_INCREMENT='.$options['AUTO_INCREMENT'];
 			}
 
 			//Check if there is an TABLE_COLLATION option
 			if(isset($options['TABLE_COLLATION']) === true &&
 				$options['TABLE_COLLATION'] == true) {
-				$collation_parts = explode('_', $options['TABLE_COLLATION']);
-				$table_options[] = 'DEFAULT CHARSET='.$collation_parts[0];
-				$table_options[] = 'COLLATE='.$options['TABLE_COLLATION'];
+				$collationParts = explode('_', $options['TABLE_COLLATION']);
+				$tableOptions[] = 'DEFAULT CHARSET='.$collationParts[0];
+				$tableOptions[] = 'COLLATE='.$options['TABLE_COLLATION'];
 			}
 
-			if(count($table_options) > 0) {
-				return implode(' ', $table_options);
+			if(count($tableOptions) > 0) {
+				return implode(' ', $tableOptions);
 			}
 		}
 	}
@@ -468,37 +468,37 @@ class Mysql extends Dialect implements DialectInterface
 			$sql = 'CREATE TABLE '.$table." (\n\t";
 		}
 
-		$create_lines = array();
+		$createLines = array();
 
 		foreach($definition['columns'] as $column) {
-			$column_line = '`'.$column->getName().'` '.$this->getColumnDefinition($column);
+			$columnLine = '`'.$column->getName().'` '.$this->getColumnDefinition($column);
 
 			//Add a NOT NULL clause
 			if($column->isNotNull() === true) {
-				$column_line .= ' NOT NULL';
+				$columnLine .= ' NOT NULL';
 			}
 
 			//Add an AUTO_INCREMENT clause
 			if($column->isAutoIncrement() === true) {
-				$column_line .= ' AUTO_INCREMENT';
+				$columnLine .= ' AUTO_INCREMENT';
 			}
 
 			//Mark the column as primary key
 			if($column->isPrimary() === true) {
-				$column_line .= ' PRIMARY KEY';
+				$columnLine .= ' PRIMARY KEY';
 			}
 
-			$create_lines[] = $column_line;
+			$createLines[] = $columnLine;
 		}
 
 		//Create related indexes
 		if(isset($definition['indexes']) === true) {
 			foreach($definition['indexes'] as $index) {
-				$index_name = $index->getName();
-				if($index_name === 'PRIMARY') {
-					$create_lines[] = 'PRIMARY KEY ('.$this->getColumnList($index->getColumns()).')';
+				$indexName = $index->getName();
+				if($indexName === 'PRIMARY') {
+					$createLines[] = 'PRIMARY KEY ('.$this->getColumnList($index->getColumns()).')';
 				} else {
-					$create_lines[] = 'KEY `'.$index_name.'` ('.$this->getColumnList($index->getColumns()).')';
+					$createLines[] = 'KEY `'.$indexName.'` ('.$this->getColumnList($index->getColumns()).')';
 				}
 			}
 		}
@@ -508,18 +508,18 @@ class Mysql extends Dialect implements DialectInterface
 			foreach($definition['references'] as $reference) {
 				$name = $reference->getName();
 				//$columns = $reference->getColumns();
-				//$column_list = $this->getColumnList($columns);
-				$referenced_table = $reference->getReferencedTable();
-				$referenced_columns = $reference->getReferencedColumns();
-				$column_list = $this->getColumnList($referenced_columns);
+				//$columnList = $this->getColumnList($columns);
+				$referencedTable = $reference->getReferencedTable();
+				$referencedColumns = $reference->getReferencedColumns();
+				$columnList = $this->getColumnList($referencedColumns);
 
-				$constraint_sql = 'CONSTRAINT `'.$name.'` FOREIGN KEY ('.$column_list.')';
-				$create_lines[] = $constraint_sql.' REFERENCES `'.$referenced_table.'`('.$column_list.')';
-				//@note there should be two different kinds of $column_list
+				$constraintSql = 'CONSTRAINT `'.$name.'` FOREIGN KEY ('.$columnList.')';
+				$createLines[] = $constraintSql.' REFERENCES `'.$referencedTable.'`('.$columnList.')';
+				//@note there should be two different kinds of $columnList
 			}
 		}
 
-		$sql .= implode(",\n\t", $create_lines)."\n)";
+		$sql .= implode(",\n\t", $createLines)."\n)";
 		if(isset($definition['options']) === true) {
 			$sql .= $this->_getTableOptions($definition);
 		}

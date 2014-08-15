@@ -131,18 +131,18 @@ abstract class Pdo extends Adapter implements EventsAwareInterface
 
 		//Check if the user has defined a custom dsn
 		if(isset($descriptor['dns']) === false) {
-			$dns_parts = array();
+			$dnsParts = array();
 
 			foreach($descriptor as $key => $value) {
-				$dns_parts[] = $key.'='.$value;
+				$dnsParts[] = $key.'='.$value;
 			}
 
-			$dns_attributes = implode(', ', $dns_parts);
+			$dnsAttributes = implode(', ', $dnsParts);
 		} else {
-			$dns_attributes = $descriptor['dns'];
+			$dnsAttributes = $descriptor['dns'];
 		}
 
-		$dns = $this->_type.':'.$dns_attributes;
+		$dns = $this->_type.':'.$dnsAttributes;
 
 		//Default options
 		$options[\PDO_ATTR_ERRMODE] = \PDO_ERRMODE_EXCEPTION;
@@ -210,17 +210,17 @@ abstract class Pdo extends Adapter implements EventsAwareInterface
 					//The bind type is double so we try to get the double value
 					$type = $dataTypes[$wildcard];
 					if($type === 32) {
-						$cast_value = (int)$value;
+						$castValue = (int)$value;
 						$type = 1024;
 					} else {
-						$cast_value = $value;
+						$castValue = $value;
 					}
 
 					//1024 is ignore the bind type
 					if($type === 1024) {
-						$statement->bindParam($parameter, $cast_value);
+						$statement->bindParam($parameter, $castValue);
 					} else {
-						$statement->bindParam($parameter, $cast_value, $type);
+						$statement->bindParam($parameter, $castValue, $type);
 					}
 				} else {
 					throw new Exception('Invalid bind type parameter');
@@ -260,15 +260,15 @@ abstract class Pdo extends Adapter implements EventsAwareInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$events_manager = $this->_eventsManager;
+		$eventsManager = $this->_eventsManager;
 
 		//Execute the beforeQuery event if an EventsManager is available
-		if(is_object($events_manager) === true) {
+		if(is_object($eventsManager) === true) {
 			$this->_sqlStatement = $sqlStatement;
 			$this->_sqlVariables = $bindParams;
 			$this->_sqlBindTypes = $bindTypes;
 
-			if($events_manager->fire('db:beforeQuery', $this, $bindParams) === false) {
+			if($eventsManager->fire('db:beforeQuery', $this, $bindParams) === false) {
 				return false;
 			}
 		}
@@ -286,8 +286,8 @@ abstract class Pdo extends Adapter implements EventsAwareInterface
 
 		//Execute the afterQuery event if an EventsManager is available
 		if(is_object($statement) === true) {
-			if(is_object($events_manager) === true) {
-				$events_manager->fire('db:afterQuery', $this, $bindParams);
+			if(is_object($eventsManager) === true) {
+				$eventsManager->fire('db:afterQuery', $this, $bindParams);
 			}
 
 			return new PdoResult($this, $statement, $sqlStatement, $bindParams, $bindTypes);
@@ -323,35 +323,35 @@ abstract class Pdo extends Adapter implements EventsAwareInterface
 		}
 
 		//Execute the beforeQuery event if an EventsManager is available
-		$events_manager = $this->_eventsManager;
-		if(is_object($events_manager) === true) {
+		$eventsManager = $this->_eventsManager;
+		if(is_object($eventsManager) === true) {
 			$this->_sqlStatement = $sqlStatement;
 			$this->_sqlVariables = $bindParams;
 			$this->_sqlBindTypes = $bindTypes;
 
-			if($events_manager->fire('db:beforeQuery', $this, $bindParams) === false) {
+			if($eventsManager->fire('db:beforeQuery', $this, $bindParams) === false) {
 				return false;
 			}
 		}
 
 		//Initialize affected_rows to 0
-		$affected_rows = 0;
+		$affectedRows = 0;
 		$pdo = $this->_pdo; //@note pdo can be null
 		if(is_array($bindParams) === true) {
 			$statement = $pdo->prepare();
 			if(is_object($statement) === true) {
-				$new_statement = $this->executePrepared($statement, $bindParams, $bindTypes);
-				$affected_rows = $new_statement->rowCount();
+				$newStatement = $this->executePrepared($statement, $bindParams, $bindTypes);
+				$affectedRows = $newStatement->rowCount();
 			}
 		} else {
-			$affected_rows = $pdo->exec($sqlStatement);
+			$affectedRows = $pdo->exec($sqlStatement);
 		}
 
 		//Execute the afterQuery event if an EventsManager is available
-		if(is_int($affected_rows) === true) {
-			$this->_affectedRows = $affected_rows;
-			if(is_object($events_manager) === true) {
-				$events_manager->fire('db:afterQuery', $this, $bindParams);
+		if(is_int($affectedRows) === true) {
+			$this->_affectedRows = $affectedRows;
+			if(is_object($eventsManager) === true) {
+				$eventsManager->fire('db:afterQuery', $this, $bindParams);
 			}
 		}
 
@@ -447,20 +447,20 @@ abstract class Pdo extends Adapter implements EventsAwareInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$query_params = array();
+		$queryParams = array();
 		$placeholders = array();
 		$matches = null;
 
 		if(preg_match_all("/\\?([0-9]+)|:([a-zA-Z0-9_]+):/", $sql, $matches, 2) === true) {
-			foreach($matches as $place_match) {
-				$numeric_place = $place_match[1];
-				if(isset($params[$numeric_place]) === true) {
-					$value = $params[$numeric_place];
+			foreach($matches as $placeMatch) {
+				$numericPlace = $placMmatch[1];
+				if(isset($params[$numericPlace]) === true) {
+					$value = $params[$numericPlace];
 				} else {
-					if(isset($place_match[2]) === true) {
-						$str_place = $place_match[2];
-						if(isset($params[$str_place]) === true) {
-							$value = $params[$str_place];
+					if(isset($placeMatch[2]) === true) {
+						$strPlace = $placeMatch[2];
+						if(isset($params[$strPlace]) === true) {
+							$value = $params[$strPlace];
 						} else {
 							throw new Exception("Matched parameter wasn't found in parameters list");
 						}
@@ -472,13 +472,13 @@ abstract class Pdo extends Adapter implements EventsAwareInterface
 				$placeholders[] = $value;
 			}
 
-			$bound_sql = preg_replace("/\\?([0-9]+)|:([a-zA-Z0-9_]+):/", '?', $sql);
+			$boundSql = preg_replace("/\\?([0-9]+)|:([a-zA-Z0-9_]+):/", '?', $sql);
 		} else {
-			$bound_sql = $sql;
+			$boundSql = $sql;
 		}
 
 		//Returns an array with the processed SQL and parameters
-		return array('sql' => $bound_sql, 'params' => $placeholders);
+		return array('sql' => $boundSql, 'params' => $placeholders);
 	}
 
 	/**
@@ -534,31 +534,31 @@ abstract class Pdo extends Adapter implements EventsAwareInterface
 		$this->_transactionLevel++;
 
 		//Check the transaction nesting level
-		$transaction_level = $this->_transactionLevel;
+		$transactionLevel = $this->_transactionLevel;
 
-		if($transaction_level === 1) {
-			$events_manager = $this->_eventsManager;
+		if($transactionLevel === 1) {
+			$eventsManager = $this->_eventsManager;
 
 			//Notify the events manager about the started transaction
-			if(is_object($events_manager) === true) {
-				$events_manager->fire('db:beginTransaction', $this);
+			if(is_object($eventsManager) === true) {
+				$eventsManager->fire('db:beginTransaction', $this);
 			}
 
 			return $pdo->beginTransaction();
 		} else {
-			if($transaction_level == true &&
+			if($transactionLevel == true &&
 				$nesting === true) {
-				$ntw_savepoint = $this->isNestedTransactionWithSavepoints();
-				if($ntw_savepoint === true) {
-					$events_manager = $this->_eventsManager;
-					$savepoint_name = $this->getNestedTransactionSavepointName();
+				$ntwSavepoint = $this->isNestedTransactionWithSavepoints();
+				if($ntwSavepoint === true) {
+					$eventsManager = $this->_eventsManager;
+					$savepointName = $this->getNestedTransactionSavepointName();
 
 					//Notify the eventsManager about the created savepoints
-					if(is_object($events_manager) === true) {
-						$events_manager->fire('db:createSavepoint', $this, $savepoint_name);
+					if(is_object($eventsManager) === true) {
+						$eventsManager->fire('db:createSavepoint', $this, $savepointName);
 					}
 
-					return $this->createSavepoint($savepoint_name);
+					return $this->createSavepoint($savepointName);
 				}
 			}
 		}
@@ -587,43 +587,43 @@ abstract class Pdo extends Adapter implements EventsAwareInterface
 		}
 
 		//Check the transaction nesting level
-		$transaction_level = $this->_transactionLevel;
-		if($transaction_level === 0) {
+		$transactionLevel = $this->_transactionLevel;
+		if($transactionLevel === 0) {
 			throw new Exception('There is no active transaction');
 		}
 
-		if($transaction_level === 1) {
-			$events_manager = $this->_eventsManager;
+		if($transactionLevel === 1) {
+			$eventsManager = $this->_eventsManager;
 			
 			//Notify the eventsManager about the rollbacked transaction
-			if(is_object($events_manager) === true) {
-				$events_manager->fire('db:rollbackTransaction', $this);
+			if(is_object($eventsManager) === true) {
+				$eventsManager->fire('db:rollbackTransaction', $this);
 			}
 
 			//Reduce the transaction nesting level
 			$this->_transactionLevel--;
 			return $pdo->rollback();
 		} else {
-			if($transaction_level == true &&
+			if($transactionLevel == true &&
 				$nesting === true) {
 				if($this->isNestedTransactionWithSavepoints() === true) {
-					$events_manager = $this->_eventsManager;
-					$savepoint_name = $this->getNestedTransactionSavepointName();
+					$eventsManager = $this->_eventsManager;
+					$savepointName = $this->getNestedTransactionSavepointName();
 
 					//Notify the eventsManager about the rollbacked savepoint
-					if(is_object($events_manager) === true) {
-						$events_manager->fire('db:rollbackSavepoint', $this, $savepoint_name);
+					if(is_object($eventsManager) === true) {
+						$eventsManager->fire('db:rollbackSavepoint', $this, $savepointName);
 					}
 
 					//Reduce the transaction nesting level
 					$this->_transactionLevel--;
-					return $this->rollbackSavepoint($savepoint_name);
+					return $this->rollbackSavepoint($savepointName);
 				}
 			}
 		}
 
 		//Reduce the transaction nesting level
-		if($transaction_level > 0) {
+		if($transactionLevel > 0) {
 			$this->_transactionLevel--;
 		}
 
@@ -651,43 +651,43 @@ abstract class Pdo extends Adapter implements EventsAwareInterface
 		}
 
 		//Check the transaction nesting level
-		$transaction_level = $this->_transactionLevel;
-		if($transaction_level === 0) {
+		$transactionLevel = $this->_transactionLevel;
+		if($transactionLevel === 0) {
 			throw new Exception('There is no active transaction');
 		}
 
-		if($transaction_level === 1) {
-			$events_manager = $this->_eventsManager;
+		if($transactionLevel === 1) {
+			$eventsManager = $this->_eventsManager;
 
 			//Notify the eventsManager about the commited transaction
-			if(is_object($events_manager) === true) {
-				$events_manager->fire('db:commitTransaction', $this);
+			if(is_object($eventsManager) === true) {
+				$eventsManager->fire('db:commitTransaction', $this);
 			}
 
 			//Reduce the transaction nesting level
 			$this->_transactionLevel--;
 			return $pdo->commit();
 		} else {
-			if($transaction_level == true &&
+			if($transactionLevel == true &&
 				$nesting === true) {
 				//Check if the current database system supports nesting transactions
 				if($this->isNestedTransactionWithSavepoints() === true) {
-					$events_manager = $this->_eventsManager;
-					$savepoint_name = $this->getNestedTransactionSavepointName();
+					$eventsManager = $this->_eventsManager;
+					$savepointName = $this->getNestedTransactionSavepointName();
 
 					//Notify the eventsManager about the commited savepoint
 					if(is_object($eventsManager) === true) {
-						$events_manager->fire('db:releaseSavepoint', $this, $savepoint_name);
+						$eventsManager->fire('db:releaseSavepoint', $this, $savepointName);
 					}
 
 					//Reduce the transaction nesting level
 					$this->_transactionLevel--;
-					return $this->releaseSavepoint($savepoint_name);
+					return $this->releaseSavepoint($savepointName);
 				}
 			}
 		}
 
-		if($transaction_level > 0) {
+		if($transactionLevel > 0) {
 			$this->_transactionLevel--;
 		}
 

@@ -65,13 +65,13 @@ class Apc extends Backend implements BackendInterface
 		/* Fetch data */
 		$this->_lastKey = '_PHCA'.$this->_prefix.$keyName;
 
-		$cached_content = apc_fetch($this->_lastKey);
-		if($cached_content === false) {
+		$cachedContent = apc_fetch($this->_lastKey);
+		if($cachedContent === false) {
 			return null;
 		}
 
 		/* Processing */
-		return $this->_frontend->afterRetrieve($cached_content);
+		return $this->_frontend->afterRetrieve($cachedContent);
 	}
 
 	/**
@@ -87,13 +87,13 @@ class Apc extends Backend implements BackendInterface
 	{
 		/* Prepare input data */
 		if(is_null($keyName) === true) {
-			$last_key = $this->_lastKey;
+			$lastKey = $this->_lastKey;
 
-			if(isset($last_key) === false) {
+			if(isset($lastKey) === false) {
 				throw new Exception('The cache must be started first');
 			}
 		} elseif(is_string($keyName) === true) {
-			$last_key = '_PHCA'.$this->_prefix.$keyName;
+			$lastKey = '_PHCA'.$this->_prefix.$keyName;
 		} else {
 			throw new Exception('Invalid parameter type.');
 		}
@@ -104,7 +104,7 @@ class Apc extends Backend implements BackendInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$storeable_content = $this->_frontend->beforeStore($content);
+		$storeableContent = $this->_frontend->beforeStore($content);
 
 		if(is_null($lifetime) === true) {
 			$lifetime = $this->_lastLifetime;
@@ -122,14 +122,14 @@ class Apc extends Backend implements BackendInterface
 		}
 
 		/* Store data */
-		apc_store($last_key, $storeable_content, $lifetime);
+		apc_store($lastKey, $storeableContent, $lifetime);
 
 		/* Buffer */
-		$is_buffering = $this->_frontend->isBuffering();
+		$isBuffering = $this->_frontend->isBuffering();
 		if($stopBuffer === true) {
 			$this->_frontend->stop();
 		}
-		if($is_buffering === true) {
+		if($isBuffering === true) {
 			echo $content;
 		}
 		$this->_started = false;
@@ -200,14 +200,14 @@ class Apc extends Backend implements BackendInterface
 	public function exists($keyName = null, $lifetime = null)
 	{
 		if(is_null($keyName) === true) {
-			$last_key = $this->_lastKey;
+			$lastKey = $this->_lastKey;
 		} elseif(is_string($keyName) === true) {
-			$last_key = '_PHCA'.$this->_prefix.$keyName;
+			$lastKey = '_PHCA'.$this->_prefix.$keyName;
 		} else {
 			throw new Exception('Invalid parameter type.');
 		}
 
-		if(isset($last_key) === true && apc_exists($last_key) !== false) {
+		if(isset($lastKey) === true && apc_exists($lastKey) !== false) {
 			return true;
 		}
 

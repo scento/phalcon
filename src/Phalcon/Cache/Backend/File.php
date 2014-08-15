@@ -88,9 +88,9 @@ class File extends Backend implements BackendInterface
 		}
 
 		$this->_lastKey = $this->_prefix.$keyName;
-		$cache_file = $this->_options['cacheDir'].$this->_lastKey;
+		$cacheFile = $this->_options['cacheDir'].$this->_lastKey;
 
-		if(file_exists($cache_file) === true) {
+		if(file_exists($cacheFile) === true) {
 
 			//Check if the file has expired
 			if(is_null($lifetime) === true) {
@@ -101,16 +101,16 @@ class File extends Backend implements BackendInterface
 			}
 
 			//The content is only retrieved if the content has not expired
-			if(filemtime($cache_file) > (time() - $lifetime)) {
+			if(filemtime($cacheFile) > (time() - $lifetime)) {
 
 				//Use file_get_contents to control that the openbase_dir can't be skipped
-				$cached_content = file_get_contents($cache_file);
-				if($cached_content === false) {
-					throw new Exception('Cache file '.$cache_file.' could not be openend');
+				$cachedContent = file_get_contents($cacheFile);
+				if($cachedContent === false) {
+					throw new Exception('Cache file '.$cacheFile.' could not be openend');
 				}
 
 				//Use the fronted to process the content of the cache
-				return $this->_frontend->afterRetrieve($cached_content);
+				return $this->_frontend->afterRetrieve($cachedContent);
 			}
 		}
 
@@ -158,22 +158,22 @@ class File extends Backend implements BackendInterface
 		if(isset($content) === false) {
 			$content = $this->_frontend->getContent();
 		}
-		$prepared_content = $this->_frontend->beforeStore($content);
+		$preparedContent = $this->_frontend->beforeStore($content);
 
 		/* Store data */
 		//We use file_put_contents to respect open_base_dir directive
-		if(file_put_contents($this->_options['cacheDir'].$keyName, $prepared_content) === false) {
+		if(file_put_contents($this->_options['cacheDir'].$keyName, $preparedContent) === false) {
 			throw new Exception('Cache directory can\'t be written');
 		}
 
 		/* Buffer handeling */
-		$is_buffering = $this->_frontend->isBuffering();
+		$isBuffering = $this->_frontend->isBuffering();
 
 		if($stopBuffer === true) {
 			$this->_frontend->stop();
 		}
 
-		if($is_buffering === true) {
+		if($isBuffering === true) {
 			echo $content;
 		}
 
@@ -193,9 +193,9 @@ class File extends Backend implements BackendInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$cache_file = $this->_options['cacheDir'].$this->_prefix.$keyName;
-		if(file_exists($cache_file) === true) {
-			return unlink($cache_file);
+		$cacheFile = $this->_options['cacheDir'].$this->_prefix.$keyName;
+		if(file_exists($cacheFile) === true) {
+			return unlink($cacheFile);
 		}
 
 		return false;
@@ -267,14 +267,14 @@ class File extends Backend implements BackendInterface
 
 		/* Check for file */
 		if(isset($keyName) === true) {
-			$cache_file = $this->_options['cacheDir'].$keyName;
-			if(file_exists($cache_file) === true) {
+			$cacheFile = $this->_options['cacheDir'].$keyName;
+			if(file_exists($cacheFile) === true) {
 				//Check if the file has expired
 				if(is_null($lifetime) === true) {
 					$lifetime = $this->_frontend->getLifetime();
 				}
 
-				if(filemtime($cache_file) > (time() - $lifetime)) {
+				if(filemtime($cacheFile) > (time() - $lifetime)) {
 					return true;
 				}
 			}

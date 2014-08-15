@@ -228,43 +228,43 @@ class Pdo
 	 */
 	public function numRows()
 	{
-		$row_count = $this->_rowCount;
-		if($row_count === false) {
+		$rowCount = $this->_rowCount;
+		if($rowCount === false) {
 			switch($this->_connection->getType()) {
 				case 'mysql':
-					$row_count = $this->_pdoStatement->rowCount();
+					$rowCount = $this->_pdoStatement->rowCount();
 					break;
 				case 'pgsql':
-					$row_count = $this->_pdoStatement->rowCount();
+					$rowCount = $this->_pdoStatement->rowCount();
 					break;
 			}
 
-			if($row_count === false) {
+			if($rowCount === false) {
 				//SQLite/Oracle/SQLServer returns resultsets that to the client eyes (PDO) has an
 				//arbitrary number of rows, so we need to perform an extra count to know that
-				$sql_statement = $this->_sqlStatement;
+				$sqlStatement = $this->_sqlStatement;
 
 				//If the sql_statement starts with SELECT COUNT(*) we don't make the count
-				if(strpos($sql_statement, 'SELECT COUNT(*) ') !== 0) {
-					$bind_params = $this->_bindParams;
-					$bind_types = $this->_bindTypes;
+				if(strpos($sqlStatement, 'SELECT COUNT(*) ') !== 0) {
+					$bindParams = $this->_bindParams;
+					$bindTypes = $this->_bindTypes;
 					$matches = null;
 
-					if(preg_match("/^SELECT\\s+(.*)$/i", $sql_statement, $matches) == true) {
-						$row_count = $this->_connection->query(
+					if(preg_match("/^SELECT\\s+(.*)$/i", $sqlStatement, $matches) == true) {
+						$rowCount = $this->_connection->query(
 							"SELECT COUNT(*) \"numrows\" FROM (SELECT ".$matches[0].')', 
-							$bind_params, $bind_types)->fetch()->numRows();
+							$bindParams, $bindTypes)->fetch()->numRows();
 					}
 				} else {
-					$row_count = 1;
+					$rowCount = 1;
 				}
 			}
 
 			//Update the value to avoid further calculations
-			$this->_rowCount = $row_count;
+			$this->_rowCount = $rowCount;
 		}
 
-		return $row_count;
+		return $rowCount;
 	}
 
 	/**
@@ -321,25 +321,25 @@ class Pdo
 
 		switch($fetchMode) {
 			case 1:
-				$fetch_type = 2;
+				$fetchType = 2;
 				break;
 			case 2:
-				$fetch_type = 4;
+				$fetchType = 4;
 				break;
 			case 3:
-				$fetch_type = 3;
+				$fetchType = 3;
 				break;
 			case 4:
-				$fetch_type = 5;
+				$fetchType = 5;
 				break;
 			default:
-				$fetch_type = 0;
+				$fetchType = 0;
 				break;
 		}
 
-		if($fetch_type !== 0) {
-			$this->_pdoStatement->setFetchMode($fetch_type);
-			$this->_fetchMode = $fetch_type;
+		if($fetchType !== 0) {
+			$this->_pdoStatement->setFetchMode($fetchType);
+			$this->_fetchMode = $fetchType;
 		}
 	}
 

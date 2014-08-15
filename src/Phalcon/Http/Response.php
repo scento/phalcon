@@ -334,10 +334,10 @@ class Response implements ResponseInterface, InjectionAwareInterface
 
 		//Change the timezone to UTC
 		$date->setTimezone($timezone);
-		$utc_date = $date->format('D, d M Y H:i:s').' GMT';
+		$utcDate = $date->format('D, d M Y H:i:s').' GMT';
 
 		//The 'Expires' header set this info
-		$this->setHeader('Expires', $utc_date);
+		$this->setHeader('Expires', $utcDate);
 
 		return $this;
 	}
@@ -433,7 +433,7 @@ class Response implements ResponseInterface, InjectionAwareInterface
 	public function redirect($location = null, $externalRedirect = null, 
 		$statusCode = null)
 	{
-		$redirect_phrases = array(
+		$redirectPhrases = array(
 			/* 300 */ 'Multiple Choices',
 			/* 301 */ 'Moved Permanently',
 			/* 302 */ 'Found',
@@ -467,8 +467,8 @@ class Response implements ResponseInterface, InjectionAwareInterface
 		if($externalRedirect === true) {
 			$header = $location;
 		} else {
-			$dependency_injector = $this->getDi();
-			$url = $dependency_injector->getShared('url');
+			$dependencyInjector = $this->getDi();
+			$url = $dependencyInjector->getShared('url');
 			if(is_object($url) === false ||
 				$url instanceof UrlInterface === false) {
 				throw new Exception('Wrong url service.');
@@ -480,12 +480,12 @@ class Response implements ResponseInterface, InjectionAwareInterface
 		/* Execution */
 		//The HTTP status is 302 by default, a temporary redirection
 		if($statusCode < 300 || $statusCode > 308) {
-			$status_text = 'Redirect';
+			$statusText = 'Redirect';
 		} else {
-			$status_text = $redirect_phrases[(int)$statusCode - 300];
+			$statusText = $redirectPhrases[(int)$statusCode - 300];
 		}
 
-		$this->setStatusCode($statusCode, $status_text);
+		$this->setStatusCode($statusCode, $statusText);
 
 		//Change the current location using 'Location'
 		$this->setHeader('Location', $header);

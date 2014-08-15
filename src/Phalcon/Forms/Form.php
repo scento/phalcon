@@ -305,8 +305,8 @@ class Form extends Injectable implements EventsAwareInterface, InjectionAwareInt
 			if(isset($filters) === true) {
 				if(is_object($filter) === false) {
 					//@note no further validation
-					$dependency_injector = $this->getDi();
-					$filter = $dependency_injector->getShared('filter');
+					$dependencyInjector = $this->getDi();
+					$filter = $dependencyInjector->getShared('filter');
 					if(is_object($filter) === false ||
 						$filter instanceof FilterInterface === false) {
 						throw new Exception('Wrong filter service.');
@@ -372,7 +372,7 @@ class Form extends Injectable implements EventsAwareInterface, InjectionAwareInt
 			}
 		}
 
-		$not_failed = true;
+		$notFailed = true;
 
 		$messages = array();
 
@@ -381,13 +381,13 @@ class Form extends Injectable implements EventsAwareInterface, InjectionAwareInt
 			if(is_array($validators) === true &&
 				empty($validators) === false) {
 				$name = $element->getName();
-				$prepared_validators = array();
+				$preparedValidators = array();
 				foreach($validators as $validator) {
-					$prepared_validators[] = array($name, $validator);
+					$preparedValidators[] = array($name, $validator);
 				}
 
 				//Create an implicit validator
-				$validation = new Validation($prepared_validators);
+				$validation = new Validation($preparedValidators);
 
 				//Get filters in the element
 				$filters = $element->getFilters();
@@ -399,17 +399,17 @@ class Form extends Injectable implements EventsAwareInterface, InjectionAwareInt
 				}
 
 				//Perform the validation
-				$element_messages = $validation->validate($data, $entity);
-				if(empty($element_messages) === false) {
+				$elementMessages = $validation->validate($data, $entity);
+				if(empty($elementMessages) === false) {
 					$name = $element->getName();
-					$messages[$name] = $element_messages;
-					$not_failed = false;
+					$messages[$name] = $elementMessages;
+					$notFailed = false;
 				}
 			}
 		}
 
 		//If the validation fails we update the messages
-		if($not_failed === false) {
+		if($notFailed === false) {
 			$this->_messages = $messages;
 		}
 
@@ -418,7 +418,7 @@ class Form extends Injectable implements EventsAwareInterface, InjectionAwareInt
 			$this->afterValidation($messages);
 		}
 
-		return $not_failed;
+		return $notFailed;
 	}
 
 	/**

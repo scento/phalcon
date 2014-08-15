@@ -144,15 +144,15 @@ abstract class Adapter implements EventsAwareInterface
 		//Dialect class can override the default dialect
 		//@note no interface validation
 		if(isset($descriptor['dialectClass']) === false) {
-			$dialect_class = 'Phalcon\\Db\\Dialect\\'.$this->_dialectType;
+			$dialectClass = 'Phalcon\\Db\\Dialect\\'.$this->_dialectType;
 		} else {
-			$dialect_class = $descriptor['dialectClass'];
+			$dialectClass = $descriptor['dialectClass'];
 		}
 
 		//Create the instance only if the dialect is a string
-		if(is_string($dialect_class) === true) {
-			$dialect_object = new $dialect_class();
-			$this->_dialect = $dialect_object;
+		if(is_string($dialectClass) === true) {
+			$dialectObject = new $dialectClass();
+			$this->_dialect = $dialectObject;
 		}
 
 		//@note what happens when $descriptor does not contain a dialect object/name
@@ -354,12 +354,12 @@ abstract class Adapter implements EventsAwareInterface
 		}
 
 		$placeholders = array();
-		$insert_values = array();
+		$insertValues = array();
 
 		if(is_array($dataTypes) === true) { //@note this seems to be wrong considering the usage
-			$bind_data_types = array();
+			$bindDataTypes = array();
 		} else {
-			$bind_data_types = $dataTypes;
+			$bindDataTypes = $dataTypes;
 		}
 
 		//Objects are casted using __toString, null values are converted to string 'null',
@@ -371,46 +371,46 @@ abstract class Adapter implements EventsAwareInterface
 				$placeholders[] = 'null';
 			} else {
 				$placeholders[] = '?';
-				$insert_values[] = $value;
+				$insertValues[] = $value;
 				if(is_array($dataTypes) === true) {
 					if(isset($dataTypes[$position]) === false) {
 						throw new Exception('Incomplete number of bind types');
 					}
 
-					$bind_data_types[] = $dataTypes[$position];
+					$bindDataTypes[] = $dataTypes[$position];
 				}
 			}
 		}
 
 		if(isset($GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS']) === true &&
 			$GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS'] === true) {
-			$escaped_table = $this->escapeIdentifier($table);
+			$escapedTable = $this->escapeIdentifier($table);
 		} else {
-			$escaped_table = $table;
+			$escapedTable = $table;
 		}
 
 		//Build the final SQL INSERT statement
-		$joined_values = implode(', ', $placeholders);
+		$joinedValues = implode(', ', $placeholders);
 
 		if(is_array($fields) === true) {
 			if(isset($GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS']) === true &&
 				$GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS'] === true) {
-				$escaped_fields = array();
+				$escapedFields = array();
 				foreach($fields as $field) {
-					$escaped_fields[] = $this->escapeIdentifier($field);
+					$escapedFields[] = $this->escapeIdentifier($field);
 				}
 			} else {
-				$escaped_fields = $fields;
+				$escapedFields = $fields;
 			}
 
-			$joined_fields = implode(', ', $escaped_fields);
-			$insert_sql = 'INSERT INTO '.$esacped_table.' ('.$joined_fields.') VALUES ('.$joined_values.')';
+			$joinedFields = implode(', ', $escapedFields);
+			$insertSql = 'INSERT INTO '.$esacpedTable.' ('.$joinedFields.') VALUES ('.$joinedValues.')';
 		} else {
-			$insert_sql = 'INSERT INTO '.$esacped_table.' VALUES ('.$joined_values.')';
+			$insertSql = 'INSERT INTO '.$esacpedTable.' VALUES ('.$joinedValues.')';
 		}
 
 		//Perform the execution via PDO::execute
-		return $this->execute($insert_sql, $insert_values, $bind_data_types);
+		return $this->execute($insertSql, $insertValues, $bindDataTypes);
 	}
 
 	/**
@@ -450,12 +450,12 @@ abstract class Adapter implements EventsAwareInterface
 		}
 
 		$placeholders = array();
-		$update_values = array();
+		$updateValues = array();
 
 		if(is_array($dataTypes) === true) { //@note this seems to be wrong considering the usage
-			$bind_data_types = array();
+			$bindDataTypes = array();
 		} else {
-			$bind_data_types = $dataTypes;
+			$bindDataTypes = $dataTypes;
 		}
 
 		//Objects are casted using __toString, null values are converted to string 'null',
@@ -477,14 +477,14 @@ abstract class Adapter implements EventsAwareInterface
 			} elseif(is_null($value) === true) {
 				$placeholders[] = $field.' = null';
 			} else {
-				$update_values[] = $value;
+				$updateValues[] = $value;
 				$placeholders[] = $field.' = ?';
 				if(is_array($dataTypes) === true) {
 					if(isset($dataTypes[$position]) === false) {
 						throw new Exception('Incomplete number of bind types');
 					}
 
-					$bind_data_types[] = $dataTypes[$position];
+					$bindDataTypes[] = $dataTypes[$position];
 				}
 			}
 		}
@@ -494,13 +494,13 @@ abstract class Adapter implements EventsAwareInterface
 			$table = $this->escapeIdentifier($table);
 		}
 
-		$set_clause = implode(', ', $placeholders);
+		$setClause = implode(', ', $placeholders);
 		if(is_null($whereCondition) === false) {
-			$update_sql = 'UPDATE '.$table.' SET '.$set_clause.' WHERE ';
+			$updateSql = 'UPDATE '.$table.' SET '.$setClause.' WHERE ';
 
 			//String conditions are simply appended to the SQL
 			if(is_string($whereCondition) === true) {
-				$update_sql .= $whereCondition;
+				$updateSql .= $whereCondition;
 			} else {
 				//Array conditions may have bound params and bound types
 				if(is_array($whereCondition) === false) {
@@ -510,26 +510,26 @@ abstract class Adapter implements EventsAwareInterface
 				//If an index 'conditions' is present it contains string where conditions that are
 				//appended to the UPDATE sql
 				if(isset($whereCondition['conditions']) === true) {
-					$update_sql .= $whereCondition['conditions'];
+					$updateSql .= $whereCondition['conditions'];
 				}
 
 				//Bound parameters are arbitrary values that are passed by separate
 				if(isset($whereCondition['bind']) === true) {
-					$update_values = array_merge($update_values, $whereCondition['bind']);
+					$updateValues = array_merge($updateValues, $whereCondition['bind']);
 				}
 
 				//Bind types is how the bound parameters must be casted before be sent to the
 				//database system
 				if(isset($whereCondition['bindTypes']) === true) {
-					$bind_data_types = array_merge($bind_data_types, $whereCondition['bindTypes']);
+					$bindDataTypes = array_merge($bindDataTypes, $whereCondition['bindTypes']);
 				}
 			}
 		} else {
-			$update_sql = 'UPDATE '.$table.' SET '.$set_clause;
+			$updateSql = 'UPDATE '.$table.' SET '.$setClause;
 		}
 
 		//Perform the update via PDO::execute
-		return $this->execute($update_sql, $update_values, $bind_data_types);
+		return $this->execute($updateSql, $updateValues, $bindDataTypes);
 	}
 
 	/**
@@ -889,12 +889,12 @@ abstract class Adapter implements EventsAwareInterface
 		//Execute the SQL returning the tables
 		$table = $this->fetchAll($sql, 3);
 
-		$all_tables = array();
+		$allTables = array();
 		foreach($tables as $table) {
-			$all_tables[] = $table[0];
+			$allTables[] = $table[0];
 		}
 
-		return $all_tables;
+		return $allTables;
 	}
 
 	/**
@@ -915,12 +915,12 @@ abstract class Adapter implements EventsAwareInterface
 		//Execute the SQL returning the views
 		$views = $this->fetchAll($sql, 3);
 
-		$all_views = array();
+		$allViews = array();
 		foreach($views as $view) {
-			$all_views[] = $view[0];
+			$allViews[] = $view[0];
 		}
 
-		return $all_views;
+		return $allViews;
 	}
 
 	/**
@@ -951,13 +951,13 @@ abstract class Adapter implements EventsAwareInterface
 			$indexes[$index[2]][] = $index[4];
 		}
 
-		$index_objects = array();
-		foreach($indexes as $name => $index_columns) {
+		$indexObjects = array();
+		foreach($indexes as $name => $indexColumns) {
 			//Every index is abstracted using a Phalcon\Db\Index instance
-			$index_objects[$name] = new Index($name, $index_columns);
+			$indexObjects[$name] = new Index($name, $indexColumns);
 		}
 
-		return $index_objects;
+		return $indexObjects;
 	}
 
 	/**
@@ -983,22 +983,22 @@ abstract class Adapter implements EventsAwareInterface
 
 		//Process references
 		foreach($describe as $reference) {
-			$constraint_name = $reference[2];
-			if(isset($references[$constraint_name]) === false) {
-				$references[$constraint_name] = array('referencedSchema' => $reference[3], 
+			$constraintName = $reference[2];
+			if(isset($references[$constraintName]) === false) {
+				$references[$constraintName] = array('referencedSchema' => $reference[3], 
 					'referencedTable' => $reference[4], 'columns' => array(), 'referencedColumns' => array());
 			}
 
-			$references[$constraint_name]['columns'][] = $reference[1];
-			$references[$constraint_name]['referencedColumns'][] = $reference[5];
+			$references[$constraintName]['columns'][] = $reference[1];
+			$references[$constraintName]['referencedColumns'][] = $reference[5];
 		}
 
-		$reference_objects = array();
-		foreach($references as $name => $array_reference) {
-			$reference_objects[$name] = new Reference($name, $array_reference);
+		$referenceObjects = array();
+		foreach($references as $name => $arrayReference) {
+			$referenceObjects[$name] = new Reference($name, $arrayReference);
 		}
 
-		return $reference_objects;
+		return $referenceObjects;
 	}
 
 	/**

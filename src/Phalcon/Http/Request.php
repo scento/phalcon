@@ -127,12 +127,12 @@ class Request implements RequestInterface, InjectionAwareInterface
 				if(is_null($filters) === false) {
 					//Get filter service
 					if(is_object($this->_filter) === false) {
-						$dependency_injector = $this->_dependencyInjector;
+						$dependencyInjector = $this->_dependencyInjector;
 						if(is_object($this->_dependencyInjector) === false) {
 							throw new Exception("A dependency injection object is required to access the 'filter' service");
 						}
 
-						$this->_filter = $dependency_injector->getShared('filter');
+						$this->_filter = $dependencyInjector->getShared('filter');
 					}
 
 					return $this->_filter->sanitize($value, $filters);
@@ -182,12 +182,12 @@ class Request implements RequestInterface, InjectionAwareInterface
 
 				if(is_null($filters) === false) {
 					if(is_object($this->_filter) === false) {
-						$dependency_injector = $this->_dependencyInjector;
-						if(is_object($dependency_injector) === false) {
+						$dependencyInjector = $this->_dependencyInjector;
+						if(is_object($dependencyInjector) === false) {
 							throw new Exception("A dependency injection object is required to access the 'filter' service");
 						}
 
-						$this->_filter = $dependency_injector->getShared('filter');
+						$this->_filter = $dependencyInjector->getShared('filter');
 					}
 
 					return $filter->sanitize($value, $filters);
@@ -240,12 +240,12 @@ class Request implements RequestInterface, InjectionAwareInterface
 
 					if(is_null($filters) === false) {
 						if(is_object($this->_filter) === false) {
-							$dependency_injector = $this->_dependencyInjector;
-							if(is_object($dependency_injector) === false) {
+							$dependencyInjector = $this->_dependencyInjector;
+							if(is_object($dependencyInjector) === false) {
 								throw new Exception("A dependency injection object is required to access the 'filter' service");
 							}
 
-							$this->_filter = $dependency_injector->getShared('filter');
+							$this->_filter = $dependencyInjector->getShared('filter');
 						}
 
 						return $this->_filter->sanitize($value, $filters);
@@ -456,9 +456,9 @@ class Request implements RequestInterface, InjectionAwareInterface
 	 */
 	public function getJsonRawBody()
 	{
-		$raw_body = $this->getRawBody();
-		if(is_string($raw_body) === true) {
-			return json_decode($raw_body, 0);
+		$rawBody = $this->getRawBody();
+		if(is_string($rawBody) === true) {
+			return json_decode($rawBody, 0);
 		}
 	}
 
@@ -498,37 +498,37 @@ class Request implements RequestInterface, InjectionAwareInterface
 	public function getHttpHost()
 	{
 		//Get the server name from _SERVER['HTTP_HOST']
-		$http_host = $this->getServer('HTTP_HOST');
-		if(isset($http_host) === true) {
-			return $http_host;
+		$httpHost = $this->getServer('HTTP_HOST');
+		if(isset($httpHost) === true) {
+			return $httpHost;
 		}
 
 		//Get current scheme
 		$scheme = $this->getScheme();
 
 		//Get the server name from _SERVER['SERVER_NAME']
-		$server_name = $this->getServer['SERVER_NAME'];
+		$serverName = $this->getServer['SERVER_NAME'];
 
 		//Get the server port from _SERVER['SERVER_PORT']
-		$server_port = $this->getServer['SERVER_PORT'];
+		$serverPort = $this->getServer['SERVER_PORT'];
 
 		//Check if the request is a standard http
-		$is_std_name = ($scheme === 'http' ? true : false);
-		$is_std_port = ($port === 80 ? true : false);
-		$is_std_http = ($is_std_name && $is_std_port ? true : false);
+		$isStdName = ($scheme === 'http' ? true : false);
+		$isStdPort = ($port === 80 ? true : false);
+		$isStdHttp = ($isStdName && $isStdPort ? true : false);
 
 		//Check if the request is a secure http request
-		$is_secure_scheme = ($scheme === 'https' ? true : false);
-		$is_secure_port = ($port === 443 ? true : false);
-		$is_secure_http = ($is_secure_scheme && $is_secure_port ? true : false);
+		$isSecureScheme = ($scheme === 'https' ? true : false);
+		$isSecurePort = ($port === 443 ? true : false);
+		$isSecureHttp = ($isSecureScheme && $isSecurePort ? true : false);
 
 		//If is is a standard http we return the server name only
-		if($is_std_http === true ||
-			$is_secure_http) {
+		if($isStdHttp === true ||
+			$isSecureHttp === true) {
 			return $name;
 		}
 
-		return $nane.':'.$port;
+		return $name.':'.$port;
 	}
 
 	/**
@@ -607,13 +607,13 @@ class Request implements RequestInterface, InjectionAwareInterface
 	 */
 	public function isMethod($methods)
 	{
-		$method_http = $this->getMethod();
+		$methodHttp = $this->getMethod();
 
 		if(is_string($methods) === true) {
-			return ($methods == $method_http ? true : false);
+			return ($methods == $methodHttp ? true : false);
 		} else {
 			foreach($methods as $method) {
-				if($method === $method_http) {
+				if($method === $methodHttp) {
 					return true;
 				}
 			}
@@ -826,14 +826,14 @@ class Request implements RequestInterface, InjectionAwareInterface
 		$parts = preg_split('/,\\s*/', $this->getServer($serverIndex));
 
 		foreach($parts as $part) {
-			$header_parts = explode(';', $part);
-			if(isset($header_parts[1]) === true) {
-				$quality = substr($header_parts[1], 2);
+			$headerParts = explode(';', $part);
+			if(isset($headerParts[1]) === true) {
+				$quality = substr($headerParts[1], 2);
 			} else {
 				$quality = 1;
 			}
 
-			$return[] = array($name => $header_parts[0], 'quality' => $quality);
+			$return[] = array($name => $headerParts[0], 'quality' => $quality);
 		}
 
 		return $return;
@@ -860,18 +860,18 @@ class Request implements RequestInterface, InjectionAwareInterface
 		foreach($qualityParts as $accept) {
 			if($i === 0) {
 				$quality = $accept['quality'];
-				$selected_name = $accept[$name];
+				$selectedName = $accept[$name];
 			} else {
 				if($quality < $accept['quality']) {
 					$quality = $accept['quality'];
-					$selected_name = $accept[$name];
+					$selectedName = $accept[$name];
 				}
 			}
 
 			++$i;
 		}
 
-		return $selected_name;
+		return $selectedName;
 	}
 
 	/**

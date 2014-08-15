@@ -248,14 +248,14 @@ class Cookie implements InjectionAwareInterface
 			if(isset($_COOKIE[$name]) === true) {
 				$value = $_COOKIE[$name];
 				if($this->_useEncryption === true) {
-					$dependency_injector = $this->_dependencyInjector;
+					$dependencyInjector = $this->_dependencyInjector;
 					//@note no interface validation
-					if(is_object($dependency_injector) === false) {
+					if(is_object($dependencyInjector) === false) {
 						//@note wrong exception message
 						throw new Exception("A dependency injection object is required to access the 'filter' service");
 					}
 
-					$crypt = $dependency_injector->getShared('crypt');
+					$crypt = $dependencyInjector->getShared('crypt');
 
 					if($crypt instanceof CryptInterface === false) {
 						throw new Exception('Wrong crypt service.');
@@ -272,14 +272,14 @@ class Cookie implements InjectionAwareInterface
 					$filter = $this->_filter;
 					if(is_object($filter) === false) {
 						//Get filter service
-						if(is_null($dependency_injector) === true) {
-							$dependency_injector = $this->_dependencyInjector;
-							if($dependency_injector instanceof DiInterface === false) {
+						if(is_null($dependencyInjector) === true) {
+							$dependencyInjector = $this->_dependencyInjector;
+							if($dependencyInjector instanceof DiInterface === false) {
 								throw new Exception('Invalid dependency injector');
 							}
 						}
 
-						$filter = $dependency_injector->getShared('filter');
+						$filter = $dependencyInjector->getShared('filter');
 						if($filter instanceof FilterInterface === false) {
 							throw new Exception('Wrong filter service.');
 						}
@@ -354,7 +354,7 @@ class Cookie implements InjectionAwareInterface
 				throw new Exception("A dependency injection object is required to access the 'filter' service");
 			}
 
-			$crypt = $dependency_injector->getShared('crypt');
+			$crypt = $dependencyInjector->getShared('crypt');
 			if($crypt instanceof CryptInterface === false) {
 				throw new Exception('Wrong crypt service.');
 			}

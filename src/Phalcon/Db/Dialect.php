@@ -114,13 +114,13 @@ abstract class Dialect
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$str_list = array();
-		$escape_char = $this->_escapeChar;
+		$strList = array();
+		$escapeChar = $this->_escapeChar;
 		foreach($columnList as $column) {
-			$str_list[] = $escape_char.$column.$escape_char;
+			$strList[] = $escapeChar.$column.$escapeChar;
 		}
 
-		return implode(', ', $str_list);
+		return implode(', ', $strList);
 	}
 
 	/**
@@ -201,24 +201,24 @@ abstract class Dialect
 			//Resolve parentheses
 			return '('.$this->getSqlExpression($expression['left']).')';
 		} elseif($type === 'functionCall') {
-			$sql_arguments = array();
+			$sqlArguments = array();
 			if(isset($expression['arguments']) === true) {
 				foreach($expression['arguments'] as $argument) {
-					$sql_arguments[] = $this->getSqlExpression($arguments, $escapeChar);
+					$sqlArguments[] = $this->getSqlExpression($arguments, $escapeChar);
 				}
 
-				return $expression['name'].implode(', ', $sql_arguments).')';
+				return $expression['name'].implode(', ', $sqlArguments).')';
 			} else {
 				return $expression['name'].'()';
 			}
 		} elseif($type === 'list') {
 			//Resolve lists
-			$sql_items = array();
+			$sqlItems = array();
 			foreach($expression[0] as $item) {
-				$sql_items[] = $this->getSqlExpression($item, $escapeChar);
+				$sqlItems[] = $this->getSqlExpression($item, $escapeChar);
 			}
 
-			return '('.implode(', ', $sql_items).')';
+			return '('.implode(', ', $sqlItems).')';
 		} elseif($type === 'all') {
 			//Resolve *
 			return '*';
@@ -252,33 +252,33 @@ abstract class Dialect
 
 		if(is_array($table) === true) {
 			//The index '0' is the table name
-			$table_name = $table[0];
+			$tableName = $table[0];
 			if(isset($GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS']) === true &&
 				$GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS'] === true) {
-				$str = $escapeChar.$table_name.$escapeChar;
+				$str = $escapeChar.$tableName.$escapeChar;
 			} else {
-				$str = $table_name;
+				$str = $tableName;
 			}
 
 			//The index '1' is the schema name
 			if(isset($table[1]) === true) {
-				$schema_name = $table[1];
+				$schemaName = $table[1];
 				if(isset($GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS']) === true &&
 					$GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS'] === true) {
-					$str = $escapeChar.$schema_name.$escapeChar.$str;
+					$str = $escapeChar.$schemaName.$escapeChar.$str;
 				} else {
-					$str = $schema_name.'.'.$str;
+					$str = $schemaName.'.'.$str;
 				}
 			}
 
 			//The index '2' is the table alias
 			if(isset($table[2]) === true) {
-				$alias_name = $table[2];
+				$aliasName = $table[2];
 				if(isset($GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS']) === true &&
 					$GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS'] === true) {
-					$str = $sql_schema.' AS '.$escapeChar.$alias_name.$escapeChar;
+					$str = $sqlSchema.' AS '.$escapeChar.$aliasName.$escapeChar;
 				} else {
-					$str = $sql_schema.' AS '.$alias_name;
+					$str = $sqlSchema.' AS '.$aliasName;
 				}
 			}
 
@@ -318,173 +318,173 @@ abstract class Dialect
 
 		if(isset($GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS']) === true &&
 			$GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS'] === true) {
-			$esacpe_char = $this->_escapeChar;
+			$escapeChar = $this->_escapeChar;
 		} else {
-			$esacpe_char = null;
+			$escapeChar = null;
 		}
 
 		$columns = $definition['columns'];
 		if(is_array($columns) === true) {
-			$selected_columns = array();
+			$selectedColumns = array();
 			foreach($columns as $column) {
 				//Escape column name
-				$column_item = $column[0];
-				if(is_array($column_item) === true) {
-					$column_sql = $this->getSqlExpression($column_item, $esacpe_char);
-				} elseif($column_item === '*') {
-					$column_sql = $column_item;
+				$columnItem = $column[0];
+				if(is_array($columnItem) === true) {
+					$columnSql = $this->getSqlExpression($columnItem, $escapeChar);
+				} elseif($columnItem === '*') {
+					$columnSql = $columnItem;
 				} elseif(isset($GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS']) === true &&
 					$GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS'] === true) {
-					$column_sql = $escape_char.$column_item.$escape_char;
+					$columnSql = $escapeChar.$columnItem.$escapeChar;
 				} else {
-					$column_sql = $column_item;
+					$columnSql = $columnItem;
 				}
 
 				//Escape column domain
 				if(isset($column[1]) === true) {
-					$column_domain = $column[1];
-					if($column_domain == true) {
+					$columnDomain = $column[1];
+					if($columnDomain == true) {
 						if(isset($GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS']) === true &&
 							$GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS'] === true) {
-							$column_domain_sql = $escape_char.$column_domain.$escape_char.$column_sql;
+							$columnDomainSql = $escapeChar.$columnDomain.$escapeChar.$columnSql;
 						} else {
-							$column_domain_sql = $column_domain.'.'.$column_sql;
+							$columnDomainSql = $columnDomain.'.'.$columnSql;
 						}
 					} else {
-						$column_domain_sql = $column_sql;
+						$columnDomainSql = $columnSql;
 					}
 				} else {
-					$column_domain_sql = $column_sql;
+					$columnDomainSql = $columnSql;
 				}
 
 				//Escape column alias
 				if(isset($column[2]) === true) {
-					$column_alias = $column[2];
-					if($column_alias == true) {
+					$columnAlias = $column[2];
+					if($columnAlias == true) {
 						if(isset($GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS']) === true &&
 							$GLOBALS['_PHALCON_DB_ESCAPE_IDENTIFIERS'] === true) {
-							$column_alias_sql = $column_domain_sql.' AS '.$escape_char.$column_alias.$escape_char;
+							$columnAliasSql = $columnDomainSql.' AS '.$escapeChar.$columnAlias.$escapeChar;
 						} else {
-							$column_alias_sql = $column_domain_sql.' AS '.$column_alias;
+							$columnAliasSql = $columnDomainSql.' AS '.$columnAlias;
 						}
 					} else {
-						$column_alias_sql = $column_domain_sql;
+						$columnAliasSql = $columnDomainSql;
 					}
 				} else {
-					$column_alias_sql = $column_domain_sql;
+					$columnAliasSql = $columnDomainSql;
 				}
 
-				$selected_columns[] = $column_alias_sql;
+				$selectedColumns[] = $columnAliasSql;
 			}
 
-			$column_sql = implode(', ', $selected_columns);
+			$columnSql = implode(', ', $selectedColumns);
 		} else {
-			$column_sql = $columns;
+			$columnSql = $columns;
 		}
 
 		//Check and esacpe tables
 		$tables = $definition['tables'];
 		if(is_array($tables) === true) {
-			$selected_tables = array();
+			$selectedTables = array();
 			foreach($tables as $table) {
-				$selected_tables[] = $this->getSqlTable($table, $escape_char);
+				$selectedTables[] = $this->getSqlTable($table, $escapeChar);
 			}
 
-			$tables_sql = implode(', ', $selected_tables);
+			$tablesSql = implode(', ', $selectedTables);
 		} else {
-			$tables_sql = $tables;
+			$tablesSql = $tables;
 		}
 
-		$sql = 'SELECT '.$column_sql.' FROM '.$tables_sql;
+		$sql = 'SELECT '.$columnSql.' FROM '.$tablesSql;
 
 		//Check for joins
 		if(isset($definition['joins']) === true) {
 			$joins = $definition['joins'];
 			foreach($joins as $join) {
 				$type = $join['type'];
-				$sql_table = $this->getSqlTable($join['source'], $escape_char);
-				$selected_tables[] = $sql_table;
-				$sql_join = ' '.$type.' JOIN '.$sql_table;
+				$sqlTable = $this->getSqlTable($join['source'], $escapeChar);
+				$selectedTables[] = $sqlTable;
+				$sqlJoin = ' '.$type.' JOIN '.$sqlTable;
 
 				//Check if the join has conditions
 				if(isset($join['conditions']) === true) {
-					$join_conditions_array = $join['conditions'];
-					if(empty($join_conditions_array) === false) {
-						$join_expressions = array();
-						foreach($join_conditions_array as $join_condition) {
-							$join_expressions[] = $this->getSqlExpression($join_condition, $escape_char);
+					$joinConditionsArray = $join['conditions'];
+					if(empty($joinConditionsArray) === false) {
+						$joinExpressions = array();
+						foreach($joinConditionsAarray as $joinCondition) {
+							$joinExpressions[] = $this->getSqlExpression($joinCondition, $escapeChar);
 						}
 
-						$sql_join .= ' ON '.implode(' AND ', $join_expressions).' ';
+						$sqlJoin .= ' ON '.implode(' AND ', $joinExpressions).' ';
 					}
 				}
 
-				$sql .= $sql_join;
+				$sql .= $sqlJoin;
 			}
 		}
 
 		//Check for a WHERE clause
 		if(isset($definition['where']) === true) {
-			$where_conditions = $definition['where'];
-			if(is_array($where_conditions) === true) {
-				$sql .= ' WHERE '.$this->getSqlExpression($where_conditions, $escape_char);
+			$whereConditions = $definition['where'];
+			if(is_array($whereConditions) === true) {
+				$sql .= ' WHERE '.$this->getSqlExpression($whereConditions, $escapeChar);
 			} else {
-				$sql .= ' WHERE '.$where_conditions;
+				$sql .= ' WHERE '.$whereConditions;
 			}
 		}
 
 		//Check for a GROUP clause
 		if(isset($definition['group']) === true) {
-			$group_items = array();
-			$group_fields = $definition['group'];
+			$groupItems = array();
+			$groupFields = $definition['group'];
 
-			foreach($group_fields as $group_field) {
-				$group_items[] = $this->getSqlExpression($group_field, $escape_char);
+			foreach($groupFields as $groupField) {
+				$groupItems[] = $this->getSqlExpression($groupField, $escapeChar);
 			}
 
-			$sql .= ' GROUP BY '.implode(', ', $group_items);
+			$sql .= ' GROUP BY '.implode(', ', $groupItems);
 
 			//Check for a HAVING clause
 			if(isset($definition['having']) === true) {
-				$sql .= ' HAVING '.$this->getSqlExpression($definition['having'], $escape_char);
+				$sql .= ' HAVING '.$this->getSqlExpression($definition['having'], $escapeChar);
 			}
 		}
 
 		//Check for a ORDER clause
 		if(isset($definition['order']) === true) {
-			$order_fields = $definition['order'];
-			$order_items = array();
+			$orderFields = $definition['order'];
+			$orderItems = array();
 
-			foreach($order_fields as $order_item) {
-				$order_sql_item = $this->getSqlExpression($order_item[0], $escape_char);
+			foreach($orderFields as $orderItem) {
+				$orderSqlItem = $this->getSqlExpression($orderItem[0], $escapChar);
 
 				//In the numeric 1 position could be a ASC/DESC clause
-				if(isset($order_item[1]) === true) {
-					$order_sql_item_type = $order_sql_item.' '.$order_item[1];
+				if(isset($orderItem[1]) === true) {
+					$orderSqlItemType = $orderSqlItem.' '.$orderItem[1];
 				} else {
-					$order_sql_item_type = $order_sql_item;
+					$orderSqlItemType = $orderSqlItem;
 				}
 
-				$order_items[] = $order_sql_item;
+				$orderItems[] = $orderSqlItem;
 			}
 
-			$sql .= ' ORDER BY '.implode(', ', $order_items);
+			$sql .= ' ORDER BY '.implode(', ', $orderItems);
 		}
 
 		//Check for a LIMIT condition
 		if(isset($definition['limit']) === true) {
-			$limit_value = $definition['limit'];
-			if(is_array($limit_value) === true) {
-				$number = $limit_value['number'];
+			$limitValue = $definition['limit'];
+			if(is_array($limitValue) === true) {
+				$number = $limitValue['number'];
 
 				//Check for a OFFSET condition
-				if(isset($limit_value['offset']) === true) {
-					$sql .= ' LIMIT '.$number.' OFFSET '.$limit_value['offset'];
+				if(isset($limitValue['offset']) === true) {
+					$sql .= ' LIMIT '.$number.' OFFSET '.$limitValue['offset'];
 				} else {
 					$sql .= ' LIMIT '.$number;
 				}
 			} else {
-				$sql .= ' LIMIT '.$limit_value;
+				$sql .= ' LIMIT '.$limitValue;
 			}
 		}
 

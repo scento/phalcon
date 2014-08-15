@@ -588,8 +588,8 @@ abstract class Element
 
 		//Get the related form
 		if(is_object($this->_form) === true) {
-			$has_default_value = Tag::hasValue($this->_name);
-			if($has_default_value === false) {
+			$hasDefaultValue = Tag::hasValue($this->_name);
+			if($hasDefaultValue === false) {
 				//Get the possible value for the widget
 				$value = $this->_form->getValue($name);
 			}

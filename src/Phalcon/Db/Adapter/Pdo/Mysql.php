@@ -110,7 +110,7 @@ class Mysql extends Pdo implements EventsAwareInterface, AdapterInterface
 
 		//Get the describe
 		$describe = $this->fetchAll($sql, 3);
-		$old_column = null;
+		$oldColumn = null;
 		$columns = array();
 
 		//Field Indexes: 0 - Name, 1 - Type, 2 - Not Null, 3 - Key, 4 - Default, 5 - Extra
@@ -119,32 +119,32 @@ class Mysql extends Pdo implements EventsAwareInterface, AdapterInterface
 			$definition = array('bindType' => 2);
 
 			//By checking every column type we convert it to a Phalcon\Db\Column
-			$column_type = $field[1];
+			$columnType = $field[1];
 
 			//Check the column type to get the current Phalcon type
 			while(true) {
 				//Point are varchars
-				if(strpos($column_type, 'point') !== false) {
+				if(strpos($columnType, 'point') !== false) {
 					$definition['type'] = 2;
 					break;
 				}
 
 				//Enum are treated as char
-				if(strpos($column_type, 'enum') !== false) {
+				if(strpos($columnType, 'enum') !== false) {
 					$definition['type'] = 5;
 					break;
 				}
 
 				//Tinyint(1) is boolean
-				if(strpos($column_type, 'tinyint(1)') !== false) {
+				if(strpos($columnType, 'tinyint(1)') !== false) {
 					$definition['type'] = 8;
 					$definition['bindType'] = 5;
-					$column_type = 'boolean';
+					$columnType = 'boolean';
 					break;
 				}
 
 				//Smallint/Bigint/Integer/Int are int
-				if(strpos($column_type, 'int') !== false) {
+				if(strpos($columnType, 'int') !== false) {
 					$definition['type'] = 0;
 					$definition['isNumeric'] = true;
 					$definition['bindType'] = 1;
@@ -152,19 +152,19 @@ class Mysql extends Pdo implements EventsAwareInterface, AdapterInterface
 				}
 
 				//Varchar are varchars
-				if(strpos($column_type, 'varchar') !== false) {
+				if(strpos($columnType, 'varchar') !== false) {
 					$definition['type'] = 2;
 					break;
 				}
 
 				//Special type for datetime
-				if(strpos($column_type, 'datetime') !== false) {
+				if(strpos($columnType, 'datetime') !== false) {
 					$definition['type'] = 4;
 					break;
 				}
 
 				//Decimals are floats
-				if(strpos($column_type, 'decimal') !== false) {
+				if(strpos($columnType, 'decimal') !== false) {
 					$definition['type'] = 3;
 					$definition['isNumeric'] = true;
 					$definition['bindType'] = 32;
@@ -172,31 +172,31 @@ class Mysql extends Pdo implements EventsAwareInterface, AdapterInterface
 				}
 
 				//Chars are chars
-				if(strpos($column_type, 'char') !== false) {
+				if(strpos($columnType, 'char') !== false) {
 					$definition['type'] = 5;
 					break;
 				}
 
 				//Date/Datetime are varchars
-				if(strpos($column_type, 'date') !== false) {
+				if(strpos($columnType, 'date') !== false) {
 					$definition['type'] = 1;
 					break;
 				}
 
 				//Timestamp as date
-				if(strpos($column_type, 'timstamp') !== false) {
+				if(strpos($columnType, 'timstamp') !== false) {
 					$definition['type'] = 1;
 					break;
 				}
 
 				//Text are varchars
-				if(strpos($column_type, 'text') !== false) {
+				if(strpos($columnType, 'text') !== false) {
 					$definition['type'] = 6;
 					break;
 				}
 
 				//Floats/Smallfloats/Decimals are float
-				if(strpos($column_type, 'float') !== false) {
+				if(strpos($columnType, 'float') !== false) {
 					$definition['type'] = 7;
 					$definition['isNumeric'] = true;
 					$definition['bindType'] = 32;
@@ -204,7 +204,7 @@ class Mysql extends Pdo implements EventsAwareInterface, AdapterInterface
 				}
 
 				//Doubles are floats
-				if(strpos($column_type, 'double') !== false) {
+				if(strpos($columnType, 'double') !== false) {
 					$definition['type'] = 9;
 					$definition['isNumeric'] = true;
 					$definition['bindType'] = 32;
@@ -217,9 +217,9 @@ class Mysql extends Pdo implements EventsAwareInterface, AdapterInterface
 			}
 
 			//If the column type has a parentheses we try to get the column size from it
-			if(strpos($column_type, '(') !== false) {
+			if(strpos($columnType, '(') !== false) {
 				$matches = null;
-				$pos = preg_match("#\\(([0-9]++)(?:,\\s*([0-9]++))?\\)#", $column_type, $matches);
+				$pos = preg_match("#\\(([0-9]++)(?:,\\s*([0-9]++))?\\)#", $columnType, $matches);
 				if($pos == true) {
 					if(isset($matches[1]) === true) {
 						$definition['size'] = $matches[1];
@@ -232,15 +232,15 @@ class Mysql extends Pdo implements EventsAwareInterface, AdapterInterface
 			}
 
 			//Check if the column is unsigned, only MySQL supports this
-			if(strpos($column_type, 'unsigned') !== false) {
+			if(strpos($columnType, 'unsigned') !== false) {
 				$definition['unsigned'] = true;
 			}
 
 			//Positions
-			if($old_column != true) {
+			if($oldColumn != true) {
 				$definition['first'] = true;
 			} else {
-				$definition['after'] = $old_column;
+				$definition['after'] = $oldColumn;
 			}
 
 			//Check if the field is primary key
@@ -260,7 +260,7 @@ class Mysql extends Pdo implements EventsAwareInterface, AdapterInterface
 
 			$column = new Column($field[0], $definition);
 			$columns[] = $column;
-			$old_column = $field[0];
+			$oldColumn = $field[0];
 		}
 
 		return $columns;

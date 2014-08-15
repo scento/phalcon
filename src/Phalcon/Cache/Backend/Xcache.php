@@ -136,10 +136,10 @@ class Xcache extends Backend implements BackendInterface
 		}
 
 		/* Store */
-		$prepared_content = $this->_frontend->beforeStore($content);
+		$preparedContent = $this->_frontend->beforeStore($content);
 
-		$success = xcache_set($keyName, $prepared_content, $lifetime);
-		$is_buffering = $this->_frontend->isBuffering();
+		$success = xcache_set($keyName, $preparedContent, $lifetime);
+		$isBuffering = $this->_frontend->isBuffering();
 
 		if($stopBuffer === true) {
 			$this->_frontend->stop();
@@ -218,16 +218,16 @@ class Xcache extends Backend implements BackendInterface
 	 	*/
 		$keys = xcache_get($this->_options['statsKey']);
 		if(is_array($keys) === true) {
-			$prefixed_keys = array();
+			$prefixedKeys = array();
 			foreach($keys as $key => $ttl) {
 				if(Text::startsWith($key, $prefix) === false) {
 					continue;
 				}
 
-				$prefixed_keys[] = substr($key, 5);
+				$prefixedKeys[] = substr($key, 5);
 			}
 
-			return $prefixed_keys;
+			return $prefixedKeys;
 		}
 
 		return array();

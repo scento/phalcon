@@ -202,7 +202,7 @@ class Reference implements ReferenceInterface
 		if(isset($data['_referenceName']) === false) {
 			throw new Exception('_referenceName parameter is required');
 		} else {
-			$constraint_name = $data['_referenceName'];
+			$constraintName = $data['_referenceName'];
 		}
 
 		$definition = array();
@@ -211,6 +211,6 @@ class Reference implements ReferenceInterface
 		$definition['_columns'] = (isset($data['_columns']) === true ? $data['_columns'] : null);
 		$definition['_referencedColumns'] = (isset($data['_referencedColumns']) === true ? $data['_referencedColumns'] : null);
 
-		return new Reference($constraint_name, $definition);
+		return new Reference($constraintName, $definition);
 	}
 }

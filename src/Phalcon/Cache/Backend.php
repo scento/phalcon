@@ -124,8 +124,8 @@ abstract class Backend
 		}
 
 		//Get the cache content verifying if it was expired
-		$existing_cache = $this->get($keyName, $lifetime);
-		if(is_null($existing_cache) === true) {
+		$existingCache = $this->get($keyName, $lifetime);
+		if(is_null($existingCache) === true) {
 			$this->_fresh = true;
 			$this->_frontend->start();
 		} else {
@@ -139,7 +139,7 @@ abstract class Backend
 			$this->_lastLifetime = $lifetime;
 		}
 
-		return $existing_cache;
+		return $existingCache;
 	}
 
 	/**

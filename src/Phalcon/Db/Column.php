@@ -473,7 +473,7 @@ class Column implements ColumnInterface
 			throw new Exception('Column state must be an array');
 		}
 
-		$column_name = $data['_columnName'];
+		$columnName = $data['_columnName'];
 		$definition = array();
 
 		if(isset($data['_type']) === true) {
@@ -516,6 +516,6 @@ class Column implements ColumnInterface
 			$definition['bindType'] = $data['_bindType'];
 		}
 
-		return new Column($column_name, $definition);
+		return new Column($columnName, $definition);
 	}
 }

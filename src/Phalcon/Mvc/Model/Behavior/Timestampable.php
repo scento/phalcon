@@ -75,8 +75,8 @@ class Timestampable extends Behavior implements BehaviorInterface
 
 			//Assign the value to the field, use writeAttribute if the property is protected
 			if(is_array($field) === true) {
-				foreach($field as $single_field) {
-					$model->writeAttribute($single_field, $timestamp);
+				foreach($field as $singleField) {
+					$model->writeAttribute($singleField, $timestamp);
 				}
 			} else {
 				$model->writeAttribute($field, $timstamp);

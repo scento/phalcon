@@ -44,142 +44,6 @@ abstract class Injectable implements InjectionAwareInterface, EventsAwareInterfa
 	protected $_eventsManager;
 
 	/**
-	 * View
-	 * 
-	 * @var \Phalcon\Mvc\ViewInterface|null
-	 * @access public
-	*/
-	public $view;
-
-	/**
-	 * Router
-	 * 
-	 * @var \Phalcon\Mvc\RouterInterface|null
-	 * @access public
- 	 */
-	public $router;
-
-	/**
-	 * Dispatcher
-	 * 
-	 * @var \Phalcon\Mvc\DispatcherInterface|null
-	 * @access public
- 	 */
-	public $dispatcher;
-
-	/**
-	 * URL
-	 * 
-	 * @var \Phalcon\Mvc\UrlInterface|null
-	 * @access public
- 	 */
-	public $url;
-
-	/**
-	 * DI
-	 * 
-	 * @var \Phalcon\DiInterface|null
-	 * @access public
- 	 */
-	public $di;
-
-	/**
-	 * Request
-	 * 
-	 * @var \Phalcon\HTTP\RequestInterface|null
-	 * @access public
- 	 */
-	public $request;
-
-	/**
-	 * Response
-	 * 
-	 * @var \Phalcon\HTTP\ResponseInterface|null
-	 * @access public
- 	 */
-	public $response;
-
-	/**
-	 * Flash
-	 * 
-	 * @var \Phalcon\Flash\Direct|null
-	 * @access public
- 	 */
-	public $flash;
-
-	/**
-	 * Flash Session
-	 * 
-	 * @var \Phalcon\Flash\Session|null
-	 * @access public
- 	 */
-	public $flashSession;
-
-	/**
-	 * Session
-	 * 
-	 * @var \Phalcon\Session\AdapterInterface|null
-	 * @access public
- 	 */
-	public $session;
-
-	/**
-	 * Persistent
-	 * 
-	 * @var \Phalcon\Session\Bag|null
-	 * @access public
- 	 */
-	public $persistent;
-
-	/**
-	 * Models Manager
-	 * 
-	 * @var \Phalcon\Mvc\Model\ManagerInterface|null
-	 * @access public
- 	 */
-	public $modelsManager;
-
-	/**
-	 * Models Metadata
-	 * 
-	 * @var \Phalcon\Mvc\Model\MetadataInterface|null
-	 * @access public
- 	 */
-	public $modelsMetadata;
-
-	/**
-	 * Transaction Manager
-	 * 
-	 * @var \Phalcon\Mvc\Model\Transaction\Manager|null
-	 * @access public
- 	 */
-	public $transactionManager;
-
-	/**
-	 * Filter
-	 * 
-	 * @var \Phalcon\FilterInterface|null
-	 * @access public
- 	 */
-	public $filter;
-
-	/**
-	 * Security
-	 * 
-	 * @var \Phalcon\Security|null
-	 * @access public
- 	 */
-	public $security;
-
-	/**
-	 * Annotations
-	 * 
-	 * @var \Phalcon\Annotations\Adapter\Memory|null
-	 * @access public
- 	 */
-	public $annotations;
-
-	/**
 	 * Sets the dependency injector
 	 *
 	 * @param \Phalcon\DiInterface $dependencyInjector
@@ -247,31 +111,31 @@ abstract class Injectable implements InjectionAwareInterface, EventsAwareInterfa
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$dependency_injector = $this->_dependencyInjector;
-		if(is_object($dependency_injector) === false) {
-			$dependency_injector = DI::getDefault();
+		$dependencyInjector = $this->_dependencyInjector;
+		if(is_object($dependencyInjector) === false) {
+			$dependencyInjector = DI::getDefault();
 
-			if(is_object($dependency_injector) === false) {
+			if(is_object($dependencyInjector) === false) {
 				throw new Exception('A dependency injector object is required to access the application services');
 			}
 		}
 
 		//Fallback to the PHP userland if the cache is not available
-		if($dependency_injector->has($propertyName) === true) {
-			$service = $dependency_injector->getShared($propertyName);
+		if($dependencyInjector->has($propertyName) === true) {
+			$service = $dependencyInjector->getShared($propertyName);
 			$this->$propertyName = $service;
 			return $service;
 		}
 
 		//Dependency Injector
 		if($propertyName === 'di') {
-			$this->di = $dependency_injector;
-			return $dependency_injector;
+			$this->di = $dependencyInjector;
+			return $dependencyInjector;
 		}
 
 		//Accessing the persistent property will create a session bag in any class
 		if($propertyName === 'persistent') {
-			$persistent = $dependency_injector->get('sessionBag', array(get_class($this)));
+			$persistent = $dependencyInjector->get('sessionBag', array(get_class($this)));
 			$this->persistent = $persistent;
 			return $persistent;
 		}

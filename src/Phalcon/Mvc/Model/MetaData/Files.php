@@ -169,7 +169,7 @@ class Files extends MetaData implements InjectionAwareInterface, MetaDataInterfa
 			}
 		}
 
-		$virtual_str = '';
+		$virtualStr = '';
 		$l = strlen($path);
 		for($i = 0; $i < $l; ++$i) {
 			$ch = $path[$i];
@@ -179,13 +179,13 @@ class Files extends MetaData implements InjectionAwareInterface, MetaDataInterfa
 			}
 
 			if($ch === '/' || $ch === '\\' || $ch === ':' || ctype_print($ch) === false) {
-				$virtual_str .= $virtualSeperator;
+				$virtualStr .= $virtualSeperator;
 			} else {
-				$virtual_str .= strtolower($ch);
+				$virtualStr .= strtolower($ch);
 			}
 		}
 
-		return $virtual_str;
+		return $virtualStr;
 	}
 
 	/**

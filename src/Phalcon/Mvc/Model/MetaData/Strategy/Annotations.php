@@ -44,80 +44,80 @@ class Annotations
 		}
 
 		$annotations = $dependencyInjector->get('annotations');
-		$class_name = get_class($model);
+		$className = get_class($model);
 
-		$reflection = $annotations->get($class_name);
+		$reflection = $annotations->get($className);
 		if(is_object($reflection) === false) {
-			throw new Exception('No annotations were found in class '.$class_name);
+			throw new Exception('No annotations were found in class '.$className);
 		}
 
 		//Get the properties defined in
-		$properties_annotations = $reflection->getPropertiesAnnotations();
-		if(count($properties_annotations) == 0) {
-			throw new Exception('No properties with annotations were found in class '.$class_name);
+		$propertiesAnnotations = $reflection->getPropertiesAnnotations();
+		if(count($propertiesAnnotations) == 0) {
+			throw new Exception('No properties with annotations were found in class '.$className);
 		}
 
 		//Initialize meta-data
 		$attributes = array();
-		$primary_keys = array();
-		$non_primary_keys = array();
-		$numeric_typed = array();
-		$not_null = array();
-		$field_types = array();
-		$field_bind_types = array();
-		$automatic_default = array();
-		$identity_field = false;
+		$primaryKeys = array();
+		$nonPrimaryKeys = array();
+		$numericTyped = array();
+		$notNull = array();
+		$fieldTypes = array();
+		$fieldBindTypes = array();
+		$automaticDefault = array();
+		$identityField = false;
 
-		foreach($properties_annotations as $property => $prop_annotations) {
+		foreach($propertiesAnnotations as $property => $propAnnotations) {
 			//All columns marked with the 'Column' annotation are considered columns
-			if($prop_annotations->has('Column') === false) {
+			if($propAnnotations->has('Column') === false) {
 				continue;
 			}
 
 			//Fetch the 'Column' annotation
-			$column_annotation = $prop_annotations->get('Column');
+			$columnAnnotation = $propAnnotations->get('Column');
 
 			//Check if annotation has the 'type' named parameter
-			$feature = $column_annotation->getNamedParameter('type');
+			$feature = $columnAnnotation->getNamedParameter('type');
 			if($feature === 'integer') {
-				$field_types[$property] = 0;
-				$field_bind_types[$property] = 1;
-				$numeric_typed[$property] = 1;
+				$fieldTypes[$property] = 0;
+				$fieldBindTypes[$property] = 1;
+				$numericTyped[$property] = 1;
 			} elseif($feature === 'decimal') {
-				$field_types[$property] = 3;
-				$field_bind_types[$property] = 32;
-				$numeric_typed[$property] = 1;
+				$fieldTypes[$property] = 3;
+				$fieldBindTypes[$property] = 32;
+				$numericTyped[$property] = 1;
 			} elseif($feature === 'boolean') {
-				$field_types[$property] = 8;
-				$field_bind_types[$property] = 5;
+				$fieldTypes[$property] = 8;
+				$fieldBindTypes[$property] = 5;
 			} elseif($feature === 'date') {
-				$field_types[$property] = 1;
-				$field_bind_types[$property] = 2;
+				$fieldTypes[$property] = 1;
+				$fieldBindTypes[$property] = 2;
 			} else {
-				$field_types[$property] = 2;
-				$field_bind_types[$property] = 2;
+				$fieldTypes[$property] = 2;
+				$fieldBindTypes[$property] = 2;
 			}
 
 			//All columns marked with the 'Primary' annotation are considered primary keys
-			if($prop_annotations->has('Primary') === true) {
-				$primary_keys[] = $property;
+			if($propAnnotations->has('Primary') === true) {
+				$primaryKeys[] = $property;
 			} else {
-				$non_primary_keys[] = $property;
+				$nonPrimaryKeys[] = $property;
 			}
 
-			if($prop_annotations->has('Identity') === true) {
-				$identity_field = $property;
+			if($propAnnotations->has('Identity') === true) {
+				$identityField = $property;
 			}
 
-			if($column_annotation->getNamedParameter('nullable') != true) {
-				$not_null[] = $property;
+			if($columnAnnotation->getNamedParameter('nullable') != true) {
+				$notNull[] = $property;
 			}
 		}
 
 		//Create an array using the MODELS_* constants as indexes
-		return array(0 => $attributes, 1 => $primary_keys, 2 => $non_primary_keys, 3 => $not_null, 
-			4 => $field_types, 5 => $numeric_typed, 8 => $identity_field, 9 => $field_bind_types, 
-			10 => $automatic_default, 11 => $automatic_default);
+		return array(0 => $attributes, 1 => $primaryKeys, 2 => $nonPrimaryKeys, 3 => $notNull, 
+			4 => $fieldTypes, 5 => $numericTyped, 8 => $identityField, 9 => $fieldBindTypes, 
+			10 => $automaticDefault, 11 => $automaticDefault);
 	}
 
 	/**

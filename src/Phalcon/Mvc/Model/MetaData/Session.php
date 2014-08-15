@@ -169,10 +169,10 @@ class Session extends MetaData implements InjectionAwareInterface, MetaDataInter
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$prefix_key = '$PMM$'.$this->_prefix;
-		if(isset($_SESSION[$prefix_key]) === true &&
-			isset($_SESSION[$prefix_key][$key])) {
-			return $_SESSION[$prefix_key][$key];
+		$prefixKey = '$PMM$'.$this->_prefix;
+		if(isset($_SESSION[$prefixKey]) === true &&
+			isset($_SESSION[$prefixKey][$key])) {
+			return $_SESSION[$prefixKey][$key];
 		}
 	}
 
@@ -190,12 +190,12 @@ class Session extends MetaData implements InjectionAwareInterface, MetaDataInter
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$prefix_key = '$PMM$'.$this->_prefix;
+		$prefixKey = '$PMM$'.$this->_prefix;
 
-		if(is_array($_SESSION[$prefix_key]) === false) {
-			$_SESSION[$prefix_key] = array();
+		if(is_array($_SESSION[$prefixKey]) === false) {
+			$_SESSION[$prefixKey] = array();
 		}
 
-		$_SESSION[$prefix_key][$key] = $data;
+		$_SESSION[$prefixKey][$key] = $data;
 	}
 }

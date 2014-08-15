@@ -53,6 +53,8 @@ class ExclusionIn extends Validator implements ValidatorInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
+		$value = $validator->getValue($attribute);
+
 		//A domain is an array with a list of valid values
 		$domain = $this->getOption('domain');
 		if(is_array($domain) === false) {

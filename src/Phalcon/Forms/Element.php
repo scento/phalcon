@@ -278,7 +278,7 @@ abstract class Element
 			$this->_validators = array();
 		}
 
-		$this->_validators[] = $validators;
+		$this->_validators[] = $validator;
 	}
 
 	/**

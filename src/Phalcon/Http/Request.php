@@ -190,7 +190,7 @@ class Request implements RequestInterface, InjectionAwareInterface
 						$this->_filter = $dependencyInjector->getShared('filter');
 					}
 
-					return $filter->sanitize($value, $filters);
+					return $this->_filter->sanitize($value, $filters);
 				}
 				
 				return $value;

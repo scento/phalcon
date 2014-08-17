@@ -412,6 +412,12 @@ class Loader implements EventsAwareInterface
 				continue;
 			}
 
+			//Replace seperator
+			if($ch === ord($seperator)) {
+				$virtualStr .= $virtualSeperator;
+				continue;
+			}
+
 			//Basic alphanumeric characters
 			if($ch === 95 || // _
 				($ch >= 48 && $ch <= 57) || // >="0" && <= "9"

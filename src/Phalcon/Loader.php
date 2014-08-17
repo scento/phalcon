@@ -412,6 +412,12 @@ class Loader implements EventsAwareInterface
 				continue;
 			}
 
+			//Replace seperator
+			if($ch === ord($seperator)) {
+				$virtualStr .= $virtualSeperator;
+				continue;
+			}
+
 			//Basic alphanumeric characters
 			if($ch === 95 || // _
 				($ch >= 48 && $ch <= 57) || // >="0" && <= "9"
@@ -539,7 +545,7 @@ class Loader implements EventsAwareInterface
 				//The class name starts with the prefix?
 				if(Text::startsWith($className, $prefix) === true) {
 					//Get the possible file path
-					$fileName = self::possibleAutoloadFilePath($fileName, $prefix, $className, \DIRECTORY_SEPARATOR, '_');
+					$fileName = self::possibleAutoloadFilePath($prefix, $className, \DIRECTORY_SEPARATOR, '_');
 					if($fileName !== false) {
 						//Add a trailing directory separator is the user forgot to do that
 						$fixedDirectory = self::fixPath($directory, \DIRECTORY_SEPARATOR);

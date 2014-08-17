@@ -30,7 +30,7 @@ class Manager implements ManagerInterface
 	/**
 	 * Events
 	 * 
-	 * @var null|array
+	 * @var array|null
 	 * @access protected
 	*/
 	protected $_events;
@@ -54,7 +54,7 @@ class Manager implements ManagerInterface
 	/**
 	 * Responses
 	 * 
-	 * @var null|array
+	 * @var array|null
 	 * @access protected
 	*/
 	protected $_responses;
@@ -69,11 +69,18 @@ class Manager implements ManagerInterface
 	 */
 	public function attach($eventType, $handler, $priority = null)
 	{
+		if(is_null($priority) === true) {
+			$priority = 100;
+		} elseif(is_int($priority) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+
 		if(is_string($eventType) === false) {
 			throw new Exception('Event type must be a string');
 		}
 
-		if(is_object($handler) === false) {
+		if(is_object($handler) === false &&
+			is_callable($handler) === false) {
 			throw new Exception('Event handler must be an Object');
 		}
 
@@ -92,10 +99,12 @@ class Manager implements ManagerInterface
 			}
 		}
 
+		//Get the current queue
 		$priorityQueue = $this->_events[$eventType];
 
 		//Insert the handler in the queue
 		if(is_object($priorityQueue) === true) {
+			//Pointer usage
 			$priorityQueue->insert($handler, $priority);
 		} else {
 			$priorityQueue[] = $handler;
@@ -148,6 +157,8 @@ class Manager implements ManagerInterface
 	/**
 	 * Check if the events manager is collecting all all the responses returned by every
 	 * registered listener in a single fire
+	 * 
+	 * @return boolean
 	 */
 	public function isCollecting()
 	{
@@ -157,14 +168,10 @@ class Manager implements ManagerInterface
 	/**
 	 * Returns all the responses returned by every handler executed by the last 'fire' executed
 	 *
-	 * @return array
+	 * @return array|null
 	 */
 	public function getResponses()
 	{
-		if(is_array($this->_responses) === false) {
-			$this->_responses = array();
-		}
-
 		return $this->_responses;
 	}
 
@@ -189,7 +196,7 @@ class Manager implements ManagerInterface
 	 * Removes all events from the EventsManager; alias of detachAll
 	 *
 	 * @deprecated
-	 * @param string $type|null
+	 * @param string|null $type
 	 */
 	public function dettachAll($type = null)
 	{
@@ -206,7 +213,8 @@ class Manager implements ManagerInterface
 	 */
 	public function fireQueue($queue, $event)
 	{
-		if(is_array($queue) === false && is_object($queue) === false) {
+		if(is_array($queue) === false && 
+			is_object($queue) === false) {
 			throw new Exception('The SplPriorityQueue is not valid');
 		}
 
@@ -217,6 +225,7 @@ class Manager implements ManagerInterface
 		$status = null;
 		$arguments = null;
 
+		//Get the event type
 		$eventName = $event->getType();
 		if(is_string($eventName) === false) {
 			//@note missing "is"
@@ -243,7 +252,7 @@ class Manager implements ManagerInterface
 
 				if(is_object($handler) === true) {
 					//Only handler objects are valid
-					if($handler instanceof Closure) {
+					if($handler instanceof Closure === true) {
 						//Create the closure arguments
 						if(is_null($arguments) === true) {
 							$arguments = array($event, $source, $data);
@@ -347,13 +356,19 @@ class Manager implements ManagerInterface
 	 *
 	 * @param string $eventType
 	 * @param object $source
-	 * @param mixed|null $data
-	 * @param int|null $cancelable
+	 * @param mixed $data
+	 * @param boolean|null $cancelable
 	 * @return mixed
 	 * @throws Exception
 	 */
 	public function fire($eventType, $source, $data = null, $cancelable = null)
 	{
+		if(is_null($cancelable) === true) {
+			$cancelable = true;
+		} elseif(is_bool($cancelable) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+
 		if(is_string($eventType) === false) {
 			throw new Exception('Event type must be a string');
 		}
@@ -369,6 +384,8 @@ class Manager implements ManagerInterface
 
 		$eventParts = explode(':', $eventType);
 		//@note no isset check for $eventParts[0], $eventParts[1]
+		//type: 0
+		//name: 1
 
 		//Responses must be traces?
 		if($this->_collect === true) {
@@ -380,7 +397,8 @@ class Manager implements ManagerInterface
 		if(isset($this->_events[$eventParts[0]]) === true) {
 			$fireEvents = $this->_events[$eventParts[0]];
 
-			if(is_array($fireEvents) === true || is_object($fireEvents) === true) {
+			if(is_array($fireEvents) === true || 
+				is_object($fireEvents) === true) {
 				//Create the event context
 				$event = new Event($eventParts[1], $source, $data, $cancelable);
 				$status = $this->fireQueue($fireEvents, $event);
@@ -391,7 +409,8 @@ class Manager implements ManagerInterface
 		if(isset($this->_events[$eventType]) === true) {
 			$fireEvents = $this->_events[$eventType];
 
-			if(is_array($fireEvents) === true || is_object($fireEvents) === true) {
+			if(is_array($fireEvents) === true || 
+				is_object($fireEvents) === true) {
 				//Create the event if it wasn't created before
 				if(is_null($event) === true) {
 					$event = new Event($eventParts[1], $source, $data, $cancelable);
@@ -434,10 +453,9 @@ class Manager implements ManagerInterface
 	 */
 	public function getListeners($type)
 	{
-		if(is_array($this->_events) === true) {
-			if(isset($this->_events[$type]) === true) {
-				return $this->_events[$type];
-			}
+		if(is_array($this->_events) === true &&
+			isset($this->_events[$type]) === true) {
+			return $this->_events[$type];
 		}
 
 		return array();

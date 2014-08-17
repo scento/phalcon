@@ -113,7 +113,7 @@ class Request implements RequestInterface, InjectionAwareInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		if(is_string($filters) === false && is_array($filter) === false &&
+		if(is_string($filters) === false && is_array($filters) === false &&
 			is_null($filters) === false) {
 			throw new Exception('Invalid parameter type.');
 		}

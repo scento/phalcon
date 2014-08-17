@@ -24,7 +24,7 @@ class Event
 	/**
 	 * Type
 	 * 
-	 * @var null|string
+	 * @var string|null
 	 * @access protected
 	*/
 	protected $_type;
@@ -32,7 +32,7 @@ class Event
 	/**
 	 * Source
 	 * 
-	 * @var null|object
+	 * @var object|null
 	 * @access protected
 	*/
 	protected $_source;
@@ -66,17 +66,14 @@ class Event
 	 *
 	 * @param string $type
 	 * @param object $source
-	 * @param mixed|null $data
+	 * @param mixed $data
 	 * @param boolean|null $cancelable
 	 * @throws Exception
 	 */
 	public function __construct($type, $source, $data = null, $cancelable = null)
 	{
-		if(is_string($type) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
-
-		if(is_object($source) === false) {
+		if(is_string($type) === false ||
+			is_object($source) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 
@@ -88,8 +85,14 @@ class Event
 
 		$this->_type = $type;
 		$this->_source = $source;
-		$this->_data = $data;
-		$this->_cancelable = $cancelable;
+
+		if(is_null($data) === false) {
+			$this->_data = $data;
+		}
+
+		if($cancelable !== true) {
+			$this->_cancelable = $cancelable;
+		}
 	}
 
 	/**
@@ -188,6 +191,8 @@ class Event
 
 	/**
 	 * Check whether the event is currently stopped
+	 * 
+	 * @return boolean
 	 */
 	public function isStopped()
 	{

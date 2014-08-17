@@ -115,7 +115,7 @@ class File implements FileInterface
 		}
 
 		if(isset($file['type']) === true) {
-			$this->_type = (string)$type;
+			$this->_type = (string)$file['type'];
 		}
 
 		if(isset($file['error']) === true) {

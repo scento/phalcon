@@ -63,12 +63,16 @@ class Group implements Countable, ArrayAccess, Iterator
 	 * print_r($messages[0]);
 	 *</code>
 	 *
-	 * @param string $index
+	 * @param scalar $index
 	 * @return \Phalcon\Validation\Message|null
 	 * @throws Exception
 	 */
 	public function offsetGet($index)
 	{
+		if(is_scalar($index) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+		
 		if(isset($this->_messages[$index]) === true) {
 			return $this->_messages[$index];
 		}
@@ -83,12 +87,16 @@ class Group implements Countable, ArrayAccess, Iterator
 	 * $messages[0] = new \Phalcon\Validation\Message('This is a message');
 	 *</code>
 	 *
-	 * @param string $index
+	 * @param scalar $index
 	 * @param \Phalcon\Validation\Message $message
 	 * @throws Exception
 	 */
 	public function offsetSet($index, $message)
 	{
+		if(is_scalar($index) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+		
 		if(is_object($message) === false &&
 			$message instanceof Message === false) {
 			throw new Exception('The message must be an object');
@@ -104,12 +112,16 @@ class Group implements Countable, ArrayAccess, Iterator
 	 * var_dump(isset($message['database']));
 	 *</code>
 	 *
-	 * @param string $index
+	 * @param scalar $index
 	 * @return boolean
 	 * @throws Exception
 	 */
 	public function offsetExists($index)
 	{
+		if(is_scalar($index) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+		
 		return isset($this->_messages[$index]);
 	}
 
@@ -120,11 +132,15 @@ class Group implements Countable, ArrayAccess, Iterator
 	 * unset($message['database']);
 	 *</code>
 	 *
-	 * @param string $index
+	 * @param scalar $index
 	 * @throws Exception
 	 */
 	public function offsetUnset($index)
 	{
+		if(is_scalar($index) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+		
 		unset($this->_messages[$index]);
 	}
 

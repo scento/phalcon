@@ -562,7 +562,7 @@ class Tag
 		if(is_array($parameters) === false) {
 			$params = array($parameters);
 		} else {
-			$params = array($parameters);
+			$params = $parameters;
 		}
 
 		if($asValue === false) {

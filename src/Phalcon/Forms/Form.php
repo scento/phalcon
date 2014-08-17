@@ -447,7 +447,7 @@ class Form extends Injectable implements EventsAwareInterface, InjectionAwareInt
 		}
 
 		$g = new Group();
-		if(is_array($message) === true) {
+		if(is_array($messages) === true) {
 			foreach($messages as $message) {
 				$g->appendMessages($message);
 			}

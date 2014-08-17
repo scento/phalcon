@@ -111,6 +111,8 @@ abstract class Element
 			throw new Exception("The element's name must be a string");
 		}
 
+		$this->_name = $name;
+
 		if(is_array($attributes) === true) {
 			$this->_attributes = $attributes;
 		}
@@ -278,7 +280,7 @@ abstract class Element
 			$this->_validators = array();
 		}
 
-		$this->_validators[] = $validators;
+		$this->_validators[] = $validator;
 	}
 
 	/**

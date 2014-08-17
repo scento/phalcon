@@ -21,8 +21,9 @@ interface ManagerInterface
 	 *
 	 * @param string $eventType
 	 * @param object $handler
+	 * @param int|null $priority
 	 */
-	public function attach($eventType, $handler);
+	public function attach($eventType, $handler, $priority = null);
 
 	/**
 	 * Removes all events from the EventsManager
@@ -37,9 +38,10 @@ interface ManagerInterface
 	 * @param string $eventType
 	 * @param object $source
 	 * @param mixed|null $data
+	 * @param boolean|null $cancelable
 	 * @return mixed
 	 */
-	public function fire($eventType, $source, $data = null);
+	public function fire($eventType, $source, $data = null, $cancelable = null);
 
 	/**
 	 * Returns all the attached listeners of a certain type

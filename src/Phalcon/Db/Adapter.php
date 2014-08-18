@@ -404,9 +404,9 @@ abstract class Adapter implements EventsAwareInterface
 			}
 
 			$joinedFields = implode(', ', $escapedFields);
-			$insertSql = 'INSERT INTO '.$esacpedTable.' ('.$joinedFields.') VALUES ('.$joinedValues.')';
+			$insertSql = 'INSERT INTO '.$escapedTable.' ('.$joinedFields.') VALUES ('.$joinedValues.')';
 		} else {
-			$insertSql = 'INSERT INTO '.$esacpedTable.' VALUES ('.$joinedValues.')';
+			$insertSql = 'INSERT INTO '.$escapedTable.' VALUES ('.$joinedValues.')';
 		}
 
 		//Perform the execution via PDO::execute

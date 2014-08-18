@@ -541,6 +541,8 @@ abstract class Dispatcher implements DispatcherInterface, InjectionAwareInterfac
 		$numberDispatches = 0;
 		$this->_finished = false;
 
+		$handler = null;
+
 		while(true) {
 			//Loop until finished is false
 			if($this->_finished === true) {

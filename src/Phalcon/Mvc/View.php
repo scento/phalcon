@@ -967,7 +967,7 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 		}
 
 		//Load the template engines
-		$this->_loadTemplateEngines();
+		$engines = $this->_loadTemplateEngines();
 
 		//Check if the user has picked a view different that the automatic
 		if(is_null($this->_pickView) === true) {

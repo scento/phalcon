@@ -156,7 +156,7 @@ abstract class Text
 	{
 		if(is_null($separator) === true) {
 			$separator = '_';
-		} elseif(is_string($separator) === true) {
+		} elseif(is_string($separator) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 

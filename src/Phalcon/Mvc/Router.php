@@ -1008,13 +1008,13 @@ class Router implements RouterInterface, InjectionAwareInterface
 	/**
 	 * Returns a route object by its id
 	 *
-	 * @param string $id
+	 * @param int $id
 	 * @return \Phalcon\Mvc\Router\Route|boolean
 	 * @throws Exception
 	 */
 	public function getRouteById($id)
 	{
-		if(is_string($id) === false) {
+		if(is_integer($id) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 

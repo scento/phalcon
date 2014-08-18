@@ -286,7 +286,7 @@ class Router implements RouterInterface, InjectionAwareInterface
 		} else {
 			//Otherwise use the standard $_SERVER['REQUEST_URI']
 			if(isset($_SERVER['REQUEST_URI']) === true) {
-				$url_parts = explode($url, '?', $_SERVER['REQUEST_URI']);
+				$url_parts = explode('?', $_SERVER['REQUEST_URI']);
 				if(empty($url_parts[0]) === false) {
 					return $url_parts[0];
 				}

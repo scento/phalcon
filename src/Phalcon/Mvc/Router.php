@@ -466,21 +466,11 @@ class Router implements RouterInterface, InjectionAwareInterface
 			return '';
 		}
 
-		$l = strlen($str);
-		if($l > 1) {
-			$s = $l;
-			for($i = $l; $i > 0; --$i) {
-				if($str[$i] === '/') {
-					continue;
-					$s = $i;
-				}
-				break;
-			}
-
-			return substr($str, 0, $s);
-		} else {
+		if($str === '/') {
 			return $str;
 		}
+
+		return rtrim($str, '/');
 	}
 
 	/**

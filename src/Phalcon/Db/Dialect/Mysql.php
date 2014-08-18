@@ -578,7 +578,7 @@ class Mysql extends Dialect implements DialectInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		if(isset($definition['sql']) === true) {
+		if(isset($definition['sql']) === false) {
 			throw new Exception("The index 'sql' is required in the definition array");
 		}
 

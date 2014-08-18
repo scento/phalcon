@@ -337,11 +337,11 @@ class Service implements ServiceInterface
 			throw new Exception("The attribute '_shared' is required");
 		}
 
-		if(isset($attribute['_shared']) === false) {
+		if(isset($attributes['_shared']) === false) {
 			throw new Exception("The attribute '_shared' is required");
 		}
 
-		return new Service($attribute['_name'], $attribute['_definition'], 
-			$attribute['_shared']);
+		return new Service($attributes['_name'], $attributes['_definition'], 
+			$attributes['_shared']);
 	}
 }

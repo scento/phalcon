@@ -392,6 +392,7 @@ class Manager implements ManagerInterface
 			$this->_responses = null;
 		}
 
+		$status = null;
 		$event = null;
 		//Check if events are grouped by type
 		if(isset($this->_events[$eventParts[0]]) === true) {

@@ -554,7 +554,7 @@ class Route implements RouteInterface
 	/**
 	 * Returns the route's id
 	 *
-	 * @return string|null
+	 * @return int|null
 	 */
 	public function getRouteId()
 	{

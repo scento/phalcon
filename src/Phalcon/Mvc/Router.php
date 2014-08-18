@@ -286,7 +286,7 @@ class Router implements RouterInterface, InjectionAwareInterface
 		} else {
 			//Otherwise use the standard $_SERVER['REQUEST_URI']
 			if(isset($_SERVER['REQUEST_URI']) === true) {
-				$url_parts = explode($url, '?', $_SERVER['REQUEST_URI']);
+				$url_parts = explode('?', $_SERVER['REQUEST_URI']);
 				if(empty($url_parts[0]) === false) {
 					return $url_parts[0];
 				}
@@ -466,21 +466,11 @@ class Router implements RouterInterface, InjectionAwareInterface
 			return '';
 		}
 
-		$l = strlen($str);
-		if($l > 1) {
-			$s = $l;
-			for($i = $l; $i > 0; --$i) {
-				if($str[$i] === '/') {
-					continue;
-					$s = $i;
-				}
-				break;
-			}
-
-			return substr($str, 0, $s);
-		} else {
+		if($str === '/') {
 			return $str;
 		}
+
+		return rtrim($str, '/');
 	}
 
 	/**
@@ -1008,13 +998,13 @@ class Router implements RouterInterface, InjectionAwareInterface
 	/**
 	 * Returns a route object by its id
 	 *
-	 * @param string $id
+	 * @param int $id
 	 * @return \Phalcon\Mvc\Router\Route|boolean
 	 * @throws Exception
 	 */
 	public function getRouteById($id)
 	{
-		if(is_string($id) === false) {
+		if(is_integer($id) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 

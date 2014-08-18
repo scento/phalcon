@@ -967,7 +967,7 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 		}
 
 		//Load the template engines
-		$this->_loadTemplateEngines();
+		$engines = $this->_loadTemplateEngines();
 
 		//Check if the user has picked a view different that the automatic
 		if(is_null($this->_pickView) === true) {
@@ -1027,7 +1027,7 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 				isset($this->_disabledLevels[4]) === false) {
 					//Templates after must be an array
 				if(is_array($this->_templatesAfter) === true) {
-					foreach($this->_templatesBefore as $template_after) {
+					foreach($this->_templatesAfter as $template_after) {
 						$this->_engineRender($engines, $layouts_dir.$template_after, false, true, $cache);
 					}
 				}
@@ -1190,7 +1190,7 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 		$view->reset();
 
 		//Set the render variables
-		if(is_array($params) === false) {
+		if(is_array($params) === true) {
 			$view->setVars($params);
 		}
 

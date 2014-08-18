@@ -143,7 +143,7 @@ class Builder
 		}
 
 		//The class name is required
-		if(isset($definition['className']) === true) {
+		if(isset($definition['className']) === false) {
 			throw new Exception("Invalid service definition. Missing 'className' parameter");
 		}
 

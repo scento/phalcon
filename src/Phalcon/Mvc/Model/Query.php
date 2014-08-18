@@ -2373,7 +2373,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 		if((is_array($bindParams) === false &&
 			is_null($bindParams) === false) ||
 			(is_array($bindTypes) === false &&
-				is_null($bindParams) === false)) {
+				is_null($bindTypes) === false)) {
 			throw new Exception('Invalid parameter type.');
 		}
 

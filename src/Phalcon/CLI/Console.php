@@ -274,7 +274,7 @@ class Console implements InjectionAwareInterface, EventsAwareInterface
 
 		//Get dispatcher
 		$dispatcher = $this->_dependencyInjector->getShared('dispatcher');
-		if(is_object($dispatcher) === false || $dispatcher instanceof DispatcherInterface) {
+		if(is_object($dispatcher) === false || ($dispatcher instanceof DispatcherInterface === false)) {
 			throw new Exception('Dispatcher service is not available.');
 		}
 

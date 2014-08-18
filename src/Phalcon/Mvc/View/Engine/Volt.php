@@ -105,7 +105,7 @@ class Volt extends Engine implements InjectionAwareInterface, EventsAwareInterfa
 	public function render($templatePath, $params, $mustClean = null)
 	{
 		if(is_string($templatePath) === false ||
-			is_array($params) === false) {
+			(is_array($params) === false && is_null($params) === false)) {
 			throw new Exception('Invalid parameter type.');
 		}
 

@@ -368,7 +368,7 @@ class Application extends Injectable implements EventsAwareInterface, InjectionA
 
 				//Check if the view progress has been treated by the developer
 				if($render_status !== false) {
-					$controller = $dispatcher->getControllerName();
+					$controller_name = $dispatcher->getControllerName();
 					$action_name = $dispatcher->getActionName();
 					$params = $dispatcher->getParams();
 

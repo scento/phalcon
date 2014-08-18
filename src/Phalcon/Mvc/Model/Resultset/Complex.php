@@ -154,30 +154,30 @@ SeekableIterator, Iterator, ResultsetInterface
 				//Each row in a complex result is a Phalcon\Mvc\Model\Row instance
 				switch((int)$this->_hydrateMode) {
 					case 0:
-						$active_row = new Row();
+						$activeRow = new Row();
 						break;
 					case 1:
-						$active_row = array();
+						$activeRow = array();
 						break;
 					case 2:
-						$active_row = new stdClass();
+						$activeRow = new stdClass();
 						break;
 					//@note no default exception
 				}
 
 				//Set records as dirty state PERSISTENT by default
-				$dirty_state = 0;
+				$dirtyState = 0;
 
 				foreach($this->_columnTypes as $alias => $column) {
 					if($column['type'] === 'object') {
 						//Object columns are assigned column by column
-						$column_map = $column['columnMap'];
+						$columnMap = $column['columnMap'];
 						$attributes = $column['attributes'];
 
-						$row_model = array();
+						$rowModel = array();
 						foreach($column['attributes'] as $attribute) {
 							//Columns are supposed to be in the form _table_field
-							$row_model[$attribute] = $row['_'.$column['column'].'_'.$attribute];
+							$rowModel[$attribute] = $row['_'.$column['column'].'_'.$attribute];
 						}
 
 						//Generate the column value according to the hydration type
@@ -185,21 +185,21 @@ SeekableIterator, Iterator, ResultsetInterface
 							case 0:
 									//Check if the resultset must keep snapshots
 								if(isset($column['keepSnapshots']) === true) {
-									$keep_snapshots = $column['keepSnapshots'];
+									$keepSnapshots = $column['keepSnapshots'];
 								} else {
-									$keep_snapshots = false;
+									$keepSnapshots = false;
 								}
 
 								//Get the base instance
 								$instace = $column['instance'];
 
 								//Assign the values to the attributes using a column map
-								$value = Model::cloneResultMap($instance, $row_model, $column_map, $dirty_state, $keep_snapshots);
+								$value = Model::cloneResultMap($instance, $rowModel, $columnMap, $dirtyState, $keepSnapshots);
 								break;
 
 							default:
 								//Other kinds of hydrations
-								$value = Model::cloneResultMapHydrate($row_model, $column_map, $this->_hydrateMode);
+								$value = Model::cloneResultMapHydrate($rowModel, $columnMap, $this->_hydrateMode);
 								break;
 						}
 
@@ -213,7 +213,7 @@ SeekableIterator, Iterator, ResultsetInterface
 					} else {
 						//Scalar columns are simply assigned to the result objects
 						if(isset($column['sqlAlias']) === true) {
-							$valuar = $row[$column['sqlAlias']];
+							$value = $row[$column['sqlAlias']];
 						} else {
 							if(isset($row[$alias]) === true) {
 								$value = $row[$alias];
@@ -235,16 +235,16 @@ SeekableIterator, Iterator, ResultsetInterface
 					//Assign the instance according to the hydration type
 					switch((int)$this->_hydrateMode) {
 						case 1:
-							$active_row[$attribute] = $value;
+							$activeRow[$attribute] = $value;
 							break;
 						default:
-							$active_row->$attribute = $value;
+							$activeRow->$attribute = $value;
 							break;
 					}
 				}
 
 				//Store the generated row in $this->activeRow to be retrieved by 'current'
-				$this->_activeRow = $active_row;
+				$this->_activeRow = $activeRow;
 			} else {
 				//The row is already build so we just assign it to the activeRow
 				$this->_activeRow = $row;

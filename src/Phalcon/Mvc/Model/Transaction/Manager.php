@@ -373,17 +373,17 @@ class Manager implements ManagerInterface, InjectionAwareInterface
 		}
 
 		if(count($this->_transactions) > 0) {
-			$new_transactions = array();
+			$newTransactions = array();
 
 			//@note This replaces _transactions with an array containing $transaction
-			foreach($this->_transactions as $managed_transaction) {
-				if($managed_transaction === $transaction) {
-					$new_transactions[] = $transaction;
+			foreach($this->_transactions as $managedTransaction) {
+				if($managedTransaction === $transaction) {
+					$newTransactions[] = $transaction;
 					$this->_number--;
 				}
 			}
 
-			$this->_transactions = $new_transactions;
+			$this->_transactions = $newTransactions;
 		}
 	}
 

@@ -617,7 +617,8 @@ abstract class Adapter implements EventsAwareInterface
 	public function tableExists($tableName, $schemaName = null)
 	{
 		$sql = $this->_dialect->tableExists($tableName, $schemaName);
-		return $this->fetchOne($sql, 3)[0];
+		$fetchOne = $this->fetchOne($sql, 3);
+		return $fetchOne[0];
 	}
 
 	/**
@@ -634,7 +635,8 @@ abstract class Adapter implements EventsAwareInterface
 	public function viewExists($viewName, $schemaName = null)
 	{
 		$sql = $this->_dialect->viewExists($viewName, $schemaName);
-		return $this->fetchOne($sql, 3)[0];
+		$fetchOne = $this->fetchOne($sql, 3);
+		return $fetchOne[0];
 	}
 
 	/**
@@ -1016,7 +1018,8 @@ abstract class Adapter implements EventsAwareInterface
 	{
 		$sql = $this->_dialect->tableOptions($tableName, $schemaName);
 		if(isset($sql) === true) {
-			return $this->fetchAll($sql, 1)[0];
+			$fetchAll = $this->fetchAll($sql, 1);
+			return $fetchAll[0];
 		}
 
 		return array();

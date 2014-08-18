@@ -61,7 +61,7 @@ class Timestampable extends Behavior implements BehaviorInterface
 					//A generator is a closure that produces the current timestamp value
 					if(is_object($options['generator']) === true &&
 						$options['generator'] instanceof Closure === true) {
-						$timstamp = call_user_func($generator);
+						$timestamp = call_user_func($generator);
 					} 
 				}
 			}
@@ -75,11 +75,11 @@ class Timestampable extends Behavior implements BehaviorInterface
 
 			//Assign the value to the field, use writeAttribute if the property is protected
 			if(is_array($field) === true) {
-				foreach($field as $single_field) {
-					$model->writeAttribute($single_field, $timestamp);
+				foreach($field as $singleField) {
+					$model->writeAttribute($singleField, $timestamp);
 				}
 			} else {
-				$model->writeAttribute($field, $timstamp);
+				$model->writeAttribute($field, $timestamp);
 			}
 		}
 	}

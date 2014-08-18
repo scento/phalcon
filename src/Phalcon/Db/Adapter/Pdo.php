@@ -145,12 +145,12 @@ abstract class Pdo extends Adapter implements EventsAwareInterface
 		$dns = $this->_type.':'.$dns_attributes;
 
 		//Default options
-		$options[\PDO_ATTR_ERRMODE] = \PDO_ERRMODE_EXCEPTION;
+		$options[\PDO::ATTR_ERRMODE] = \PDO::ERRMODE_EXCEPTION;
 
 		//Check if the connection must be persistent
 		if(isset($descriptor['persistent']) === true &&
 			$descriptor['persistent'] === true) {
-			$options[\PDO_ATTR_PERSISTENT] = true;
+			$options[\PDO::ATTR_PERSISTENT] = true;
 		}
 
 		//Create the connection using PDO

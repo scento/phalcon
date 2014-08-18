@@ -199,7 +199,7 @@ class Mysql extends Dialect implements DialectInterface
 
 		if(is_string($schemaName) === true &&
 			$schemaName == true) {
-			$sql .= 'ALTER TABLE `'.$schemaName.'`.`'.$tableName.'` DROP COLUMN ';
+			$sql = 'ALTER TABLE `'.$schemaName.'`.`'.$tableName.'` DROP COLUMN ';
 		} else {
 			$sql = 'ALTER TABLE `'.$tableName.'` DROP COLUMN ';
 		}
@@ -289,7 +289,7 @@ class Mysql extends Dialect implements DialectInterface
 			$schemaName == true) {
 			$sql = 'ALTER TABLE `'.$schemaName.'`.`'.$tableName.'` ADD PRIMARY KEY ';
 		} else {
-			$sql = 'ALTER TABLE `'.$tableName.'``ADD PRIMARY KEY ';
+			$sql = 'ALTER TABLE `'.$tableName.'` ADD PRIMARY KEY ';
 		}
 
 		return $sql.'('.$this->getColumnList($index->getColumns()).')';

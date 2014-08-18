@@ -645,15 +645,15 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 		}
 
 		/* Create the parameters */
-		$next_hidden_param = $this->_hiddenParamNumber + 1;
-		$minimum_key = 'phb'.$this->_hiddenParamNumber;
-		$maximum_key = 'phb'.$next_hidden_param;
-		$conditions = $expr.' BETWEEN :'.$minimum_key.': AND :'.$maximum_key.':';
-		$bind_params = array($minimum_key => $minimum, $maximum_key => $maximum);
+		$nextHiddenParam = $this->_hiddenParamNumber + 1;
+		$minimumKey = 'phb'.$this->_hiddenParamNumber;
+		$maximumKey = 'phb'.$nextHiddenParam;
+		$conditions = $expr.' BETWEEN :'.$minimumKey.': AND :'.$maximumKey.':';
+		$bindParams = array($minimumKey => $minimum, $maximumKey => $maximum);
 
 		//Append the BETWEEN to the current conditions using 'AND'
-		$this->andWhere($conditions, $bind_params);
-		$this->_hiddenParamNumber = $next_hidden_param;
+		$this->andWhere($conditions, $bindParams);
+		$this->_hiddenParamNumber = $nextHiddenParam;
 
 		return $this;
 	}
@@ -679,15 +679,15 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 		}
 
 		/* Create the parameters */
-		$next_hidden_param = $this->_hiddenParamNumber + 1;
-		$minimum_key = 'phb'.$this->_hiddenParamNumber;
-		$maximum_key = 'phb'.$next_hidden_param;
-		$conditions = $expr.' NOT BETWEEN :'.$minimum_key.': AND :'.$maximum_key.':';
-		$bind_params = array($minimum_key => $minimum, $maximum_key => $maximum);
+		$nextHiddenParam = $this->_hiddenParamNumber + 1;
+		$minimumKey = 'phb'.$this->_hiddenParamNumber;
+		$maximumKey = 'phb'.$nextHiddenParam;
+		$conditions = $expr.' NOT BETWEEN :'.$minimumKey.': AND :'.$maximumKey.':';
+		$bindParams = array($minimumKey => $minimum, $maximumKey => $maximum);
 
 		//Append the BETWEEN to the current conditions using 'AND'
-		$this->andWhere($conditions, $bind_params);
-		$this->_hiddenParamNumber = $next_hidden_param;
+		$this->andWhere($conditions, $bindParams);
+		$this->_hiddenParamNumber = $nextHiddenParam;
 
 		return $this;
 	}
@@ -716,25 +716,25 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 		}
 
 		/* Create the parameters */
-		$hidden_param = $this->_hiddenParamNumber;
-		$bind_params = array();
-		$bind_keys = array();
+		$hiddenParam = $this->_hiddenParamNumber;
+		$bindParams = array();
+		$bindKeys = array();
 
 		foreach($values as $value) {
 			//Key with auto-bind params
-			$key = 'phi'.$hidden_param;
-			$query_key = ':'.$key.':';
-			$bind_keys[] = $query_key;
-			$bind_params[$key] = $value;
-			$hidden_param++;
+			$key = 'phi'.$hiddenParam;
+			$queryKey = ':'.$key.':';
+			$bindKeys[] = $queryKey;
+			$bindParams[$key] = $value;
+			$hiddenParam++;
 		}
 
 		//Create a standard IN condition with bind params
-		$conditions = $expr.' IN ('.implode(', ', $bind_keys).')';
+		$conditions = $expr.' IN ('.implode(', ', $bindKeys).')';
 
 		//Append the IN to the current conditions using 'AND'
-		$this->andWhere($conditions, $bind_params);
-		$this->_hiddenParamNumber = $hidden_param;
+		$this->andWhere($conditions, $bindParams);
+		$this->_hiddenParamNumber = $hiddenParam;
 
 		return $this;
 	}
@@ -763,25 +763,25 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 		}
 
 		/* Create the parameters */
-		$hidden_param = $this->_hiddenParamNumber;
-		$bind_params = array();
-		$bind_keys = array();
+		$hiddenParam = $this->_hiddenParamNumber;
+		$bindParams = array();
+		$bindKeys = array();
 
 		foreach($values as $value) {
 			//Key with auto-bind params
-			$key = 'phi'.$hidden_param;
-			$query_key = ':'.$key.':';
-			$bind_keys[] = $query_key;
-			$bind_params[$key] = $value;
-			$hidden_param++;
+			$key = 'phi'.$hiddenParam;
+			$queryKey = ':'.$key.':';
+			$bindKeys[] = $queryKey;
+			$bindParams[$key] = $value;
+			$hiddenParam++;
 		}
 
 		//Create a standard IN condition with bind params
-		$conditions = $expr.' NOT IN ('.implode(', ', $bind_keys).')';
+		$conditions = $expr.' NOT IN ('.implode(', ', $bindKeys).')';
 
 		//Append the IN to the current conditions using 'AND'
-		$this->andWhere($conditions, $bind_params);
-		$this->_hiddenParamNumber = $hidden_param;
+		$this->andWhere($conditions, $bindParams);
+		$this->_hiddenParamNumber = $hiddenParam;
 
 		return $this;
 	}
@@ -961,7 +961,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 	 */
 	public function getGroupBy()
 	{
-		return $this->_gorup;
+		return $this->_group;
 	}
 
 	/**
@@ -1006,38 +1006,38 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 
 			//Get the models metadata service to obtain the column names, column map and
 			//primary key
-			$no_primary = true;
-			$model_instance = new $model($dependencyInjector);
-			$meta_data = $dependencyInjector->getShared('modelsMetadata');
-			$primary_keys = $meta_data->getPrimaryKeyAttributes($model_instance);
+			$noPrimary = true;
+			$modelInstance = new $model($dependencyInjector);
+			$metaData = $dependencyInjector->getShared('modelsMetadata');
+			$primaryKeys = $metaData->getPrimaryKeyAttributes($modelInstance);
 
-			if(empty($primary_keys) == false && isset($primary_keys[0]) === true) {
-				$first_primary_key = $primary_keys[0];
+			if(empty($primaryKeys) == false && isset($primaryKeys[0]) === true) {
+				$firstPrimaryKey = $primaryKeys[0];
 
 				//The PHQL contains the renamed columns if available
 				if(isset($GLOBALS['_PHALCON_ORM_COLUMN_RENAMING']) === true &&
 					$GLOBALS['_PHALCON_ORM_COLUMN_RENAMING'] === true) {
-					$column_map = $meta_data->getColumnMap($model_instance);
+					$columnMap = $metaData->getColumnMap($modelInstance);
 				} else {
-					$column_map = null;
+					$columnMap = null;
 				}
 
-				if(is_array($column_map) === true) {
-					if(isset($column_map[$first_primary_key]) === true) {
-						$attribute_field = $column_map[$first_primary_key];
+				if(is_array($columnMap) === true) {
+					if(isset($columnMap[$firstPrimaryKey]) === true) {
+						$attributeField = $columnMap[$firstPrimaryKey];
 					} else {
-						throw new Exception("Column '".$first_primary_key.'" isn\'t part of the column map');
+						throw new Exception("Column '".$firstPrimaryKey.'" isn\'t part of the column map');
 					}
 				} else {
-					$attribute_field = $first_primary_key;
+					$attributeField = $firstPrimaryKey;
 				}
 
-				$conditions = '['.$model.'].['.$attribute_field.'] = '.$conditions;
-				$no_primary = false;
+				$conditions = '['.$model.'].['.$attributeField.'] = '.$conditions;
+				$noPrimary = false;
 			}
 
 			//A primary key is mandatory in these cases
-			if($no_primary === true) {
+			if($noPrimary === true) {
 				throw new Exception('Source related to this model does not have a primary key defined');
 			}
 		}
@@ -1046,32 +1046,32 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 		if(is_null($columns) === false) {
 			//Generate PHQL for columns
 			if(is_array($columns) === true) {
-				$selected_columns = array();
-				foreach($columns as $column_alias => $column) {
-					if(is_int($column_alias) === true) {
-						$selected_columns[] = $column;
+				$selectedColumns = array();
+				foreach($columns as $columnAlias => $column) {
+					if(is_int($columnAlias) === true) {
+						$selectedColumns[] = $column;
 					} else {
-						$selected_columns[] = $column.' AS '.$column_alias;
+						$selectedColumns[] = $column.' AS '.$columnAlias;
 					}
 				}
 
-				$phql .= implode(', ', $selected_columns);
+				$phql .= implode(', ', $selectedColumns);
 			} else {
 				$phql .= $columns;
 			}
 		} else {
 			//Automatically generate an array of models
 			if(is_array($models) === true) {
-				$selected_columns = array();
-				foreach($models as $model_column_alias => $model) {
-					if(is_int($model_column_alias) === true) {
-						$selected_columns[] = '['.$model.'].*';
+				$selectedColumns = array();
+				foreach($models as $modelColumnAlias => $model) {
+					if(is_int($modelColumnAlias) === true) {
+						$selectedColumns[] = '['.$model.'].*';
 					} else {
-						$selected_columns[] = '['.$model_column_alias.'].*';
+						$selectedColumns[] = '['.$modelColumnAlias.'].*';
 					}
 				}
 
-				$phql .= implode(', ', $selected_columns);
+				$phql .= implode(', ', $selectedColumns);
 			} else {
 				$phql .= '['.$models.'].*';
 			}
@@ -1079,16 +1079,16 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 
 		//Join multiple models or use a single one if it is a string
 		if(is_array($models) === true) {
-			$selected_models = array();
-			foreach($models as $model_alias => $model) {
-				if(is_string($model_alias) === true) {
-					$selected_models[] = '['.$model.'] AS ['.$model_alias.']';
+			$selectedModels = array();
+			foreach($models as $modelAlias => $model) {
+				if(is_string($modelAlias) === true) {
+					$selectedModels[] = '['.$model.'] AS ['.$modelAlias.']';
 				} else {
-					$selected_models[] = '['.$model.']';
+					$selectedModels[] = '['.$model.']';
 				}
 			}
 
-			$phql .= ' FROM '.implode(', ', $selected_models);
+			$phql .= ' FROM '.implode(', ', $selectedModels);
 		} else {
 			$phql .= ' FROM ['.$models.']';
 		}
@@ -1097,32 +1097,32 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 		if(is_array($joins) === true) {
 			foreach($joins as $join) {
 				//Joined table
-				$join_model = $join[0];
+				$joinModel = $join[0];
 
 				//Join conditions
-				$join_conditions = $join[1];
+				$joinConditions = $join[1];
 
 				//Join alias
-				$join_alias = $join[2];
+				$joinAlias = $join[2];
 
 				//Join Type
-				$join_type = $join[3];
+				$joinType = $join[3];
 
 				//Create the join according to the type
-				if(isset($join_type)) {
-					$phql .= ' '.$join_type.' JOIN ['.$join_model.']';
+				if(isset($joinType)) {
+					$phql .= ' '.$joinType.' JOIN ['.$joinModel.']';
 				} else {
-					$phql .= ' JOIN ['.$join_model.']';
+					$phql .= ' JOIN ['.$joinModel.']';
 				}
 
 				//Alias comes first
-				if(isset($join_alias) === true) {
-					$phql .= ' AS ['.$join_alias.']';
+				if(isset($joinAlias) === true) {
+					$phql .= ' AS ['.$joinAlias.']';
 				}
 
 				//Conditions then
-				if(isset($join_conditions) === true) {
-					$phql .= ' ON '.$join_conditions;
+				if(isset($joinConditions) === true) {
+					$phql .= ' ON '.$joinConditions;
 				}
 			}
 		}
@@ -1130,29 +1130,29 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 		//Only append conditions if it's a string
 		if(is_string($conditions) === true &&
 			empty($conditions) === false) {
-			$phql .= 'WHERE '.$conditions;
+			$phql .= ' WHERE '.$conditions;
 		}
 
 		//Process group parameters
 		if(is_null($group) === false) {
 			if(is_array($group) === true) {
-				$group_items = array();
-				foreach($group as $group_item) {
-					if(is_numeric($group_item) === true) {
-						$group_items[] = $group_item;
+				$groupItems = array();
+				foreach($group as $groupItem) {
+					if(is_numeric($groupItem) === true) {
+						$groupItems[] = $groupItem;
 					} else {
-						if(strpos($group_item, '.') !== false) {
-							$group_items[] = $group_item;
+						if(strpos($groupItem, '.') !== false) {
+							$groupItems[] = $groupItem;
 						} else {
-							$group_items[] = '['.$group_items.']';
+							$groupItems[] = '['.$groupItem.']';
 						}
 					}
 				}
 
-				$phql .= ' GROUP BY '.implode(', ', $group_items);
+				$phql .= ' GROUP BY '.implode(', ', $groupItems);
 			} else {
 				if(is_null($group) === true) {
-					$phql .= 'GROUP BY '.$gorup;
+					$phql .= ' GROUP BY '.$group;
 				} else {
 					if(strpos($group, '.') !== false) {
 						$phql .= ' GROUP BY '.$group;
@@ -1171,20 +1171,20 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 		//Process order clause
 		if(is_null($order) === false) {
 			if(is_array($order) === true) {
-				$order_items = array();
-				foreach($order as $order_item) {
-					if(is_null($order_item) === true) {
-						$order_items[] = $order_item;
+				$orderItems = array();
+				foreach($order as $orderItem) {
+					if(is_null($orderItem) === true) {
+						$orderItems[] = $orderItem;
 					} else {
-						if(strpos($order_item, '.') !== false) {
-							$order_items[] = $order_item;
+						if(strpos($orderItem, '.') !== false) {
+							$orderItems[] = $orderItem;
 						} else {
-							$order_items[] = '['.$order_item.']';
+							$orderItems[] = '['.$orderItem.']';
 						}
 					}
 				}
 
-				$phql .= ' ORDER BY '.implode(', ', $order_items);
+				$phql .= ' ORDER BY '.implode(', ', $orderItems);
 			} else {
 				$phql .= ' ORDER BY '.$order;
 			}
@@ -1235,15 +1235,15 @@ class Builder implements BuilderInterface, InjectionAwareInterface
 		$query = new Query($phql, $this->_dependencyInjector);
 
 		//Set default bind params
-		$bind_params = $this->_bindParams;
-		if(is_array($bind_params) === true) {
-			$query->setBindParams($bind_params);
+		$bindParams = $this->_bindParams;
+		if(is_array($bindParams) === true) {
+			$query->setBindParams($bindParams);
 		}
 
 		//Set default bind types
-		$bind_types = $this->_bindTypes;
-		if(is_array($bind_types) === true) {
-			$query->setBindTypes($bind_types);
+		$bindTypes = $this->_bindTypes;
+		if(is_array($bindTypes) === true) {
+			$query->setBindTypes($bindTypes);
 		}
 
 		return $query;

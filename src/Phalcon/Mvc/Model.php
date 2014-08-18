@@ -937,6 +937,9 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 		$builder->limit(1);
 		$query = $builder->getQuery();
 
+		$bind_params = null;
+		$bind_types = null;
+		
 		//Check for bind parameters
 		if(isset($params['bind']) === true) {
 			$bind_params = $params['bind'];
@@ -951,7 +954,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 		}
 
 		//Return only the first row
-		$query->setUniqueRow(1);
+		$query->setUniqueRow(true);
 
 		//Execute the query passing the bind-params and casting-types
 		return $query->execute($bind_params, $bind_types);
@@ -1152,7 +1155,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 			if(isset($params['group']) === true) {
 				$columns = $params['group'].', '.$function.'('.$params['group'].') AS '.$alias;
 			} else {
-				$columns = $funciton.'('.$group_column.') AS '.$alias;
+				$columns = $function.'('.$group_column.') AS '.$alias;
 			}
 		}
 
@@ -3410,13 +3413,13 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 	 * @param string $intermediateModel
 	 * @param string $intermediateFields
 	 * @param string $intermediateReferencedFields
-	 * @param string $referencedModel
+	 * @param string $referenceModel
 	 * @param string $referencedFields
 	 * @param array|null $options
 	 * @return \Phalcon\Mvc\Model\Relation
 	 */
 	public function hasManyToMany($fields, $intermediateModel, $intermediateFields, 
-		$intermediateReferecedFields, $referencedModel, $referencedFields, $options = null)
+		$intermediateReferecedFields, $referenceModel, $referencedFields, $options = null)
 	{
 		return $this->_modelsManager->addHasManyToMany($this, $fields, $intermediateModel, $intermediateFields, 
 			$intermediateReferecedFields, $referenceModel, $referencedFields, $options);

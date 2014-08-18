@@ -134,9 +134,9 @@ class Reflection
 			if(isset($this->_reflectionData['properties']) === true) {
 				$this->_propertyAnnotations = array();
 				if(empty($this->_reflectionData['properties']) === false) {
-					foreach($this->_reflectionData['properties'] as $property => $reflectionPproperty)
+					foreach($this->_reflectionData['properties'] as $property => $reflectionProperty)
 					{
-						$collection = new Collection($reflectioProperty);
+						$collection = new Collection($reflectionProperty);
 						$this->_propertyAnnotations[$property] = $collection;
 					}
 

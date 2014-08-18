@@ -58,18 +58,18 @@ class SoftDelete extends Behavior implements BehaviorInterface
 
 			//'field' is the attribute to be updated instead of delete the record
 			$field = $options['field'];
-			$actual_value = $model->readAttribute($field);
+			$actualValue = $model->readAttribute($field);
 
 			//If the record is already flagged as 'deleted' we don't delete it again
-			if($actual_value !== $value) {
+			if($actualValue !== $value) {
 				//Clone the current model to make a clean new operation
-				$update_model = clone $model;
+				$updateModel = clone $model;
 
 				//Update the cloned model
-				$update_model->writeAttribute($field, $value);
-				if($update_model->save() !== true) {
+				$updateModel->writeAttribute($field, $value);
+				if($updateModel->save() !== true) {
 					//Transfer the message from the cloned model to the original model
-					$messages = $update_model->getMessages();
+					$messages = $updateModel->getMessages();
 					foreach($messages as $message) {
 						$model->appendMessage($message);
 					}

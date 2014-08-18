@@ -131,18 +131,18 @@ abstract class Pdo extends Adapter implements EventsAwareInterface
 
 		//Check if the user has defined a custom dsn
 		if(isset($descriptor['dns']) === false) {
-			$dns_parts = array();
+			$dnsParts = array();
 
 			foreach($descriptor as $key => $value) {
-				$dns_parts[] = $key.'='.$value;
+				$dnsParts[] = $key.'='.$value;
 			}
 
-			$dns_attributes = implode(';', $dns_parts);
+			$dnsAttributes = implode(';', $dnsParts);
 		} else {
-			$dns_attributes = $descriptor['dns'];
+			$dnsAttributes = $descriptor['dns'];
 		}
 
-		$dns = $this->_type.':'.$dns_attributes;
+		$dns = $this->_type.':'.$dnsAttributes;
 
 		//Default options
 		$options[\PDO::ATTR_ERRMODE] = \PDO::ERRMODE_EXCEPTION;

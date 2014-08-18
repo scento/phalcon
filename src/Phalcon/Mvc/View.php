@@ -1190,7 +1190,7 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 		$view->reset();
 
 		//Set the render variables
-		if(is_array($params) === false) {
+		if(is_array($params) === true) {
 			$view->setVars($params);
 		}
 

@@ -113,7 +113,7 @@ class Request implements RequestInterface, InjectionAwareInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		if(is_string($filters) === false && is_array($filter) === false &&
+		if(is_string($filters) === false && is_array($filters) === false &&
 			is_null($filters) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
@@ -190,7 +190,7 @@ class Request implements RequestInterface, InjectionAwareInterface
 						$this->_filter = $dependencyInjector->getShared('filter');
 					}
 
-					return $filter->sanitize($value, $filters);
+					return $this->_filter->sanitize($value, $filters);
 				}
 				
 				return $value;

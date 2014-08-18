@@ -37,7 +37,7 @@ class Php extends Engine implements InjectionAwareInterface,
 	public function render($path, $params, $mustClean = null)
 	{
 		if(is_string($path) === false ||
-			is_array($params) === false) {
+			(is_array($params) === false && is_null($params) === false)) {
 			throw new Exception('Invalid parameter type.');
 		}
 

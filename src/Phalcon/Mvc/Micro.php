@@ -399,7 +399,7 @@ class Micro extends Injectable implements EventsAwareInterface, InjectionAwareIn
 		//Get the main handler
 		$main_handler = $collection->getHandler();
 		if(empty($main_handler) === true) {
-			throw Exception('The collection requires a main handler');
+			throw new Exception('The collection requires a main handler');
 		}
 
 		$handlers = $collection->getHandlers();

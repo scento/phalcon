@@ -1018,7 +1018,7 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 			//Insert controller layout
 			if($this->_renderLevel >= 3) {
 				if(isset($this->_disabledLevels[3]) === false) {
-					$this->_engineRender($engines, $layoutDir.$layoutName, true, true, $cache);
+					$this->_engineRender($engines, $layoutsDir.$layoutName, true, true, $cache);
 				}
 			}
 

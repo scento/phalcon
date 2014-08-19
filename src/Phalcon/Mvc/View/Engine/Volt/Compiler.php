@@ -2378,13 +2378,13 @@ class Compiler implements InjectionAwareInterface
 		if(is_string($compiled_path) === true) {
 			//Calculate the template realpath's
 			if(empty($compiled_path) === false) {
-				$real_template_path = realpath($template_path);
+				$real_template_path = realpath($templatePath);
 
 				//Create the virtual path replacing the directory separator by the compiled
 				//separator
 				$template_sep_path = self::prepareVirtualPath($real_template_path, $compiled_separator);
 			} else {
-				$template_sep_path = $template_path;
+				$template_sep_path = $templatePath;
 			}
 
 			//In extends mode we add an additional 'e' suffix to the file
@@ -2397,7 +2397,7 @@ class Compiler implements InjectionAwareInterface
 			//A closure can dynamically compile the path
 			if(is_object($compiled_path) === true) {
 				if($compiled_path instanceof Closure === true) {
-					$compiled_template_path = call_user_func_array($compiled_path, array($template_path, $options, $extendsMode));
+					$compiled_template_path = call_user_func_array($compiled_path, array($templatePath, $options, $extendsMode));
 
 					//The closure must return a valid path
 					if(is_string($compiled_template_path) === false) {
@@ -2415,13 +2415,13 @@ class Compiler implements InjectionAwareInterface
 
 		if($compile_always === true) {
 			//Compile always must be used only in the development stage
-			$compilation = $this->compileFile($template_path, $real_compiled_path, $extendsMode);
+			$compilation = $this->compileFile($templatePath, $real_compiled_path, $extendsMode);
 		} else {
 			if($stat === true) {
 				if(file_exists($compiled_template_path) === true) {
 					//Compare modification timestamps to check if the file needs to be recompiled
-					if(self::compareMtime($template_path, $real_compiled_path) === true) {
-						$compilation = $this->compileFile($template_path, $real_compiled_path, $extendsMode);
+					if(self::compareMtime($templatePath, $real_compiled_path) === true) {
+						$compilation = $this->compileFile($templatePath, $real_compiled_path, $extendsMode);
 					} else {
 						if($extendsMode === true) {
 							//In extends mode we read the file that must contain a serialized array of blocks
@@ -2440,7 +2440,7 @@ class Compiler implements InjectionAwareInterface
 					}
 				} else {
 					//The file doesn't exists so we compile the php version for the first time
-					$compilation = $this->compileFile($template_path, $real_compiled_path, $extendsMode);
+					$compilation = $this->compileFile($templatePath, $real_compiled_path, $extendsMode);
 				}
 			} else {
 				//Stat is off but the compiled file doesn't exists

@@ -1442,8 +1442,9 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 		}
 
 		if(is_array($this->_viewParams) === false) {
-			throw new Exception('Invalid parameter type.');
+			$this->_viewParams = array();
 		}
+
 		$this->_viewParams[$key] = $value;
 	}
 

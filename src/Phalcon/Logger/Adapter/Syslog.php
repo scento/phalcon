@@ -12,8 +12,7 @@ namespace Phalcon\Logger\Adapter;
 
 use \Phalcon\Logger\Adapter,
 	\Phalcon\Logger\AdapterInterface,
-	\Phalcon\Logger\Exception,
-	\Phalcon\Logger\Formatter\Syslog;
+	\Phalcon\Logger\Exception;
 
 /**
  * Phalcon\Logger\Adapter\Syslog
@@ -83,7 +82,7 @@ class Syslog extends Adapter implements AdapterInterface
 	public function getFormatter()
 	{
 		if(is_object($this->_formatter) === false) {
-			$this->_formatter = new Syslog();
+			$this->_formatter = new \Phalcon\Logger\Formatter\Syslog();
 		}
 
 		return $this->_formatter;

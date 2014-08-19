@@ -10,8 +10,7 @@
 */
 namespace Phalcon\CLI;
 
-use \Phalcon\Dispatcher,
-	\Phalcon\Events\EventsAwareInterface,
+use \Phalcon\Events\EventsAwareInterface,
 	\Phalcon\DI\InjectionAwareInterface,
 	\Phalcon\DispatcherInterface,
 	\Phalcon\CLI\Dispatcher\Exception;
@@ -41,7 +40,7 @@ use \Phalcon\Dispatcher,
  * 
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/cli/dispatcher.c
  */
-class Dispatcher extends Dispatcher implements EventsAwareInterface, InjectionAwareInterface, DispatcherInterface
+class Dispatcher extends \Phalcon\Dispatcher implements EventsAwareInterface, InjectionAwareInterface, DispatcherInterface
 {
 	/**
 	 * Exception: No Dependency Injector

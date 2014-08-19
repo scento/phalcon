@@ -761,22 +761,22 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 				}
 
 				$arguments = array($this, $this->_dependencyInjector);
-				foreach($this->_registeredEngines as $extension => $engine_service) {
-					if(is_object($engine_service) === true) {
+				foreach($this->_registeredEngines as $extension => $engineService) {
+					if(is_object($engineService) === true) {
 						//Engine can be a closure
-						if($engine_service instanceof Closure) {
-							$engine_object = call_user_func_array($engine_service, $arguments);
+						if($engineService instanceof Closure) {
+							$engineObject = call_user_func_array($engineService, $arguments);
 						} else {
-							$engine_object = $engine_service;
+							$engineObject = $engineService;
 						}
-					} elseif(is_string($engine_service) === true) {
+					} elseif(is_string($engineService) === true) {
 						//Engine can be a string representing a service in the DI
-						$engine_object = $this->_dependencyInjector->getShared($engine_service, $arguments);
+						$engineObject = $this->_dependencyInjector->getShared($engineService, $arguments);
 					} else {
 						throw new Exception('Invalid template engine registration for extension: '.$extension);
 					}
 
-					$engines[$extension] = $engine_object;
+					$engines[$extension] = $engineObject;
 				}
 			}
 
@@ -806,8 +806,8 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$views_dir_path = $this->_basePath.$this->_viewsDir.$viewPath;
-		$not_exists = true;
+		$viewsDirPath = $this->_basePath.$this->_viewsDir.$viewPath;
+		$notExists = true;
 
 		if(is_object($cache) === true &&
 			$cache instanceof BackendInterface === true) {
@@ -839,9 +839,9 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 					}
 
 					//We start the cache using the key set
-					$cached_view = $cache->start($key, $lifetime);
-					if(is_null($cached_view) === false) {
-						$this->_content = $cached_view;
+					$cachedView = $cache->start($key, $lifetime);
+					if(is_null($cachedView) === false) {
+						$this->_content = $cachedView;
 						return null;
 					}
 				}
@@ -855,20 +855,20 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 
 		//Views are rendered in each engine
 		foreach($engines as $extension => $engine) {
-			$view_engine_path = $views_dir_path.$extension;
+			$viewEnginePath = $viewsDirPath.$extension;
 
-			if(file_exists($view_engine_path) === true) {
+			if(file_exists($viewEnginePath) === true) {
 				//Call beforeRenderView if there is a events manager available
 				if(is_object($this->_eventsManager) === true) {
-					$this->_activeRenderPath = $view_engine_path;
-					if($this->_eventsManager->fire('view:beforeRenderView', $this, $view_engine_path) === false) {
+					$this->_activeRenderPath = $viewEnginePath;
+					if($this->_eventsManager->fire('view:beforeRenderView', $this, $viewEnginePath) === false) {
 						continue;
 					}
 				}
 
-				$engine->render($view_engine_path, $this->_viewParams, $mustClean);
+				$engine->render($viewEnginePath, $this->_viewParams, $mustClean);
 
-				$not_exists = false;
+				$notExists = false;
 				//Call afterRenderView if there is a events manager available
 				if(is_object($this->_eventsManager) === true) {
 					$this->_eventsManager->fire('view:afterRenderView', $this);
@@ -878,15 +878,15 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 			}
 		}
 
-		if($not_exists === true) {
+		if($notExists === true) {
 			//Notify about not found views
 			if(is_object($this->_eventsManager) === true) {
-				$this->_activeRenderPath = $view_engine_path;
+				$this->_activeRenderPath = $viewEnginePath;
 				$this->_eventsManager->fire('view:notFoundView', $this);
 			}
 
 			if($silence === false) {
-				throw new Exception("View '".$views_dir_path."' was not found in the views directory");
+				throw new Exception("View '".$viewsDirPath."' was not found in the views directory");
 			}
 		}
 	}
@@ -955,15 +955,15 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 		$this->_params = $params;
 
 		//Check if there is a layouts directory set
-		$layouts_dir = $this->_layoutsDir;
-		if(isset($layouts_dir) === false) {
-			$layouts_dir = 'layouts/';
+		$layoutsDir = $this->_layoutsDir;
+		if(isset($layoutsDir) === false) {
+			$layoutsDir = 'layouts/';
 		}
 
 		//Check if the user has defined a custom layout
-		$layout_name = $this->_layout;
-		if(isset($layout_name) === false) {
-			$layout_name = $controllerName;
+		$layoutName = $this->_layout;
+		if(isset($layoutName) === false) {
+			$layoutName = $controllerName;
 		}
 
 		//Load the template engines
@@ -971,13 +971,13 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 
 		//Check if the user has picked a view different that the automatic
 		if(is_null($this->_pickView) === true) {
-			$render_view = $controllerName.'/'.$actionName;
+			$renderView = $controllerName.'/'.$actionName;
 		} else { //@note better check for array type here!
 			//The 'picked' view is an array, where the first element is the controller and the
 			//second the action
-			$render_view = $this->_pickView[0];
+			$renderView = $this->_pickView[0];
 			if(isset($this->_pickView[1]) === true) {
-				$layout_name = $this->_pickView[1];
+				$layoutName = $this->_pickView[1];
 			}
 		}
 
@@ -1003,22 +1003,22 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 		if($this->_renderLevel > 0) {
 			//Insert view related to action
 			if($this->_renderLevel >= 1 && isset($this->_disabledLevels[1]) === false) {
-				$this->_engineRender($engines, $render_view, true, true, $cache);
+				$this->_engineRender($engines, $renderView, true, true, $cache);
 			}
 
 			//Insert templates before layout
 			if($this->_renderLevel >= 2 && isset($this->_disabledLevels[2]) === false &&
 				is_array($this->_templatesBefore) === true) {
 				//Templates before must be an array
-				foreach($this->_templatesBefore as $template_before) {
-					$this->_engineRender($engines, $layouts_dir.$templateBefore, false, true, $cache);
+				foreach($this->_templatesBefore as $templateBefore) {
+					$this->_engineRender($engines, $layoutsDir.$templateBefore, false, true, $cache);
 				}
 			}
 
 			//Insert controller layout
 			if($this->_renderLevel >= 3) {
 				if(isset($this->_disabledLevels[3]) === false) {
-					$this->_engineRender($engines, $layout_dir.$layout_name, true, true, $cache);
+					$this->_engineRender($engines, $layoutDir.$layoutName, true, true, $cache);
 				}
 			}
 
@@ -1027,8 +1027,8 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 				isset($this->_disabledLevels[4]) === false) {
 					//Templates after must be an array
 				if(is_array($this->_templatesAfter) === true) {
-					foreach($this->_templatesAfter as $template_after) {
-						$this->_engineRender($engines, $layouts_dir.$template_after, false, true, $cache);
+					foreach($this->_templatesAfter as $templateAfter) {
+						$this->_engineRender($engines, $layoutsDir.$templateAfter, false, true, $cache);
 					}
 				}
 			}
@@ -1085,7 +1085,7 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 	public function pick($renderView)
 	{
 		if(is_array($renderView) === true) {
-			$pick_view = $renderView;
+			$pickView = $renderView;
 		} else {
 			$layout = null;
 			if(strpos($renderView, '/') !== false) {
@@ -1093,9 +1093,9 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 				$layout = $parts[0];
 			}
 
-			$pick_view = $render_view;
+			$pickView = $renderView;
 			if(is_null($layout) === false) {
-				$pick_view[] = $layout;
+				$pickView[] = $layout;
 			}
 		}
 
@@ -1129,10 +1129,10 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 
 		//If the developer passes an array of variables we create a new virtual symbol table
 		if(is_array($params) === true) {
-			$view_params = $this->_viewParams;
+			$viewParams = $this->_viewParams;
 			//Merge or assign the new params as parameters
-			if(is_array($view_params) === true) {
-				$params = array_merge($view_params, $params);
+			if(is_array($viewParams) === true) {
+				$params = array_merge($viewParams, $params);
 			}
 
 			//Update the parameters with the name ones
@@ -1142,18 +1142,18 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 		}
 
 		//Partials are looked up under the partials directory
-		$real_path = $this->_partialsDir.$partialPath;
+		$realPath = $this->_partialsDir.$partialPath;
 
 		//We need to check if the engines are loaded first, this method could be called
 		//outside of 'render'
 		$engines = $this->_loadTemplateEngines();
 
 		//Call engine render, this checks in every registered engine for the partial
-		$this->_engineRender($engines, $real_path, false, false, false);
+		$this->_engineRender($engines, $realPath, false, false, false);
 
 		//Now we need to restore the original view parameters
-		if(isset($view_params) === true) {
-			$this->_viewParams = $view_params;
+		if(isset($viewParams) === true) {
+			$this->_viewParams = $viewParams;
 		}
 	}
 
@@ -1236,27 +1236,27 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 			throw new Exception('A dependency injector container is required to obtain the view cache services');
 		}
 
-		$cache_service = 'viewCache';
+		$cacheService = 'viewCache';
 
 		if(is_array($this->_options) === true) {
 			if(isset($this->_options['cache']) === true) {
-				$cache_options = $this->_options['cache'];
-				if(is_array($cache_options) === true) {
-					if(isset($cache_options['service']) === true) {
-						$cache_service = $cache_options['service'];
+				$cacheOptions = $this->_options['cache'];
+				if(is_array($cacheOptions) === true) {
+					if(isset($cacheOptions['service']) === true) {
+						$cacheService = $cacheOptions['service'];
 					}
 				}
 			}
 		}
 
-		//@note $cache_service can be null
+		//@note $cacheService can be null
 		//The injected service must be an object
-		$view_cache = $this->_dependencyInjector->getShared($cache_service);
-		if(is_object($view_cache) === false) {
+		$viewCache = $this->_dependencyInjector->getShared($cacheService);
+		if(is_object($viewCache) === false) {
 			throw new Exception('The injected caching service is invalid');
 		}
 
-		return $view_cache;
+		return $viewCache;
 	}
 
 	/**
@@ -1305,31 +1305,31 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 		}
 
 		if(is_array($options) === true) {
-			$view_options = $this->_options;
-			if(is_array($view_options) === false) {
-				$view_options = array();
+			$viewOptions = $this->_options;
+			if(is_array($viewOptions) === false) {
+				$viewOptions = array();
 			}
 
 			//Get the default cache options
-			if(isset($view_options['cache']) === true) {
-				$cache_options = $view_options['cache'];
+			if(isset($viewOptions['cache']) === true) {
+				$cacheOptions = $viewOptions['cache'];
 			} else {
-				$cache_options = array();
+				$cacheOptions = array();
 			}
 
 			foreach($options as $key => $value) {
-				$cache_options[$key] = $value;
+				$cacheOptions[$key] = $value;
 			}
 
 			//Check if the user has defined a default cache level or uses 5 as default
-			if(isset($cache_options['level']) === true) {
-				$this->_cacheLevel = $cache_options['level'];
+			if(isset($cacheOptions['level']) === true) {
+				$this->_cacheLevel = $cacheOptions['level'];
 			} else {
 				$this->_cacheLevel = 5;
 			}
 
-			$view_options['cache'] = $cache_options;
-			$this->_options = $view_options;
+			$viewOptions['cache'] = $cacheOptions;
+			$this->_options = $viewOptions;
 		} elseif(is_bool($options) === true) {
 			//If 'options' isn't an arary we enable the cache with the default options
 			$this->_cacheLevel = ($options === true ? 5 : 0);

@@ -13,7 +13,8 @@ namespace Phalcon\Cache\Backend;
 use \Phalcon\Cache\Backend,
 	\Phalcon\Cache\BackendInterface,
 	\Phalcon\Cache\Exception,
-	\MongoRegex;
+	\MongoRegex,
+	\Mongo as NativeMongo;
 
 /**
  * Phalcon\Cache\Backend\Mongo
@@ -103,7 +104,7 @@ class Mongo extends Backend implements BackendInterface
 					throw new Exception('The backend requires a valid MongoDB connection string');
 				}
 
-				$mongo = new \Mongo($this->_options['server']);
+				$mongo = new NativeMongo($this->_options['server']);
 			}
 
 			if(is_string($this->_options['db']) === false) {

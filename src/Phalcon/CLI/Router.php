@@ -222,7 +222,7 @@ class Router implements InjectionAwareInterface
 		//Check for an action
 		if(isset($arguments['action']) === true) {
 			$actionName = $arguments['action'];
-			unset($arguments['task']);
+			unset($arguments['action']);
 		} else {
 			$actionName = null;
 		}

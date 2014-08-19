@@ -497,7 +497,7 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$this->_layoutsDir = $layout;
+		$this->_layout = $layout;
 
 		return $this;
 	}

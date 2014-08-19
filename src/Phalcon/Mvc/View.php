@@ -1010,7 +1010,7 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 			if($this->_renderLevel >= 2 && isset($this->_disabledLevels[2]) === false &&
 				is_array($this->_templatesBefore) === true) {
 				//Templates before must be an array
-				foreach($this->_templatesBefore as $template_before) {
+				foreach($this->_templatesBefore as $templateBefore) {
 					$this->_engineRender($engines, $layouts_dir.$templateBefore, false, true, $cache);
 				}
 			}
@@ -1018,7 +1018,7 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 			//Insert controller layout
 			if($this->_renderLevel >= 3) {
 				if(isset($this->_disabledLevels[3]) === false) {
-					$this->_engineRender($engines, $layout_dir.$layout_name, true, true, $cache);
+					$this->_engineRender($engines, $layouts_dir.$layout_name, true, true, $cache);
 				}
 			}
 

@@ -956,13 +956,13 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 
 		//Check if there is a layouts directory set
 		$layoutsDir = $this->_layoutsDir;
-		if(isset($layoutsDir) === false) {
+		if(empty($layoutsDir) === true) {
 			$layoutsDir = 'layouts/';
 		}
 
 		//Check if the user has defined a custom layout
 		$layoutName = $this->_layout;
-		if(isset($layoutName) === false) {
+		if(empty($layoutName) === true) {
 			$layoutName = $controllerName;
 		}
 

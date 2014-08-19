@@ -2320,10 +2320,10 @@ class Compiler implements InjectionAwareInterface
 
 		$stat = true;
 		$compile_always = false;
-		$compiled_path = '';
+		$compiledPath = '';
 		$prefix = null;
 		$compiled_separator = '%%';
-		$compiled_extension = '.php';
+		$compiledExtension = '.php';
 		$compilation = null;
 
 		$options = $this->_options;
@@ -2346,7 +2346,7 @@ class Compiler implements InjectionAwareInterface
 
 			//Compiled path is a directory where the compiled templates will be located
 			if(isset($options['compiledPath']) === true) {
-				$compiled_path = $options['compiledPath'];
+				$compiledPath = $options['compiledPath'];
 				if(is_string($compiledPath) === false &&
 					is_object($compiledPath) === false) {
 					throw new Exception('compiledPath must be a string or a closure');
@@ -2363,7 +2363,7 @@ class Compiler implements InjectionAwareInterface
 
 			//By default the compile extension is .php
 			if(isset($options['compiledExtension']) === true) {
-				$compiled_extension = $option['compiledExtension'];
+				$compiledExtension = $option['compiledExtension'];
 				if(is_string($compiledExtension) === false) {
 					throw new Exception('compiledExtension must be a string');
 				}
@@ -2375,9 +2375,9 @@ class Compiler implements InjectionAwareInterface
 			}
 		}
 
-		if(is_string($compiled_path) === true) {
+		if(is_string($compiledPath) === true) {
 			//Calculate the template realpath's
-			if(empty($compiled_path) === false) {
+			if(empty($compiledPath) === false) {
 				$real_template_path = realpath($templatePath);
 
 				//Create the virtual path replacing the directory separator by the compiled
@@ -2389,15 +2389,15 @@ class Compiler implements InjectionAwareInterface
 
 			//In extends mode we add an additional 'e' suffix to the file
 			if($extendsMode === true) {
-				$compiled_template_path = $compiled_path.$prefix.$template_sep_path.$compiled_separator.'e'.$compiled_separator.$compiled_extension;
+				$compiled_template_path = $compiledPath.$prefix.$template_sep_path.$compiled_separator.'e'.$compiled_separator.$compiledExtension;
 			} else {
-				$compiled_template_path = $compiled_path.$prefix.$template_sep_path.$compiled_extension;
+				$compiled_template_path = $compiledPath.$prefix.$template_sep_path.$compiledExtension;
 			}
 		} else {
 			//A closure can dynamically compile the path
-			if(is_object($compiled_path) === true) {
-				if($compiled_path instanceof Closure === true) {
-					$compiled_template_path = call_user_func_array($compiled_path, array($templatePath, $options, $extendsMode));
+			if(is_object($compiledPath) === true) {
+				if($compiledPath instanceof Closure === true) {
+					$compiled_template_path = call_user_func_array($compiledPath, array($templatePath, $options, $extendsMode));
 
 					//The closure must return a valid path
 					if(is_string($compiled_template_path) === false) {

@@ -996,7 +996,7 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 		}
 
 		//Get the current content in the buffer maybe some output from the controller
-		$contents = $this->_content;
+		$this->_content = ob_get_contents();
 
 		//Disabled levels allow to avoid an specific level of rendering
 		//Render level will tell us when to stop

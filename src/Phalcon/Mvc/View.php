@@ -1000,14 +1000,14 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 
 		//Disabled levels allow to avoid an specific level of rendering
 		//Render level will tell us when to stop
-		if($this->_renderLevel > 0) {
+		if($this->_renderLevel > self::LEVEL_NO_RENDER) {
 			//Insert view related to action
-			if($this->_renderLevel >= 1 && isset($this->_disabledLevels[1]) === false) {
+			if($this->_renderLevel >= self::LEVEL_ACTION_VIEW && isset($this->_disabledLevels[self::LEVEL_ACTION_VIEW]) === false) {
 				$this->_engineRender($engines, $renderView, true, true, $cache);
 			}
 
 			//Insert templates before layout
-			if($this->_renderLevel >= 2 && isset($this->_disabledLevels[2]) === false &&
+			if($this->_renderLevel >= self::LEVEL_BEFORE_TEMPLATE && isset($this->_disabledLevels[self::LEVEL_BEFORE_TEMPLATE]) === false &&
 				is_array($this->_templatesBefore) === true) {
 				//Templates before must be an array
 				foreach($this->_templatesBefore as $templateBefore) {
@@ -1016,15 +1016,15 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 			}
 
 			//Insert controller layout
-			if($this->_renderLevel >= 3) {
-				if(isset($this->_disabledLevels[3]) === false) {
+			if($this->_renderLevel >= self::LEVEL_LAYOUT) {
+				if(isset($this->_disabledLevels[self::LEVEL_LAYOUT]) === false) {
 					$this->_engineRender($engines, $layoutsDir.$layoutName, true, true, $cache);
 				}
 			}
 
 			//Inserts templates after layout
-			if($this->_renderLevel >= 4 &&
-				isset($this->_disabledLevels[4]) === false) {
+			if($this->_renderLevel >= self::LEVEL_AFTER_TEMPLATE &&
+				isset($this->_disabledLevels[self::LEVEL_AFTER_TEMPLATE]) === false) {
 					//Templates after must be an array
 				if(is_array($this->_templatesAfter) === true) {
 					foreach($this->_templatesAfter as $templateAfter) {
@@ -1034,7 +1034,7 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
 			}
 
 			//Inserts main view
-			if($this->_renderLevel >= 5 && isset($this->_disabledLevels[5]) === false) {
+			if($this->_renderLevel >= self::LEVEL_MAIN_LAYOUT && isset($this->_disabledLevels[self::LEVEL_MAIN_LAYOUT]) === false) {
 				$this->_engineRender($engines, $this->_mainView, true, true, $cache);
 			}
 

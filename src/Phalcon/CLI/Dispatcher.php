@@ -147,7 +147,7 @@ class Dispatcher extends Dispatcher implements EventsAwareInterface, InjectionAw
 	 */
 	public function setTaskName($taskName)
 	{
-		if(is_string($taskName) === false) {
+		if(is_string($taskName) === false && is_null($taskName) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 

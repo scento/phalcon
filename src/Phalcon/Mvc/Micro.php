@@ -403,7 +403,7 @@ class Micro extends Injectable implements EventsAwareInterface, InjectionAwareIn
 		}
 
 		$handlers = $collection->getHandlers();
-		if(count($handler) === 0) {
+		if(count($handlers) === 0) {
 			throw new Exception('There are no handlers to mount');
 		}
 

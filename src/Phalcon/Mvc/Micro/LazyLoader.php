@@ -68,7 +68,7 @@ class LazyLoader
 		}
 
 		if(is_object($this->_handler) === false) {
-			$this->_handler = new $_definition();
+			$this->_handler = new $this->_definition();
 		}
 
 		//Call the handler

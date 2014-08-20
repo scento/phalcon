@@ -3854,7 +3854,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 
 		$model_name = get_called_class();
 
-		if(is_null($extra_method) === false) {
+		if(is_null($extra_method) === true) {
 			//The method doesn't exist - throw an exception
 			throw new Exception('The static method "'.$method.'" doesn\'t exist on model"'.$model_name.'"');
 		}

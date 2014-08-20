@@ -138,7 +138,7 @@ class Collection implements CollectionInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$this->_handlers = $handler;
+		$this->_handler = $handler;
 		$this->_lazy = $lazy;
 
 		return $this;

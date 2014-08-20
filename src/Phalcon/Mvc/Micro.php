@@ -403,7 +403,7 @@ class Micro extends Injectable implements EventsAwareInterface, InjectionAwareIn
 		}
 
 		$handlers = $collection->getHandlers();
-		if(count($handler) === 0) {
+		if(count($handlers) === 0) {
 			throw new Exception('There are no handlers to mount');
 		}
 
@@ -619,8 +619,8 @@ class Micro extends Injectable implements EventsAwareInterface, InjectionAwareIn
 			$this->_activeHandler = $handler;
 
 			//Calling beforeExecuteRoute event
-			if(is_object($_eventsManager) === true) {
-				if($this->_eventsManager->fire('micro:beforeExecuteRoute') === false) {
+			if(is_object($this->_eventsManager) === true) {
+				if($this->_eventsManager->fire('micro:beforeExecuteRoute', $this) === false) {
 					return false;
 				} else {
 					$handler = $this->_activeHandler;

@@ -142,7 +142,7 @@ class Dispatcher extends Dispatcher implements EventsAwareInterface, InjectionAw
 	/**
 	 * Sets the task name to be dispatched
 	 *
-	 * @param string $taskName
+	 * @param string|null $taskName
 	 * @throws Exception
 	 */
 	public function setTaskName($taskName)
@@ -158,7 +158,7 @@ class Dispatcher extends Dispatcher implements EventsAwareInterface, InjectionAw
 	/**
 	 * Gets last dispatched task name
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function getTaskName()
 	{

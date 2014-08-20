@@ -838,7 +838,8 @@ InjectionAwareInterface
 		}
 
 		$params = $this->getParams();
-		$resultset = $model->find($params);
+		
+		$resultset = forward_static_call_array(array($this->_model, 'find'), $params);
 
 		return $resultset;
 	}

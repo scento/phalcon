@@ -1151,7 +1151,7 @@ class Tag
 		}
 
 		/* Set default values */
-		$params = array('rel' => 'stylesheet', 'href' => '', 'type' => 'text/css');
+		$params = array('href' => '', 'type' => 'text/css');
 
 		/* Parse parameters */
 		if(is_array($parameters) === false) {

@@ -142,12 +142,12 @@ class Dispatcher extends DefaultDispatcher implements EventsAwareInterface, Inje
 	/**
 	 * Sets the task name to be dispatched
 	 *
-	 * @param string $taskName
+	 * @param string|null $taskName
 	 * @throws Exception
 	 */
 	public function setTaskName($taskName)
 	{
-		if(is_string($taskName) === false) {
+		if(is_string($taskName) === false && is_null($taskName) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 
@@ -158,7 +158,7 @@ class Dispatcher extends DefaultDispatcher implements EventsAwareInterface, Inje
 	/**
 	 * Gets last dispatched task name
 	 *
-	 * @return string
+	 * @return string|null
 	 */
 	public function getTaskName()
 	{

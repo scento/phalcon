@@ -453,7 +453,7 @@ abstract class Pdo extends Adapter implements EventsAwareInterface
 
 		if(preg_match_all("/\\?([0-9]+)|:([a-zA-Z0-9_]+):/", $sql, $matches, 2) === true) {
 			foreach($matches as $placeMatch) {
-				$numericPlace = $placMmatch[1];
+				$numericPlace = $placeMatch[1];
 				if(isset($params[$numericPlace]) === true) {
 					$value = $params[$numericPlace];
 				} else {

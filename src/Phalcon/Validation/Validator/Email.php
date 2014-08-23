@@ -53,7 +53,7 @@ class Email extends Validator implements ValidatorInterface
 		}
 
 		$value = $validator->getValue($attribute);
-		if(filter_var($value, 274) === false) {
+		if(filter_var($value, \FILTER_VALIDATE_EMAIL) === false) {
 			$message = $this->getOption('message');
 			if(empty($message) === true) {
 				$message = "Value of field '".$attribute."' must have a valid e-mail format";

@@ -239,6 +239,9 @@ class Router implements RouterInterface, InjectionAwareInterface
 			$routes[] = new Route('#^/([a-zA-Z0-9\\_\\-]+)/([a-zA-Z0-9\\.\\_]+)(/.*)*$#', 
 				array('controller' => 1, 'action' => 2, 'params' => 3));
 		}
+
+		$this->_params = array();
+		$this->_routes = $routes;
 	}
 
 	/**

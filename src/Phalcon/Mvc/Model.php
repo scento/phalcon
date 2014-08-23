@@ -865,7 +865,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 
 		//Builds a query with the passed parameters
 		$builder = new Builder($params);
-		$builder->from(__CLASS__);
+		$builder->from(get_called_class());
 		$query = $builder->getQuery();
 
 		$bind_params = null;
@@ -931,7 +931,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 
 		//Builds a query with the passed parameters
 		$builder = new Builder($params);
-		$builder->from(__CLASS__);
+		$builder->from(get_called_class());
 
 		//We only want the first record
 		$builder->limit(1);
@@ -975,7 +975,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 
 		$criteria = new Criteria();
 		$criteria->setDi($dependencyInjector);
-		$criteria->setModelName(__CLASS__);
+		$criteria->setModelName(get_called_class());
 
 		return $criteria;
 	}
@@ -1162,7 +1162,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 		//Builds a query with the passed parameters
 		$builder = new Builder($params);
 		$builder->columns($columns);
-		$builder->from(__CLASS__);
+		$builder->from(get_called_class());
 		$query = $builder->getQuery();
 
 		$bind_params = null;
@@ -3852,9 +3852,9 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 			$extra_method = substr($method, 7);
 		}
 
-		$model_name = __CLASS__;
+		$model_name = get_called_class();
 
-		if(is_null($extra_method) === false) {
+		if(is_null($extra_method) === true) {
 			//The method doesn't exist - throw an exception
 			throw new Exception('The static method "'.$method.'" doesn\'t exist on model"'.$model_name.'"');
 		}

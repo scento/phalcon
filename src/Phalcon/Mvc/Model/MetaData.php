@@ -258,7 +258,7 @@ abstract class MetaData implements InjectionAwareInterface
 		}
 
 		//Get the meta-data
-		$modelColumnMap = $strategy->getColumnMaps($model, $dependencyInjector);
+		$modelColumnMap = $strategy->getColumnMaps($model, $this->_dependencyInjector);
 
 		//Update the column map locally
 		$this->_columnMap[$keyName] = $modelColumnMap;

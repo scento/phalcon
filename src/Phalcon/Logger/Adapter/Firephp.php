@@ -78,9 +78,7 @@ class Firephp extends Adapter implements AdapterInterface
 			is_int($time) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
-
-		$formatter = $this->getFormatter();
-		
+	
 		if(headers_sent() === true) {
 			throw new Exception('Headers have already been sent.');
 		}
@@ -98,7 +96,7 @@ class Firephp extends Adapter implements AdapterInterface
 			self::$_initialized = true;
 		}
 
-		$appliedFormat = $this->_formatter->format($message, $type, $time);
+		$appliedFormat = $this->getFormatter()->format($message, $type, $time);
 		if(is_string($appliedFormat) === false) {
 			throw new Exception('The formatted message is not valid');
 		}

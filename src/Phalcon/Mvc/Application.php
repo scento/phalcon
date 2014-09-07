@@ -28,7 +28,6 @@ use \Phalcon\DI\Injectable,
  *
  * class Application extends \Phalcon\Mvc\Application
  * {
- *
  *		/\**
  *		 * Register the services here to make them general or register
  *		 * in the ModuleDefinition to make them module-specific
@@ -60,30 +59,30 @@ use \Phalcon\DI\Injectable,
  *	$application->main();
  *
  *</code>
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/mvc/application.c
  */
-class Application extends Injectable implements EventsAwareInterface, InjectionAwareInterface
+class Application extends Injectable
 {
 	/**
 	 * Default Module
-	 * 
+	 *
 	 * @var null|string
 	 * @access protected
-	*/
+	 */
 	protected $_defaultModule;
 
 	/**
 	 * Modules
-	 * 
+	 *
 	 * @var null|array
 	 * @access protected
-	*/
+	 */
 	protected $_modules;
 
 	/**
 	 * Module Object
-	 * 
+	 *
 	 * @var null
 	 * @access protected
 	*/
@@ -91,7 +90,7 @@ class Application extends Injectable implements EventsAwareInterface, InjectionA
 
 	/**
 	 * Implicit View?
-	 * 
+	 *
 	 * @var bool
 	 * @access protected
 	*/
@@ -274,7 +273,7 @@ class Application extends Injectable implements EventsAwareInterface, InjectionA
 
 				//If developer specifies a path try to include the file
 				if(isset($module['path']) === true) {
-					if(class_exists($class_name) === false) {
+					if(class_exists($class_name, false) === false) {
 						if(file_exists($module['path']) === true) {
 							require_once($module['path']);
 						} else {
@@ -317,15 +316,14 @@ class Application extends Injectable implements EventsAwareInterface, InjectionA
 		$controller_name = $router->getControllerName();
 		$action_name = $router->getActionName();
 		$params = $router->getParams();
+		$exact = $router->isExactControllerName();
 
 		$dispatcher = $this->_dependencyInjector->getShared('dispatcher');
 		$dispatcher->setModuleName($router->getModuleName());
 		$dispatcher->setNamespaceName($router->getNamespaceName());
-		$dispatcher->setControllerName($controller_name);
+		$dispatcher->setControllerName($controller_name, $exact);
 		$dispatcher->setActionName($action_name);
 		$dispatcher->setParams($params);
-
-		$exact = $router->isExactControllerName();
 
 		//Start the view component (start output buffering)
 		if(isset($view) === true) {
@@ -392,6 +390,11 @@ class Application extends Injectable implements EventsAwareInterface, InjectionA
 		} else {
 			//We don't need to create a response because there is one already
 			$response = $possible_response;
+		}
+
+		//Calling beforeSendResponse
+		if(is_object($this->_eventsManager) === true) {
+			$this->_eventsManager->fire('application:beforeSendResponse', $this, $response);
 		}
 
 		//Headers are automatically send

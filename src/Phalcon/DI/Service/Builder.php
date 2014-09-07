@@ -214,9 +214,9 @@ class Builder
 						throw new Exception('Call arguments must be an array '.$methodPosition);
 					}
 
-					if(empty($arguments) === false) {
+					if(empty($method['arguments']) === false) {
 						//Call the method on the instance
-						$status = call_user_func_array(array($instance, $method['method']), $this->_buildParameters($dependencyInjector, $arguments));
+						$status = call_user_func_array(array($instance, $method['method']), $this->_buildParameters($dependencyInjector, $method['arguments']));
 
 						continue;
 					}

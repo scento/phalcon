@@ -31,33 +31,33 @@ use \Phalcon\Db\Adapter,
  *		'port' => '3306'
  *	));
  *</code>
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/db/adapter/pdo.c
  */
 abstract class Pdo extends Adapter implements EventsAwareInterface
 {
 	/**
 	 * PDO
-	 * 
+	 *
 	 * @var null|\PDO
 	 * @access protected
-	*/
+	 */
 	protected $_pdo;
 
 	/**
 	 * Affected Rows
-	 * 
+	 *
 	 * @var null|int
 	 * @access protected
-	*/
+	 */
 	protected $_affectedRows;
 
 	/**
 	 * Transaction Level
-	 * 
+	 *
 	 * @var int
 	 * @access protected
-	*/
+	 */
 	protected $_transactionLevel = 0;
 
 	/**
@@ -338,7 +338,7 @@ abstract class Pdo extends Adapter implements EventsAwareInterface
 		$affectedRows = 0;
 		$pdo = $this->_pdo; //@note pdo can be null
 		if(is_array($bindParams) === true) {
-			$statement = $pdo->prepare();
+			$statement = $pdo->prepare($sqlStatement);
 			if(is_object($statement) === true) {
 				$newStatement = $this->executePrepared($statement, $bindParams, $bindTypes);
 				$affectedRows = $newStatement->rowCount();
@@ -594,7 +594,7 @@ abstract class Pdo extends Adapter implements EventsAwareInterface
 
 		if($transactionLevel === 1) {
 			$eventsManager = $this->_eventsManager;
-			
+
 			//Notify the eventsManager about the rollbacked transaction
 			if(is_object($eventsManager) === true) {
 				$eventsManager->fire('db:rollbackTransaction', $this);

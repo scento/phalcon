@@ -139,7 +139,7 @@ class Memory extends MetaData implements InjectionAwareInterface, MetaDataInterf
 	 */
 	public function read($key)
 	{
-		
+
 	}
 
 	/**

@@ -37,105 +37,105 @@ abstract class MetaData implements InjectionAwareInterface
 {
 	/**
 	 * Models: Attributes
-	 * 
+	 *
 	 * @var int
 	*/
 	const MODELS_ATTRIBUTES = 0;
 
 	/**
 	 * Models: Primary Key
-	 * 
+	 *
 	 * @var int
 	*/
 	const MODELS_PRIMARY_KEY = 1;
 
 	/**
 	 * Models: Non Primary Key
-	 * 
+	 *
 	 * @var int
 	*/
 	const MODELS_NON_PRIMARY_KEY = 2;
 
 	/**
 	 * Models: Not Null
-	 * 
+	 *
 	 * @var int
 	*/
 	const MODELS_NOT_NULL = 3;
 
 	/**
 	 * Models: Data Types
-	 * 
+	 *
 	 * @var int
 	*/
 	const MODELS_DATA_TYPES = 4;
 
 	/**
 	 * Models: Data Types Numeric
-	 * 
+	 *
 	 * @var int
 	*/
 	const MODELS_DATA_TYPES_NUMERIC = 5;
 
 	/**
 	 * Models: Date At
-	 * 
+	 *
 	 * @var int
 	*/
 	const MODELS_DATE_AT = 6;
 
 	/**
 	 * Models: Date In
-	 * 
+	 *
 	 * @var int
 	*/
 	const MODELS_DATE_IN = 7;
 
 	/**
 	 * Models: Identity Column
-	 * 
+	 *
 	 * @var int
 	*/
 	const MODELS_IDENTITY_COLUMN = 8;
 
 	/**
 	 * Models: Data Types Bind
-	 * 
+	 *
 	 * @var int
 	*/
 	const MODELS_DATA_TYPES_BIND = 9;
 
 	/**
 	 * Models: Automatic Default Insert
-	 * 
+	 *
 	 * @var int
 	*/
 	const MODELS_AUTOMATIC_DEFAULT_INSERT = 10;
 
 	/**
 	 * Models: AUtomatic Default Update
-	 * 
+	 *
 	 * @var int
 	*/
 	const MODELS_AUTOMATIC_DEFAULT_UPDATE = 11;
 
 	/**
 	 * Models: Column Map
-	 * 
+	 *
 	 * @var int
 	*/
 	const MODELS_COLUMN_MAP = 0;
 
 	/**
 	 * Models: Reverse Column Map
-	 * 
+	 *
 	 * @var int
 	*/
 	const MODELS_REVERSE_COLUMN_MAP = 1;
 
 	/**
 	 * Dependency Injector
-	 * 
+	 *
 	 * @var null|\Phalcon\DiInterface
 	 * @access protected
 	*/
@@ -143,7 +143,7 @@ abstract class MetaData implements InjectionAwareInterface
 
 	/**
 	 * Strategy
-	 * 
+	 *
 	 * @var null|\Phalcon\Mvc\Model\MetaData\Strategy\Introspection
 	 * @access protected
 	*/
@@ -151,7 +151,7 @@ abstract class MetaData implements InjectionAwareInterface
 
 	/**
 	 * Metadata
-	 * 
+	 *
 	 * @var null|array
 	 * @access protected
 	*/
@@ -159,7 +159,7 @@ abstract class MetaData implements InjectionAwareInterface
 
 	/**
 	 * Column Map
-	 * 
+	 *
 	 * @var null|array
 	 * @access protected
 	*/
@@ -176,10 +176,9 @@ abstract class MetaData implements InjectionAwareInterface
 	 */
 	protected function _initialize(ModelInterface $model, $key = null, $table, $schema)
 	{
-		if(is_string($table) === false ||
-			is_string($schema) === false ||
-			(is_string($key) === false &&
-				is_null($key) === false)) {
+		if((is_string($table) === false &&  is_null($table) === false) ||
+			(is_string($schema) === false && is_null($schema) === false) ||
+			(is_string($key) === false && is_null($key) === false)) {
 			throw new Exception('Invalid parameter type.');
 		}
 
@@ -233,13 +232,12 @@ abstract class MetaData implements InjectionAwareInterface
 		}
 
 		$keyName = strtolower($className);
+		if(isset($this->_columnMap[$keyName]) === true) {
+			return;
+		}
 
 		if(is_array($this->_columnMap) === false) {
 			$this->_columnMap = array();
-		}
-
-		if(isset($this->_columnMap[$keyName]) === true) {
-			return;
 		}
 
 		//Create the map key name

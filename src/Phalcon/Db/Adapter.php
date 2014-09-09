@@ -22,62 +22,62 @@ use \Phalcon\Db\Exception,
  * Phalcon\Db\Adapter
  *
  * Base class for Phalcon\Db adapters
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/db/adapter.c
  */
 abstract class Adapter implements EventsAwareInterface
 {
 	/**
 	 * Events Manager
-	 * 
+	 *
 	 * @var null|\Phalcon\Events\ManagerInterface
 	 * @access protected
-	*/
+	 */
 	protected $_eventsManager;
 
 	/**
 	 * Descriptor
-	 * 
+	 *
 	 * @var null|array
 	 * @access protected
-	*/
+	 */
 	protected $_descriptor;
 
 	/**
 	 * Dialect Type
-	 * 
+	 *
 	 * @var null|string
 	 * @access protected
-	*/
+	 */
 	protected $_dialectType;
 
 	/**
 	 * Type
-	 * 
+	 *
 	 * @var null
 	 * @access protected
-	*/
+	 */
 	protected $_type;
 
 	/**
 	 * Dialect
-	 * 
+	 *
 	 * @var null|object
 	 * @access protected
-	*/
+	 */
 	protected $_dialect;
 
 	/**
 	 * Connection ID
-	 * 
+	 *
 	 * @var null|int
 	 * @access protected
-	*/
+	 */
 	protected $_connectionId;
 
 	/**
 	 * SQL Statement
-	 * 
+	 *
 	 * @var null|string
 	 * @access protected
 	*/
@@ -85,43 +85,43 @@ abstract class Adapter implements EventsAwareInterface
 
 	/**
 	 * SQL Variables
-	 * 
+	 *
 	 * @var null|array
 	 * @access protected
-	*/
+	 */
 	protected $_sqlVariables;
 
 	/**
 	 * SQL Bind Types
-	 * 
+	 *
 	 * @var null|array
 	 * @access protected
-	*/
+	 */
 	protected $_sqlBindTypes;
 
 	/**
 	 * Transaction Level
-	 * 
+	 *
 	 * @var int
 	 * @access protected
-	*/
+	 */
 	protected $_transactionLevel = 0;
 
 	/**
 	 * Transactions With Savepoints
-	 * 
+	 *
 	 * @var boolean
 	 * @access protected
 	 * @note updated data type
-	*/
+	 */
 	protected $_transactionsWithSavepoints = false;
 
 	/**
 	 * Connection Consecutive
-	 * 
+	 *
 	 * @var int
 	 * @access protected
-	*/
+	 */
 	protected static $_connectionConsecutive = 0;
 
 	/**
@@ -302,10 +302,8 @@ abstract class Adapter implements EventsAwareInterface
 				$result->setFetchMode($fetchMode);
 			}
 
-			$row = $result->fetch();
-			while(isset($row)) {
+			while ($row = $result->fetch()) {
 				$results[] = $row;
-				$row = $result->fetch();
 			}
 		}
 
@@ -349,7 +347,7 @@ abstract class Adapter implements EventsAwareInterface
 		}
 
 		//A valid array with elements is required
-		if(empty($values) === false) {
+		if(empty($values) === true) {
 			throw new Exception('Unable to insert into '.$table.' without data');
 		}
 
@@ -987,8 +985,12 @@ abstract class Adapter implements EventsAwareInterface
 		foreach($describe as $reference) {
 			$constraintName = $reference[2];
 			if(isset($references[$constraintName]) === false) {
-				$references[$constraintName] = array('referencedSchema' => $reference[3], 
-					'referencedTable' => $reference[4], 'columns' => array(), 'referencedColumns' => array());
+				$references[$constraintName] = array(
+					'referencedSchema' => $reference[3],
+					'referencedTable' => $reference[4],
+					'columns' => array(),
+					'referencedColumns' => array()
+				);
 			}
 
 			$references[$constraintName]['columns'][] = $reference[1];

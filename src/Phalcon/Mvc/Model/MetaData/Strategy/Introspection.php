@@ -18,7 +18,7 @@ use \Phalcon\Mvc\Model\Exception,
  * Phalcon\Mvc\Model\MetaData\Strategy\Instrospection
  *
  * Queries the table meta-data in order to instrospect the model's metadata
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/mvc/model/metadata/strategy/introspection.c
  */
 class Introspection
@@ -46,7 +46,7 @@ class Introspection
 		$readConnection = $model->getReadConnection();
 
 		//Check if the mapped table exists on the database
-		if($readConnection->tableExists($table, $schema) !== true) {
+		if(!$readConnection->tableExists($table, $schema)) {
 			//The table does not exist
 			throw new Exception('Table "'.($schema == true ? $schema.'"."'.$table : $table).
 				'" doesn\'t exist on database when dumping meta-data for '.$className);
@@ -54,7 +54,7 @@ class Introspection
 
 		//Try to describe the table
 		$columns = $readConnection->describeColumns($table, $schema);
-		if(count($column) == 0) {
+		if(count($columns) == 0) {
 			throw new Exception('Cannot obtain table columns for the mapped source "'.
 				($schema == true ? $schema.'"."'.$table : $table).'" used in model "'.$className);
 		}
@@ -103,7 +103,7 @@ class Introspection
 			$fieldBindTypes[$fieldName] = $column->getBindType();
 		}
 
-		return array(0 => $attributes, 1 => $primaryKeys, 2 => $nonPrimaryKeys, 3 => $notNull, 4 => $fieldTypes, 
+		return array(0 => $attributes, 1 => $primaryKeys, 2 => $nonPrimaryKeys, 3 => $notNull, 4 => $fieldTypes,
 			5 => $numericTyped, 8 => $identityField, 9 => $fieldBindTypes, 10 => $automaticDefault, 11 => $automaticDefault);
 	}
 
@@ -133,7 +133,7 @@ class Introspection
 			if(is_array($userColumnMap) === false) {
 				throw new Exception('columnMap() not returned an array');
 			}
-		
+
 			$reversedColumnMap = array();
 			$orderedColumnMap = $userColumnMap;
 

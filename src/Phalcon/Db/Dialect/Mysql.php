@@ -21,14 +21,14 @@ use \Phalcon\Db\Dialect,
  * Phalcon\Db\Dialect\Mysql
  *
  * Generates database specific SQL for the MySQL RBDM
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/db/dialect/mysql.c
  */
 class Mysql extends Dialect implements DialectInterface
 {
 	/**
 	 * Escape Char
-	 * 
+	 *
 	 * @var string
 	 * @access protected
 	*/
@@ -699,7 +699,7 @@ class Mysql extends Dialect implements DialectInterface
 			return 'DESCRIBE `'.$schema.'`.`'.$table.'`';
 		}
 
-		return 'DESCIRBE `'.$table.'`';
+		return 'DESCRIBE `'.$table.'`';
 	}
 
 	/**

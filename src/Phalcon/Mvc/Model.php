@@ -67,56 +67,56 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 {
 	/**
 	 * Operation: None
-	 * 
+	 *
 	 * @var int
-	*/
+	 */
 	const OP_NONE = 0;
 
 	/**
 	 * Operation: Create
-	 * 
+	 *
 	 * @var int
-	*/
+	 */
 	const OP_CREATE = 1;
 
 	/**
 	 * Operation: Update
-	 * 
+	 *
 	 * @var int
-	*/
+	 */
 	const OP_UPDATE = 2;
 
 	/**
 	 * Operation: Delete
-	 * 
+	 *
 	 * @var int
-	*/
+	 */
 	const OP_DELETE = 3;
 
 	/**
 	 * Dirty State: Persistent
-	 * 
+	 *
 	 * @var int
-	*/
+	 */
 	const DIRTY_STATE_PERSISTENT = 0;
 
 	/**
 	 * Dirty State: Transient
-	 * 
+	 *
 	 * @var int
-	*/
+	 */
 	const DIRTY_STATE_TRANSIENT = 1;
 
 	/**
 	 * Dirty State: Detached
-	 * 
+	 *
 	 * @var int
-	*/
+	 */
 	const DIRTY_STATE_DETACHED = 2;
 
 	/**
 	 * Dependency Injector
-	 * 
+	 *
 	 * @var null|\Phalcon\DiInterface
 	 * @access protected
 	*/
@@ -124,39 +124,39 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 
 	/**
 	 * Models Manager
-	 * 
+	 *
 	 * @var null|\Phalcon\Mvc\Model\ManagerInterface
 	 * @access protected
-	*/
+	 */
 	protected $_modelsManager;
 
 	/**
 	 * Models Metadata
-	 * 
+	 *
 	 * @var null|\Phalcon\Mvc\Model\MetaDataInterface
 	 * @access protected
-	*/
+	 */
 	protected $_modelsMetaData;
 
 	/**
 	 * Error Messages
-	 * 
+	 *
 	 * @var null|array
 	 * @access protected
-	*/
+	 */
 	protected $_errorMessages;
 
 	/**
 	 * Operation Made
-	 * 
+	 *
 	 * @var int
 	 * @access protected
-	*/
+	 */
 	protected $_operationMade = 0;
 
 	/**
 	 * Dirty State
-	 * 
+	 *
 	 * @var int
 	 * @access protected
 	*/
@@ -164,31 +164,31 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 
 	/**
 	 * Transaction
-	 * 
+	 *
 	 * @var null|\Phalcon\Mvc\Model\TransactionInterface
 	 * @access protected
-	*/
+	 */
 	protected $_transaction;
 
 	/**
 	 * Unique Key
-	 * 
+	 *
 	 * @var null|string
 	 * @access protected
-	*/
+	 */
 	protected $_uniqueKey;
 
 	/**
 	 * Unique Params
-	 * 
+	 *
 	 * @var null|array
 	 * @access protected
-	*/
+	 */
 	protected $_uniqueParams;
 
 	/**
 	 * Unique Types
-	 * 
+	 *
 	 * @var null|array
 	 * @access protected
 	*/
@@ -196,26 +196,26 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 
 	/**
 	 * Skipped
-	 * 
+	 *
 	 * @var null|boolean
 	 * @access protected
-	*/
+	 */
 	protected $_skipped;
 
 	/**
 	 * Related
-	 * 
+	 *
 	 * @var null
 	 * @access protected
-	*/
+	 */
 	protected $_related;
 
 	/**
 	 * Snapshot
-	 * 
+	 *
 	 * @var null|array
 	 * @access protected
-	*/
+	 */
 	protected $_snapshot;
 
 	/**
@@ -939,7 +939,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 
 		$bind_params = null;
 		$bind_types = null;
-		
+
 		//Check for bind parameters
 		if(isset($params['bind']) === true) {
 			$bind_params = $params['bind'];
@@ -1112,7 +1112,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 		} else {
 			$this->_dirtyState = 1;
 		}
-		
+
 		return false;
 	}
 
@@ -2054,7 +2054,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 	protected function _doLowInsert($metaData, $connection, $table, $identityField)
 	{
 		if(is_object($metaData) === false ||
-			is_object($conenction) === false ||
+			is_object($connection) === false ||
 			$metaData instanceof MetaDataInterface === false ||
 			$connection instanceof DbAdapterInterface === false ||
 			is_string($table) === false) {
@@ -2241,7 +2241,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 			$column_map = null;
 		}
 
-		//Update based on the non-primary attributes. Values of the 
+		//Update based on the non-primary attributes. Values of the
 		//primary key attributes will be ignored.
 		foreach($non_primary as $field) {
 			if(isset($automatic_attributes[$field]) === false) {
@@ -2347,7 +2347,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 
 	/**
 	 * Get messages from model
-	 * 
+	 *
 	 * @param object $model
 	 * @param object $target
 	 * @return boolean
@@ -2669,7 +2669,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 		//_preSave() makes all the validations
 		if($this->_preSave($meta_data, $exists, $identity_field) === false) {
 			//Rollback the current transaction if there was validation error
-			if(is_array($related) === true) {
+			if(is_array($this->_related) === true) {
 				$write_connection->rollback(false);
 			}
 
@@ -2701,7 +2701,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 			$success = $this->_postSave($succes, $exists);
 		}
 
-		if(is_array($related) === true) {
+		if(is_array($this->_related) === true) {
 			//Rollbacks the implicit transaction if the master save has failed
 			if($success === false) {
 				$write_connection->rollback(false);
@@ -2709,7 +2709,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 			}
 
 			//Save the post-related records
-			if($this->_postSaveRelatedRecords($write_connection, $related) === false) {
+			if($this->_postSaveRelatedRecords($write_connection, $this->_related) === false) {
 				return false;
 			}
 		}
@@ -2782,7 +2782,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 				//Check if there is data for the field
 				if(isset($data[$attribute_field]) === true) {
 					//If the whiteliste is an array check if the attribute is on that
-					if(is_array($whiteList) === true && 
+					if(is_array($whiteList) === true &&
 						in_array($attribute_field, $whiteList) === false) {
 						continue;
 					}
@@ -2875,7 +2875,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 				//Check if there is data for the field
 				if(isset($data[$attribute_field]) === true) {
 					//If the whitelist is an array check if the attribute is on that list
-					if(is_array($whiteList) === true && 
+					if(is_array($whiteList) === true &&
 						in_array($attribute_field, $whiteList) === false) {
 							continue;
 					}
@@ -3054,7 +3054,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 
 	/**
 	 * Refreshes the model attributes re-querying the record from the database
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	public function refresh()
@@ -3418,10 +3418,10 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 	 * @param array|null $options
 	 * @return \Phalcon\Mvc\Model\Relation
 	 */
-	public function hasManyToMany($fields, $intermediateModel, $intermediateFields, 
+	public function hasManyToMany($fields, $intermediateModel, $intermediateFields,
 		$intermediateReferecedFields, $referenceModel, $referencedFields, $options = null)
 	{
-		return $this->_modelsManager->addHasManyToMany($this, $fields, $intermediateModel, $intermediateFields, 
+		return $this->_modelsManager->addHasManyToMany($this, $fields, $intermediateModel, $intermediateFields,
 			$intermediateReferecedFields, $referenceModel, $referencedFields, $options);
 	}
 
@@ -3733,7 +3733,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 		}
 
 		//Call the 'getRelationRecords' in the model manager
-		return call_user_func_array(array($this->_modelsManager, 'getRelationRecords'), 
+		return call_user_func_array(array($this->_modelsManager, 'getRelationRecords'),
 			array($relation, null, $this, $arguments));
 	}
 
@@ -3894,7 +3894,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 		}
 
 		//Execute the query (static call)
-		return call_user_func_array(array($model_name, $type), 
+		return call_user_func_array(array($model_name, $type),
 			array('conditions' => $field.' = ?0', 'bind' => array($value)));
 	}
 
@@ -3988,10 +3988,10 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$maanger = $this->getModelsManager();
+		$manager = $this->getModelsManager();
 
 		//Check if the property is a relationship
-		$relation = $manager->getRelationByAlias($model_name, $property);
+		$relation = $manager->getRelationByAlias(get_called_class(), $property);
 
 		return (is_object($relation) === true ? true : false);
 	}
@@ -4131,7 +4131,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 	 * columnRenaming        — Enables/Disables column renaming
 	 * notNullValidations    — Enables/Disables automatic not null validation
 	 * exceptionOnFailedSave — Enables/Disables throws an exception if the saving process fails
-	 * phqlLiterals          — Enables/Disables literals in PHQL this improves the security of applications  
+	 * phqlLiterals          — Enables/Disables literals in PHQL this improves the security of applications
 	 *
 	 * @param array $options
 	 * @throws Exception

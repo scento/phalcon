@@ -34,14 +34,14 @@ use \Phalcon\Db\Adapter\Pdo,
  *	$connection = new Phalcon\Db\Adapter\Pdo\Mysql($config);
  *
  *</code>
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/db/adapter/pdo/mysql.c
  */
 class Mysql extends Pdo implements EventsAwareInterface, AdapterInterface
 {
 	/**
 	 * Type
-	 * 
+	 *
 	 * @var string
 	 * @access protected
 	*/
@@ -49,7 +49,7 @@ class Mysql extends Pdo implements EventsAwareInterface, AdapterInterface
 
 	/**
 	 * Dialect Type
-	 * 
+	 *
 	 * @var string
 	 * @access protected
 	*/

@@ -711,7 +711,7 @@ abstract class Dispatcher implements DispatcherInterface, InjectionAwareInterfac
 					//Call the method allowing exceptions
 					$m = new ReflectionMethod($handler, $actionMethod);
 					$value = $m->invokeArgs($handler, $this->_params);
-				} catch(\Exception $e) {
+				} catch(\Exception $exception) {
 					//Copy the exception to rethrow it later if needed
 
 					//Try to handle the exception
@@ -721,7 +721,7 @@ abstract class Dispatcher implements DispatcherInterface, InjectionAwareInterfac
 						}
 					} else {
 						//Exception wasn't handled, rethrow it
-						throw new Exception($e);
+						throw new Exception($exception);
 					}
 				}
 			
@@ -814,12 +814,12 @@ abstract class Dispatcher implements DispatcherInterface, InjectionAwareInterfac
 			&& is_array($forward['params']) === true) {
 			//@note Changed "fetch_string" to "fetch_array", since the parameters are passed
 			//as an array
-			$this->_params = $params;
+			$this->_params = $forward['params'];
 		}
 
 		$this->_isExactHandler = false;
 		$this->_finished = false;
-		$tihs->_forwarded = true;
+		$this->_forwarded = true;
 	}
 
 	/**

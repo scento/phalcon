@@ -1145,7 +1145,7 @@ class Tag
 	{
 		/* Type check */
 		if(is_null($local) === true) {
-			$local = false;
+			$local = true;
 		} elseif(is_bool($local) === false) {
 			throw new TagException('Invalid parameter type.');
 		}
@@ -1179,7 +1179,7 @@ class Tag
 
 		/* Return string */
 		return '<link rel="stylesheet"'.self::writeAttributes($params).
-			(self::$_documentType > 5 ? ' />' : '>\n');
+			(self::$_documentType > 5 ? ' />' : '>') . "\n";
 	}
 
 	/**
@@ -1205,7 +1205,7 @@ class Tag
 	{
 		/* Type check */
 		if(is_null($local) === true) {
-			$local = false;
+			$local = true;
 		} elseif(is_bool($local) === false) {
 			throw new TagException('Invalid parameter type.');
 		}

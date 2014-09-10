@@ -2,3 +2,4 @@
 docs/
 .directory
 phpunit.phar
+.idea/

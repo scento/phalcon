@@ -145,7 +145,7 @@ class Application extends Injectable
 	 *
 	 * @param array $modules
 	 * @param boolean|null $merge
-	 * @param \Phalcon\Mvc\Application
+	 * @return \Phalcon\Mvc\Application
 	 * @throws Exception
 	 */
 	public function registerModules($modules, $merge = null)
@@ -277,7 +277,7 @@ class Application extends Injectable
 						if(file_exists($module['path']) === true) {
 							require_once($module['path']);
 						} else {
-							throw new Exception("Module definition path '".$path."' doesn't exist");
+							throw new Exception("Module definition path '".$module['path']."' doesn't exist");
 						}
 					}
 				}

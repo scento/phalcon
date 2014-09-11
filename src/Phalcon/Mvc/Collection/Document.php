@@ -10,8 +10,7 @@
 */
 namespace Phalcon\Mvc\Collection;
 
-use \ArrayAccess,
-	\Phalcon\Mvc\Collection\Document;
+use \ArrayAccess;
 
 /**
  * Phalcon\Mvc\Collection\Document

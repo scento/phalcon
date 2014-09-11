@@ -82,7 +82,7 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 	/**
 	 * Models Manager
 	 * 
-	 * @var null|Phalcon\Mvc\Collection\ManagerInterface
+	 * @var null|\Phalcon\Mvc\Collection\ManagerInterface
 	 * @access protected
 	*/
 	protected $_modelsManager;
@@ -254,7 +254,7 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 	 */
 	protected function getEventsManager()
 	{
-		return $this->_modelsManager->getCustomEventsManager();
+		return $this->_modelsManager->getCustomEventsManager($this);
 	}
 
 	/**
@@ -966,7 +966,7 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 	{
 		if(is_object($message) === false ||
 			$message instanceof MessageInterface === false) {
-			throw new Exception('Invalid message format \''.$type."'");
+			throw new Exception('Invalid message format \''.gettype($message)."'");
 		}
 
 		$this->_errorMessages[] = $message;
@@ -980,7 +980,9 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 	 */
 	public function save()
 	{
-		if(is_object($this->_dependencyInjector) === false) {
+		$dependency_injector = $this->_dependencyInjector;
+
+		if(is_object($dependency_injector) === false) {
 			throw new Exception('A dependency injector container is required to obtain the services related to the ORM');
 		}
 
@@ -994,8 +996,10 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 		//Choose a collection according to the collection name
 		$collection = $connection->selectCollection($source);
 
+		$exists = $this->_exists($collection);
+
 		//Check the dirty state of the current operation to update the current operation
-		if($this->_exists === false) {
+		if($exists === false) {
 			$this->_operationMade = 1;
 		} else {
 			$this->_operationMade = 2;
@@ -1006,7 +1010,7 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 		$disable_events = self::$_disableEvents;
 
 		//Execute the preSave hook
-		if($this->_preSave($dependencyInjector, $disable_events, $exists) === false) {
+		if($this->_preSave($dependency_injector, $disable_events, $exists) === false) {
 			return false;
 		}
 
@@ -1040,7 +1044,7 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 		}
 
 		//Call the postSave hooks
-		return $this->_postSave($disableEvents, $success, $exists);
+		return $this->_postSave($disable_events, $success, $exists);
 	}
 
 	/**
@@ -1105,7 +1109,7 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 
 		$collection = new self();
 		$connection = $collection->getConnection();
-		return $this->_getResultset($parameters, $collection, $connection, $unique, true);
+		return self::_getResultset($parameters, $collection, $connection, true);
 	}
 
 	/**
@@ -1156,7 +1160,7 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 		$collection = new self();
 		$connection = $collection->getConnection();
 
-		return $this->_getResultset($parameters, $collection, $connection, false);
+		return self::_getResultset($parameters, $collection, $connection, false);
 	}
 
 	/**
@@ -1179,7 +1183,7 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 		$collection = new self();
 		$connection = $collection->getConnection();
 
-		return $this->_getGroupResultset($parameters, $collection, $connection);
+		return self::_getGroupResultset($parameters, $collection, $connection);
 	}
 
 	/**
@@ -1203,7 +1207,7 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 			throw new Exception('Method getSource() returns empty string');
 		}
 
-		$collection->selectCollection($source);
+		$collection = $connection->selectCollection($source);
 		return $collection->aggregate($parameters);
 	}
 

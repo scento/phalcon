@@ -980,9 +980,9 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 	 */
 	public function save()
 	{
-		$dependency_injector = $this->_dependencyInjector;
+		$dependencyInjector = $this->_dependencyInjector;
 
-		if(is_object($dependency_injector) === false) {
+		if(is_object($dependencyInjector) === false) {
 			throw new Exception('A dependency injector container is required to obtain the services related to the ORM');
 		}
 
@@ -1007,10 +1007,10 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 
 		//The messages added to the validator are reset here
 		$this->_errorMessages = array();
-		$disable_events = self::$_disableEvents;
+		$disableEvents = self::$_disableEvents;
 
 		//Execute the preSave hook
-		if($this->_preSave($dependency_injector, $disable_events, $exists) === false) {
+		if($this->_preSave($dependencyInjector, $disableEvents, $exists) === false) {
 			return false;
 		}
 
@@ -1044,7 +1044,7 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 		}
 
 		//Call the postSave hooks
-		return $this->_postSave($disable_events, $success, $exists);
+		return $this->_postSave($disableEvents, $success, $exists);
 	}
 
 	/**

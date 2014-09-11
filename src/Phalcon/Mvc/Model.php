@@ -3085,8 +3085,8 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 			$unique_key = $this->_uniqueKey;
 		}
 
-		$unique_params = $this->_uniqueParams;
-		if(is_array($unique_params) === false) {
+		$uniqueParams = $this->_uniqueParams;
+		if(is_array($uniqueParams) === false) {
 			throw new Exception('The record cannot be refreshed because it does not exist or is deleted');
 		}
 
@@ -3104,7 +3104,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 		$dialect = $read_connection->getDialect();
 		$sql = $dialect->select(array('columns' => $fields, 'tables' => $read_connection->escapeIdentifier($table),
 		 'where' => $unique_key));
-		$row = $read_connection->fetchOne($sql, 1, $unique_params, $unique_types);
+		$row = $read_connection->fetchOne($sql, 1, $uniqueParams, $unique_types);
 
 		//Get a column map if any
 		$column_map = $meta_data->getColumnMap($this);
@@ -3545,14 +3545,14 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 	 * @param string|null $fieldName
 	 * @throws Exception
 	 */
-	public function hasChanged($field_name = null)
+	public function hasChanged($fieldName = null)
 	{
 		if(is_array($this->_snapshot) === false) {
 			throw new Exception("The record doesn't have a valid data snapshot");
 		}
 
-		if(is_string($field_name) === false &&
-			is_null($field_name) === false) {
+		if(is_string($fieldName) === false &&
+			is_null($fieldName) === false) {
 			throw new Exception('The field name must be string');
 		}
 
@@ -3576,30 +3576,30 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 		}
 
 		//If a field was specified we only check it
-		if(is_string($field_name) === true) {
+		if(is_string($fieldName) === true) {
 			//We only make this validation over valid fields
 			if(is_array($column_map) === true) {
-				if(isset($column_map[$field_name]) === false) {
-					throw new Exception("The field '".$field_name."' is not part of the model");
+				if(isset($column_map[$fieldName]) === false) {
+					throw new Exception("The field '".$fieldName."' is not part of the model");
 				}
 			} else {
-				if(isset($attributes[$field_name]) === false) {
-					throw new Exception("The field '".$field_name."' is not part of the model");
+				if(isset($attributes[$fieldName]) === false) {
+					throw new Exception("The field '".$fieldName."' is not part of the model");
 				}
 			}
 
 			//The field is not part of the model - throw exception
-			if(isset($this->$field_name) === false) {
-				throw new Exception("The field '".$field_name."' is not defined on the model");
+			if(isset($this->$fieldName) === false) {
+				throw new Exception("The field '".$fieldName."' is not defined on the model");
 			}
 
 			//The field is not part of the data snapshot, throw exception
-			if(isset($this->_snapshot[$field_name]) === false) {
-				throw new Exception("The field '".$field_name."' was not found in the snapshot");
+			if(isset($this->_snapshot[$fieldName]) === false) {
+				throw new Exception("The field '".$fieldName."' was not found in the snapshot");
 			}
 
-			$value = $this->$field_name;
-			$original_value = $this->_snapshot[$field_name];
+			$value = $this->$fieldName;
+			$original_value = $this->_snapshot[$fieldName];
 
 			//Check if the field has changed
 			return ($value == $original_value ? false : true);

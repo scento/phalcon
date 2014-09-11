@@ -57,23 +57,23 @@ class Ini extends Config
 	public function __construct($filePath)
 	{
 		$array = array();
-		if (is_string($filePath) === false) {
+		if(is_string($filePath) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 
 		$d = parse_ini_file($filePath, true);
 
-		if ($d === false) {
+		if($d === false) {
 			throw new Exception('Configuration file '.$filePath.' can\'t be loaded');
 		}
 
 		foreach($d as $section => $directives) {
-			if (!is_array($directives) || empty($directives)) {
+			if((is_array($directives) === false) || (empty($directives) === true)) {
 				$array[$section] = $directives;
 			} else {
-				foreach ($directives as $key => $value) {
-					if (strpos($key, '.') !== false) {
-						!isset($array[$section]) && $array[$section] = array();
+				foreach($directives as $key => $value) {
+					if(strpos($key, '.') !== false) {
+						(isset($array[$section]) === false) && $array[$section] = array();
 						$array[$section] = self::_parseKey($array[$section], $key, $value);
 					} else {
 						$array[$section][$key] = $value;
@@ -86,42 +86,31 @@ class Ini extends Config
 	}
 
 	/**
-	 * recursive parse key
+	 * Recursive parse key
 	 *
 	 * <code>
-	 * $r = self::_parseKey(array(), 'a.b.c', 1);
-	 * $r = array(
-	 *		'a' => array(
-	 *			'b' => array(
-	 *				'c' => 1
-	 *			)
-	 *		)
-	 * );
-	 *
-	 * $r = self::_parseKey(array(), 'a..', 1);
-	 * $r = array(
-	 *		'a' => array(
-	 *			0 => array(
-	 *				0 => 1
-	 *			)
-	 *		)
-	 * );
-	 *
+	 * print_r(self::_parseKey(array(), 'a.b.c', 1));
 	 * </code>
+	 *
+	 * @param array $config
+	 * @param string $key
+	 * @param string $value
+	 * @throws Exception
+	 * @return array
 	 */
-	private static function _parseKey($config, $key, $value) {
-		if (strpos($key, '.') !== false) {
+	private static function _parseKey($config, $key, $value)
+	{
+		if(strpos($key, '.') !== false) {
 			list($k, $v) = explode('.', $key, 2);
-
-			$k = isset($k{0}) ? $k : 0;
-			$v = isset($v{0}) ? $v : 0;
-
-			if (!isset($config[$k])) {
-				$config[$k] = array();
+			if((empty($k) === false) && (empty($v) === false)) {
+				if(!isset($config[$k])) {
+					$config[$k] = array();
+				}
+			} else {
+				throw new Exception("Invalid key '.$key.'");
 			}
 
 			$config[$k] = self::_parseKey($config[$k], $v, $value);
-
 		} else {
 			$config[$key] = $value;
 		}

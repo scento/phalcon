@@ -58,12 +58,12 @@ class Config implements ArrayAccess, Countable
 	 */
 	public function __construct($arrayConfig = null)
 	{
-		if (is_array($arrayConfig) === false) {
+		if(is_array($arrayConfig) === false) {
 			throw new ConfigException('The configuration must be an Array');
 		}
 
-		foreach ($arrayConfig as $key => $value) {
-			if (is_array($value)) {
+		foreach($arrayConfig as $key => $value) {
+			if(is_array($value) === true) {
 				$this->_storage[$key] = new self($value);
 			} else {
 				$this->_storage[$key] = $value;
@@ -78,13 +78,13 @@ class Config implements ArrayAccess, Countable
 	 * var_dump(isset($config['database']));
 	 *</code>
 	 *
-	 * @param string $index
+	 * @param scalar $index
 	 * @return boolean
 	 * @throws ConfigException
 	 */
 	public function offsetExists($index)
 	{
-		if (is_scalar($index) === false) {
+		if(is_scalar($index) === false) {
 			throw new ConfigException('Invalid parameter type.');
 		}
 		return isset($this->_storage[$index]);
@@ -98,14 +98,14 @@ class Config implements ArrayAccess, Countable
 	 * echo $config->get('controllersDir', '../app/controllers/');
 	 *</code>
 	 *
-	 * @param mixed $index
+	 * @param scalar $index
 	 * @param mixed $defaultValue
 	 * @return mixed
 	 * @throws ConfigException
 	 */
 	public function get($index, $defaultValue = null)
 	{
-		if (is_scalar($index) === false) {
+		if(is_scalar($index) === false) {
 			throw new ConfigException('Invalid parameter type.');
 		}
 		return (isset($this->_storage[$index]) === true ? $this->_storage[$index] : $defaultValue);
@@ -134,13 +134,13 @@ class Config implements ArrayAccess, Countable
 	 * $config['database'] = array('type' => 'Sqlite');
 	 *</code>
 	 *
-	 * @param mixed $index
+	 * @param scalar $index
 	 * @param mixed $value
 	 * @throws ConfigException
 	 */
 	public function offsetSet($index, $value)
 	{
-		if (is_scalar($index) === false) {
+		if(is_scalar($index) === false) {
 			throw new ConfigException('Invalid parameter type.');
 		}
 
@@ -154,12 +154,12 @@ class Config implements ArrayAccess, Countable
 	 * unset($config['database']);
 	 *</code>
 	 *
-	 * @param mixed $index
+	 * @param scalar $index
 	 * @throws ConfigException
 	 */
 	public function offsetUnset($index)
 	{
-		if (is_scalar($index) === false) {
+		if(is_scalar($index) === false) {
 			throw new ConfigException('Invalid parameter type.');
 		}
 
@@ -182,26 +182,26 @@ class Config implements ArrayAccess, Countable
 	 */
 	public function merge($config)
 	{
-		if (is_array($config) === false && is_object($config) === false) {
+		if((is_array($config) === false) && (is_object($config) === false)) {
 			throw new ConfigException('Configuration must be an object or array');
 		}
 
-		if (is_object($config) && $config instanceof Config) {
+		if((is_object($config) === true) && ($config instanceof Config)) {
 			$config = $config->toArray(false);
 		}
 
-		foreach ($config as $key => $value) {
+		foreach($config as $key => $value) {
 			/**
 			 * The key is already defined in the object, we have to merge it
 			 */
-			if (isset($this->_storage[$key])) {
-				if ($this->$key instanceof Config && $value instanceof Config) {
+			if(isset($this->_storage[$key]) === true) {
+				if($this->$key instanceof Config && $value instanceof Config) {
 					$this->$key->merge($value);
 				} else {
 					$this->$key = $value;
 				}
 			} else {
-				if ($value instanceof Config) {
+				if($value instanceof Config) {
 					$this->$key = new self($item->toArray());
 				} else {
 					$this->$key = $value;
@@ -226,9 +226,9 @@ class Config implements ArrayAccess, Countable
 	{
 		$array = $this->_storage;
 
-		if ($recursive) {
-			foreach ($this->_storage as $key => $value) {
-				if ($value instanceof Config) {
+		if($recursive) {
+			foreach($this->_storage as $key => $value) {
+				if($value instanceof Config) {
 					$array[$key] = $value->toArray($recursive);
 				} else {
 					$array[$key] = $value;
@@ -268,7 +268,7 @@ class Config implements ArrayAccess, Countable
 	/**
 	 * Get element
 	 *
-	 * @param string $index
+	 * @param scalar $index
 	 * @return mixed
 	 * @throws ConfigException
 	*/
@@ -280,7 +280,7 @@ class Config implements ArrayAccess, Countable
 	/**
 	 * Set element
 	 *
-	 * @param string $index
+	 * @param scalar $index
 	 * @param mixed $value
 	 * @throws ConfigException
 	*/
@@ -292,7 +292,7 @@ class Config implements ArrayAccess, Countable
 	/**
 	 * Isset element?
 	 *
-	 * @param string $index
+	 * @param scalar $index
 	 * @return boolean
 	 * @throws ConfigException
 	*/
@@ -307,7 +307,7 @@ class Config implements ArrayAccess, Countable
 	 * @WARNING This function is not implemented in the original
 	 * Phalcon API.
 	 *
-	 * @param string $index
+	 * @param scalar $index
 	 * @throws ConfigException
 	*/
 	public function __unset($index)

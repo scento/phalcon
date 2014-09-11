@@ -1085,7 +1085,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 			$unique_key = $this->_uniqueKey;
 		}
 
-		if(is_null($unqiue_params) === true) {
+		if(is_null($unique_params) === true) {
 			$unique_params = $this->_uniqueParams;
 		}
 
@@ -1405,7 +1405,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 			$this->_errorMessages = array();
 		}
 
-		$this->_errorMessages[] = $messages;
+		$this->_errorMessages[] = $message;
 
 		return $this;
 	}
@@ -1526,7 +1526,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 		$manager = $this->_modelsManager;
 
 		//We check if some of the belongsTo relations act as virtual foreign keys
-		$belogs_to = $manager->belongsTo($this);
+		$belongs_to = $manager->belongsTo($this);
 
 		if(count($belongs_to) > 0) {
 			$error = false;
@@ -1871,7 +1871,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 
 		//Columns marked as not null are automatically validated by the ORM
 		if(isset($GLOBALS['_PHALCON_ORM_NOT_NULL_VALIDATIONS']) === true) {
-			$not_null = $MetaData->getNotNullAttributes($this);
+			$not_null = $metaData->getNotNullAttributes($this);
 			if(is_array($not_null) === true) {
 				//Get the fields which are numeric, these are validated in a different way
 				$data_type_numeric = $metaData->getDataTypesNumeric($this);
@@ -2232,7 +2232,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 
 		$bind_data_types = $metaData->getBindTypes($this);
 		$non_primary = $metaData->getNonPrimaryKeysAttributes($this);
-		$automatic_attributes = $metaData->getAutomaticUpdateAttributes();
+		$automatic_attributes = $metaData->getAutomaticUpdateAttributes($this);
 
 		if(isset($GLOBALS['_PHALCON_ORM_COLUMN_RENAMING']) === true &&
 			$GLOBALS['_PHALCON_ORM_COLUMN_RENAMING'] === true) {
@@ -2287,7 +2287,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 						if($changed === true) {
 							$fields[] = $field;
 							$values[] = $value;
-							$bind_types[] = $bind_type[$field];
+							$bind_types[] = $bind_data_types[$field];
 						}
 					}
 				} else {
@@ -2430,7 +2430,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 					}
 
 					//Read the attribute from the referenced model and assign it to the current model
-					$this->$columns = $record->readAttribute($referenced_field);
+					$this->$columns = $record->readAttribute($referenced_fields);
 				}
 			}
 		}
@@ -2449,7 +2449,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 	protected function _postSaveRelatedRecords($connection, $related)
 	{
 		if(is_object($connection) === false ||
-			$conection instanceof DbAdapterInterface === false ||
+			$connection instanceof DbAdapterInterface === false ||
 			is_array($related) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
@@ -2698,7 +2698,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 		//_postSave() makes all the validations
 		if(isset($GLOBALS['_PHALCON_ORM_EVENTS']) === true &&
 			$GLOBALS['_PHALCON_ORM_EVENTS'] === true) {
-			$success = $this->_postSave($succes, $exists);
+			$success = $this->_postSave($success, $exists);
 		}
 
 		if(is_array($this->_related) === true) {
@@ -3545,14 +3545,14 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 	 * @param string|null $fieldName
 	 * @throws Exception
 	 */
-	public function hasChanged($fieldName = null)
+	public function hasChanged($field_name = null)
 	{
 		if(is_array($this->_snapshot) === false) {
 			throw new Exception("The record doesn't have a valid data snapshot");
 		}
 
-		if(is_string($fieldName) === false &&
-			is_null($fieldName) === false) {
+		if(is_string($field_name) === false &&
+			is_null($field_name) === false) {
 			throw new Exception('The field name must be string');
 		}
 
@@ -3576,7 +3576,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 		}
 
 		//If a field was specified we only check it
-		if(is_string($fieldName) === true) {
+		if(is_string($field_name) === true) {
 			//We only make this validation over valid fields
 			if(is_array($column_map) === true) {
 				if(isset($column_map[$field_name]) === false) {
@@ -3886,7 +3886,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 				$field = $extra_method_first;
 			} else {
 				//Get the possible real method name
-				$field = Text::uncamelize($field, $extra_method);
+				$field = Text::uncamelize($extra_method);
 				if(isset($attributes[$field]) === false) {
 					throw new Exception('Cannot resolve attribute "'.$extra_method.'" in the model');
 				}
@@ -3946,6 +3946,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 			throw new Exception('Invalid parameter type.');
 		}
 
+		$model_name = get_class($this);
 		$lower_property = strtolower($property);
 		$manager = $this->getModelsManager();
 
@@ -4093,7 +4094,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 	 */
 	public function toArray()
 	{
-		$meta_data = $this->getModelsMetaData();
+		$metaData = $this->getModelsMetaData();
 		$data = array();
 
 		//Original attributes

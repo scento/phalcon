@@ -787,7 +787,7 @@ class Micro extends Injectable implements EventsAwareInterface, InjectionAwareIn
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$this->_activeHandler = $active;
+		$this->_activeHandler = $activeHandler;
 	}
 
 	/**

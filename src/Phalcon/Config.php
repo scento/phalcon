@@ -118,7 +118,7 @@ class Config implements ArrayAccess, Countable
 	 * print_r($config['database']);
 	 *</code>
 	 *
-	 * @param mixed $index
+	 * @param scalar $index
 	 * @return string|null
 	 * @throws ConfigException
 	 */

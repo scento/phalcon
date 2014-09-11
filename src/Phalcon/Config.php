@@ -177,31 +177,28 @@ class Config implements ArrayAccess, Countable
 	 *</code>
 	 *
 	 * @param \Phalcon\Config|array $config
-	 * @todo Object should be more specific
 	 * @throws Exception ConfigException
 	 */
 	public function merge($config)
 	{
-		if((is_array($config) === false) && (is_object($config) === false)) {
+		if(is_array($config) === false && 
+			(is_object($config) === false || $config instanceof Config === false)) {
 			throw new ConfigException('Configuration must be an object or array');
 		}
 
-		if((is_object($config) === true) && ($config instanceof Config)) {
-			$config = $config->toArray(false);
-		}
+		$config = $config->toArray(false);
 
 		foreach($config as $key => $value) {
-			/**
-			 * The key is already defined in the object, we have to merge it
-			 */
+			//The key is already defined in the object, we have to merge it
 			if(isset($this->_storage[$key]) === true) {
-				if($this->$key instanceof Config && $value instanceof Config) {
+				if($this->$key instanceof Config === true && 
+					$value instanceof Config === true) {
 					$this->$key->merge($value);
 				} else {
 					$this->$key = $value;
 				}
 			} else {
-				if($value instanceof Config) {
+				if($value instanceof Config === true) {
 					$this->$key = new self($item->toArray());
 				} else {
 					$this->$key = $value;
@@ -226,9 +223,9 @@ class Config implements ArrayAccess, Countable
 	{
 		$array = $this->_storage;
 
-		if($recursive) {
+		if($recursive === true) {
 			foreach($this->_storage as $key => $value) {
-				if($value instanceof Config) {
+				if($value instanceof Config === true) {
 					$array[$key] = $value->toArray($recursive);
 				} else {
 					$array[$key] = $value;

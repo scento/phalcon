@@ -5,6 +5,7 @@
  * @author Andres Gutierrez <andres@phalconphp.com>
  * @author Eduar Carvajal <eduar@phalconphp.com>
  * @author Wenzel Pünter <wenzel@phelix.me>
+ * @author Liu Yuan <lewisay@163.com>
  * @version 1.2.6
  * @package Phalcon
  */
@@ -64,11 +65,11 @@ class Ini extends Config
 		$d = parse_ini_file($filePath, true);
 
 		if($d === false) {
-			throw new Exception('Configuration file '.$filePath.' can\'t be loaded');
+			throw new Exception('Configuration file '.$filePath." can't be loaded");
 		}
 
 		foreach($d as $section => $directives) {
-			if((is_array($directives) === false) || (empty($directives) === true)) {
+			if(is_array($directives) === false || empty($directives) === true) {
 				$array[$section] = $directives;
 			} else {
 				foreach($directives as $key => $value) {
@@ -94,20 +95,25 @@ class Ini extends Config
 	 *
 	 * @param array $config
 	 * @param string $key
-	 * @param string $value
-	 * @throws Exception
+	 * @param scalar|array $value
 	 * @return array
+	 * @throws Exception
 	 */
-	private static function _parseKey($config, $key, $value)
+	private static function _parseKey(array $config, $key, $value)
 	{
+		if(is_string($key) === false ||
+			(is_scalar($value) === false && is_array($value) === false)) {
+			throw new Exception('Invalid parameter type.');
+		}
+
 		if(strpos($key, '.') !== false) {
 			list($k, $v) = explode('.', $key, 2);
-			if((empty($k) === false) && (empty($v) === false)) {
-				if(!isset($config[$k])) {
+			if(empty($k) === false && empty($v) === false) {
+				if(isset($config[$k]) === false) {
 					$config[$k] = array();
 				}
 			} else {
-				throw new Exception("Invalid key '.$key.'");
+				throw new Exception("Invalid key '".$key."'");
 			}
 
 			$config[$k] = self::_parseKey($config[$k], $v, $value);

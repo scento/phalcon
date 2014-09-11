@@ -7,7 +7,7 @@
  * @author Wenzel Pünter <wenzel@phelix.me>
  * @version 1.2.6
  * @package Phalcon
-*/
+ */
 namespace Phalcon;
 
 use \ArrayAccess,
@@ -44,11 +44,11 @@ class Config implements ArrayAccess, Countable
 {
 	/**
 	 * Storage
-	 * 
+	 *
 	 * @var array
 	 * @access private
 	*/
-	private $storage = array();
+	private $_storage = array();
 
 	/**
 	 * \Phalcon\Config constructor
@@ -58,14 +58,18 @@ class Config implements ArrayAccess, Countable
 	 */
 	public function __construct($arrayConfig = null)
 	{
-		if(is_array($arrayConfig) === false)
-		{
+		if(is_array($arrayConfig) === false) {
 			throw new ConfigException('The configuration must be an Array');
 		}
 
-		$this->storage = $arrayConfig;
+		foreach($arrayConfig as $key => $value) {
+			if(is_array($value) === true) {
+				$this->_storage[$key] = new self($value);
+			} else {
+				$this->_storage[$key] = $value;
+			}
+		}
 	}
-
 
 	/**
 	 * Allows to check whether an attribute is defined using the array-syntax
@@ -74,20 +78,17 @@ class Config implements ArrayAccess, Countable
 	 * var_dump(isset($config['database']));
 	 *</code>
 	 *
-	 * @param string $index
+	 * @param scalar $index
 	 * @return boolean
 	 * @throws ConfigException
 	 */
 	public function offsetExists($index)
 	{
-		if(is_string($index) === false)
-		{
+		if(is_scalar($index) === false) {
 			throw new ConfigException('Invalid parameter type.');
 		}
-
-		return isset($this->storage[$index]);
+		return isset($this->_storage[$index]);
 	}
-
 
 	/**
 	 * Gets an attribute from the configuration, if the attribute isn't defined returns null
@@ -97,21 +98,18 @@ class Config implements ArrayAccess, Countable
 	 * echo $config->get('controllersDir', '../app/controllers/');
 	 *</code>
 	 *
-	 * @param string $index
+	 * @param scalar $index
 	 * @param mixed $defaultValue
 	 * @return mixed
 	 * @throws ConfigException
 	 */
 	public function get($index, $defaultValue = null)
 	{
-		if(is_string($index) === false)
-		{
+		if(is_scalar($index) === false) {
 			throw new ConfigException('Invalid parameter type.');
 		}
-
-		return (isset($this->storage[$index]) === true ? $this->storage[$index] : $defaultValue);
+		return (isset($this->_storage[$index]) === true ? $this->_storage[$index] : $defaultValue);
 	}
-
 
 	/**
 	 * Gets an attribute using the array-syntax
@@ -120,20 +118,14 @@ class Config implements ArrayAccess, Countable
 	 * print_r($config['database']);
 	 *</code>
 	 *
-	 * @param string $index
+	 * @param scalar $index
 	 * @return string|null
 	 * @throws ConfigException
 	 */
 	public function offsetGet($index)
 	{
-		if(is_string($index) === false)
-		{
-			throw new ConfigException('Invalid parameter type.');
-		}
-
-		return (isset($this->storage[$index]) === true ? $this->storage[$index] : null);
+		return $this->get($index);
 	}
-
 
 	/**
 	 * Sets an attribute using the array-syntax
@@ -142,20 +134,18 @@ class Config implements ArrayAccess, Countable
 	 * $config['database'] = array('type' => 'Sqlite');
 	 *</code>
 	 *
-	 * @param string $index
+	 * @param scalar $index
 	 * @param mixed $value
 	 * @throws ConfigException
 	 */
 	public function offsetSet($index, $value)
 	{
-		if(is_string($index) === false)
-		{
+		if(is_scalar($index) === false) {
 			throw new ConfigException('Invalid parameter type.');
 		}
 
-		$this->storage[$index] = $value;
+		$this->_storage[$index] = $value;
 	}
-
 
 	/**
 	 * Unsets an attribute using the array-syntax
@@ -164,19 +154,17 @@ class Config implements ArrayAccess, Countable
 	 * unset($config['database']);
 	 *</code>
 	 *
-	 * @param string $index
+	 * @param scalar $index
 	 * @throws ConfigException
 	 */
 	public function offsetUnset($index)
 	{
-		if(is_string($index) === false)
-		{
+		if(is_scalar($index) === false) {
 			throw new ConfigException('Invalid parameter type.');
 		}
 
-		unset($this->storage[$index]);
+		unset($this->_storage[$index]);
 	}
-
 
 	/**
 	 * Merges a configuration into the current one
@@ -194,17 +182,33 @@ class Config implements ArrayAccess, Countable
 	 */
 	public function merge($config)
 	{
-		if(is_array($config) === true)
-		{
-			$this->storage = array_merge($this->storage, $config);
-		} elseif(is_object($config) === true)
-		{
-			$this->storage = array_merge($this->storage, $config->toArray());
-		} else {
-			throw new ConfigException('Invalid parameter type.');
+		if((is_array($config) === false) && (is_object($config) === false)) {
+			throw new ConfigException('Configuration must be an object or array');
+		}
+
+		if((is_object($config) === true) && ($config instanceof Config)) {
+			$config = $config->toArray(false);
+		}
+
+		foreach($config as $key => $value) {
+			/**
+			 * The key is already defined in the object, we have to merge it
+			 */
+			if(isset($this->_storage[$key]) === true) {
+				if($this->$key instanceof Config && $value instanceof Config) {
+					$this->$key->merge($value);
+				} else {
+					$this->$key = $value;
+				}
+			} else {
+				if($value instanceof Config) {
+					$this->$key = new self($item->toArray());
+				} else {
+					$this->$key = $value;
+				}
+			}
 		}
 	}
-
 
 	/**
 	 * Converts recursively the object to an array
@@ -220,27 +224,29 @@ class Config implements ArrayAccess, Countable
 	 */
 	public function toArray($recursive = true)
 	{
-		if($recursive === true)
-		{
-			return $this->storage;
-		} else {
-			$d = array();
-			foreach($this->storage as $key => $value)
-			{
-				$d[$key] = new Config($value);
+		$array = $this->_storage;
+
+		if($recursive) {
+			foreach($this->_storage as $key => $value) {
+				if($value instanceof Config) {
+					$array[$key] = $value->toArray($recursive);
+				} else {
+					$array[$key] = $value;
+				}
 			}
-			return $d;
 		}
+
+		return $array;
 	}
 
 	/**
 	 * Counts configuration elements
-	 * 
+	 *
 	 * @return int
 	*/
 	public function count()
 	{
-		return count($this->storage);
+		return count($this->_storage);
 	}
 
 	/**
@@ -261,76 +267,51 @@ class Config implements ArrayAccess, Countable
 
 	/**
 	 * Get element
-	 * 
-	 * @param string $index
+	 *
+	 * @param scalar $index
 	 * @return mixed
 	 * @throws ConfigException
 	*/
 	public function __get($index)
 	{
-		if(is_string($index) === false)
-		{
-			throw new ConfigException('Invalid parameter type.');
-		}
-
-		if(isset($this->storage[$index]) === true)
-		{
-			return $this->storage[$index];
-		} else {
-			return null;
-		}
+		return $this->get($index);
 	}
 
 	/**
 	 * Set element
-	 * 
-	 * @param string $index
+	 *
+	 * @param scalar $index
 	 * @param mixed $value
 	 * @throws ConfigException
 	*/
 	public function __set($index, $value)
 	{
-		if(is_string($index) === false)
-		{
-			throw new ConfigException('Invalid parameter type.');
-		}
-
-		$this->storage[$index] = $value;
+		$this->offsetSet($index, $value);
 	}
 
 	/**
 	 * Isset element?
-	 * 
-	 * @param string $index
+	 *
+	 * @param scalar $index
 	 * @return boolean
 	 * @throws ConfigException
 	*/
 	public function __isset($index)
 	{
-		if(is_string($index) === false)
-		{
-			throw new ConfigException('Invalid parameter type.');
-		}
-
-		return isset($this->storage[$index]);
+		return $this->offsetExists($index);
 	}
 
 	/**
 	 * Unset element
-	 * 
+	 *
 	 * @WARNING This function is not implemented in the original
 	 * Phalcon API.
-	 * 
-	 * @param string $index
+	 *
+	 * @param scalar $index
 	 * @throws ConfigException
 	*/
 	public function __unset($index)
 	{
-		if(is_string($index) === false)
-		{
-			throw new ConfigException('Invalid parameter type.');
-		}
-
-		unset($this->storage[$index]);
+		$this->offsetUnset($index);
 	}
 }

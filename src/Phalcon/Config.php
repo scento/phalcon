@@ -181,12 +181,11 @@ class Config implements ArrayAccess, Countable
 	 */
 	public function merge($config)
 	{
-		if(is_array($config) === false && 
-			(is_object($config) === false || $config instanceof Config === false)) {
+		if(is_object($config) === true && $config instanceof Config === true) {
+			$config = $config->toArray(false);
+		} else(is_array($config) === false) {
 			throw new ConfigException('Configuration must be an object or array');
 		}
-
-		$config = $config->toArray(false);
 
 		foreach($config as $key => $value) {
 			//The key is already defined in the object, we have to merge it

@@ -189,7 +189,7 @@ class Url implements UrlInterface, InjectionAwareInterface
 	 */
 	public function getBaseUri()
 	{
-		$base_uri = $this->_baseUri;
+		$baseUri = $this->_baseUri;
 
 		if(is_null($this->_baseUri) === true) {
 			if(isset($_SERVER['PHP_SELF']) === true) {
@@ -197,15 +197,15 @@ class Url implements UrlInterface, InjectionAwareInterface
 			}
 
 			if(is_string($uri) === false) {
-				$base_uri = '/';
+				$baseUri = '/';
 			} else {
-				$base_uri .= '/'.$uri.'/';
+				$baseUri .= '/'.$uri.'/';
 			}
 
-			$this->_baseUri = $base_uri;
+			$this->_baseUri = $baseUri;
 		}
 
-		return $base_uri;
+		return $baseUri;
 	}
 
 	/**
@@ -265,7 +265,7 @@ class Url implements UrlInterface, InjectionAwareInterface
 	*/
 	private static function replaceMarker($pattern, $named, &$paths, &$replacements, &$position, 
 		&$cursor, &$marker) {
-		$not_valid = false;
+		$notValid = false;
 		/*
 		 * $marker: string index of the start char (e.g. "{")
 		 * $cursor: string index of the character before end (e.g. "}")
@@ -277,42 +277,42 @@ class Url implements UrlInterface, InjectionAwareInterface
 		if($named === true) {
 			$length = $cursor - $marker - 1;	//Length of the name
 			$item = substr($pattern, $marker + 1, $length); //The name
-			$cursor_var = $marker + 1;
+			$cursorVar = $marker + 1;
 			$marker = $marker + 1;
 			for($j = 0; $j < $length; ++$j) {
-				$ch = $pattern[$cursor_var];
+				$ch = $pattern[$cursorVar];
 				if($ch === "\0") {
-					$not_valid = true;
+					$notValid = true;
 					break;
 				}
 				
 				$z = ord($ch);
 				if($j === 0 && !(($z >= 97 && $z <= 122) || ($z >= 65 && $z <= 90))) {
-					$not_valid = true;
+					$notValid = true;
 					break;
 				}
 				
 				if(($z >= 97 && $z <= 122) || ($z >= 65 && $z <= 90) || ($z >= 48 && 
 				$z <= 57) || $ch === '-' || $ch === '_' || $ch === ':') {
 					if($ch === ':') {
-						$variable_length = $cursor_var - $marker;
-						$variable = substr($pattern, $marker, $variable_length);
+						$variableLength = $cursorVar - $marker;
+						$variable = substr($pattern, $marker, $variableLength);
 						break;
 					}
 				} else {
-					$not_valid = true;
+					$notValid = true;
 					break;
 				}
-				$cursor_var++;
+				$cursorVar++;
 			}
 		}
 		
-		if($not_valid === false) {
+		if($notValid === false) {
 			if(isset($paths[$position])) {
 				if($named === true) {
 					if(isset($variable) === true) {
 						$item = $variable;
-						$length = $variable_length;
+						$length = $variableLength;
 					}
 					
 					if(isset($replacements[$item]) === true) {
@@ -375,13 +375,13 @@ class Url implements UrlInterface, InjectionAwareInterface
 
 		$cursor = 1;		//Cursor for $pattern; Ignoring the first character
 		$marker = null;
-		$bracket_count = 0;
-		$parentheses_count = 0;
+		$bracketCount = 0;
+		$parenthesesCount = 0;
 		$intermediate = 0;
 		$ch = null;
-		$route_str = '';
+		$routeStr = '';
 		$position = 1;
-		$looking_placeholder = false;
+		$lookingPlaceholder = false;
 
 		for($i = 1; $i < $l; ++$i) {
 			$ch = $pattern[$cursor];
@@ -389,25 +389,25 @@ class Url implements UrlInterface, InjectionAwareInterface
 				break;
 			}
 
-			if($parentheses_count === 0 && $looking_placeholder === false) {
+			if($parenthesesCount === 0 && $lookingPlaceholder === false) {
 				if($ch === '{') {
-					if($bracket_count === 0) {
+					if($bracketCount === 0) {
 						$marker = $cursor;
 						$intermediate = 0;
 					}
-					++$bracket_count;
+					++$bracketCount;
 				} else {
 					if($ch === '}') {
-						--$bracket_count;
+						--$bracketCount;
 						if($intermediate > 0) {
-							if($bracket_count === 0) {
+							if($bracketCount === 0) {
 								$replace = self::replaceMarker($pattern, true, $paths, $replacements, $position, $cursor, $marker);
 								if(isset($replace) === true) {
 									if(is_string($replace) === false) {
 										$replace = (string)$replace;
 									}
 
-									$route_str .= $replace;
+									$routeStr .= $replace;
 								}
 								++$cursor;
 								continue;
@@ -417,18 +417,18 @@ class Url implements UrlInterface, InjectionAwareInterface
 				}
 			}
 
-			if($bracket_count === 0 && $looking_placeholder === false) {
+			if($bracketCount === 0 && $lookingPlaceholder === false) {
 				if($ch === '(') {
-					if($parentheses_count === 0) {
+					if($parenthesesCount === 0) {
 						$marker = $cursor;
 						$intermediate = 0;
 					}
-					++$parentheses_count;
+					++$parenthesesCount;
 				} else {
 					if($ch === ')') {
-						--$parentheses_count;
+						--$parenthesesCount;
 						if($intermediate > 0) {
-							if($parentheses_count === 0) {
+							if($parenthesesCount === 0) {
 								$replace = self::replaceMarker($pattern, false, $paths, $replacements, $position, $cursor, $marker);
 								
 								if(isset($replace) === true) {
@@ -436,7 +436,7 @@ class Url implements UrlInterface, InjectionAwareInterface
 										$replace = (string)$replace;
 									}
 
-									$route_str .= $replace;
+									$routeStr .= $replace;
 								}
 								++$cursor;
 								continue;
@@ -446,8 +446,8 @@ class Url implements UrlInterface, InjectionAwareInterface
 				}
 			}
 
-			if($bracket_count === 0 && $parentheses_count === 0) {
-				if($looking_placeholder === true) {
+			if($bracketCount === 0 && $parenthesesCount === 0) {
+				if($lookingPlaceholder === true) {
 					if($intermediate > 0) {
 						$chord = ord($ch);
 						if($chord < 97 || $chord > 122 || $i === ($l - 1)) {
@@ -457,33 +457,33 @@ class Url implements UrlInterface, InjectionAwareInterface
 									$replace = (string)$replace;
 								}
 
-								$route_str .= $replace;
+								$routeStr .= $replace;
 							}
 
-							$looking_placeholder = false;
+							$lookingPlaceholder = false;
 							continue;
 						}
 					}
 				} else {
 					if($ch === ':') {
-						$looking_placeholder = true;
+						$lookingPlaceholder = true;
 						$marker = $cursor;
 						$intermediate = 0;
 					}
 				}
 			}
 
-			if($bracket_count > 0 || $parentheses_count > 0 || 
-				$looking_placeholder === true) {
+			if($bracketCount > 0 || $parenthesesCount > 0 ||
+				$lookingPlaceholder === true) {
 				++$intermediate;
 			} else {
-				$route_str .= $ch;
+				$routeStr .= $ch;
 			}
 
 			++$cursor;
 		}
 
-		return $route_str;
+		return $routeStr;
 	}
 
 	/**
@@ -556,22 +556,22 @@ class Url implements UrlInterface, InjectionAwareInterface
 
 			//Check if the router has not previously set
 			if(is_object($router) === false) {
-				$dependency_injector = $this->_dependencyInjector;
-				if(is_object($dependency_injector) === false) {
+				$dependencyInjector = $this->_dependencyInjector;
+				if(is_object($dependencyInjector) === false) {
 					throw new Exception('A dependency injector container is required to obtain the "url" service');
 				}
 
 				//@note no interface validation
-				$this->_router = $dependency_injector->getShared('router');
+				$this->_router = $dependencyInjector->getShared('router');
 				$router = $this->_router;
 			}
 
-			$route_name = $uri['for'];
+			$routeName = $uri['for'];
 
 			//Every route is uniquely differenced by a name
-			$route = $router->getRouteByName($route_name);
+			$route = $router->getRouteByName($routeName);
 			if(is_object($route) === false) {
-				throw new Exception('Cannot obtain a route using the name "'.$route_name.'"');
+				throw new Exception('Cannot obtain a route using the name "'.$routeName.'"');
 			}
 
 			//Replace the patterns by its variables

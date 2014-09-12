@@ -242,26 +242,26 @@ class Application extends Injectable
 
 		//Handle the URI pattern (if any) and get the module config
 		$router->handle($uri);
-		$module_name = $router->getModuleName();
+		$moduleName = $router->getModuleName();
 
 		//If the router doesn't return a valid module we use the default module
-		if(isset($module_name) === false) {
-			$module_name = $this->_defaultModule;
+		if(isset($moduleName) === false) {
+			$moduleName = $this->_defaultModule;
 		} else {
 			//Process the module definition
 			if(is_object($this->_eventsManager) === true) {
-				if($this->_eventsManager->fire('application:beforeStartModule', $this, $module_name) === false) {
+				if($this->_eventsManager->fire('application:beforeStartModule', $this, $moduleName) === false) {
 					return false;
 				}
 			}
 
 			//Check if the module passed by the router is registered in the modules container
-			if(isset($this->_modules[$module_name]) === false) {
-				throw new Exception("Module '".$module_name."' isn't registered in the application container");
+			if(isset($this->_modules[$moduleName]) === false) {
+				throw new Exception("Module '".$moduleName."' isn't registered in the application container");
 			}
 
 			//A module definition must be an array or an object
-			$module = $this->_modules[$module_name];
+			$module = $this->_modules[$moduleName];
 			if(is_array($module) === false && is_object($module) === false) {
 				throw new Exception('Invalid module definition');
 			}
@@ -269,11 +269,11 @@ class Application extends Injectable
 			//An array module definition contains a path to a module definition class
 			if(is_array($module) === true) {
 				//Class name used to load the module definition
-				$class_name = (isset($module['className']) === true ? $module['className'] : 'Module');
+				$className = (isset($module['className']) === true ? $module['className'] : 'Module');
 
 				//If developer specifies a path try to include the file
 				if(isset($module['path']) === true) {
-					if(class_exists($class_name, false) === false) {
+					if(class_exists($className, false) === false) {
 						if(file_exists($module['path']) === true) {
 							require_once($module['path']);
 						} else {
@@ -282,11 +282,11 @@ class Application extends Injectable
 					}
 				}
 
-				$module_object = $this->_dependencyInjector->get($class_name);
+				$moduleObject = $this->_dependencyInjector->get($className);
 
 				// 'registerAutoloaders' and 'registerServices' are automatically called
-				$module_object->registerAutoloaders($this->_dependencyInjector);
-				$module_object->registerServices($this->_dependencyInjector);
+				$moduleObject->registerAutoloaders($this->_dependencyInjector);
+				$moduleObject->registerServices($this->_dependencyInjector);
 			} else {
 				//A module definition object can be a Closure instance
 				if($module instanceof Closure === true) {
@@ -299,9 +299,9 @@ class Application extends Injectable
 
 			//Calling afterStartModule event
 			if(is_object($this->_eventsManager) === true) {
-				$this->_moduleObject = $module_object;
+				$this->_moduleObject = $moduleObject;
 
-				if($this->_eventsManager->fire('application:afterStartModule', $this, $module_name) === false) {
+				if($this->_eventsManager->fire('application:afterStartModule', $this, $moduleName) === false) {
 					return false;
 				}
 			}
@@ -313,16 +313,16 @@ class Application extends Injectable
 		}
 
 		//We get the parameters from the router and assign them to the dispatcher
-		$controller_name = $router->getControllerName();
-		$action_name = $router->getActionName();
+		$controllerName = $router->getControllerName();
+		$actionName = $router->getActionName();
 		$params = $router->getParams();
 		$exact = $router->isExactControllerName();
 
 		$dispatcher = $this->_dependencyInjector->getShared('dispatcher');
 		$dispatcher->setModuleName($router->getModuleName());
 		$dispatcher->setNamespaceName($router->getNamespaceName());
-		$dispatcher->setControllerName($controller_name, $exact);
-		$dispatcher->setActionName($action_name);
+		$dispatcher->setControllerName($controllerName, $exact);
+		$dispatcher->setActionName($actionName);
 		$dispatcher->setParams($params);
 
 		//Start the view component (start output buffering)
@@ -340,13 +340,13 @@ class Application extends Injectable
 		//The dispatcher must return an object
 		$controller = $dispatcher->dispatch();
 
-		$returned_response = false;
+		$returnedResponse = false;
 
 		//Get the latest value returned by an action
-		$possible_response = $dispatcher->getReturnedValue();
-		if(is_object($possible_response) === true) {
+		$possibleResponse = $dispatcher->getReturnedValue();
+		if(is_object($possibleResponse) === true) {
 			//Check if the returned object is already a response
-			$returned_response = $possible_response instanceof ResponseInterface;
+			$returnedResponse = $possibleResponse instanceof ResponseInterface;
 		}
 
 		//Calling afterHandleRequest
@@ -355,23 +355,23 @@ class Application extends Injectable
 		}
 
 		//If the dispatcher returns an object we try to render the view in auto-rendering mode
-		if($returned_response === false) {
+		if($returnedResponse === false) {
 			if(isset($view) === true && is_object($controller) === true) {
-				$render_status = true;
+				$renderStatus = true;
 
 				//This allows to make a custom view
 				if(is_object($this->_eventsManager) === true) {
-					$render_status = $this->_eventsManager->fire('application:viewRender', $this, $view);
+					$renderStatus = $this->_eventsManager->fire('application:viewRender', $this, $view);
 				}
 
 				//Check if the view progress has been treated by the developer
-				if($render_status !== false) {
-					$controller_name = $dispatcher->getControllerName();
-					$action_name = $dispatcher->getActionName();
+				if($renderStatus !== false) {
+					$controllerName = $dispatcher->getControllerName();
+					$actionName = $dispatcher->getActionName();
 					$params = $dispatcher->getParams();
 
 					//Automatic render based on the latest controller executed
-					$view->render($controller_name, $action_name, $params);
+					$view->render($controllerName, $actionName, $params);
 				}
 			}
 		}
@@ -381,7 +381,7 @@ class Application extends Injectable
 			$view->finish();
 		}
 
-		if($returned_response === false) {
+		if($returnedResponse === false) {
 			$response = $this->_dependencyInjector->getShared('response');
 			if(isset($view) === true) {
 				//The content returned by the view is passed to the response service
@@ -389,7 +389,7 @@ class Application extends Injectable
 			}
 		} else {
 			//We don't need to create a response because there is one already
-			$response = $possible_response;
+			$response = $possibleResponse;
 		}
 
 		//Calling beforeSendResponse

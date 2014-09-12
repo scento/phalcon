@@ -62,7 +62,7 @@ class Ini extends Config
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$d = parse_ini_file($filePath, true);
+		@$d = parse_ini_file($filePath, true);
 
 		if($d === false) {
 			throw new Exception('Configuration file '.$filePath." can't be loaded");
@@ -101,11 +101,6 @@ class Ini extends Config
 	 */
 	private static function _parseKey(array $config, $key, $value)
 	{
-		if(is_string($key) === false ||
-			(is_scalar($value) === false && is_array($value) === false)) {
-			throw new Exception('Invalid parameter type.');
-		}
-
 		if(strpos($key, '.') !== false) {
 			list($k, $v) = explode('.', $key, 2);
 			if(empty($k) === false && empty($v) === false) {

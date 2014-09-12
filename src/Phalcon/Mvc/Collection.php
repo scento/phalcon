@@ -184,10 +184,10 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 	public function setId($id)
 	{
 		if(is_object($id) === false) {
-			$models_manager = $this->_modelsManager;
+			$modelsManager = $this->_modelsManager;
 
 			//Check if the model uses implicit ids
-			if($models_manager->isUsingImplicitObjectIds($this) === true) {
+			if($modelsManager->isUsingImplicitObjectIds($this) === true) {
 				$id = new MongoId($id);
 			}
 		}
@@ -426,13 +426,13 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 			throw new Exception('Invalid document');
 		}
 
-		$cloned_collection = clone $collection;
+		$clonedCollection = clone $collection;
 
 		foreach($document as $key => $value) {
-			$cloned_collection->writeAttribute($key, $value);
+			$clonedCollection->writeAttribute($key, $value);
 		}
 
-		return $cloned_collection;
+		return $clonedCollection;
 	}
 
 	/**
@@ -463,7 +463,7 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 		}
 
 		//@note connection must be a mongoDb object?
-		$mongo_collection = $connection->selectCollection($source);
+		$mongoCollection = $connection->selectCollection($source);
 
 		/* Get conditions */
 		if(isset($params[0]) === true) {
@@ -478,24 +478,24 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 
 		/* Perform the find */
 		if(isset($params['fields']) === true) {
-			$documents_cursor = $mongo_collection->find($conditions, $params['fields']);
+			$documentsCursor = $mongoCollection->find($conditions, $params['fields']);
 		} else {
-			$documents_cursor = $mongo_collection->find($conditions);
+			$documentsCursor = $mongoCollection->find($conditions);
 		}
 
 		/* Check if a 'limit' clause was defined */
 		if(isset($params['limit']) === true) {
-			$documents_cursor->limit($params['limit']);
+			$documentsCursor->limit($params['limit']);
 		}
 
 		/* Check if a 'sort' clause was defined */
 		if(isset($params['sort']) === true) {
-			$documents_cursor->sort($params['sort']);
+			$documentsCursor->sort($params['sort']);
 		}
 
 		/* Check if a 'skip' clause was defined */
 		if(isset($params['skip']) === true) {
-			$documents_cursor->skip($params['skip']);
+			$documentsCursor->skip($params['skip']);
 		}
 
 		/* If a group of specific fields are requested we use a 
@@ -507,8 +507,8 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 		/* Get data */
 		if($unique === true) {
 			//Requesting a single result
-			$documents_cursor->rewind();
-			$document = $documents_cursor->current();
+			$documentsCursor->rewind();
+			$document = $documentsCursor->current();
 			if(is_array($document) === true) {
 				//Assign the values to the base object
 				return self::cloneResult($collection, $document);
@@ -520,8 +520,8 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 		//Requesting a complete resultset
 		$collections = array();
 
-		$documents_array = iterator_to_array($documents_cursor);
-		foreach($documents_array as $document) {
+		$documentsArray = iterator_to_array($documentsCursor);
+		foreach($documentsArray as $document) {
 			//Assign the values to the base object
 			$collections[] = self::cloneResult($collection, $document);
 		}
@@ -556,7 +556,7 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 			throw new Exception('Method getSource() returns empty string');
 		}
 
-		$mongo_collection = $connection->selectCollection($source);
+		$mongoCollection = $connection->selectCollection($source);
 
 		/* Parse params */
 		if(isset($params[0]) === true) {
@@ -586,29 +586,29 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 		/* Extended Query */
 		if($simple === false) {
 			//Perform the find
-			$documents_cursor = $mongo_collection->find($conditions);
+			$documentsCursor = $mongoCollection->find($conditions);
 
 			//Check if a 'limit' clause was defined
 			if(isset($params['limit']) === true) {
-				$documents_cursor->limit($params['limit']);
+				$documentsCursor->limit($params['limit']);
 			}
 
 			//Check if a 'sort' clause was defined
 			if(isset($params['sort']) === true) {
-				$documents_cursor->sort($params['sort']);
+				$documentsCursor->sort($params['sort']);
 			}
 
 			//Check if a 'skip' clause was defined
 			if(isset($params['skip']) === true) {
-				$documents_cursor->skip($params['skip']);
+				$documentsCursor->skip($params['skip']);
 			}
 
 			//Only 'count' is supported
-			return count($documents_cursor);
+			return count($documentsCursor);
 		}
 
 		/* Simple query */
-		return $mongo_collection->count($conditions);
+		return $mongoCollection->count($conditions);
 	}
 
 	/**
@@ -907,9 +907,9 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 			}
 
 			//Perform the count using the function provided by the driver
-			$document_count = $collection->count(array('_id' => $this->_id));
+			$documentCount = $collection->count(array('_id' => $this->_id));
 
-			return ($document_count < 0 ? true : false);
+			return ($documentCount < 0 ? true : false);
 		}
 
 		return false;
@@ -1059,11 +1059,11 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 		if(is_object($id) === false) {
 			$collection = new self();
 
-			$models_manager = $collection->getModelsManager();
+			$modelsManager = $collection->getModelsManager();
 
 			//Check if the model use implicit ids
-			$use_implicit_ids = $models_manager->isUsingImplicitObjectIds($collection);
-			if($use_implicit_ids === true) {
+			$useImplicitIds = $modelsManager->isUsingImplicitObjectIds($collection);
+			if($useImplicitIds === true) {
 				$id = new MongoId($id);
 			}
 		} elseif(is_string($id) === false) {
@@ -1252,12 +1252,12 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 
 		if(isset($group['retval']) === true) {
 			if(isset($group['retval'][0]) === true) {
-				$first_retval = $group['retval'][0];
-				if(isset($first_retval['summatory']) === true) {
-					return $first_retval['summatory'];
+				$firstRetval = $group['retval'][0];
+				if(isset($firstRetval['summatory']) === true) {
+					return $firstRetval['summatory'];
 				}
 
-				return $first_retval;
+				return $firstRetval;
 			}
 
 			return $group['retval'];
@@ -1306,8 +1306,8 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 		$collection = $connection->selectCollection($source);
 		if(is_object($id) === false) {
 			//Is the collection using implicit object ids?
-			$use_implicit_ids = $this->_modelsManager->isUsingImplicitObjectIds($this);
-			if($use_implicit_ids === true) {
+			$useImplicitIds = $this->_modelsManager->isUsingImplicitObjectIds($this);
+			if($useImplicitIds === true) {
 				$id = new MongoId($this->_id);
 			}
 		}
@@ -1387,16 +1387,16 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
 			$attributes = unserialize($data);
 			if(is_array($attributes) === true) {
 				//Obtain the default DI
-				$dependency_injector = DI::getDefault();
-				if(is_object($dependency_injector) === false) {
+				$dependencyInjector = DI::getDefault();
+				if(is_object($dependencyInjector) === false) {
 					throw new Exception('A dependency injector container is required to obtain the services related to the ODM');
 				}
 
 				//Update the dependency injector
-				$this->_dependencyInjector = $dependency_injector;
+				$this->_dependencyInjector = $dependencyInjector;
 
 				//Get the default modelsManager service
-				$manager = $dependency_injector->getShared('collectionManager');
+				$manager = $dependencyInjector->getShared('collectionManager');
 				if(is_object($manager) === false) {
 					throw new Exception("The injected service 'collectionManager' is not valid");
 				}

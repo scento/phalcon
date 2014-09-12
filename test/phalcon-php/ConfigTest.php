@@ -167,4 +167,39 @@ class ConfigTest extends BaseTest
 			array(true),
 			'Phalcon\Config\Exception');
 	}
+
+	public function testIni()
+	{
+		$config = new \Phalcon\Config\Adapter\Ini(__DIR__.'/Config/Config.ini');
+
+		$this->assertEquals(isset($config->database->adapter), true);
+		$this->assertEquals($config['database']['adapter'], 'Mysql');
+
+		$this->assertEquals(isset($config['models']['metadata']['adapter']), true);
+		$this->assertEquals($config->models->metadata->adapter, "Memory");
+
+		$this->assertEquals(isset($config['custom']['firstlevel']['secondlevel']['thirdlevel']), true);
+		$this->assertEquals($config['custom']['firstlevel']['secondlevel']['thirdlevel'], 'Data');
+
+		$this->assertEquals($config->offsetExists('standalone'), true);
+		$this->assertEquals($config->offsetGet('standalone'), 1);
+	}
+
+	public function testIniConstructorException()
+	{
+		$this->setExpectedException('\Phalcon\Config\Exception');
+		$config = new \Phalcon\Config\Adapter\Ini(false);
+	}
+
+	public function testIniInvalidFile()
+	{
+		$this->setExpectedException('\Phalcon\Config\Exception');
+		$config = new \Phalcon\Config\Adapter\Ini(__DIR__.'/Config/NotExisting.ini');
+	}
+
+	public function testIniInvalidKey()
+	{
+		$this->setExpectedException('\Phalcon\Config\Exception');
+		$config = new \Phalcon\Config\Adapter\Ini(__DIR__.'/Config/Invalid.ini');
+	}
 }

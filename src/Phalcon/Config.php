@@ -198,7 +198,7 @@ class Config implements ArrayAccess, Countable
 				}
 			} else {
 				if($value instanceof Config === true) {
-					$this->$key = new self($item->toArray());
+					$this->$key = new self($value->toArray());
 				} else {
 					$this->$key = $value;
 				}

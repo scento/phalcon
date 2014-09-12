@@ -56,7 +56,7 @@ class Config implements ArrayAccess, Countable
 	 * @param array $arrayConfig
 	 * @throws ConfigException
 	 */
-	public function __construct($arrayConfig = null)
+	public function __construct($arrayConfig)
 	{
 		if(is_array($arrayConfig) === false) {
 			throw new ConfigException('The configuration must be an Array');
@@ -258,6 +258,7 @@ class Config implements ArrayAccess, Countable
 	 */
 	public static function __set_state($data)
 	{
+		//@warning this function is not compatible with a direct var_export
 		return new Config($data);
 	}
 

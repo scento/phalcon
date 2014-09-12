@@ -122,4 +122,49 @@ class ConfigTest extends BaseTest
 			)
 		));
 	}
+
+	public function testSetState()
+	{
+		$config = new \Phalcon\Config(array(
+			'a' => 'b'
+		));
+		$configCopy = \Phalcon\Config::__set_state($config->toArray());
+		$this->assertEquals($configCopy->toArray(), $config->toArray());
+	}
+
+	public function testConstructorException()
+	{
+		$this->setExpectedException('\Phalcon\Config\Exception');
+		$config = new \Phalcon\Config(false);
+	}
+
+	public function testExceptions()
+	{
+		$config = new \Phalcon\Config(array());
+
+		$this->assertException(
+			array($config, 'offsetExists'),
+			array(new \stdClass()),
+			'Phalcon\Config\Exception');
+
+		$this->assertException(
+			array($config, 'get'), 
+			array(array('Invalid Data')),
+			'Phalcon\Config\Exception');
+
+		$this->assertException(
+			array($config, 'offsetSet'), 
+			array(new \stdClass(), 'Valid Data'),
+			'Phalcon\Config\Exception');
+
+		$this->assertException(
+			array($config, 'offsetUnset'), 
+			array(array('Invalid Data')),
+			'Phalcon\Config\Exception');
+
+		$this->assertException(
+			array($config, 'merge'), 
+			array(true),
+			'Phalcon\Config\Exception');
+	}
 }

@@ -56,6 +56,70 @@ class ConfigTest extends BaseTest
 		$this->assertEquals($config['boolTrue'], null);
 
 		$this->assertEquals($config->toArray(), array());
-		$this->assertEquals($config->count, 0);
+		$this->assertEquals($config->count(), 0);
+
+		$config->a = 'b';
+		$this->assertEquals($config->toArray(), array(
+			'a' => 'b'
+		));
+
+		$anotherConfig = new \Phalcon\Config(array('test' => 'data'));
+		$config['config'] = $anotherConfig;
+		$this->assertEquals($config->toArray(), array(
+			'a' => 'b',
+			'config' => array(
+				'test' => 'data'
+			)
+		));
+
+		unset($config->a);
+		$this->assertEquals($config->count(), 1);
+	}
+
+	public function testMerge()
+	{
+		//Simple merge
+		$configA = new \Phalcon\Config(array(
+			'a' => 'b',
+			'c' => array('d', 'e')
+		));
+		$configB = new \Phalcon\Config(array(
+			'c' => 'f',
+			'g' => 'h'
+		));
+		$configA->merge($configB);
+
+		$this->assertEquals($configA->toArray(), array(
+			'a' => 'b',
+			'c' => 'f',
+			'g' => 'h'
+		));
+
+		//Inherited merge
+		$configC = new \Phalcon\Config(array(
+			'a' => new \Phalcon\Config(array(
+				'b' => 'c'
+			))
+		));
+
+		$configD = new \Phalcon\Config(array(
+			'a' => new \Phalcon\Config(array(
+				'd' => 'e'
+			)),
+			'f' => new \Phalcon\Config(array(
+				'g' => 'h'
+			))
+		));
+		$configC->merge($configD);
+
+		$this->assertEquals($configC->toArray(), array(
+			'a' => array(
+				'b' => 'c',
+				'd' => 'e'
+			),
+			'f' => array(
+				'g' => 'h'
+			)
+		));
 	}
 }

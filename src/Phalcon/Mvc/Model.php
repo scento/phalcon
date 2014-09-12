@@ -1067,13 +1067,13 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
 				return false;
 			}
 
-			$joinhereW = implode(' AND ', $wherePk);
+			$joinWhere = implode(' AND ', $wherePk);
 
 			//The unique key is composed of 3 parts _uniqueKey, _uniqueParams, _uniqueTypes
-			$this->_uniqueKey = $joinhereW;
+			$this->_uniqueKey = $joinWhere;
 			$this->_uniqueParams = $uniqueParams;
 			$this->_uniqueTypes = $uniqueTypes;
-			$uniqueKey = $joinhereW;
+			$uniqueKey = $joinWhere;
 		}
 
 		//If we already know if the record exists we don't check it

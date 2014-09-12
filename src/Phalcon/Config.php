@@ -183,7 +183,7 @@ class Config implements ArrayAccess, Countable
 	{
 		if(is_object($config) === true && $config instanceof Config === true) {
 			$config = $config->toArray(false);
-		} else(is_array($config) === false) {
+		} elseif(is_array($config) === false) {
 			throw new ConfigException('Configuration must be an object or array');
 		}
 

@@ -42,10 +42,10 @@ interface ManagerInterface
 	 * Loads a model throwing an exception if it doesn't exist
 	 *
 	 * @param string $modelName
-	 * @param boolean $newInstance
+	 * @param null|boolean $newInstance
 	 * @return \Phalcon\Mvc\ModelInterface
 	 */
-	public function load($modelName, $newInstance);
+	public function load($modelName, $newInstance = null);
 
 	/**
 	 * Setup a 1-1 relation between two models
@@ -62,24 +62,24 @@ interface ManagerInterface
 	/**
 	 * Setup a relation reverse 1-1  between two models
 	 *
-	 * @param 	Phalcon\Mvc\ModelInterface $model
+	 * @param 	\Phalcon\Mvc\ModelInterface $model
 	 * @param mixed $fields
 	 * @param string $referencedModel
 	 * @param mixed $referencedFields
 	 * @param array|null $options
-	 * @return 	Phalcon\Mvc\Model\RelationInterface
+	 * @return 	\Phalcon\Mvc\Model\RelationInterface
 	 */
 	public function addBelongsTo($model, $fields, $referencedModel, $referencedFields, $options = null);
 
 	/**
 	 * Setup a relation 1-n between two models
 	 *
-	 * @param 	Phalcon\Mvc\ModelInterface $model
+	 * @param 	\Phalcon\Mvc\ModelInterface $model
 	 * @param mixed $fields
 	 * @param string $referencedModel
 	 * @param mixed $referencedFields
 	 * @param array|null $options
-	 * @return 	Phalcon\Mvc\Model\RelationInterface
+	 * @return 	\Phalcon\Mvc\Model\RelationInterface
 	 */
 	public function addHasMany($model, $fields, $referencedModel, $referencedFields, $options = null);
 

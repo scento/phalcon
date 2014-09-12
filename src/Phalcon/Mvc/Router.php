@@ -289,9 +289,9 @@ class Router implements RouterInterface, InjectionAwareInterface
 		} else {
 			//Otherwise use the standard $_SERVER['REQUEST_URI']
 			if(isset($_SERVER['REQUEST_URI']) === true) {
-				$url_parts = explode('?', $_SERVER['REQUEST_URI']);
-				if(empty($url_parts[0]) === false) {
-					return $url_parts[0];
+				$urlParts = explode('?', $_SERVER['REQUEST_URI']);
+				if(empty($urlParts[0]) === false) {
+					return $urlParts[0];
 				}
 			}
 		}
@@ -505,8 +505,8 @@ class Router implements RouterInterface, InjectionAwareInterface
 
 		//Runtime variables
 		$request = null;
-		$current_host_name = null;
-		$route_found = false;
+		$currentHostName = null;
+		$routeFound = false;
 		$matches = null;
 		$parts = array();
 		$params = array();
@@ -552,12 +552,12 @@ class Router implements RouterInterface, InjectionAwareInterface
 				}
 
 				//Check if the current hostname is the same as the route
-				if(is_null($current_host_name) === true) {
-					$current_host_name = $request->getHttpHost();
+				if(is_null($currentHostName) === true) {
+					$currentHostName = $request->getHttpHost();
 				}
 
 				//No HTTP_HOST, maybe in CLI mode?
-				if(is_null($current_host_name) === true) {
+				if(is_null($currentHostName) === true) {
 					continue;
 				}
 
@@ -567,9 +567,9 @@ class Router implements RouterInterface, InjectionAwareInterface
 						$hostname = '#^'.$hostname.'$#';
 					}
 
-					$matched = (preg_match($hostname, $current_host_name) == 0 ? false : true);
+					$matched = (preg_match($hostname, $currentHostName) == 0 ? false : true);
 				} else {
-					$matched = ($current_host_name === $hostname ? true : false);
+					$matched = ($currentHostName === $hostname ? true : false);
 				}
 
 				if($matched === false) {
@@ -580,27 +580,27 @@ class Router implements RouterInterface, InjectionAwareInterface
 			//If the route has parentheses use preg_match
 			$pattern = $route->getCompiledPattern();
 			if(strpos($pattern, '^') !== false) {
-				$route_found = (preg_match($pattern, $uri, $matches) == 0 ? false : true);
+				$routeFound = (preg_match($pattern, $uri, $matches) == 0 ? false : true);
 			} else {
-				$route_found = ($pattern === $uri ? true : false);
+				$routeFound = ($pattern === $uri ? true : false);
 			}
 
 			//Check for beforeMatch conditions
-			if($route_found === true) {
-				$before_match = $route->getBeforeMatch();
-				if(is_null($before_match) === false) {
+			if($routeFound === true) {
+				$beforeMatch = $route->getBeforeMatch();
+				if(is_null($beforeMatch) === false) {
 					//Check first if the callback is callable
-					if(is_callable($before_match) === false) {
+					if(is_callable($beforeMatch) === false) {
 						throw new Exception('Before-Match callback is not callable in matched route');
 					}
 
 					//Call the function
-					$route_found = call_user_func_array($before_match, array($uri, $route, $this));
+					$routeFound = call_user_func_array($beforeMatch, array($uri, $route, $this));
 				}
 			}
 
 			//Apply converters
-			if($route_found === true) {
+			if($routeFound === true) {
 				//Start from the default paths
 				$paths = $route->getPaths();
 				$parts = $paths;
@@ -612,17 +612,17 @@ class Router implements RouterInterface, InjectionAwareInterface
 					foreach($paths as $part => $position) {
 						if(is_string($part) === false || $part[0] !== chr(0)) {
 							if(isset($matches[$position]) === true) {
-								$match_position = $matches[$position];
+								$matchPosition = $matches[$position];
 
 								//Check if the part has a converter
 								if(isset($converters[$part]) === true) {
 									$converter = $converters[$part];
-									$parts[$part] = call_user_func_array($converter, $match_position);
+									$parts[$part] = call_user_func_array($converter, $matchPosition);
 									continue;
 								}
 
 								//Update the parts if there is no coverter
-								$parts[$part] = $match_position;
+								$parts[$part] = $matchPosition;
 							} else {
 								//Apply the converters anyway
 								if(isset($converters[$part]) === true) {
@@ -642,18 +642,18 @@ class Router implements RouterInterface, InjectionAwareInterface
 		}
 
 		//Update the wasMatched property indicating if the route was matched
-		$this->_wasMatched = ($route_found === true ? true : false);
+		$this->_wasMatched = ($routeFound === true ? true : false);
 
 		//The route wasn't found, try to use the not-found paths
-		if($route_found !== true) {
+		if($routeFound !== true) {
 			if(is_null($this->_notFoundPaths) === false) {
 				$parts = $this->_notFoundPaths;
-				$route_found = true;
+				$routeFound = true;
 			}
 		}
 
 		//Check route
-		if($route_found === true) {
+		if($routeFound === true) {
 			//Check for a namespace
 			if(isset($parts['namespace']) === true) {
 				if(is_numeric($parts['namespace']) === false) {
@@ -675,10 +675,10 @@ class Router implements RouterInterface, InjectionAwareInterface
 			}
 
 			//Check for exact controller name
-			$exact_str_identifer = chr(0).'exact';
-			if(isset($parts[$exact_str_identifer]) === true) {
-				$this->_isExactControllerName = $parts[$exact_str_identifer];
-				unset($parts[$exact_str_identifer]);
+			$exactStrIdentifer = chr(0).'exact';
+			if(isset($parts[$exactStrIdentifer]) === true) {
+				$this->_isExactControllerName = $parts[$exactStrIdentifer];
+				unset($parts[$exactStrIdentifer]);
 			} else {
 				$this->_isExactControllerName = false;
 			}
@@ -706,9 +706,9 @@ class Router implements RouterInterface, InjectionAwareInterface
 			//Check for parameters
 			$params = array();
 			if(isset($parts['params']) === true) {
-				$param_str = (string)substr($parts['params'], 1, 0);
-				if(empty($param_str) === false) {
-					$params = explode($param_str, '/');
+				$paramStr = (string)substr($parts['params'], 1, 0);
+				if(empty($paramStr) === false) {
+					$params = explode($paramStr, '/');
 				}
 
 				unset($parts['params']);
@@ -851,32 +851,32 @@ class Router implements RouterInterface, InjectionAwareInterface
 			throw new Exception('The group of routes is not valid');
 		}
 
-		$group_routes = $group->getRoutes();
-		if(empty($group_routes) === true) {
+		$groupRoutes = $group->getRoutes();
+		if(empty($groupRoutes) === true) {
 			throw new Exception('The group of routes does not contain any routes');
 		}
 
 		//Get the before-match condition
-		$before_match = $group->getBeforeMatch();
-		if(is_null($before_match) === false) {
-			foreach($group_routes as $route) {
-				$route->beforeMatch($before_match);
+		$beforeMatch = $group->getBeforeMatch();
+		if(is_null($beforeMatch) === false) {
+			foreach($groupRoutes as $route) {
+				$route->beforeMatch($beforeMatch);
 			}
 		}
 
 		//Get the hostname restrictions
 		$hostname = $group->getHostname();
 		if(is_null($hostname) === false) {
-			foreach($group_routes as $route) {
+			foreach($groupRoutes as $route) {
 				$route->setHostname($hostname);
 			}
 		}
 
 		//Set data
 		if(is_array($this->_routes) === true) {
-			$this->_routes = array_merge($this->_routes, $group_routes);
+			$this->_routes = array_merge($this->_routes, $groupRoutes);
 		} else {
-			$this->_routes = $group_routes;
+			$this->_routes = $groupRoutes;
 		}
 
 		return $this;

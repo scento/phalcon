@@ -210,10 +210,10 @@ class Manager implements InjectionAwareInterface, EventsAwareInterface
 			$this->_initialized = array();
 		}
 
-		$class_name = strtolower(get_class($model));
+		$className = strtolower(get_class($model));
 
 		//Models are just initialized once per request
-		if(isset($this->_initialized[$class_name]) === false) {
+		if(isset($this->_initialized[$className]) === false) {
 			//Call the 'initialize' method if it's implemented
 			if(method_exists($model, 'initialize') === true) {
 				$model->initialize();
@@ -224,7 +224,7 @@ class Manager implements InjectionAwareInterface, EventsAwareInterface
 				$this->_eventsManager->fire('collectionManager:afterInitialize', $this);
 			}
 
-			$this->_initialized[$class_name] = $model;
+			$this->_initialized[$className] = $model;
 			$this->_lastInitialized = $model;
 		}
 	}
@@ -315,15 +315,15 @@ class Manager implements InjectionAwareInterface, EventsAwareInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$entity_name = strtolower(get_class($model));
+		$entityName = strtolower(get_class($model));
 
 		if(is_array($this->_implicitObjectsIds) === false) {
 			$this->_implicitObjectsIds = array();
 		}
 
 		//All collections use by default implicit object ids
-		return (isset($this->_implicitObjectsIds[$entity_name]) === true ?
-			$this->_implicitObjectsIds[$entity_name] : true);
+		return (isset($this->_implicitObjectsIds[$entityName]) === true ?
+			$this->_implicitObjectsIds[$entityName] : true);
 	}
 
 	/**
@@ -343,11 +343,11 @@ class Manager implements InjectionAwareInterface, EventsAwareInterface
 		$service = 'mongo';
 
 		if(is_array($this->_connectionServices) === true) {
-			$entity_name = strtolower(get_class($model));
+			$entityName = strtolower(get_class($model));
 
 			//Check if the model has a custom connection service
-			if(isset($this->_connectionServices[$entity_name]) === true) {
-				$service = $this->_connectionServices[$entity_name];
+			if(isset($this->_connectionServices[$entityName]) === true) {
+				$service = $this->_connectionServices[$entityName];
 			}
 		}
 
@@ -391,9 +391,9 @@ class Manager implements InjectionAwareInterface, EventsAwareInterface
 
 		//A model can have a specific events manager
 		if(is_array($this->_customEventsManager) === true) {
-			$entity_name = strtolower(get_class($model));
-			if(isset($this->_customEventsManager[$entity_name]) === true) {
-				$status = $this->_customEventsManager[$entity_name]->fire('collection:'.$eventName, $model);
+			$entityName = strtolower(get_class($model));
+			if(isset($this->_customEventsManager[$entityName]) === true) {
+				$status = $this->_customEventsManager[$entityName]->fire('collection:'.$eventName, $model);
 			}
 		}
 

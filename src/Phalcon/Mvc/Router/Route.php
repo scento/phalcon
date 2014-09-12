@@ -127,14 +127,14 @@ class Route implements RouteInterface
 		$this->_methods = $httpMethods;
 
 		//Get the unique Id from the static member _uniqueId
-		$unique_id = self::$_uniqueId;
-		if(is_null($unique_id) === true) {
-			$unique_id = 0;
+		$uniqueId = self::$_uniqueId;
+		if(is_null($uniqueId) === true) {
+			$uniqueId = 0;
 		}
 
 		//TODO: Add a function that increases static members
-		$this->_id = $unique_id;
-		self::$_uniqueId = $unique_id + 1;
+		$this->_id = $uniqueId;
+		self::$_uniqueId = $uniqueId + 1;
 	}
 
 	/**
@@ -150,51 +150,51 @@ class Route implements RouteInterface
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$compiled_pattern = $pattern;
+		$compiledPattern = $pattern;
 
 		//If a pattern contains ':', maybe there are placeholders to replace
 		if(strpos($pattern, ':') !== false) {
 			//This is a pattern for valid identifers
-			$id_pattern = '/([a-zA-Z0-9\\_\\-]+)';
+			$idPattern = '/([a-zA-Z0-9\\_\\-]+)';
 
 			//Replace the module part
 			if(strpos($pattern, '/:module') !== false) {
-				$compiled_pattern = str_replace('/:module', $id_pattern, $compiled_pattern);
+				$compiledPattern = str_replace('/:module', $idPattern, $compiledPattern);
 			}
 
 			//Replace the controller placeholder
 			if(strpos($pattern, '/:controller') !== false) {
-				$compiled_pattern = str_replace('/:controller', $id_pattern, $compiled_pattern);
+				$compiledPattern = str_replace('/:controller', $idPattern, $compiledPattern);
 			}
 
 			//Replace the namespace placeholder
 			if(strpos($pattern, '/:namespace') !== false) {
-				$compiled_pattern = str_replace('/:namespace', $id_pattern, $compiled_pattern);
+				$compiledPattern = str_replace('/:namespace', $idPattern, $compiledPattern);
 			}
 
 			//Replace the action placeholder
 			if(strpos($pattern, '/:action') !== false) {
-				$compiled_pattern = str_replace('/:action', $id_pattern, $compiled_pattern);
+				$compiledPattern = str_replace('/:action', $idPattern, $compiledPattern);
 			}
 
 			//Replace the params placeholder
 			if(strpos($pattern, '/:params') !== false) {
-				$compiled_pattern = str_replace('/:params', '(/.*)*', $compiled_pattern);
+				$compiledPattern = str_replace('/:params', '(/.*)*', $compiledPattern);
 			}
 
 			//Replace the int placeholder
 			if(strpos($pattern, '/:int') !== false) {
-				$compiled_pattern = str_replace('/:int', '/([0-9]+)', $compiled_pattern);
+				$compiledPattern = str_replace('/:int', '/([0-9]+)', $compiledPattern);
 			}
 		}
 
 		//Check if the pattern has parantheses in order to add the regex delimiters
-		if(strpos($compiled_pattern, '(') !== false ||
-			strpos($compiled_pattern, '[') !== false) {
-			return '#^'.$compiled_pattern.'$#';
+		if(strpos($compiledPattern, '(') !== false ||
+			strpos($compiledPattern, '[') !== false) {
+			return '#^'.$compiledPattern.'$#';
 		}
 
-		return $compiled_pattern;
+		return $compiledPattern;
 	}
 
 	/**
@@ -236,18 +236,18 @@ class Route implements RouteInterface
 			return false;
 		}
 
-		$bracket_count = 0;
-		$parentheses_count = 0;
+		$bracketCount = 0;
+		$parenthesesCount = 0;
 		$intermediate = 0;
-		$number_matches = 0;
-		$regexp_length = 0;
-		$not_valid = false;
+		$numberMatches = 0;
+		$regexpLength = 0;
+		$notValid = false;
 		$marker = null;
 		$variable = null;
 		$item = null;
 		$regexp = null;
-		$cursor_var = null;
-		$route_str = '';
+		$cursorVar = null;
+		$routeStr = '';
 		$cursor = 0;
 
 		$l = strlen($str);
@@ -258,26 +258,26 @@ class Route implements RouteInterface
 				break;
 			}
 
-			if($parentheses_count === 0) {
+			if($parenthesesCount === 0) {
 				if($ch === '{') {
-					if($bracket_count === 0) {
+					if($bracketCount === 0) {
 						$marker = $i;
 						$intermediate = 0;
-						$not_valid = false;
+						$notValid = false;
 					}
-					++$bracket_count;
+					++$bracketCount;
 				} elseif($ch === '}') {
-					--$bracket_count;
+					--$bracketCount;
 					if($intermediate > 0) {
-						if($bracket_count === 0) {
-							$number_matches++;
+						if($bracketCount === 0) {
+							$numberMatches++;
 							$variable = null;
 							$length = $cursor - $marker - 1;
 							$item = substr($str, $marker + 1, $length);
-							$cursor_var = $marker + 1;
+							$cursorVar = $marker + 1;
 							$marker = $marker + 1;
 							for($j = 0; $j < $length; ++$j) {
-								$ch = $str[$cursor_var];
+								$ch = $str[$cursorVar];
 								$cha = ord($ch);
 
 								if($ch === "\0") {
@@ -285,67 +285,67 @@ class Route implements RouteInterface
 								}
 
 								if($j === 0 && !(($cha >= 97 && $cha <= 122) || ($cha >= 65 && $cha <= 90))) {
-									$not_valid = true;
+									$notValid = true;
 									break;
 								}
 
 								if(($cha >= 97 && $cha <= 122) || ($cha >= 65 && $cha <= 90) || ($cha >= 48 && $cha <= 57) || $ch === '-' || $ch === '_' || $ch === ':') {
 									if($ch === ':') {
-										$regexp_length = $length - $j - 1;
-										$variable_length = $cursor_var - $marker;
-										$variable = substr($str, $marker, $variable_length);
-										$regexp = substr($str, $cursor_var + 1, $regexp_length);
+										$regexpLength = $length - $j - 1;
+										$variableLength = $cursorVar - $marker;
+										$variable = substr($str, $marker, $variableLength);
+										$regexp = substr($str, $cursorVar + 1, $regexpLength);
 										break;
 									}
 								} else {
-									$not_valid = true;
+									$notValid = true;
 									break;
 								}
 
-								$cursor_var++;
+								$cursorVar++;
 							}
 
-							if($not_valid === false) {
-								$tmp = $number_matches;
+							if($notValid === false) {
+								$tmp = $numberMatches;
 								if(isset($variable) === true) {
-									if($regexp_length > 0) {
+									if($regexpLength > 0) {
 										if($regexp === null) {
 											throw new Exception('Invalid assumption.');
 										}
 
 										//Check if we need to add parentheses to the expressions
-										$found_pattern = 0;
-										for($k = 0; $k < $regexp_length; ++$k) {
+										$foundPattern = 0;
+										for($k = 0; $k < $regexpLength; ++$k) {
 											if($regexp[$k] === "\0") {
 												break;
 											}
 
-											if($found_pattern === false) {
+											if($foundPattern === false) {
 												if($regexp[$k] === '(') {
-													$found_pattern = 1;
+													$foundPattern = 1;
 												}
 											} else {
 												if($regexp[$k] === ')') {
-													$found_pattern = 2;
+													$foundPattern = 2;
 													break;
 												}
 											}
 										}
 
-										if($found_pattern !== 2) {
-											$route_str .= '('.$regexp.')';
+										if($foundPattern !== 2) {
+											$routeStr .= '('.$regexp.')';
 										} else {
-											$route_str .= $regexp;
+											$routeStr .= $regexp;
 										}
 										$matches[$variable] = $tmp;
 									}
 								} else {
-									$route_str .= '([^/]*)';
+									$routeStr .= '([^/]*)';
 									$matches[$item] = $tmp;
 								}
 							}
 						} else {
-							$route_str .= '{'.$item.'}';
+							$routeStr .= '{'.$item.'}';
 						}
 
 						$cursor++;
@@ -354,29 +354,29 @@ class Route implements RouteInterface
 				}
 			}
 
-			if($bracket_count === 0) {
+			if($bracketCount === 0) {
 				if($ch === '(') {
-					$parentheses_count++;
+					$parenthesesCount++;
 				} else {
 					if($ch === ')') {
-						$parentheses_count--;
-						if($parentheses_count === 0) {
-							$number_matches++;
+						$parenthesesCount--;
+						if($parenthesesCount === 0) {
+							$numberMatches++;
 						}
 					}
 				}
 			}
 
-			if($bracket_count > 0) {
+			if($bracketCount > 0) {
 				$intermediate++;
  			} else {
- 				$route_str .= $ch;
+ 				$routeStr .= $ch;
  			}
 
  			$cursor++;
 		}
 
-		return $route_str;
+		return $routeStr;
 	}
 
 	/**
@@ -392,80 +392,80 @@ class Route implements RouteInterface
 			throw new Exception('The pattern must be string');
 		}
 
-		$original_pattern = $pattern;
+		$originalPattern = $pattern;
 
 		if(is_string($paths) === true) {
-			$module_name = null;
-			$controller_name = null;
-			$action_name = null;
+			$moduleName = null;
+			$controllerName = null;
+			$actionName = null;
 
 			//Explode the short paths using the :: separator
 			$parts = explode('::', $paths);
-			$number_parts = count($parts);
+			$numberParts = count($parts);
 
 			//Create the array paths dynamically
-			switch($number_parts) {
+			switch($numberParts) {
 				case 3:
-					$module_name = $parts[0];
-					$controller_name = $parts[1];
-					$action_name = $parts[2];
+					$moduleName = $parts[0];
+					$controllerName = $parts[1];
+					$actionName = $parts[2];
 					break;
 				case 2:
-					$controller_name = $parts[0];
-					$action_name = $parts[1];
+					$controllerName = $parts[0];
+					$actionName = $parts[1];
 					break;
 				case 1:
-					$controller_name = $parts[0];
+					$controllerName = $parts[0];
 					break;
 				//@note no default
 			}
 
-			$route_paths = array();
+			$routePaths = array();
 
 			//Process module name
-			if(is_null($module_name) === false) {
-				$route_paths['module'] = $module_name;
+			if(is_null($moduleName) === false) {
+				$routePaths['module'] = $moduleName;
 			}
 
 			//Process controller name
-			if(is_null($controller_name) === false) {
+			if(is_null($controllerName) === false) {
 				//Check if we need to obtain the namespace 
-				if(strpos($controller_name, '\\') !== false) {
-					$class_with_namespace = get_class($controller_name);
+				if(strpos($controllerName, '\\') !== false) {
+					$classWithNamespace = get_class($controllerName);
 
 					//Extract the real class name from the namespaced class
 					//Extract the namespace from the namespaced class
-					$pos = strrpos($class_with_namespace, '\\');
+					$pos = strrpos($classWithNamespace, '\\');
 					if($pos !== false) {
-						$namespace_name = substr($class_with_namespace, 0, $pos);
-						$real_class_name = substr($class_with_namespace, $pos);
+						$namespaceName = substr($classWithNamespace, 0, $pos);
+						$realClassName = substr($classWithNamespace, $pos);
 					} else {
-						$real_class_name = $class_with_namespace;
+						$realClassName = $classWithNamespace;
 					}
 
 					//Update the namespace
-					if(isset($namespace_name) === true) {
-						$route_paths['namespace'] = $namespace_name;
+					if(isset($namespaceName) === true) {
+						$routePaths['namespace'] = $namespaceName;
 					}
 				} else {
-					$real_class_name = $controller_name;
+					$realClassName = $controllerName;
 				}
 
 				//Always pass the controller to lowercase
-				$real_class_name = Text::uncamelize($real_class_name);
+				$realClassName = Text::uncamelize($realClassName);
 
 				//Update the controller path
-				$route_paths['controller'] = $real_class_name;
+				$routePaths['controller'] = $realClassName;
 			}
 
 			//Process action name
-			if(is_null($action_name) === false) {
-				$route_paths['action'] = $action_name;
+			if(is_null($actionName) === false) {
+				$routePaths['action'] = $actionName;
 			}
 		} elseif(is_array($paths) === true) {
-			$route_paths = $paths;
+			$routePaths = $paths;
 		} elseif(is_null($paths) === true) {
-			$route_paths = array();
+			$routePaths = array();
 		} else {
 			throw new Exception('The route contains invalid paths');
 		}
@@ -474,7 +474,7 @@ class Route implements RouteInterface
 		if(Text::startsWith($pattern, '#') === false) {
 			if(strpos($pattern, '{') !== false) {
 				//The route has named parameters so we need to extract them
-				$pattern = self::extractNamedParameters($pattern, $route_paths);
+				$pattern = self::extractNamedParameters($pattern, $routePaths);
 			}
 
 			//Transform the route's pattern to a regular expression
@@ -482,9 +482,9 @@ class Route implements RouteInterface
 		}
 
 		//Update member variables
-		$this->_pattern = $original_pattern;
+		$this->_pattern = $originalPattern;
 		$this->_compiledPattern = $pattern;
-		$this->_paths = $route_paths;
+		$this->_paths = $routePaths;
 	}
 
 	/**

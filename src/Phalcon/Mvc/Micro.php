@@ -397,8 +397,8 @@ class Micro extends Injectable implements EventsAwareInterface, InjectionAwareIn
 		}
 
 		//Get the main handler
-		$main_handler = $collection->getHandler();
-		if(empty($main_handler) === true) {
+		$mainHandler = $collection->getHandler();
+		if(empty($mainHandler) === true) {
 			throw new Exception('The collection requires a main handler');
 		}
 
@@ -410,7 +410,7 @@ class Micro extends Injectable implements EventsAwareInterface, InjectionAwareIn
 		if(is_array($handlers) === true) {
 			//Check if hander is lazy
 			if($collection->isLazy() === true) {
-				$main_handler = new LazyLoader($main_handler);
+				$mainHandler = new LazyLoader($mainHandler);
 			}
 
 			//Get the main prefix for the collection
@@ -422,21 +422,21 @@ class Micro extends Injectable implements EventsAwareInterface, InjectionAwareIn
 
 				$methods = $handler[0];
 				$pattern = $handler[1];
-				$sub_handler = $handler[2];
+				$subHandler = $handler[2];
 
 				//Create a real handler
 				if(empty($prefix) === false) {
 					if($pattern !== '/') {
-						$prefixed_pattern = $prefix.$pattern;
+						$prefixedPattern = $prefix.$pattern;
 					} else {
-						$prefixed_pattern = $prefix;
+						$prefixedPattern = $prefix;
 					}
 				} else {
-					$prefixed_pattern = $pattern;
+					$prefixedPattern = $pattern;
 				}
 
 				//Map the route manually
-				$route = $this->map($prefixed_pattern, array($main_handler, $sub_handler));
+				$route = $this->map($prefixedPattern, array($mainHandler, $subHandler));
 				if(isset($methods) === true) {
 					$route->via($methods);
 				}
@@ -607,15 +607,15 @@ class Micro extends Injectable implements EventsAwareInterface, InjectionAwareIn
 		$router->handle($uri);
 
 		//Check if one route was matched
-		$matched_route = $router->getMatchedRoute();
-		if(is_object($matched_route) === true) {
-			$route_id = $matched_route->getRouteId();
-			if(isset($this->_handlers[$route_id]) === false) {
+		$matchedRoute = $router->getMatchedRoute();
+		if(is_object($matchedRoute) === true) {
+			$routeId = $matchedRoute->getRouteId();
+			if(isset($this->_handlers[$routeId]) === false) {
 				throw new Exception("Matched route doesn't have an associate handler");
 			}
 
 			//Updating active handler
-			$handler = $this->_handlers[$route_id];
+			$handler = $this->_handlers[$routeId];
 			$this->_activeHandler = $handler;
 
 			//Calling beforeExecuteRoute event
@@ -787,7 +787,7 @@ class Micro extends Injectable implements EventsAwareInterface, InjectionAwareIn
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$this->_activeHandler = $active;
+		$this->_activeHandler = $activeHandler;
 	}
 
 	/**

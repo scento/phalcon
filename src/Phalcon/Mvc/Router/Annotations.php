@@ -174,7 +174,7 @@ class Annotations extends Router implements InjectionAwareInterface, RouterInter
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$annotations_service = null;
+		$annotationsService = null;
 
 		if($this->_processed === false) {
 			if(is_array($this->_handlers) === true) {
@@ -187,48 +187,48 @@ class Annotations extends Router implements InjectionAwareInterface, RouterInter
 							}
 						}
 
-						if(is_object($annotations_service) === false) {
+						if(is_object($annotationsService) === false) {
 							if(is_object($this->_dependencyInjector) === false) {
 								throw new Exception("A dependency injection container is required to access the 'annotations' service");
 							}
 
-							$annotations_service = $this->_dependencyInjector->getShared('annotations');
+							$annotationsService = $this->_dependencyInjector->getShared('annotations');
 							//@note no interface validation
 						}
 
 						//The controller must be in position 1
 						if(strpos($scope[1], '\\') !== false) {
 							//Extract the real class name from the namespaced class
-							$class_with_namespace = get_class($handler);
+							$classWithNamespace = get_class($handler);
 
 							//Extract the real class name from the namespaced class
 							//Extract the namespace from the namespaced class
-							$pos = strrpos($class_with_namespace, '\\');
+							$pos = strrpos($classWithNamespace, '\\');
 							if($pos !== false) {
-								$namespace_name = substr($class_with_namespace, 0, $pos);
-								$controller_name = substr($class_with_namespace, $pos);
+								$namespaceName = substr($classWithNamespace, 0, $pos);
+								$controllerName = substr($classWithNamespace, $pos);
 							} else {
-								$controller_name = $class_with_namespace;
-								$namespace_name = null;
+								$controllerName = $classWithNamespace;
+								$namespaceName = null;
 							}
 
 							$this->_routePrefix = null;
 
 							//Check if the scope has a module associated
 							if(isset($scope[2]) === true) {
-								$module_name = $scope[2];
+								$moduleName = $scope[2];
 							} else {
-								$module_name = null;
+								$moduleName = null;
 							}
 
 							//Get the annotations from the class
-							$handler_annotations = $annotations_service->get($handler.$this->_controllerSuffix);
+							$handlerAnnotations = $annotationsService->get($handler.$this->_controllerSuffix);
 
 							//Process class annotations
-							$class_annotations = $handler_annotations->getClassAnnotations();
-							if(is_object($class_annotations) === true) {
+							$classAnnotations = $handlerAnnotations->getClassAnnotations();
+							if(is_object($classAnnotations) === true) {
 								//Process class annotaitons
-								$annotations = $class_annotations->getAnnotations();
+								$annotations = $classAnnotations->getAnnotations();
 								if(is_array($annotations) === true) {
 									foreach($annotations as $annotation) {
 										$this->processControllerAnnotation($annotation);
@@ -237,13 +237,13 @@ class Annotations extends Router implements InjectionAwareInterface, RouterInter
 							}
 
 							//Process method annotations
-							$method_annotations = $handler_annotations->getMethodsAnnotations();
-							if(is_array($method_annotations) === true) {
-								foreach($method_annotations as $method => $collection) {
+							$methodAnnotations = $handlerAnnotations->getMethodsAnnotations();
+							if(is_array($methodAnnotations) === true) {
+								foreach($methodAnnotations as $method => $collection) {
 									if(is_object($collection) === true) {
 										$annotations = $collection->getAnnotations();
 										foreach($annotations as $annotation) {
-											$this->processActionAnnotation($module_name, $namespace_name, $controller_name, $method, $annotation);
+											$this->processActionAnnotation($moduleName, $namespaceName, $controllerName, $method, $annotation);
 										}
 									}
 								}
@@ -312,24 +312,24 @@ class Annotations extends Router implements InjectionAwareInterface, RouterInter
 
 		//Find if the route is for adding routes
 		if($name === 'Route') {
-			$is_route = true;
+			$isRoute = true;
 		} elseif($name === 'Get') {
-			$is_route = true;
+			$isRoute = true;
 			$methods = 'GET';
 		} elseif($name === 'Post') {
-			$is_route = true;
+			$isRoute = true;
 			$methods = 'POST';
 		} elseif($name === 'Put') {
-			$is_route = true;
+			$isRoute = true;
 			$methods = 'PUT';
 		} elseif($name === 'Options') {
-			$is_route = true;
+			$isRoute = true;
 			$methods = 'OPTIONS';
 		}
 		//@note no DELETE or HEAD routes?!
 
-		if($is_route === true) {
-			$action_name = strtolower(str_replace($this->_actionSuffix, '', $action));
+		if($isRoute === true) {
+			$actionName = strtolower(str_replace($this->_actionSuffix, '', $action));
 
 			//Check for existing paths in the annotation
 			$paths = $annotation->getNamedParameter('paths');
@@ -348,7 +348,7 @@ class Annotations extends Router implements InjectionAwareInterface, RouterInter
 			}
 
 			$paths['controller'] = $controller;
-			$paths['action'] = $action_name;
+			$paths['action'] = $actionName;
 			$paths["\0exact"] = true;
 
 			$value = $annotation->getArgument(0);
@@ -361,7 +361,7 @@ class Annotations extends Router implements InjectionAwareInterface, RouterInter
 					$uri = $this->_routePrefix;
 				}
 			} else {
-				$uri = $this->_routePrefix.$action_name;
+				$uri = $this->_routePrefix.$actionName;
 			}
 
 			//Add the route to the router
@@ -388,14 +388,14 @@ class Annotations extends Router implements InjectionAwareInterface, RouterInter
 
 			$converts = $annotation->getNamedParameter('conversors');
 			if(is_array($converts) === true) {
-				foreach($converts as $conversor_param => $covert) {
-					$route->convert($conversor_param, $convert);
+				foreach($converts as $conversorParam => $covert) {
+					$route->convert($conversorParam, $convert);
 				}
 			}
 
-			$route_name = $annotation->getNamedParameter('name');
-			if(is_string($route_name) === true) {
-				$route->setName($route_name);
+			$routeName = $annotation->getNamedParameter('name');
+			if(is_string($routeName) === true) {
+				$route->setName($routeName);
 			}
 
 			return true;

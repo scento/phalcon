@@ -10,11 +10,8 @@
 */
 namespace Phalcon\Config\Adapter;
 
-use \Countable,
-	\ArrayAccess,
-	\Phalcon\Config,
+use \Phalcon\Config,
 	\Phalcon\Config\Exception;
-	
 
 /**
  * Phalcon\Config\Adapter\Json
@@ -37,7 +34,7 @@ use \Countable,
  *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/config/adapter/json.c
  */
-class Json extends Config implements Countable, ArrayAccess
+class Json extends Config 
 {
 	/**
 	 * \Phalcon\Config\Adapter\Json constructor
@@ -47,23 +44,19 @@ class Json extends Config implements Countable, ArrayAccess
 	 */
 	public function __construct($filePath)
 	{
-		if(is_string($filePath) === false)
-		{
+		if(is_string($filePath) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 
-		$contents = file_get_contents($filePath);
-		if(is_string($contents) === true)
-		{
+		@$contents = file_get_contents($filePath);
+		if(is_string($contents) === true) {
 			$array = json_decode($contents, true);
 
-			if(json_last_error() !== \JSON_ERROR_NONE)
-			{
+			if(json_last_error() !== \JSON_ERROR_NONE) {
 				throw new Exception('Invalid json file.');
 			}
 
 			parent::__construct($array);
-
 		} else {
 			throw new Exception('Unable to read json file.');
 		}

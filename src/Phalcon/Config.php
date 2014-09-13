@@ -119,7 +119,7 @@ class Config implements ArrayAccess, Countable
 	 *</code>
 	 *
 	 * @param scalar $index
-	 * @return string|null
+	 * @return mixed
 	 * @throws ConfigException
 	 */
 	public function offsetGet($index)

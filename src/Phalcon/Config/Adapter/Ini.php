@@ -11,9 +11,7 @@
  */
 namespace Phalcon\Config\Adapter;
 
-use \ArrayAccess,
-	\Countable,
-	\Phalcon\Config,
+use \Phalcon\Config,
 	\Phalcon\Config\Exception;
 
 /**

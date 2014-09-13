@@ -1,0 +1,27 @@
+{
+	"standalone": 1,
+	"database": {
+		"adapter": "Mysql",
+		"host": "localhost",
+		"username": "scott",
+		"password": "cheetah",
+		"dbname": "test_db"
+	},
+	"phalcon": {
+		"controllersDir": "../app/controllers/",
+		"modelsDir": "../app/models/",
+		"viewsDir": "../app/views/"
+	},
+	"models": {
+		"metadata": {
+			"adapter": "Memory"
+		}
+	},
+	"custom": {
+		"firstlevel": {
+			"secondlevel": {
+				"thirdlevel": "Data"
+			}
+		}
+	}
+}

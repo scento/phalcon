@@ -185,10 +185,33 @@ class ConfigTest extends BaseTest
 		$this->assertEquals($config->offsetGet('standalone'), 1);
 	}
 
+	public function testJson()
+	{
+		$config = new \Phalcon\Config\Adapter\Json(__DIR__.'/Config/Config.json');
+
+		$this->assertEquals(isset($config->database->adapter), true);
+		$this->assertEquals($config['database']['adapter'], 'Mysql');
+
+		$this->assertEquals(isset($config['models']['metadata']['adapter']), true);
+		$this->assertEquals($config->models->metadata->adapter, "Memory");
+
+		$this->assertEquals(isset($config['custom']['firstlevel']['secondlevel']['thirdlevel']), true);
+		$this->assertEquals($config['custom']['firstlevel']['secondlevel']['thirdlevel'], 'Data');
+
+		$this->assertEquals($config->offsetExists('standalone'), true);
+		$this->assertEquals($config->offsetGet('standalone'), 1);
+	}
+
 	public function testIniConstructorException()
 	{
 		$this->setExpectedException('\Phalcon\Config\Exception');
 		$config = new \Phalcon\Config\Adapter\Ini(false);
+	}
+
+	public function testJsonConstructorException()
+	{
+		$this->setExpectedException('\Phalcon\Config\Exception');
+		$config = new \Phalcon\Config\Adapter\Json(false);
 	}
 
 	public function testIniInvalidFile()
@@ -197,9 +220,21 @@ class ConfigTest extends BaseTest
 		$config = new \Phalcon\Config\Adapter\Ini(__DIR__.'/Config/NotExisting.ini');
 	}
 
-	public function testIniInvalidKey()
+	public function testJsonInvalidFile()
+	{
+		$this->setExpectedException('\Phalcon\Config\Exception');
+		$config = new \Phalcon\Config\Adapter\Json(__DIR__.'/Config/NotExisting.json');
+	}
+
+	public function testIniInvalidFormat()
 	{
 		$this->setExpectedException('\Phalcon\Config\Exception');
 		$config = new \Phalcon\Config\Adapter\Ini(__DIR__.'/Config/Invalid.ini');
+	}
+
+	public function testJsonInvalidFormat()
+	{
+		$this->setExpectedException('\Phalcon\Config\Exception');
+		$config = new \Phalcon\Config\Adapter\Json(__DIR__.'/Config/Invalid.json');
 	}
 }

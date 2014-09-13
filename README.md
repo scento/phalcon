@@ -21,8 +21,9 @@ It is possible to generate a low-level PHPDoc-based documentation of the entire 
 
 ##Branching
 
-Despite of the original branching system for releases, we will use tags to mark releases. As long as the version `1.2.6` is incomplete, all development 
-progress is part of the `master` branch. After the first release the development version can be found in the `dev` branch.
+Although the cphalcon project uses branches to manage releases, this project uses tags.
+After the first release the development version can be found in the `dev` branch and the stable 
+version is `master`. We suggest the usage of feature branches if you want to submit something.
 
 ##License
 

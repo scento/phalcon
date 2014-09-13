@@ -21,7 +21,8 @@ It is possible to generate a low-level PHPDoc-based documentation of the entire 
 
 ##Branching
 
-This project will in future use the original Phalcon project's branching system. As long as the version `1.2.6` is not working, all development progress is part of the `master` branch.
+Despite of the original branching system for releases, we will use tags to mark releases. As long as the version `1.2.6` is incomplete, all development 
+progress is part of the `master` branch. After the first release the development version can be found in the `dev` branch.
 
 ##License
 

@@ -65,13 +65,13 @@ abstract class Text
 	 *
 	 * @param string $str
 	 * @return string
+	 * @throws Exception
 	 */
 	public static function camelize($str)
 	{
 		if(is_string($str) === false) {
-			//@note triggers E_USER_ERROR instead of E_ERROR
-			trigger_error('Invalid arguments supplied for camelize()', \E_USER_ERROR);
-			return '';
+			//@warning The Exception is an E_ERROR in the original API
+			throw new Exception('Invalid arguments supplied for camelize()');
 		}
 
 		$l = strlen($str);
@@ -106,14 +106,14 @@ abstract class Text
 	 *
 	 * @param string $str
 	 * @return string
+	 * @throws Exception
 	 */
 	public static function uncamelize($str)
 	{
 		if(is_string($str) === false) {
-			//@note triggers E_USER_ERROR instead of E_ERROR
+			//@warning The Exception is an E_ERROR in the original API
 			//@note changed "camelize" to "uncamelize"
-			trigger_error('Invalid arguments supplied for uncamelize()', \E_USER_ERROR);
-			return '';
+			throw new Exception('Invalid arguments supplied for uncamelize()');
 		}
 
 		$l = strlen($str);
@@ -148,7 +148,7 @@ abstract class Text
 	 *</code>
 	 *
 	 * @param string $str
-	 * @param string $separator
+	 * @param string|null $separator
 	 * @return string
 	 * @throws Exception
 	 */
@@ -185,19 +185,22 @@ abstract class Text
 	 *
 	 * @param int $type
 	 * @param int|null $length
-	 * @return string|null
+	 * @return string
+	 * @throws Exception
 	 */
 	public static function random($type, $length = null)
 	{
 		if(is_int($type) === false || $type < self::RANDOM_ALNUM ||
 			$type > self::RANDOM_NOZERO) {
-			return null;
+			//@warning The function returns NULL in the original API
+			throw new Exception('Invalid parameter type.');
 		}
 
 		if(is_null($length) === true) {
 			$length = 8;
 		} elseif(is_int($length) === false) {
-			return null;
+			//@warning The function returns NULL in the original API
+			throw new Exception('Invalid parameter type.');
 		}
 
 		//@note this function is not always usable for cryptographic usage
@@ -270,6 +273,7 @@ abstract class Text
 		if(is_string($str) === false || is_string($start) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
+		
 		if(is_null($ignoreCase) === false && $ignoreCase === true) {
 			return (stripos($str, $start) === 0 ? true : false);
 		} else {

@@ -16,7 +16,7 @@ class TextTest extends BaseTest
 
 	public function testCamelizeException()
 	{
-		$this->setExpectedException('PHPUnit_Framework_Error');
+		$this->setExpectedException('\Phalcon\Exception');
 		\Phalcon\Text::camelize(false);
 	}
 
@@ -30,7 +30,7 @@ class TextTest extends BaseTest
 
 	public function testUncamelizeException()
 	{
-		$this->setExpectedException('PHPUnit_Framework_Error');
+		$this->setExpectedException('\Phalcon\Exception');
 		\Phalcon\Text::uncamelize(1.2);
 	}
 
@@ -100,13 +100,28 @@ class TextTest extends BaseTest
 		$this->assertEquals(strlen($generated), 8);
 	}
 
-	public function testRandomStrangeExceptionBehavior()
+	public function testRandomExceptions()
 	{
-		$this->assertTrue(is_null(\Phalcon\Text::random(-1)));
-		$this->assertTrue(is_null(\Phalcon\Text::random(5)));
-		$this->assertTrue(is_null(\Phalcon\Text::random(false)));
-		$this->assertTrue(is_null(\Phalcon\Text::random(\Phalcon\Text::RANDOM_NOZERO, 'false')));
-		$this->assertTrue(is_null(\Phalcon\Text::random(\Phalcon\Text::RANDOM_NOZERO, false)));
+		$this->assertException(
+			array('\Phalcon\Text', 'random'),
+			array(-1),
+			'Phalcon\Exception');
+		$this->assertException(
+			array('\Phalcon\Text', 'random'),
+			array(5),
+			'Phalcon\Exception');
+		$this->assertException(
+			array('\Phalcon\Text', 'random'),
+			array(false),
+			'Phalcon\Exception');
+		$this->assertException(
+			array('\Phalcon\Text', 'random'),
+			array(\Phalcon\Text::RANDOM_NOZERO, 'false'),
+			'Phalcon\Exception');
+		$this->assertException(
+			array('\Phalcon\Text', 'random'),
+			array(\Phalcon\Text::RANDOM_NOZERO, false),
+			'Phalcon\Exception');
 	}
 
 	public function testStartsWith()

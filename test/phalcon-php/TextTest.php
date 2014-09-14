@@ -113,7 +113,7 @@ class TextTest extends BaseTest
 	{
 		$this->assertTrue(\Phalcon\Text::startsWith('Hello', 'He'));
 		$this->assertFalse(\Phalcon\Text::startsWith('Hello', 'he'));
-		$this->assertTrue(\Phalcon\Text::startsWith('Hello', 'he', false));
+		$this->assertTrue(\Phalcon\Text::startsWith('Hello', 'he', true));
 		$this->assertFalse(\Phalcon\Text::startsWith('Hello', 'he', 3));
 	}
 
@@ -127,7 +127,7 @@ class TextTest extends BaseTest
 	{
 		$this->assertTrue(\Phalcon\Text::endsWith('Hello', 'llo'));
 		$this->assertFalse(\Phalcon\Text::endsWith('Hello', 'LLO'));
-		$this->assertTrue(\Phalcon\Text::endsWith('Hello', 'LLO', false));
+		$this->assertTrue(\Phalcon\Text::endsWith('Hello', 'LLO', true));
 		$this->assertFalse(\Phalcon\Text::endsWith('Hello', 'LLO', 3));
 	}
 
@@ -142,7 +142,6 @@ class TextTest extends BaseTest
 		$this->assertEquals(\Phalcon\Text::lower('StrangeText'), 'strangetext');
 		$this->assertEquals(\Phalcon\Text::lower('Nothing_ToLower'), 'nothing_tolower');
 		$this->assertEquals(\Phalcon\Text::lower('already'), 'already');
-		$this->assertEquals(\Phalcon\Text::lower('Ümlaute'), 'ümlaute');
 	}
 
 	public function testLowerException()
@@ -156,7 +155,6 @@ class TextTest extends BaseTest
 		$this->assertEquals(\Phalcon\Text::upper('pleaseUpperThisText'), 'PLEASEUPPERTHISTEXT');
 		$this->assertEquals(\Phalcon\Text::upper('ALREADY'), 'ALREADY');
 		$this->assertEquals(\Phalcon\Text::upper('SPECIAL_CHARs'), 'SPECIAL_CHARS');
-		$this->assertEquals(\Phalcon\Text::upper('üMLAUTE'), 'ÜMLAUTE');
 	}
 
 	public function testUpperException()

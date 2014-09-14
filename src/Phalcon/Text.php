@@ -154,6 +154,10 @@ abstract class Text
 	 */
 	public static function increment($str, $separator = null)
 	{
+		if(is_string($str) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+
 		if(is_null($separator) === true) {
 			$separator = '_';
 		} elseif(is_string($separator) === false) {
@@ -185,7 +189,8 @@ abstract class Text
 	 */
 	public static function random($type, $length = null)
 	{
-		if(is_int($type) === false || $type > self::RANDOM_NOZERO) {
+		if(is_int($type) === false || $type < self::RANDOM_ALNUM ||
+			$type > self::RANDOM_NOZERO) {
 			return null;
 		}
 
@@ -251,12 +256,12 @@ abstract class Text
 	 *<code>
 	 *	echo \Phalcon\Text::startsWith("Hello", "He"); // true
 	 *	echo \Phalcon\Text::startsWith("Hello", "he"); // false
-	 *	echo \Phalcon\Text::startsWith("Hello", "he", false); // true
+	 *	echo \Phalcon\Text::startsWith("Hello", "he", true); // true
 	 *</code>
 	 *
 	 * @param string $str
 	 * @param string $start
-	 * @param boolean $ignoreCase
+	 * @param boolean|null $ignoreCase
 	 * @return boolean
 	 * @throws Exception
 	 */
@@ -265,8 +270,7 @@ abstract class Text
 		if(is_string($str) === false || is_string($start) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
-
-		if($ignoreCase === null || $ignoreCase === true) {
+		if(is_null($ignoreCase) === false && $ignoreCase === true) {
 			return (stripos($str, $start) === 0 ? true : false);
 		} else {
 			return (strpos($str, $start) === 0 ? true : false);
@@ -279,12 +283,12 @@ abstract class Text
 	 *<code>
 	 *	echo \Phalcon\Text::endsWith("Hello", "llo"); // true
 	 *	echo \Phalcon\Text::endsWith("Hello", "LLO"); // false
-	 *	echo \Phalcon\Text::endsWith("Hello", "LLO", false); // true
+	 *	echo \Phalcon\Text::endsWith("Hello", "LLO", true); // true
 	 *</code>
 	 *
 	 * @param string $str
 	 * @param string $end
-	 * @param boolean $ignoreCase
+	 * @param boolean|null $ignoreCase
 	 * @return boolean
 	 * @throws Exception
 	 */
@@ -295,7 +299,7 @@ abstract class Text
 		}
 
 		$g = strlen($str)-strlen($end);
-		if($ignoreCase === null || $ignoreCase === true) {
+		if(is_null($ignoreCase) === false && $ignoreCase === true) {
 			return (strripos($str, $end) === $g ? true : false);
 		} else {
 			return (strrpos($str, $end) === $g ? true : false);

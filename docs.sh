@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 DATA_DIR=`pwd`/src/Phalcon
 
 DOCS_DIR=`pwd`/docs

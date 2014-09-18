@@ -70,9 +70,9 @@ class EventTest extends BaseTest
 		$e->setData('data');
 		$this->assertEquals($e->getData(), 'data');
 
-		$this->assertFalse($e->getCancelable());
-		$e->setCancelable(true);
 		$this->assertTrue($e->getCancelable());
+		$e->setCancelable(false);
+		$this->assertFalse($e->getCancelable());
 	}
 
 	public function testTypeSetterException()

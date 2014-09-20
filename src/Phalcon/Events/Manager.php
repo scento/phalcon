@@ -184,7 +184,7 @@ class Manager implements ManagerInterface
 	public function detachAll($type = null)
 	{
 		if(is_null($type) === true) {
-			unset($this->_events);
+			$this->_events = null;
 		} elseif(is_string($type) === true) {
 			unset($this->_events[$type]);
 		} else {

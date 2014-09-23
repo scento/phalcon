@@ -109,4 +109,119 @@ class EventsTest extends BaseTest
 		$this->assertEquals(count($e->getListeners('event:event')), 0);
 		$this->assertEquals(count($e->getListeners('event2:event')), 1);
 	}
+
+	public function testDetachAllException()
+	{
+		$this->setExpectedException('\Phalcon\Events\Exception');
+		$e = new \Phalcon\Events\Manager();
+		$e->detachAll((object)'invalid');
+	}
+
+	public function testDetachAllAlias()
+	{
+		$e = new \Phalcon\Events\Manager();
+		$e->attach('event:event', function($event, $data){});
+		$this->assertTrue($e->hasListeners('event:event'));
+		$e->dettachAll();
+		$this->assertFalse($e->hasListeners('event:event'));
+
+		$e->attach('event2:event', function($event, $data){});
+		$e->attach('event:event', function($event, $data){});
+		$this->assertTrue($e->hasListeners('event2:event'));
+		$this->assertEquals(count($e->getListeners('event:event')), 1);
+		$e->dettachAll('event:event');
+		$this->assertTrue($e->hasListeners('event2:event'));
+		$this->assertEquals(count($e->getListeners('event:event')), 0);
+		$this->assertEquals(count($e->getListeners('event2:event')), 1);
+	}
+
+	public function testFireQueueArray()
+	{
+		$e = new \Phalcon\Events\Manager();
+		$e->collectResponses(true);
+		$e->attach('event:event', function($event, $data){return 'payload';});
+		$e->attach('event:event', function($event, $data){$event->stop();});
+		$e->attach('event:event', function($event, $data){});
+		$e->fire('event:event', (object)'source');
+		$this->assertEquals($e->getResponses(), array('payload', null));
+	}
+
+	public function testFireQueuePriority()
+	{
+		$e = new \Phalcon\Events\Manager();
+		$e->collectResponses(true);
+		$e->enablePriorities(true);
+		$e->attach('event:event', function($event, $data){return 'payload';}, 300);
+		$e->attach('event:event', function($event, $data){$event->stop();}, 200);
+		$e->attach('event:event', function($event, $data){}, 100);
+		$e->fire('event:event', (object)'source');
+		$this->assertEquals($e->getResponses(), array('payload', null));
+	}
+
+	public function testFireQueueExceptionQueue()
+	{
+		$this->setExpectedException('\Phalcon\Events\Exception');
+		$e = new \Phalcon\Events\Manager();
+		$e->fireQueue('invalid', (object)'event');
+	}
+
+	public function testFireQueueExceptionEvent()
+	{
+		$this->setExpectedException('\Phalcon\Events\Exception');
+		$e = new \Phalcon\Events\Manager();
+		$e->fireQueue(array('event'), 'invalid object');
+	}
+
+	public function testFireQueueInvalidObject()
+	{
+		$this->setExpectedException('\Phalcon\Events\Exception');
+		$e = new \Phalcon\Events\Manager();
+		$e->fireQueue(array('queue'), (object)'event');
+	}
+
+	public function testFireQueueInvalidEventNameType()
+	{
+		$e = new \Phalcon\Events\Manager();
+		$this->setExpectedException('\Phalcon\Events\Exception');
+		include_once(__DIR__.'/Events/InvalidEventType.php');
+		$event = new InvalidEventType('type', (object)'random', array('data'), false);
+		$e->fireQueue(array('queue'), $event);
+	}
+
+	public function testFireCalcelableException()
+	{
+		$this->setExpectedException('\Phalcon\Events\Exception');
+		$e = new \Phalcon\Events\Manager();
+		$e->fire('eventType', (object)'source', 'data', 'nobool');
+	}
+
+	public function testFireEventTypeException()
+	{
+		$this->setExpectedException('\Phalcon\Events\Exception');
+		$e = new \Phalcon\Events\Manager();
+		$e->fire(true, (object)'notanobject', 'data');
+	}
+
+	public function testFireNoEvents()
+	{
+		$e = new \Phalcon\Events\Manager();
+		$this->assertTrue(is_null($e->fire('eventType', (object)'source', 'data')));
+	}
+
+	public function testFireInvalidEventType()
+	{
+		$this->setExpectedException('\Phalcon\Events\Exception');
+		$e = new \Phalcon\Events\Manager();
+		$e->attach('event', function($event, $data){return 'payload';});
+		$e->fire('event', (object)'source');
+	}
+
+	public function testHasListenersType()
+	{
+		$this->setExpectedException('\Phalcon\Events\Exception');
+		$e = new \Phalcon\Events\Manager();
+		$e->hasListeners(false);
+	}
+
+
 }

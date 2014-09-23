@@ -214,11 +214,13 @@ class Manager implements ManagerInterface
 	public function fireQueue($queue, $event)
 	{
 		if(is_array($queue) === false && 
-			is_object($queue) === false) {
+			(is_object($queue) === false ||
+				$queue instanceof SplPriorityQueue === false)) {
 			throw new Exception('The SplPriorityQueue is not valid');
 		}
 
-		if(is_object($event) === false) {
+		if(is_object($event) === false ||
+			$event instanceof Event === false) {
 			throw new Exception('The event is not valid');
 		}
 
@@ -373,6 +375,10 @@ class Manager implements ManagerInterface
 			throw new Exception('Event type must be a string');
 		}
 
+		if(is_object($source) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+
 		if(is_array($this->_events) === false) {
 			return null;
 		}
@@ -454,6 +460,10 @@ class Manager implements ManagerInterface
 	 */
 	public function getListeners($type)
 	{
+		if(is_string($type) === false) {
+			throw new Exception('Invalid parameter type.');
+		}
+
 		if(is_array($this->_events) === true &&
 			isset($this->_events[$type]) === true) {
 			return $this->_events[$type];

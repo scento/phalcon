@@ -240,11 +240,7 @@ class Manager implements ManagerInterface
 
 		if(is_object($queue) === true) {
 			//We need to clone the queue before iterate over it
-			try {
-				$iterator = clone $queue;
-			} catch(\Exception $e) {
-				return null;
-			}
+			$iterator = clone $queue;
 
 			//Move the queue to the top
 			$iterator->top();

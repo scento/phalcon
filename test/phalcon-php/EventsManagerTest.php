@@ -223,5 +223,10 @@ class EventsTest extends BaseTest
 		$e->hasListeners(false);
 	}
 
-
+	public function testFireInvalidSourceType()
+	{
+		$this->setExpectedException('\Phalcon\Events\Exception');
+		$e = new \Phalcon\Events\Manager();
+		$e->fire('type', 'source');
+	}
 }

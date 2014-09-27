@@ -4,7 +4,7 @@
  *
  * @author Wenzel Pünter <wenzel@phelix.me>
 */
-class EventsTest extends BaseTest
+class EventsManagerTest extends BaseTest
 {
 	public function testEnablePriorities()
 	{
@@ -228,5 +228,35 @@ class EventsTest extends BaseTest
 		$this->setExpectedException('\Phalcon\Events\Exception');
 		$e = new \Phalcon\Events\Manager();
 		$e->fire('type', 'source');
+	}
+
+	public function testGetListenersInvalidType()
+	{
+		$this->setExpectedException('\Phalcon\Events\Exception');
+		$e = new \Phalcon\Events\Manager();
+		$e->getListeners(false);
+	}
+
+	public function testFireQueueArrayObject()
+	{
+		include_once(__DIR__.'/Events/SampleEvent.php');
+		$sample = new SampleEvent();
+		$e = new \Phalcon\Events\Manager();
+		$e->collectResponses(true);
+		$e->attach('event:event', $sample);
+		$e->fire('event:event', (object)'source');
+		$this->assertEquals($e->getResponses(), array('status'));
+	}
+
+	public function testFireQueuePriorityObject()
+	{
+		include_once(__DIR__.'/Events/SampleEvent.php');
+		$sample = new SampleEvent();
+		$e = new \Phalcon\Events\Manager();
+		$e->collectResponses(true);
+		$e->enablePriorities(true);
+		$e->attach('event:event', $sample, 300);
+		$e->fire('event:event', (object)'source');
+		$this->assertEquals($e->getResponses(), array('status'));
 	}
 }

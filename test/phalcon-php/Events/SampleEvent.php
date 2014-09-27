@@ -6,4 +6,8 @@ class SampleEvent
 		$event->stop();
 		return 'status';
 	}
+
+	public function nostop($event, $source, $data) {
+		return 'continue';
+	}
 }

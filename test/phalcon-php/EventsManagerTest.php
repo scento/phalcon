@@ -259,4 +259,38 @@ class EventsManagerTest extends BaseTest
 		$e->fire('event:event', (object)'source');
 		$this->assertEquals($e->getResponses(), array('status'));
 	}
+
+	public function testFireQueueArrayObjectNoStop()
+	{
+		include_once(__DIR__.'/Events/SampleEvent.php');
+		$sample = new SampleEvent();
+		$e = new \Phalcon\Events\Manager();
+		$e->collectResponses(true);
+		$e->attach('event:nostop', $sample);
+		$e->fire('event:nostop', (object)'source');
+		$this->assertEquals($e->getResponses(), array('continue'));
+	}
+
+	public function testFireQueuePriorityObjectNoStop()
+	{
+		include_once(__DIR__.'/Events/SampleEvent.php');
+		$sample = new SampleEvent();
+		$e = new \Phalcon\Events\Manager();
+		$e->collectResponses(true);
+		$e->enablePriorities(true);
+		$e->attach('event:nostop', $sample, 300);
+		$e->fire('event:nostop', (object)'source');
+		$this->assertEquals($e->getResponses(), array('continue'));
+	}
+
+	public function testGroupedEvents()
+	{
+		$e = new \Phalcon\Events\Manager();
+		$e->collectResponses(true);
+		$e->attach('group', function($event, $data){return 'group';});
+		$e->attach('group:event:event', function($event, $data){return 'group';});
+		$e->attach('group:event:event', function($event, $data){return 'event';});
+		$e->fire('group:event:event', (object)'source');
+		$this->assertEquals($e->getResponses(), array('group', 'group', 'event'));
+	}
 }

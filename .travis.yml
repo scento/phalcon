@@ -28,7 +28,6 @@ before_script:
 script:
   - phpunit --configuration ./test/phpunit.xml --coverage-clover build/logs/clover.xml --debug
   - ./test/ci/execute_phploc.sh
-  - ./test/ci/execute_phpmd.sh
 
 after_script:
   - php vendor/bin/coveralls -v

@@ -42,7 +42,7 @@ use \Phalcon\Mvc\Model\Validator,
  * 
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/mvc/model/validator/exclusionin.c
  */
-class Exclusionin extends Validator implements ValidatorInterface
+class ExclusionIn extends Validator implements ValidatorInterface
 {
 	/**
 	 * Executes the validator

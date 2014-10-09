@@ -45,7 +45,7 @@ abstract class Lang
 		}
 
 		try {
-			$scanner = new Scanner($phql);
+			//$scanner = new Scanner($phql);
 			//@todo implement scanner
 		} catch(\Exception $e) {
 			return null;

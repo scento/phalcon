@@ -2,13 +2,20 @@
 <phpunit 
 	colors="true"
 	stopOnFailure="false"
+	stopOnError="false"
+	stopOnIncomplete="false"
+	stopOnSkipped="false"
+	verbose="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
 	bootstrap="bootstrap.php">
 	<testsuites>
-		<testsuite name="phalcon-php">
+		<!--<testsuite name="phalcon-php">
 			<directory>phalcon-php/</directory>
-		</testsuite>
-		<!--<testsuite name="cphalcon">
+			</testsuite>-->
+		<testsuite name="cphalcon">
 			<directory>cphalcon/</directory>
-		</testsuite>-->
+		</testsuite>
 	</testsuites>
 </phpunit>

@@ -138,7 +138,7 @@ class ModelsMetadataAdaptersTest extends PHPUnit_Framework_TestCase
 		$di = $this->_getDI();
 
 		$di->set('modelsMetadata', function(){
-			return new Phalcon\Mvc\Model\Metadata\Session(array(
+			return new Phalcon\Mvc\Model\MetaData\Session(array(
 				'prefix' => 'my-local-app'
 			));
 		});
@@ -176,7 +176,7 @@ class ModelsMetadataAdaptersTest extends PHPUnit_Framework_TestCase
 		$di = $this->_getDI();
 
 		$di->set('modelsMetadata', function(){
-			return new Phalcon\Mvc\Model\Metadata\Apc(array(
+			return new Phalcon\Mvc\Model\MetaData\Apc(array(
 				'prefix' => 'my-local-app',
 				'lifetime' => 60
 			));
@@ -212,7 +212,7 @@ class ModelsMetadataAdaptersTest extends PHPUnit_Framework_TestCase
 		$di = $this->_getDI();
 
 		$di->set('modelsMetadata', function(){
-			return new Phalcon\Mvc\Model\Metadata\Xcache(array(
+			return new Phalcon\Mvc\Model\MetaData\Xcache(array(
 				'prefix' => 'my-local-app',
 				'lifetime' => 60
 			));
@@ -241,7 +241,7 @@ class ModelsMetadataAdaptersTest extends PHPUnit_Framework_TestCase
 		$di = $this->_getDI();
 
 		$di->set('modelsMetadata', function(){
-			return new Phalcon\Mvc\Model\Metadata\Files(array(
+			return new Phalcon\Mvc\Model\MetaData\Files(array(
 				'metaDataDir' => __DIR__.'/cache/',
 			));
 		});

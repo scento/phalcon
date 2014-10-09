@@ -51,7 +51,7 @@ class Sqlite extends Pdo implements EventsAwareInterface, AdapterInterface
 	 * @var string
 	 * @access protected
 	*/
-	protected $_dialectType = 'sqlite';
+	protected $_dialectType = 'Sqlite';
 
 	/**
 	 * This method is automatically called in \Phalcon\Db\Adapter\Pdo constructor.

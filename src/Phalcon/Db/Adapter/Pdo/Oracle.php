@@ -51,7 +51,7 @@ class Oracle extends Pdo implements EventsAwareInterface, AdapterInterface
 	 * @var string
 	 * @access protected
 	*/
-	protected $_dialectType = 'oracle';
+	protected $_dialectType = 'Oracle';
 
 	/**
 	 * This method is automatically called in \Phalcon\Db\Adapter\Pdo constructor.

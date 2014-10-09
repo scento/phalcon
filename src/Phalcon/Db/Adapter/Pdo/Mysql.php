@@ -53,7 +53,7 @@ class Mysql extends Pdo implements EventsAwareInterface, AdapterInterface
 	 * @var string
 	 * @access protected
 	*/
-	protected $_dialectType = 'mysql';
+	protected $_dialectType = 'Mysql';
 
 	/**
 	 * Escapes a column/table/schema name

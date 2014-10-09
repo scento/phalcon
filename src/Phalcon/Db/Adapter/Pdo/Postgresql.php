@@ -52,7 +52,7 @@ class Postgresql extends Pdo implements EventsAwareInterface, AdapterInterface
 	 * @var string
 	 * @access protected
 	*/
-	protected $_dialectType = 'postgresql';
+	protected $_dialectType = 'Postgresql';
 
 	/**
 	 * This method is automatically called in \Phalcon\Db\Adapter\Pdo constructor.

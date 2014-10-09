@@ -60,7 +60,7 @@ class Uniqueness extends Validator implements ValidatorInterface
 
 		$field = $this->getOption('field');
 		$dependencyInjector = $record->getDi();
-		$metaData = $dependencyInjector->getShared('modelsManager');
+		$metaData = $dependencyInjector->getShared('modelsMetadata');
 
 		//PostgreSQL check if the compared constant has the same type as the column, so we
 		//make cast to the data passed to match those column types

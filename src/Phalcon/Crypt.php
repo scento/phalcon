@@ -173,13 +173,13 @@ class Crypt implements CryptInterface
 	/**
 	 * Sets the encryption key
 	 *
-	 * @param string $key
+	 * @param scalar $key
 	 * @return \Phalcon\Crypt
 	 * @throws CryptException
 	 */
 	public function setKey($key)
 	{
-		if(is_string($key) === false) {
+		if(is_scalar($key) === false) {
 			throw new CryptException('Invalid parameter type.');
 		}
 

@@ -10,10 +10,10 @@
 */
 namespace Phalcon\Forms\Element;
 
-use \Phalcon\Tag,
-	\Phalcon\Forms\Element,
-	\Phalcon\Forms\ElementInterface,
-	\Phalcon\Forms\Exception;
+use \Phalcon\Tag;
+use \Phalcon\Forms\Element;
+use \Phalcon\Forms\ElementInterface;
+use \Phalcon\Forms\Exception;
 
 /**
  * Phalcon\Forms\Element\TextArea
@@ -24,20 +24,20 @@ use \Phalcon\Tag,
  */
 class TextArea extends Element implements ElementInterface
 {
-	/**
-	 * Renders the element widget
-	 *
-	 * @param array|null $attributes
-	 * @return string
-	 * @throws Exception
-	 */
-	public function render($attributes = null)
-	{
-		if(is_array($attributes) === false &&
-			is_null($attributes) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+    /**
+     * Renders the element widget
+     *
+     * @param array|null $attributes
+     * @return string
+     * @throws Exception
+     */
+    public function render($attributes = null)
+    {
+        if (is_array($attributes) === false &&
+            is_null($attributes) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		return Tag::textArea($this->prepareAttributes($attributes));
-	}
+        return Tag::textArea($this->prepareAttributes($attributes));
+    }
 }

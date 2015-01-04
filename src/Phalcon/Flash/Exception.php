@@ -18,5 +18,4 @@ namespace Phalcon\Flash;
  */
 class Exception extends \Phalcon\Exception
 {
-
 }

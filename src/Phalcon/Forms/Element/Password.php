@@ -10,10 +10,10 @@
 */
 namespace Phalcon\Forms\Element;
 
-use \Phalcon\Tag,
-	\Phalcon\Forms\Element,
-	\Phalcon\Forms\ElementInterface,
-	\Phalcon\Forms\Exception;
+use \Phalcon\Tag;
+use \Phalcon\Forms\Element;
+use \Phalcon\Forms\ElementInterface;
+use \Phalcon\Forms\Exception;
 
 /**
  * Phalcon\Forms\Element\Password
@@ -24,20 +24,20 @@ use \Phalcon\Tag,
  */
 class Password extends Element implements ElementInterface
 {
-	/**
-	 * Renders the element widget returning html
-	 *
-	 * @param array $attributes
-	 * @return string
-	 * @throws Exception
-	 */
-	public function render($attributes = null)
-	{
-		if(is_null($attributes) === false &&
-			is_array($attributes) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+    /**
+     * Renders the element widget returning html
+     *
+     * @param array $attributes
+     * @return string
+     * @throws Exception
+     */
+    public function render($attributes = null)
+    {
+        if (is_null($attributes) === false &&
+            is_array($attributes) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		return Tag::passwordField($this->prepareAttributes($attributes));
-	}
+        return Tag::passwordField($this->prepareAttributes($attributes));
+    }
 }

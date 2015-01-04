@@ -10,12 +10,12 @@
 */
 namespace Phalcon\Validation\Validator;
 
-use \Phalcon\Validation\Validator,
-	\Phalcon\Validation\ValidatorInterface,
-	\Phalcon\Validation\Message,
-	\Phalcon\Validation\Exception,
-	\Mvc\Model\Exception as StrangeException, //Look into the original code
-	\Phalcon\Validation;
+use \Phalcon\Validation\Validator;
+use \Phalcon\Validation\ValidatorInterface;
+use \Phalcon\Validation\Message;
+use \Phalcon\Validation\Exception;
+use \Mvc\Model\Exception as StrangeException; //Look into the original code
+use \Phalcon\Validation;
 
 /**
  * Phalcon\Validation\Validator\StringLength
@@ -37,77 +37,77 @@ use \Phalcon\Validation\Validator,
  */
 class StringLength extends Validator implements ValidatorInterface
 {
-	/**
-	 * Executes the validation
-	 *
-	 * @param \Phalcon\Validation $validator
-	 * @param string $attribute
-	 * @return boolean
-	 * @throws Exception
-	 */
-	public function validate($validator, $attribute)
-	{
-		if(is_object($validator) === false ||
-			$validator instanceof Validation === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+    /**
+     * Executes the validation
+     *
+     * @param \Phalcon\Validation $validator
+     * @param string $attribute
+     * @return boolean
+     * @throws Exception
+     */
+    public function validate($validator, $attribute)
+    {
+        if (is_object($validator) === false ||
+            $validator instanceof Validation === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		if(is_string($attribute) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+        if (is_string($attribute) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		//At least one of 'min' or 'max' must be set
-		$isSetMin = $this->issetOption('min');
-		$isSetMax = $this->issetOption('max');
+        //At least one of 'min' or 'max' must be set
+        $isSetMin = $this->issetOption('min');
+        $isSetMax = $this->issetOption('max');
 
-		if($isSetMax === false && $isSetMin === false) {
-			//@note exception type
-			throw new StrangeException('A minimum or maximum must be set');
-		}
+        if ($isSetMax === false && $isSetMin === false) {
+            //@note exception type
+            throw new StrangeException('A minimum or maximum must be set');
+        }
 
-		$value = $validator->getValue($attribute);
+        $value = $validator->getValue($attribute);
 
-		//Check if mbstring is available to calculate the correct length
-		if(function_exists('mb_strlen') === true) {
-			$length = mb_strlen($value);
-		} else {
-			$length = strlen($value);
-		}
+        //Check if mbstring is available to calculate the correct length
+        if (function_exists('mb_strlen') === true) {
+            $length = mb_strlen($value);
+        } else {
+            $length = strlen($value);
+        }
 
-		//Maximum length
-		if($isSetMax === true) {
-			$maximum = $this->getOption('max');
+        //Maximum length
+        if ($isSetMax === true) {
+            $maximum = $this->getOption('max');
 
-			if($length >= $maximum) {
-				//Check if the developer has defined a custom message
-				$message = $this->getOption('messageMaximum');
-				if(empty($message) === true) {
-					$message = "Value of field '".$attribute."' exceeds the maximum ".$maximum." characters";
+            if ($length >= $maximum) {
+                //Check if the developer has defined a custom message
+                $message = $this->getOption('messageMaximum');
+                if (empty($message) === true) {
+                    $message = "Value of field '".$attribute."' exceeds the maximum ".$maximum." characters";
 
-					$validator->appendMessage(new Message($message, $attribute, 'TooLong'));
+                    $validator->appendMessage(new Message($message, $attribute, 'TooLong'));
 
-					return false;
-				}
-			}
-		}
+                    return false;
+                }
+            }
+        }
 
-		//Minimum length
-		if($isSetMin === true) {
-			$minimum = $this->getOption('min');
+        //Minimum length
+        if ($isSetMin === true) {
+            $minimum = $this->getOption('min');
 
-			if($length <= $minimum) {
-				//Check if the developer has defined a custom message
-				$message = $this->getOption('messageMinimum');
-				if(empty($message) === true) {
-					$message = "Value of field '".$attribute."' is less than the minimum ".$minimum." characters";
-				}
+            if ($length <= $minimum) {
+                //Check if the developer has defined a custom message
+                $message = $this->getOption('messageMinimum');
+                if (empty($message) === true) {
+                    $message = "Value of field '".$attribute."' is less than the minimum ".$minimum." characters";
+                }
 
-				$validator->appendMessage(new Message($message, $attribute, 'TooShort'));
+                $validator->appendMessage(new Message($message, $attribute, 'TooShort'));
 
-				return false;
-			}
-		}
+                return false;
+            }
+        }
 
-		return true;
-	}
+        return true;
+    }
 }

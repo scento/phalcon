@@ -10,34 +10,34 @@
 */
 namespace Phalcon\Forms\Element;
 
-use \Phalcon\Tag,
-	\Phalcon\Forms\Element,
-	\Phalcon\Forms\ElementInterface,
-	\Phalcon\Forms\Exception;
+use \Phalcon\Tag;
+use \Phalcon\Forms\Element;
+use \Phalcon\Forms\ElementInterface;
+use \Phalcon\Forms\Exception;
 
 /**
  * Phalcon\Forms\Element\Email
  *
  * Component INPUT[type=email] for forms
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/forms/element/email.c
  */
 class Email extends Element implements ElementInterface
 {
-	/**
-	 * Renders the element widget returning html
-	 *
-	 * @param array|null $attributes
-	 * @return string
-	 * @throws Exception
-	 */
-	public function render($attributes = null)
-	{
-		if(is_array($attributes) === false &&
-			is_null($attributes) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+    /**
+     * Renders the element widget returning html
+     *
+     * @param array|null $attributes
+     * @return string
+     * @throws Exception
+     */
+    public function render($attributes = null)
+    {
+        if (is_array($attributes) === false &&
+            is_null($attributes) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		return Tag::emailField($this->prepareAttributes($attributes));
-	}
+        return Tag::emailField($this->prepareAttributes($attributes));
+    }
 }

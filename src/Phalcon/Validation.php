@@ -10,12 +10,12 @@
 */
 namespace Phalcon;
 
-use \Phalcon\DI\Injectable,
-	\Phalcon\Events\EventsAwareInterface,
-	\Phalcon\DI\InjectionAwareInterface,
-	\Phalcon\Validation\Exception as ValidationException,
-	\Phalcon\Validation\Message\Group,
-	\Phalcon\FilterInterface;
+use \Phalcon\DI\Injectable;
+use \Phalcon\Events\EventsAwareInterface;
+use \Phalcon\DI\InjectionAwareInterface;
+use \Phalcon\Validation\Exception as ValidationException;
+use \Phalcon\Validation\Message\Group;
+use \Phalcon\FilterInterface;
 
 /**
  * Phalcon\Validation
@@ -24,334 +24,334 @@ use \Phalcon\DI\Injectable,
  */
 class Validation extends Injectable implements EventsAwareInterface, InjectionAwareInterface
 {
-	/**
-	 * Data
-	 * 
-	 * @var null|array|object
-	 * @access protected
-	*/
-	protected $_data = null;
+    /**
+     * Data
+     *
+     * @var null|array|object
+     * @access protected
+    */
+    protected $_data = null;
 
-	/**
-	 * Entity
-	 * 
-	 * @var null|object
-	 * @access protected
-	*/
-	protected $_entity = null;
+    /**
+     * Entity
+     *
+     * @var null|object
+     * @access protected
+    */
+    protected $_entity = null;
 
-	/**
-	 * Validators
-	 * 
-	 * @var null|array
-	 * @access protected
-	*/
-	protected $_validators = null;
+    /**
+     * Validators
+     *
+     * @var null|array
+     * @access protected
+    */
+    protected $_validators = null;
 
-	/**
-	 * Filters
-	 * 
-	 * @var null|array
-	 * @access protected
-	*/
-	protected $_filters = null;
+    /**
+     * Filters
+     *
+     * @var null|array
+     * @access protected
+    */
+    protected $_filters = null;
 
-	/**
-	 * Messages
-	 * 
-	 * @var null|\Phalcon\Validation\Message\Group
-	 * @access protected
-	*/
-	protected $_messages = null;
+    /**
+     * Messages
+     *
+     * @var null|\Phalcon\Validation\Message\Group
+     * @access protected
+    */
+    protected $_messages = null;
 
-	/**
-	 * Values
-	 * 
-	 * @var null
-	 * @access protected
-	*/
-	protected $_values = null;
+    /**
+     * Values
+     *
+     * @var null
+     * @access protected
+    */
+    protected $_values = null;
 
-	/**
-	 * \Phalcon\Validation constructor
-	 *
-	 * @param array|null $validators
-	 * @throws ValidationException
-	 */
-	public function __construct($validators = null)
-	{
-		if(is_null($validators) === false && is_array($validators) === false) {
-			throw new ValidationException('Validators must be an array');
-		}
+    /**
+     * \Phalcon\Validation constructor
+     *
+     * @param array|null $validators
+     * @throws ValidationException
+     */
+    public function __construct($validators = null)
+    {
+        if (is_null($validators) === false && is_array($validators) === false) {
+            throw new ValidationException('Validators must be an array');
+        }
 
-		$this->_validators = $validators;
+        $this->_validators = $validators;
 
-		if(method_exists($this, 'initialize') === true) {
-			$this->initialize();
-		}
-	}
+        if (method_exists($this, 'initialize') === true) {
+            $this->initialize();
+        }
+    }
 
-	/**
-	 * Validate a set of data according to a set of rules
-	 *
-	 * @param array|object|null $data
-	 * @param object|null $entity
-	 * @return \Phalcon\Validation\Message\Group|boolean|null
-	 * @throws ValidationException
-	 */
-	public function validate($data = null, $entity = null)
-	{
-		if(is_array($this->_validators) === false) {
-			throw new ValidationException('There are no validators to validate');
-		}
+    /**
+     * Validate a set of data according to a set of rules
+     *
+     * @param array|object|null $data
+     * @param object|null $entity
+     * @return \Phalcon\Validation\Message\Group|boolean|null
+     * @throws ValidationException
+     */
+    public function validate($data = null, $entity = null)
+    {
+        if (is_array($this->_validators) === false) {
+            throw new ValidationException('There are no validators to validate');
+        }
 
-		//Clear pre-calculated values
-		$this->_values = null;
+        //Clear pre-calculated values
+        $this->_values = null;
 
-		//Implicity creates a Phalcon\Validation\Message\Group object
-		$messages = new Group();
+        //Implicity creates a Phalcon\Validation\Message\Group object
+        $messages = new Group();
 
-		//Validation classes can implement the 'beforeValidation' callback
-		if(method_exists($this, 'beforeValidation') === true) {
-			if($this->beforeValidation($data, $entity, $messages) === false) {
-				return false;
-			}
-		}
+        //Validation classes can implement the 'beforeValidation' callback
+        if (method_exists($this, 'beforeValidation') === true) {
+            if ($this->beforeValidation($data, $entity, $messages) === false) {
+                return false;
+            }
+        }
 
-		$this->_messages = $messages;
-		if(is_array($data) === true || is_object($data) === true) {
-			$this->_data = $data;
-		}
+        $this->_messages = $messages;
+        if (is_array($data) === true || is_object($data) === true) {
+            $this->_data = $data;
+        }
 
-		//Validate
-		foreach($this->_validators as $scope) {
-			if(is_array($scope) === false) {
-				throw new ValidationException('The validator scope is not valid');
-			}
+        //Validate
+        foreach ($this->_validators as $scope) {
+            if (is_array($scope) === false) {
+                throw new ValidationException('The validator scope is not valid');
+            }
 
-			if(is_object($scope[1]) === false) {
-				throw new ValidationException('One of the validators is not valid');
-			}
+            if (is_object($scope[1]) === false) {
+                throw new ValidationException('One of the validators is not valid');
+            }
 
-			if($scope[1]->validate($this, $scope[0]) === false) {
-				if($scope[1]->getOption('cancelOnFail') === true) {
-					break;
-				}
-			}
-		}
+            if ($scope[1]->validate($this, $scope[0]) === false) {
+                if ($scope[1]->getOption('cancelOnFail') === true) {
+                    break;
+                }
+            }
+        }
 
-		//Get the messages generated by the validators
-		if(method_exists($this, 'afterValidation') === true) {
-			$this->afterValidation($data, $entity, $this->_messages);
-		}
+        //Get the messages generated by the validators
+        if (method_exists($this, 'afterValidation') === true) {
+            $this->afterValidation($data, $entity, $this->_messages);
+        }
 
-		return $this->_messages;
-	}
+        return $this->_messages;
+    }
 
-	/**
-	 * Adds a validator to a field
-	 *
-	 * @param string $attribute
-	 * @param \Phalcon\Validation\ValidatorInterface
-	 * @return \Phalcon\Validation
-	 * @throws ValidationException
-	 */
-	public function add($attribute, $validator)
-	{
-		if(is_string($attribute) === false) {
-			throw new ValidationException('The attribute must be a string');
-		}
+    /**
+     * Adds a validator to a field
+     *
+     * @param string $attribute
+     * @param \Phalcon\Validation\ValidatorInterface
+     * @return \Phalcon\Validation
+     * @throws ValidationException
+     */
+    public function add($attribute, $validator)
+    {
+        if (is_string($attribute) === false) {
+            throw new ValidationException('The attribute must be a string');
+        }
 
-		if(is_object($validator) === false) {
-			throw new ValidationException('The validator must be an object');
-		}
+        if (is_object($validator) === false) {
+            throw new ValidationException('The validator must be an object');
+        }
 
-		if(is_array($this->_validators) === false) {
-			$this->_validators = array();
-		}
+        if (is_array($this->_validators) === false) {
+            $this->_validators = array();
+        }
 
-		$this->_validators[] = array($attribute, $validator);
+        $this->_validators[] = array($attribute, $validator);
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Adds filters to the field
-	 *
-	 * @param string $attribute
-	 * @param array|string $filters
-	 * @return \Phalcon\Validation
-	 * @throws ValidationException
-	 */
-	public function setFilters($attribute, $filters)
-	{
-		if(is_string($attribute) === false) {
-			throw new ValidationException('Invalid parameter type.');
-		}
+    /**
+     * Adds filters to the field
+     *
+     * @param string $attribute
+     * @param array|string $filters
+     * @return \Phalcon\Validation
+     * @throws ValidationException
+     */
+    public function setFilters($attribute, $filters)
+    {
+        if (is_string($attribute) === false) {
+            throw new ValidationException('Invalid parameter type.');
+        }
 
-		if(is_array($attribute) === false && is_string($attribute) === false) {
-			throw new ValidationException('Invalid parameter type.');
-		}
+        if (is_array($attribute) === false && is_string($attribute) === false) {
+            throw new ValidationException('Invalid parameter type.');
+        }
 
-		$this->_filters[$attribute] = $filters;
-	}
+        $this->_filters[$attribute] = $filters;
+    }
 
-	/**
-	 * Returns all the filters or a specific one
-	 *
-	 * @param string|null $attribute
-	 * @return null|array|string
-	 */
-	public function getFilters($attribute = null)
-	{
-		if(is_string($attribute) === true) {
-			if(isset($this->_filters[$attribute]) === true) {
-				return $this->_filters[$attribute];
-			}
+    /**
+     * Returns all the filters or a specific one
+     *
+     * @param string|null $attribute
+     * @return null|array|string
+     */
+    public function getFilters($attribute = null)
+    {
+        if (is_string($attribute) === true) {
+            if (isset($this->_filters[$attribute]) === true) {
+                return $this->_filters[$attribute];
+            }
 
-			return null;
-		}
+            return null;
+        }
 
-		return $this->_filters;
-	}
+        return $this->_filters;
+    }
 
-	/**
-	 * Returns the validators added to the validation
-	 *
-	 * @return array|null
-	 */
-	public function getValidators()
-	{
-		return $this->_validators;
-	}
+    /**
+     * Returns the validators added to the validation
+     *
+     * @return array|null
+     */
+    public function getValidators()
+    {
+        return $this->_validators;
+    }
 
-	/**
-	 * Returns the bound entity
-	 *
-	 * @return object|null
-	 */
-	public function getEntity()
-	{
-		return $this->_entity;
-	}
+    /**
+     * Returns the bound entity
+     *
+     * @return object|null
+     */
+    public function getEntity()
+    {
+        return $this->_entity;
+    }
 
-	/**
-	 * Returns the registered validators
-	 *
-	 * @return \Phalcon\Validation\Message\Group|null
-	 */
-	public function getMessages()
-	{
-		return $this->_messages;
-	}
+    /**
+     * Returns the registered validators
+     *
+     * @return \Phalcon\Validation\Message\Group|null
+     */
+    public function getMessages()
+    {
+        return $this->_messages;
+    }
 
-	/**
-	 * Appends a message to the messages list
-	 *
-	 * @param \Phalcon\Validation\MessageInterface $message
-	 * @return \Phalcon\Validation
-	 */
-	public function appendMessage($message)
-	{
-		//@note the type check is not implemented in the original source code
-		if(is_null($this->_messages) === false) {
-			$this->_messages->appendMessage($message);
-		}
+    /**
+     * Appends a message to the messages list
+     *
+     * @param \Phalcon\Validation\MessageInterface $message
+     * @return \Phalcon\Validation
+     */
+    public function appendMessage($message)
+    {
+        //@note the type check is not implemented in the original source code
+        if (is_null($this->_messages) === false) {
+            $this->_messages->appendMessage($message);
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Assigns the data to an entity
-	 * The entity is used to obtain the validation values
-	 *
-	 * @param object $entity
-	 * @param object|array $data
-	 * @return \Phalcon\Validation
-	 * @throws ValidationException
-	 */
-	public function bind($entity, $data)
-	{
-		if(is_object($entity) === false) {
-			throw new ValidationException('The entity must be an object');
-		}
+    /**
+     * Assigns the data to an entity
+     * The entity is used to obtain the validation values
+     *
+     * @param object $entity
+     * @param object|array $data
+     * @return \Phalcon\Validation
+     * @throws ValidationException
+     */
+    public function bind($entity, $data)
+    {
+        if (is_object($entity) === false) {
+            throw new ValidationException('The entity must be an object');
+        }
 
-		if(is_array($data) === false && is_object($data) === false) {
-			throw new ValidationException('The data to validate must be an array or object');
-		}
+        if (is_array($data) === false && is_object($data) === false) {
+            throw new ValidationException('The data to validate must be an array or object');
+        }
 
-		$this->_entity = $entity;
-		$this->_data = $data;
+        $this->_entity = $entity;
+        $this->_data = $data;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Gets the a value to validate in the array/object data source
-	 *
-	 * @param string $attribute
-	 * @return mixed
-	 * @throws ValidationException
-	 */
-	public function getValue($attribute)
-	{
-		$method = 'get'.$attribute;
-		if(is_object($this->_entity) === true) {
-			if(method_exists($this->_entity, $method) === true) {
-				return call_user_method($method, $this->_entity);
-			} elseif(method_exists($this->_entity, 'readattribute') === true) {
-				return $this->_entity->readattribute($attribute);
-			} elseif(property_exists($this->_entity, $attribute) === true) {
-				return $this->_entity->$attribute;
-			} else {
-				return null;
-			}
-		}
+    /**
+     * Gets the a value to validate in the array/object data source
+     *
+     * @param string $attribute
+     * @return mixed
+     * @throws ValidationException
+     */
+    public function getValue($attribute)
+    {
+        $method = 'get'.$attribute;
+        if (is_object($this->_entity) === true) {
+            if (method_exists($this->_entity, $method) === true) {
+                return call_user_method($method, $this->_entity);
+            } elseif (method_exists($this->_entity, 'readattribute') === true) {
+                return $this->_entity->readattribute($attribute);
+            } elseif (property_exists($this->_entity, $attribute) === true) {
+                return $this->_entity->$attribute;
+            } else {
+                return null;
+            }
+        }
 
-		$value = null;
+        $value = null;
 
-		//Check if there is a calculated value
-		if(isset($this->_values[$attribute]) === true) {
-			return $this->_values[$attribute];
-		}
+        //Check if there is a calculated value
+        if (isset($this->_values[$attribute]) === true) {
+            return $this->_values[$attribute];
+        }
 
-		if(is_array($this->_data) === true) {
-			if(isset($this->_data[$attribute]) === true) {
-				$value = $this->_data[$attribute];
-			}
-		} elseif(is_object($this->_data) === true) {
-			if(property_exists($this->_data, $attribute) === true) {
-				$value = $this->_data->$attribute;
-			}
-		} else {
-			throw new ValidationException('There is no data to validate');
-		}
+        if (is_array($this->_data) === true) {
+            if (isset($this->_data[$attribute]) === true) {
+                $value = $this->_data[$attribute];
+            }
+        } elseif (is_object($this->_data) === true) {
+            if (property_exists($this->_data, $attribute) === true) {
+                $value = $this->_data->$attribute;
+            }
+        } else {
+            throw new ValidationException('There is no data to validate');
+        }
 
-		if(is_null($value) === false) {
-			if(is_array($this->_filters) === true && isset($this->_filters[$attribute])) {
-				if(isset($this->_filters[$attribute]) === true) {
-					$dependencyInjector = $this->getDi();
-					if(is_object($dependencyInjector) === false) {
-						$dependencyInjector = \Phalcon\DI::getDefault();
-						if(is_object($dependencyInjector) === false) {
-							throw new ValidationException('A dependency injector is required to obtain the \'filter\' service');
-						}
-					}
+        if (is_null($value) === false) {
+            if (is_array($this->_filters) === true && isset($this->_filters[$attribute])) {
+                if (isset($this->_filters[$attribute]) === true) {
+                    $dependencyInjector = $this->getDi();
+                    if (is_object($dependencyInjector) === false) {
+                        $dependencyInjector = \Phalcon\DI::getDefault();
+                        if (is_object($dependencyInjector) === false) {
+                            throw new ValidationException('A dependency injector is required to obtain the \'filter\' service');
+                        }
+                    }
 
-					$filterService = $dependencyInjector->getShared('filter');
-					if(is_object($filterService) === false || $filterService instanceof FilterInterface === false) {
-						throw new ValidationException('Returned \'filter\' service is invalid');
-					}
+                    $filterService = $dependencyInjector->getShared('filter');
+                    if (is_object($filterService) === false || $filterService instanceof FilterInterface === false) {
+                        throw new ValidationException('Returned \'filter\' service is invalid');
+                    }
 
-					return $filterService->sanitize($value, $this->_filters[$attribute]);
-				}
-			}
+                    return $filterService->sanitize($value, $this->_filters[$attribute]);
+                }
+            }
 
-			//Cache the calculated value
-			$this->_values[$attribute] = $value;
-			return $value;
-		}
+            //Cache the calculated value
+            $this->_values[$attribute] = $value;
+            return $value;
+        }
 
-		return null;
-	}
+        return null;
+    }
 }

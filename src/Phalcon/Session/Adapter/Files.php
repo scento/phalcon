@@ -10,8 +10,8 @@
 */
 namespace Phalcon\Session\Adapter;
 
-use \Phalcon\Session\Adapter,
-	\Phalcon\Session\AdapterInterface;
+use \Phalcon\Session\Adapter;
+use \Phalcon\Session\AdapterInterface;
 
 /**
  * Phalcon\Session\Adapter\Files
@@ -29,10 +29,9 @@ use \Phalcon\Session\Adapter,
  *
  * echo $session->get('var');
  *</code>
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/session/adapter/files.c
  */
 class Files extends Adapter implements AdapterInterface
 {
-
 }

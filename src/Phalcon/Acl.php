@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * ACL
  *
@@ -18,51 +18,51 @@ namespace Phalcon;
  *
  *<code>
  *
- *	$acl = new Phalcon\Acl\Adapter\Memory();
+ *  $acl = new Phalcon\Acl\Adapter\Memory();
  *
- *	//Default action is deny access
- *	$acl->setDefaultAction(Phalcon\Acl::DENY);
+ *  //Default action is deny access
+ *  $acl->setDefaultAction(Phalcon\Acl::DENY);
  *
- *	//Create some roles
- *	$roleAdmins = new Phalcon\Acl\Role('Administrators', 'Super-User role');
- *	$roleGuests = new Phalcon\Acl\Role('Guests');
+ *  //Create some roles
+ *  $roleAdmins = new Phalcon\Acl\Role('Administrators', 'Super-User role');
+ *  $roleGuests = new Phalcon\Acl\Role('Guests');
  *
- *	//Add "Guests" role to acl
- *	$acl->addRole($roleGuests);
+ *  //Add "Guests" role to acl
+ *  $acl->addRole($roleGuests);
  *
- *	//Add "Designers" role to acl
- *	$acl->addRole('Designers');
+ *  //Add "Designers" role to acl
+ *  $acl->addRole('Designers');
  *
- *	//Define the "Customers" resource
- *	$customersResource = new Phalcon\Acl\Resource('Customers', 'Customers management');
+ *  //Define the "Customers" resource
+ *  $customersResource = new Phalcon\Acl\Resource('Customers', 'Customers management');
  *
- *	//Add "customers" resource with a couple of operations
- *	$acl->addResource($customersResource, 'search');
- *	$acl->addResource($customersResource, array('create', 'update'));
+ *  //Add "customers" resource with a couple of operations
+ *  $acl->addResource($customersResource, 'search');
+ *  $acl->addResource($customersResource, array('create', 'update'));
  *
- *	//Set access level for roles into resources
- *	$acl->allow('Guests', 'Customers', 'search');
- *	$acl->allow('Guests', 'Customers', 'create');
- *	$acl->deny('Guests', 'Customers', 'update');
+ *  //Set access level for roles into resources
+ *  $acl->allow('Guests', 'Customers', 'search');
+ *  $acl->allow('Guests', 'Customers', 'create');
+ *  $acl->deny('Guests', 'Customers', 'update');
  *
- *	//Check whether role has access to the operations
- *	$acl->isAllowed('Guests', 'Customers', 'edit'); //Returns 0
- *	$acl->isAllowed('Guests', 'Customers', 'search'); //Returns 1
- *	$acl->isAllowed('Guests', 'Customers', 'create'); //Returns 1
+ *  //Check whether role has access to the operations
+ *  $acl->isAllowed('Guests', 'Customers', 'edit'); //Returns 0
+ *  $acl->isAllowed('Guests', 'Customers', 'search'); //Returns 1
+ *  $acl->isAllowed('Guests', 'Customers', 'create'); //Returns 1
  *
  *</code>
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/acl.c
  */
 abstract class Acl
 {
-	/**
-	 * Allow Access
-	*/
-	const ALLOW = 1;
+    /**
+     * Allow Access
+    */
+    const ALLOW = 1;
 
-	/**
-	 * Deny Access
-	*/
-	const DENY = 0;
+    /**
+     * Deny Access
+    */
+    const DENY = 0;
 }

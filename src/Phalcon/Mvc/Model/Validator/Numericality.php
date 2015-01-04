@@ -10,10 +10,10 @@
 */
 namespace Phalcon\Mvc\Model\Validator;
 
-use \Phalcon\Mvc\Model\Validator,
-	\Phalcon\Mvc\Model\ValidatorInterface,
-	\Phalcon\Mvc\Model\Exception,
-	\Phalcon\Mvc\ModelInterface;
+use \Phalcon\Mvc\Model\Validator;
+use \Phalcon\Mvc\Model\ValidatorInterface;
+use \Phalcon\Mvc\Model\Exception;
+use \Phalcon\Mvc\ModelInterface;
 
 /**
  * Phalcon\Mvc\Model\Validator\Numericality
@@ -43,40 +43,40 @@ use \Phalcon\Mvc\Model\Validator,
  */
 class Numericality extends Validator implements ValidatorInterface
 {
-	/**
-	 * Executes the validator
-	 *
-	 * @param \Phalcon\Mvc\ModelInterface $record
-	 * @return boolean
-	 * @throws Exception
-	 */
-	public function validate($record)
-	{
-		if(is_object($record) === false ||
-			$record instanceof ModelInterface === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+    /**
+     * Executes the validator
+     *
+     * @param \Phalcon\Mvc\ModelInterface $record
+     * @return boolean
+     * @throws Exception
+     */
+    public function validate($record)
+    {
+        if (is_object($record) === false ||
+            $record instanceof ModelInterface === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		$field = $this->getOption('field');
-		if(is_string($field) === false) {
-			throw new Exception('Field name must be a string');
-		}
+        $field = $this->getOption('field');
+        if (is_string($field) === false) {
+            throw new Exception('Field name must be a string');
+        }
 
-		$value = $record->readAttribute($field);
+        $value = $record->readAttribute($field);
 
-		//Check if the value is numeric using is_numeric
-		if(is_null($value) === false) {
-			//Check if the developer has defined a custom message
-			$message = $this->getOption('message');
-			if(isset($message) === false) {
-				$message = "Value of field '".$field."' must be numeric";
-			}
+        //Check if the value is numeric using is_numeric
+        if (is_null($value) === false) {
+            //Check if the developer has defined a custom message
+            $message = $this->getOption('message');
+            if (isset($message) === false) {
+                $message = "Value of field '".$field."' must be numeric";
+            }
 
-			$this->appendMessage($message, $field, 'Numericality');
+            $this->appendMessage($message, $field, 'Numericality');
 
-			return false;
-		}
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 }

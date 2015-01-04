@@ -10,8 +10,8 @@
 */
 namespace Phalcon\Cache\Frontend;
 
-use \Phalcon\Cache\FrontendInterface,
-	\Phalcon\Cache\Exception;
+use \Phalcon\Cache\FrontendInterface;
+use \Phalcon\Cache\Exception;
 
 /**
  * Phalcon\Cache\Frontend\Json
@@ -32,9 +32,9 @@ use \Phalcon\Cache\FrontendInterface,
  *
  * //Create the Cache setting memcached connection options
  * $cache = new Phalcon\Cache\Backend\Memcache($frontCache, array(
- *		'host' => 'localhost',
- *		'port' => 11211,
- *  	'persistent' => false
+ *      'host' => 'localhost',
+ *      'port' => 11211,
+ *      'persistent' => false
  * ));
  *
  * //Cache arbitrary data
@@ -43,105 +43,102 @@ use \Phalcon\Cache\FrontendInterface,
  * //Get data
  * $data = $cache->get('my-data');
  *</code>
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/cache/frontend/json.c
  */
 class Json implements FrontendInterface
 {
-	/**
-	 * Frontend Options
-	 * 
-	 * @var array|null
-	 * @access protected
-	*/
-	protected $_frontendOptions;
+    /**
+     * Frontend Options
+     *
+     * @var array|null
+     * @access protected
+    */
+    protected $_frontendOptions;
 
-	/**
-	 * \Phalcon\Cache\Frontend\Base64 constructor
-	 *
-	 * @param array|null $frontendOptions
-	 * @throws Exception
-	 */
-	public function __construct($frontendOptions = null)
-	{
-		if(is_array($frontendOptions) === false &&
-			is_null($frontendOptions) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+    /**
+     * \Phalcon\Cache\Frontend\Base64 constructor
+     *
+     * @param array|null $frontendOptions
+     * @throws Exception
+     */
+    public function __construct($frontendOptions = null)
+    {
+        if (is_array($frontendOptions) === false &&
+            is_null($frontendOptions) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		$this->_frontendOptions = $frontendOptions;
-	}
+        $this->_frontendOptions = $frontendOptions;
+    }
 
-	/**
-	 * Returns the cache lifetime
-	 *
-	 * @return integer
-	 */
-	public function getLifetime()
-	{
-		if(is_array($this->_frontendOptions) === true &&
-			isset($this->_frontendOptions['lifetime']) === true) {
-			return $this->_frontendOptions['lifetime'];
-		}
+    /**
+     * Returns the cache lifetime
+     *
+     * @return integer
+     */
+    public function getLifetime()
+    {
+        if (is_array($this->_frontendOptions) === true &&
+            isset($this->_frontendOptions['lifetime']) === true) {
+            return $this->_frontendOptions['lifetime'];
+        }
 
-		return 1;
-	}
+        return 1;
+    }
 
-	/**
-	 * Check whether if frontend is buffering output
-	 *
-	 * @return boolean
-	 */
-	public function isBuffering()
-	{
-		return false;
-	}
+    /**
+     * Check whether if frontend is buffering output
+     *
+     * @return boolean
+     */
+    public function isBuffering()
+    {
+        return false;
+    }
 
-	/**
-	 * Starts output frontend. Actually, does nothing
-	 */
-	public function start()
-	{
+    /**
+     * Starts output frontend. Actually, does nothing
+     */
+    public function start()
+    {
+    }
 
-	}
+    /**
+     * Returns output cached content
+     *
+     * @return string|null
+     */
+    public function getContent()
+    {
+    }
 
-	/**
-	 * Returns output cached content
-	 *
-	 * @return string|null
-	 */
-	public function getContent()
-	{
+    /**
+     * Stops output frontend
+     */
+    public function stop()
+    {
+    }
 
-	}
+    /**
+     * Serializes data before storing it
+     *
+     * @param mixed $data
+     * @return string
+     */
+    public function beforeStore($data)
+    {
+        return json_encode($data);
+    }
 
-	/**
-	 * Stops output frontend
-	 */
-	public function stop()
-	{
-
-	}
-
-	/**
-	 * Serializes data before storing it
-	 *
-	 * @param mixed $data
-	 * @return string
-	 */
-	public function beforeStore($data)
-	{
-		return json_encode($data);
-	}
-
-	/**
-	 * Unserializes data after retrieving it
-	 *
-	 * @param mixed $data
-	 * @return mixed
-	 */
-	public function afterRetrieve($data)
-	{
-		return json_decode($data);
-	}
+    /**
+     * Unserializes data after retrieving it
+     *
+     * @param mixed $data
+     * @return mixed
+     */
+    public function afterRetrieve($data)
+    {
+        return json_decode($data);
+    }
 }

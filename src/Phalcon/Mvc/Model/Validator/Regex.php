@@ -10,10 +10,10 @@
 */
 namespace Phalcon\Mvc\Model\Validator;
 
-use \Phalcon\Mvc\Model\Validator,
-	\Phalcon\Mvc\Model\ValidatorInterface,
-	\Phalcon\Mvc\Model\Exception,
-	\Phalcon\Mvc\ModelInterface;
+use \Phalcon\Mvc\Model\Validator;
+use \Phalcon\Mvc\Model\ValidatorInterface;
+use \Phalcon\Mvc\Model\Exception;
+use \Phalcon\Mvc\ModelInterface;
 
 /**
  * Phalcon\Mvc\Model\Validator\Regex
@@ -44,54 +44,54 @@ use \Phalcon\Mvc\Model\Validator,
  */
 class Regex extends Validator implements ValidatorInterface
 {
-	/**
-	 * Executes the validator
-	 *
-	 * @param \Phalcon\Mvc\ModelInterface $record
-	 * @return boolean
-	 * @throws Exception
-	 */
-	public function validate($record)
-	{
-		if(is_object($record) === false &&
-			$record instanceof ModelInterface === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+    /**
+     * Executes the validator
+     *
+     * @param \Phalcon\Mvc\ModelInterface $record
+     * @return boolean
+     * @throws Exception
+     */
+    public function validate($record)
+    {
+        if (is_object($record) === false &&
+            $record instanceof ModelInterface === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		$fieldName = $this->getOption('field');
-		if(is_string($fieldName) === false) {
-			throw new Exception('Field name must be a string');
-		}
+        $fieldName = $this->getOption('field');
+        if (is_string($fieldName) === false) {
+            throw new Exception('Field name must be a string');
+        }
 
-		//The 'pattern' option must be a valid regular expression
-		if($this->isSetOption('pattern') === false) {
-			throw new Exception('Validator requires a perl-compatible regex pattern');
-		}
-		$pattern = $this->getOption('pattern');
+        //The 'pattern' option must be a valid regular expression
+        if ($this->isSetOption('pattern') === false) {
+            throw new Exception('Validator requires a perl-compatible regex pattern');
+        }
+        $pattern = $this->getOption('pattern');
 
-		$value = $this->readAttribute($fieldName);
+        $value = $this->readAttribute($fieldName);
 
-		$failed = false;
-		$matches = null;
+        $failed = false;
+        $matches = null;
 
-		//Check if the value matches using preg_match
-		if(preg_match($pattern, $value, $matches) == true) {
-			$failed = ($matches[0] !== $value ? true : false);
-		} else {
-			$failed = true;
-		}
+        //Check if the value matches using preg_match
+        if (preg_match($pattern, $value, $matches) == true) {
+            $failed = ($matches[0] !== $value ? true : false);
+        } else {
+            $failed = true;
+        }
 
-		if($failed === true) {
-			//Check if the develop has defined a custom message
-			$message = $this->getOption('message');
-			if(isset($message) === false) {
-				$message = "Value of field '".$fieldName."' doesn't match regular expression";
-			}
+        if ($failed === true) {
+            //Check if the develop has defined a custom message
+            $message = $this->getOption('message');
+            if (isset($message) === false) {
+                $message = "Value of field '".$fieldName."' doesn't match regular expression";
+            }
 
-			$this->appendMessage($message, $fieldName, 'Regex');
-			return false;
-		}
+            $this->appendMessage($message, $fieldName, 'Regex');
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 }

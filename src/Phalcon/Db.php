@@ -43,58 +43,57 @@ use \Phalcon\Db\Exception as DbException;
  *  }
  *
  *} catch (Phalcon\Db\Exception $e) {
- *	echo $e->getMessage(), PHP_EOL;
+ *  echo $e->getMessage(), PHP_EOL;
  *}
  *
  * </code>
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/1.2.6/master/ext/db.c
  */
 abstract class Db
 {
-	/**
-	 * Fetch associative array
-	 * 
-	 * @var int
-	*/
-	const FETCH_ASSOC = 1;
+    /**
+     * Fetch associative array
+     *
+     * @var int
+    */
+    const FETCH_ASSOC = 1;
 
-	/**
-	 * Fetch associative and numeric array
-	 * 
-	 * @var int
-	*/
-	const FETCH_BOTH = 2;
+    /**
+     * Fetch associative and numeric array
+     *
+     * @var int
+    */
+    const FETCH_BOTH = 2;
 
-	/**
-	 * Fetch numeric array
-	 * 
-	 * @var int
-	*/
-	const FETCH_NUM = 3;
+    /**
+     * Fetch numeric array
+     *
+     * @var int
+    */
+    const FETCH_NUM = 3;
 
-	/**
-	 * Fetch object
-	 * 
-	 * @var int
-	*/
-	const FETCH_OBJ = 4;
+    /**
+     * Fetch object
+     *
+     * @var int
+    */
+    const FETCH_OBJ = 4;
 
-	/**
-	 * Enables/disables options in the Database component
-	 *
-	 * @param array $options
-	 * @throws DbException
-	 */
-	public static function setup($options)
-	{
-		if(is_array($options) === false) {
-			throw new DbException('Options must be an array');
-		}
+    /**
+     * Enables/disables options in the Database component
+     *
+     * @param array $options
+     * @throws DbException
+     */
+    public static function setup($options)
+    {
+        if (is_array($options) === false) {
+            throw new DbException('Options must be an array');
+        }
 
-		if(isset($options['escapeSqlIdentifiers']) === true) {
-			$GLOBALS['__phalcon_db__escape_identifiers'] = 
-				(bool)$options['escapeSqlIdentifiers'];
-		}
-	}
+        if (isset($options['escapeSqlIdentifiers']) === true) {
+            $GLOBALS['__phalcon_db__escape_identifiers'] = (bool)$options['escapeSqlIdentifiers'];
+        }
+    }
 }

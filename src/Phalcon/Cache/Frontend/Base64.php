@@ -10,8 +10,8 @@
 */
 namespace Phalcon\Cache\Frontend;
 
-use \Phalcon\Cache\FrontendInterface,
-	\Phalcon\Cache\Exception;
+use \Phalcon\Cache\FrontendInterface;
+use \Phalcon\Cache\Exception;
 
 /**
  * Phalcon\Cache\Frontend\Base64
@@ -29,9 +29,9 @@ use \Phalcon\Cache\FrontendInterface,
  *
  * //Create a MongoDB cache
  * $cache = new Phalcon\Cache\Backend\Mongo($frontCache, array(
- *		'server' => "mongodb://localhost",
+ *      'server' => "mongodb://localhost",
  *      'db' => 'caches',
- *		'collection' => 'images'
+ *      'collection' => 'images'
  * ));
  *
  * // Try to get cached image
@@ -46,106 +46,103 @@ use \Phalcon\Cache\FrontendInterface,
  * header('Content-Type: image/jpeg');
  * echo $image;
  *</code>
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/cache/frontend/base64.c
  */
 class Base64 implements FrontendInterface
 {
-	/**
-	 * Frontend Options
-	 * 
-	 * @var null|array
-	 * @access protected
-	*/
-	protected $_frontendOptions;
+    /**
+     * Frontend Options
+     *
+     * @var null|array
+     * @access protected
+    */
+    protected $_frontendOptions;
 
-	/**
-	 * \Phalcon\Cache\Frontend\Base64 constructor
-	 *
-	 * @param array|null $frontendOptions
-	 * @throws Exception
-	 */
-	public function __construct($frontendOptions = null)
-	{
-		if(is_array($frontendOptions) === false &&
-			is_null($frontendOptions) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+    /**
+     * \Phalcon\Cache\Frontend\Base64 constructor
+     *
+     * @param array|null $frontendOptions
+     * @throws Exception
+     */
+    public function __construct($frontendOptions = null)
+    {
+        if (is_array($frontendOptions) === false &&
+            is_null($frontendOptions) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		$this->_frontendOptions = $frontendOptions;
-	}
+        $this->_frontendOptions = $frontendOptions;
+    }
 
-	/**
-	 * Returns the cache lifetime
-	 *
-	 * @return integer
-	 */
-	public function getLifetime()
-	{
-		if(is_array($this->_frontendOptions) === true &&
-			isset($this->_frontendOptions['lifetime']) === true) {
-				return $this->_frontendOptions['lifetime'];
-		}
+    /**
+     * Returns the cache lifetime
+     *
+     * @return integer
+     */
+    public function getLifetime()
+    {
+        if (is_array($this->_frontendOptions) === true &&
+            isset($this->_frontendOptions['lifetime']) === true) {
+                return $this->_frontendOptions['lifetime'];
+        }
 
-		return 1;
-	}
+        return 1;
+    }
 
-	/**
-	 * Check whether if frontend is buffering output
-	 *
-	 * @return boolean
-	 */
-	public function isBuffering()
-	{
-		return false;
-	}
+    /**
+     * Check whether if frontend is buffering output
+     *
+     * @return boolean
+     */
+    public function isBuffering()
+    {
+        return false;
+    }
 
-	/**
-	 * Starts output frontend. Actually, does nothing
-	 */
-	public function start()
-	{
+    /**
+     * Starts output frontend. Actually, does nothing
+     */
+    public function start()
+    {
+    }
 
-	}
+    /**
+     * Returns output cached content
+     *
+     * @return string|null
+     */
+    public function getContent()
+    {
+    }
 
-	/**
-	 * Returns output cached content
-	 *
-	 * @return string|null
-	 */
-	public function getContent()
-	{
+    /**
+     * Stops output frontend
+     */
+    public function stop()
+    {
+    }
 
-	}
+    /**
+     * Serializes data before storing them
+     *
+     * @param mixed $data
+     * @return string
+     */
+    public function beforeStore($data)
+    {
+        return base64_encode($data);
+    }
 
-	/**
-	 * Stops output frontend
-	 */
-	public function stop()
-	{
-
-	}
-
-	/**
-	 * Serializes data before storing them
-	 *
-	 * @param mixed $data
-	 * @return string
-	 */
-	public function beforeStore($data)
-	{
-		return base64_encode($data);
-	}
-
-	/**
-	 * Unserializes data after retrieval
-	 *
-	 * @param mixed $data
-	 * @return mixed
-	 */
-	public function afterRetrieve($data)
-	{
-		//@note base64_decode can return "false" if an error occurs
-		return base64_decode($data);
-	}
+    /**
+     * Unserializes data after retrieval
+     *
+     * @param mixed $data
+     * @return mixed
+     */
+    public function afterRetrieve($data)
+    {
+        //@note base64_decode can return "false" if an error occurs
+        return base64_decode($data);
+    }
 }

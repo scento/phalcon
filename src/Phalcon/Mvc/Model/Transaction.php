@@ -10,11 +10,11 @@
 */
 namespace Phalcon\Mvc\Model;
 
-use \Phalcon\Mvc\Model\Transaction\Failed,
-	\Phalcon\Mvc\Model\TransactionInterface,
-	\Phalcon\Mvc\Model\Exception,
-	\Phalcon\Mvc\ModelInterface,
-	\Phalcon\DiInterface;
+use \Phalcon\Mvc\Model\Transaction\Failed;
+use \Phalcon\Mvc\Model\TransactionInterface;
+use \Phalcon\Mvc\Model\Exception;
+use \Phalcon\Mvc\ModelInterface;
+use \Phalcon\DiInterface;
 
 /**
  * Phalcon\Mvc\Model\Transaction
@@ -52,267 +52,267 @@ use \Phalcon\Mvc\Model\Transaction\Failed,
  *}
  *
  *</code>
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/mvc/model/transaction.c
  */
 class Transaction implements TransactionInterface
 {
-	/**
-	 * Connection
-	 * 
-	 * @var null|\Phalcon\Db\AdapterInterface
-	 * @access protected
-	*/
-	protected $_connection;
+    /**
+     * Connection
+     *
+     * @var null|\Phalcon\Db\AdapterInterface
+     * @access protected
+    */
+    protected $_connection;
 
-	/**
-	 * Active Transaction?
-	 * 
-	 * @var boolean
-	 * @access protected
-	*/
-	protected $_activeTransaction = false;
+    /**
+     * Active Transaction?
+     *
+     * @var boolean
+     * @access protected
+    */
+    protected $_activeTransaction = false;
 
-	/**
-	 * Is New Transaction?
-	 * 
-	 * @var boolean
-	 * @access protected
-	*/
-	protected $_isNewTransaction = true;
+    /**
+     * Is New Transaction?
+     *
+     * @var boolean
+     * @access protected
+    */
+    protected $_isNewTransaction = true;
 
-	/**
-	 * Rollback on Abort?
-	 * 
-	 * @var boolean
-	 * @access protected
-	*/
-	protected $_rollbackOnAbort = false;
+    /**
+     * Rollback on Abort?
+     *
+     * @var boolean
+     * @access protected
+    */
+    protected $_rollbackOnAbort = false;
 
-	/**
-	 * Manager
-	 * 
-	 * @var null|\Phalcon\Mvc\Model\Transaction\ManagerInterface
-	 * @access protected
-	*/
-	protected $_manager;
+    /**
+     * Manager
+     *
+     * @var null|\Phalcon\Mvc\Model\Transaction\ManagerInterface
+     * @access protected
+    */
+    protected $_manager;
 
-	/**
-	 * Messages
-	 * 
-	 * @var null|array
-	 * @access protected
-	*/
-	protected $_messages;
+    /**
+     * Messages
+     *
+     * @var null|array
+     * @access protected
+    */
+    protected $_messages;
 
-	/**
-	 * Rollback Record
-	 * 
-	 * @var null|\Phalcon\Mvc\ModelInterface
-	 * @access protected
-	*/
-	protected $_rollbackRecord;
+    /**
+     * Rollback Record
+     *
+     * @var null|\Phalcon\Mvc\ModelInterface
+     * @access protected
+    */
+    protected $_rollbackRecord;
 
-	/**
-	 * \Phalcon\Mvc\Model\Transaction constructor
-	 *
-	 * @param \Phalcon\DiInterface $dependencyInjector
-	 * @param boolean|null $autoBegin
-	 * @param string|null $service
-	 * @throws Exception
-	 */
-	public function __construct($dependencyInjector, $autoBegin = null, $service = null)
-	{
-		if(is_object($dependencyInjector) === false ||
-			$dependencyInjector instanceof DiInterface === false) {
-			throw new Exception('A dependency injector container is required to obtain the services related to the ORM');
-		}
+    /**
+     * \Phalcon\Mvc\Model\Transaction constructor
+     *
+     * @param \Phalcon\DiInterface $dependencyInjector
+     * @param boolean|null $autoBegin
+     * @param string|null $service
+     * @throws Exception
+     */
+    public function __construct($dependencyInjector, $autoBegin = null, $service = null)
+    {
+        if (is_object($dependencyInjector) === false ||
+            $dependencyInjector instanceof DiInterface === false) {
+            throw new Exception('A dependency injector container is required to obtain the services related to the ORM');
+        }
 
-		if(is_null($autoBegin) === true) {
-			$autoBegin = false;
-		} elseif(is_bool($autoBegin) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+        if (is_null($autoBegin) === true) {
+            $autoBegin = false;
+        } elseif (is_bool($autoBegin) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		if(is_null($service) === true) {
-			$service = 'db';
-		} elseif(is_string($service) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+        if (is_null($service) === true) {
+            $service = 'db';
+        } elseif (is_string($service) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		$this->_connection = $dependencyInjector->get($service);
+        $this->_connection = $dependencyInjector->get($service);
 
-		if($autoBegin === true) {
-			$this->_connection->begin();
-		}
-	}
+        if ($autoBegin === true) {
+            $this->_connection->begin();
+        }
+    }
 
-	/**
-	 * Sets transaction manager related to the transaction
-	 *
-	 * @param \Phalcon\Mvc\Model\Transaction\ManagerInterface $manager
-	 * @throws Exception
-	 */
-	public function setTransactionManager($manager)
-	{
-		if(is_object($manager) === false ||
-			$manager instanceof ManagerInterface === false) {
-			throw new Exception('Manager must be an Object');
-		}
+    /**
+     * Sets transaction manager related to the transaction
+     *
+     * @param \Phalcon\Mvc\Model\Transaction\ManagerInterface $manager
+     * @throws Exception
+     */
+    public function setTransactionManager($manager)
+    {
+        if (is_object($manager) === false ||
+            $manager instanceof ManagerInterface === false) {
+            throw new Exception('Manager must be an Object');
+        }
 
-		$this->_manager = $manager;
-	}
+        $this->_manager = $manager;
+    }
 
-	/**
-	 * Starts the transaction
-	 *
-	 * @return boolean
-	 */
-	public function begin()
-	{
-		return $this->_connection->begin();
-	}
+    /**
+     * Starts the transaction
+     *
+     * @return boolean
+     */
+    public function begin()
+    {
+        return $this->_connection->begin();
+    }
 
-	/**
-	 * Commits the transaction
-	 *
-	 * @return boolean
-	 */
-	public function commit()
-	{
-		if(is_object($this->_manager) === true) {
-			call_user_func(array($this->_manager, 'notifyCommit'), $this);
-		}
+    /**
+     * Commits the transaction
+     *
+     * @return boolean
+     */
+    public function commit()
+    {
+        if (is_object($this->_manager) === true) {
+            call_user_func(array($this->_manager, 'notifyCommit'), $this);
+        }
 
-		return $this->_connection->commit();
-	}
+        return $this->_connection->commit();
+    }
 
-	/**
-	 * Rollbacks the transaction
-	 *
-	 * @param string|null $rollbackMessage
-	 * @param \Phalcon\Mvc\ModelInterface|null $rollbackRecord
-	 * @return boolean
-	 * @throws Exception
-	 */
-	public function rollback($rollbackMessage = null, $rollbackRecord = null)
-	{
-		if(is_string($rollbackMessage) === false &&
-			is_null($rollbackMessage) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+    /**
+     * Rollbacks the transaction
+     *
+     * @param string|null $rollbackMessage
+     * @param \Phalcon\Mvc\ModelInterface|null $rollbackRecord
+     * @return boolean
+     * @throws Exception
+     */
+    public function rollback($rollbackMessage = null, $rollbackRecord = null)
+    {
+        if (is_string($rollbackMessage) === false &&
+            is_null($rollbackMessage) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		if((is_object($rollbackRecord) === false ||
-			$rollbackRecord instanceof ModelInterface === false) &&
-			is_null($rollbackRecord) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+        if ((is_object($rollbackRecord) === false ||
+            $rollbackRecord instanceof ModelInterface === false) &&
+            is_null($rollbackRecord) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		if(is_object($this->_manager) === true) {
-			call_user_func(array($this->_manager, 'notifyRollback'), $this);
-		}
+        if (is_object($this->_manager) === true) {
+            call_user_func(array($this->_manager, 'notifyRollback'), $this);
+        }
 
-		if($this->_connection->rollback() === true) {
-			if(is_null($rollbackMessage) === true) {
-				$rollbackMessage = 'Transaction aborted';
-			}
+        if ($this->_connection->rollback() === true) {
+            if (is_null($rollbackMessage) === true) {
+                $rollbackMessage = 'Transaction aborted';
+            }
 
-			if(is_object($rollbackRecord) === true) {
-				$this->_rollbackRecord = $rollbackRecord;
-			}
+            if (is_object($rollbackRecord) === true) {
+                $this->_rollbackRecord = $rollbackRecord;
+            }
 
-			throw new Failed($rollbackMessage, $rollbackRecord);
-		}
-	}
+            throw new Failed($rollbackMessage, $rollbackRecord);
+        }
+    }
 
-	/**
-	 * Returns the connection related to transaction
-	 *
-	 * @return \Phalcon\Db\AdapterInterface
-	 */
-	public function getConnection()
-	{
-		if($this->_rollbackOnAbort === true &&
-			connection_aborted() === true) {
-			$this->rollback('The request was aborted');
-		}
+    /**
+     * Returns the connection related to transaction
+     *
+     * @return \Phalcon\Db\AdapterInterface
+     */
+    public function getConnection()
+    {
+        if ($this->_rollbackOnAbort === true &&
+            connection_aborted() === true) {
+            $this->rollback('The request was aborted');
+        }
 
-		return $this->_connection;
-	}
+        return $this->_connection;
+    }
 
-	/**
-	 * Sets if is a reused transaction or new once
-	 *
-	 * @param boolean $isNew
-	 * @throws Exception
-	 */
-	public function setIsNewTransaction($isNew)
-	{
-		if(is_bool($isNew) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+    /**
+     * Sets if is a reused transaction or new once
+     *
+     * @param boolean $isNew
+     * @throws Exception
+     */
+    public function setIsNewTransaction($isNew)
+    {
+        if (is_bool($isNew) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		$this->_isNewTransaction = $isNew;
-	}
+        $this->_isNewTransaction = $isNew;
+    }
 
-	/**
-	 * Sets flag to rollback on abort the HTTP connection
-	 *
-	 * @param boolean $rollbackOnAbort
-	 * @throws Exception
-	 */
-	public function setRollbackOnAbort($rollbackOnAbort)
-	{
-		if(is_bool($rollbackOnAbort) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+    /**
+     * Sets flag to rollback on abort the HTTP connection
+     *
+     * @param boolean $rollbackOnAbort
+     * @throws Exception
+     */
+    public function setRollbackOnAbort($rollbackOnAbort)
+    {
+        if (is_bool($rollbackOnAbort) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		$this->_rollbackOnAbort = $rollbackOnAbort;
-	}
+        $this->_rollbackOnAbort = $rollbackOnAbort;
+    }
 
-	/**
-	 * Checks whether transaction is managed by a transaction manager
-	 *
-	 * @return boolean
-	 */
-	public function isManaged()
-	{
-		return is_object($this->_manager);
-	}
+    /**
+     * Checks whether transaction is managed by a transaction manager
+     *
+     * @return boolean
+     */
+    public function isManaged()
+    {
+        return is_object($this->_manager);
+    }
 
-	/**
-	 * Returns validations messages from last save try
-	 *
-	 * @return array
-	 */
-	public function getMessages()
-	{
-		return $this->_messages;
-	}
+    /**
+     * Returns validations messages from last save try
+     *
+     * @return array
+     */
+    public function getMessages()
+    {
+        return $this->_messages;
+    }
 
-	/**
-	 * Checks whether internal connection is under an active transaction
-	 *
-	 * @return boolean
-	 */
-	public function isValid()
-	{
-		return $this->_connection->isUnderTransaction();
-	}
+    /**
+     * Checks whether internal connection is under an active transaction
+     *
+     * @return boolean
+     */
+    public function isValid()
+    {
+        return $this->_connection->isUnderTransaction();
+    }
 
-	/**
-	 * Sets object which generates rollback action
-	 *
-	 * @param \Phalcon\Mvc\ModelInterface $record
-	 * @throws Exception
-	 */
-	public function setRollbackedRecord($record)
-	{
-		if(is_object($record) === false ||
-			$record instanceof ModelInterface === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+    /**
+     * Sets object which generates rollback action
+     *
+     * @param \Phalcon\Mvc\ModelInterface $record
+     * @throws Exception
+     */
+    public function setRollbackedRecord($record)
+    {
+        if (is_object($record) === false ||
+            $record instanceof ModelInterface === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		$this->_rollbackRecord = $record;
-	}
+        $this->_rollbackRecord = $record;
+    }
 }

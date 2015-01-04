@@ -10,10 +10,10 @@
 */
 namespace Phalcon\Mvc\Model\Validator;
 
-use \Phalcon\Mvc\Model\Validator,
-	\Phalcon\Mvc\Model\ValidatorInterface,
-	\Phalcon\Mvc\Model\Exception,
-	\Phalcon\Mvc\ModelInterface;
+use \Phalcon\Mvc\Model\Validator;
+use \Phalcon\Mvc\Model\ValidatorInterface;
+use \Phalcon\Mvc\Model\Exception;
+use \Phalcon\Mvc\ModelInterface;
 
 /**
  * Phalcon\Mvc\Model\Validator\PresenceOf
@@ -44,39 +44,39 @@ use \Phalcon\Mvc\Model\Validator,
  */
 class PresenceOf extends Validator implements ValidatorInterface
 {
-	/**
-	 * Executes the validator
-	 *
-	 * @param \Phalcon\Mvc\ModelInterface $record
-	 * @return boolean
-	 * @throws Exception
-	 */
-	public function validate($record)
-	{
-		if(is_object($record) === false ||
-			$record instanceof ModelInterface === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+    /**
+     * Executes the validator
+     *
+     * @param \Phalcon\Mvc\ModelInterface $record
+     * @return boolean
+     * @throws Exception
+     */
+    public function validate($record)
+    {
+        if (is_object($record) === false ||
+            $record instanceof ModelInterface === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		$fieldName = $this->getOption('field');
-		if(is_string($fieldName) === false) {
-			throw new Exception('Field name must be a string');
-		}
+        $fieldName = $this->getOption('field');
+        if (is_string($fieldName) === false) {
+            throw new Exception('Field name must be a string');
+        }
 
-		//A value is numm when it is identical to null or a empty string
-		$value = $record->readAttribute($fieldName);
+        //A value is numm when it is identical to null or a empty string
+        $value = $record->readAttribute($fieldName);
 
-		if(empty($value) === true) {
-			//Check if the developer has defined a custom message
-			$message = $this->getOption('message');
-			if(isset($message) === false) {
-				$message = "'".$fieldName."' is required";
-			}
+        if (empty($value) === true) {
+            //Check if the developer has defined a custom message
+            $message = $this->getOption('message');
+            if (isset($message) === false) {
+                $message = "'".$fieldName."' is required";
+            }
 
-			$this->appendMessage($message, $fieldName, 'PresenceOf');
-			return false;
-		}
+            $this->appendMessage($message, $fieldName, 'PresenceOf');
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 }

@@ -22,25 +22,25 @@ use \Phalcon\Db\Profiler\Item;
  *
  *<code>
  *
- *	$profiler = new Phalcon\Db\Profiler();
+ *  $profiler = new Phalcon\Db\Profiler();
  *
- *	//Set the connection profiler
- *	$connection->setProfiler($profiler);
+ *  //Set the connection profiler
+ *  $connection->setProfiler($profiler);
  *
- *	$sql = "SELECT buyer_name, quantity, product_name
- *	FROM buyers LEFT JOIN products ON
- *	buyers.pid=products.id";
+ *  $sql = "SELECT buyer_name, quantity, product_name
+ *  FROM buyers LEFT JOIN products ON
+ *  buyers.pid=products.id";
  *
- *	//Execute a SQL statement
- *	$connection->query($sql);
+ *  //Execute a SQL statement
+ *  $connection->query($sql);
  *
- *	//Get the last profile in the profiler
- *	$profile = $profiler->getLastProfile();
+ *  //Get the last profile in the profiler
+ *  $profile = $profiler->getLastProfile();
  *
- *	echo "SQL Statement: ", $profile->getSQLStatement(), "\n";
- *	echo "Start Time: ", $profile->getInitialTime(), "\n";
- *	echo "Final Time: ", $profile->getFinalTime(), "\n";
- *	echo "Total Elapsed Time: ", $profile->getTotalElapsedSeconds(), "\n";
+ *  echo "SQL Statement: ", $profile->getSQLStatement(), "\n";
+ *  echo "Start Time: ", $profile->getInitialTime(), "\n";
+ *  echo "Final Time: ", $profile->getFinalTime(), "\n";
+ *  echo "Total Elapsed Time: ", $profile->getTotalElapsedSeconds(), "\n";
  *
  *</code>
  *
@@ -48,129 +48,129 @@ use \Phalcon\Db\Profiler\Item;
  */
 class Profiler
 {
-	/**
-	 * All Profiles
-	 * 
-	 * @var null|array
-	 * @access protected
-	*/
-	protected $_allProfiles;
+    /**
+     * All Profiles
+     *
+     * @var null|array
+     * @access protected
+    */
+    protected $_allProfiles;
 
-	/**
-	 * Active Profile
-	 * 
-	 * @var null|\Phalcon\Db\Profiler\Item
-	 * @access protected
-	*/
-	protected $_activeProfile;
+    /**
+     * Active Profile
+     *
+     * @var null|\Phalcon\Db\Profiler\Item
+     * @access protected
+    */
+    protected $_activeProfile;
 
-	/**
-	 * Total Seconds
-	 * 
-	 * @var int
-	 * @access protected
-	*/
-	protected $_totalSeconds = 0;
+    /**
+     * Total Seconds
+     *
+     * @var int
+     * @access protected
+    */
+    protected $_totalSeconds = 0;
 
-	/**
-	 * Starts the profile of a SQL sentence
-	 *
-	 * @param string $sqlStatement
-	 * @return \Phalcon\Db\Profiler
-	 */
-	public function startProfile($sqlStatement)
-	{
-		$activeProfile = new Item();
-		$activeProfile->setSqlStatement($sqlStatement);
-		$activeProfile->setInitialTime(microtime(true));
-		if(method_exists($this, 'beforeStartProfile') === true) {
-			$this->beforeStartProfile($activeProfile);
-		}
+    /**
+     * Starts the profile of a SQL sentence
+     *
+     * @param string $sqlStatement
+     * @return \Phalcon\Db\Profiler
+     */
+    public function startProfile($sqlStatement)
+    {
+        $activeProfile = new Item();
+        $activeProfile->setSqlStatement($sqlStatement);
+        $activeProfile->setInitialTime(microtime(true));
+        if (method_exists($this, 'beforeStartProfile') === true) {
+            $this->beforeStartProfile($activeProfile);
+        }
 
-		$this->_activeProfile = $activeProfile;
+        $this->_activeProfile = $activeProfile;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Stops the active profile
-	 *
-	 * @return \Phalcon\Db\Profiler
-	 */
-	public function stopProfile()
-	{
-		$finalTime = microtime(true);
+    /**
+     * Stops the active profile
+     *
+     * @return \Phalcon\Db\Profiler
+     */
+    public function stopProfile()
+    {
+        $finalTime = microtime(true);
 
-		$activeProfile = $this->_activeProfile;
-		$this->_activeProfile->setFinalTime($finalTime);
-		$difference = $finalTime - $activeProfile->getInitialTime();
-		$this->_totalSeconds = $this->_totalSeconds + $difference;
+        $activeProfile = $this->_activeProfile;
+        $this->_activeProfile->setFinalTime($finalTime);
+        $difference = $finalTime - $activeProfile->getInitialTime();
+        $this->_totalSeconds = $this->_totalSeconds + $difference;
 
-		if(is_array($this->_allProfiles) === false) {
-			$this->_allProfiles = array();
-		}
-		$this->_allProfiles[] = $activeProfile;
+        if (is_array($this->_allProfiles) === false) {
+            $this->_allProfiles = array();
+        }
+        $this->_allProfiles[] = $activeProfile;
 
-		if(method_exists($this, 'afterEndProfile') === true) {
-			$this->afterEndProfile($activeProfile);
-		}
+        if (method_exists($this, 'afterEndProfile') === true) {
+            $this->afterEndProfile($activeProfile);
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Returns the total number of SQL statements processed
-	 *
-	 * @return integer
-	 */
-	public function getNumberTotalStatements()
-	{
-		if(is_array($this->_allProfiles) === true) {
-			return count($this->_allProfiles);
-		} else {
-			return 0;
-		}
-	}
+    /**
+     * Returns the total number of SQL statements processed
+     *
+     * @return integer
+     */
+    public function getNumberTotalStatements()
+    {
+        if (is_array($this->_allProfiles) === true) {
+            return count($this->_allProfiles);
+        } else {
+            return 0;
+        }
+    }
 
-	/**
-	 * Returns the total time in seconds spent by the profiles
-	 *
-	 * @return int
-	 */
-	public function getTotalElapsedSeconds()
-	{
-		return $this->_totalSeconds;
-	}
+    /**
+     * Returns the total time in seconds spent by the profiles
+     *
+     * @return int
+     */
+    public function getTotalElapsedSeconds()
+    {
+        return $this->_totalSeconds;
+    }
 
-	/**
-	 * Returns all the processed profiles
-	 *
-	 * @return \Phalcon\Db\Profiler\Item[]|null
-	 */
-	public function getProfiles()
-	{
-		return $this->_allProfiles;
-	}
+    /**
+     * Returns all the processed profiles
+     *
+     * @return \Phalcon\Db\Profiler\Item[]|null
+     */
+    public function getProfiles()
+    {
+        return $this->_allProfiles;
+    }
 
-	/**
-	 * Resets the profiler, cleaning up all the profiles
-	 *
-	 * @return \Phalcon\Db\Profiler
-	 */
-	public function reset()
-	{
-		$this->_allProfiles = array();
+    /**
+     * Resets the profiler, cleaning up all the profiles
+     *
+     * @return \Phalcon\Db\Profiler
+     */
+    public function reset()
+    {
+        $this->_allProfiles = array();
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Returns the last profile executed in the profiler
-	 *
-	 * @return \Phalcon\Db\Profiler\Item
-	 */
-	public function getLastProfile()
-	{
-		return $this->_activeProfile;
-	}
+    /**
+     * Returns the last profile executed in the profiler
+     *
+     * @return \Phalcon\Db\Profiler\Item
+     */
+    public function getLastProfile()
+    {
+        return $this->_activeProfile;
+    }
 }

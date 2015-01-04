@@ -10,10 +10,10 @@
 */
 namespace Phalcon\Forms\Element;
 
-use \Phalcon\Forms\Element,
-	\Phalcon\Forms\ElementInterface,
-	\Phalcon\Forms\Exception,
-	\Phalcon\Tag\Select as TagSelect;
+use \Phalcon\Forms\Element;
+use \Phalcon\Forms\ElementInterface;
+use \Phalcon\Forms\Exception;
+use \Phalcon\Tag\Select as TagSelect;
 
 /**
  * Phalcon\Forms\Element\Select
@@ -24,97 +24,99 @@ use \Phalcon\Forms\Element,
  */
 class Select extends Element implements ElementInterface
 {
-	/**
-	 * Options Values
-	 * 
-	 * @var null|array|object
-	 * @access protected
-	*/
-	protected $_optionsValues;
+    /**
+     * Options Values
+     *
+     * @var null|array|object
+     * @access protected
+    */
+    protected $_optionsValues;
 
-	/**
-	 * \Phalcon\Forms\Element constructor
-	 *
-	 * @param string $name
-	 * @param object|array|null $options
-	 * @param array|null $attributes
-	 * @throws Exception
-	 */
-	public function __construct($name, $options = null, $attributes = null)
-	{
-		if(is_object($options) === false &&
-			is_array($options) === false &&
-			is_null($options) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+    /**
+     * \Phalcon\Forms\Element constructor
+     *
+     * @param string $name
+     * @param object|array|null $options
+     * @param array|null $attributes
+     * @throws Exception
+     */
+    public function __construct($name, $options = null, $attributes = null)
+    {
+        if (is_object($options) === false &&
+            is_array($options) === false &&
+            is_null($options) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		$this->_optionsValues = $options;
-		parent::__construct($name, $attributes);
-	}
+        $this->_optionsValues = $options;
+        parent::__construct($name, $attributes);
+    }
 
-	/**
-	 * Set the choice's options
-	 *
-	 * @param array|object $options
-	 * @return \Phalcon\Forms\Element
-	 * @throws Exception
-	 */
-	public function setOptions($options)
-	{
-		if(is_object($options) === false &&
-			is_array($options) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+    /**
+     * Set the choice's options
+     *
+     * @param array|object $options
+     * @return \Phalcon\Forms\Element
+     * @throws Exception
+     */
+    public function setOptions($options)
+    {
+        if (is_object($options) === false &&
+            is_array($options) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		$this->_optionsValues = $options;
+        $this->_optionsValues = $options;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Returns the choices' options
-	 *
-	 * @return array|object|null
-	 */
-	public function getOptions()
-	{
-		return $this->_optionsValues;
-	}
+    /**
+     * Returns the choices' options
+     *
+     * @return array|object|null
+     */
+    public function getOptions()
+    {
+        return $this->_optionsValues;
+    }
 
-	/**
-	 * Adds an option to the current options
-	 *
-	 * @param array $option
-	 * @return $this
-	 * @throws Exception
-	 */
-	public function addOption($option)
-	{
-		if(is_array($option) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+    /**
+     * Adds an option to the current options
+     *
+     * @param array $option
+     * @return $this
+     * @throws Exception
+     */
+    public function addOption($option)
+    {
+        if (is_array($option) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		$this->_optionsValues[] = $option;
+        $this->_optionsValues[] = $option;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Renders the element widget returning html
-	 *
-	 * @param array|null $attributes
-	 * @return string
-	 * @throws Exception
-	 */
-	public function render($attributes = null)
-	{
-		if(is_array($attributes) === false &&
-			is_null($attributes) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+    /**
+     * Renders the element widget returning html
+     *
+     * @param array|null $attributes
+     * @return string
+     * @throws Exception
+     */
+    public function render($attributes = null)
+    {
+        if (is_array($attributes) === false &&
+            is_null($attributes) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		//Merge passed attributes with previously defined ones
-		return TagSelect::selectField($this->prepareAttributes($attributes), 
-			$this->_optionsValues);
-	}
+        //Merge passed attributes with previously defined ones
+        return TagSelect::selectField(
+            $this->prepareAttributes($attributes),
+            $this->_optionsValues
+        );
+    }
 }

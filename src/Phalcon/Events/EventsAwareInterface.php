@@ -11,22 +11,22 @@ namespace Phalcon\Events;
 
 /**
  * Phalcon\Events\EventsAwareInterface initializer
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/events/eventsawareinterface.c
  */
 interface EventsAwareInterface
 {
-	/**
-	 * Sets the events manager
-	 *
-	 * @param \Phalcon\Events\ManagerInterface $eventsManager
-	 */
-	public function setEventsManager($eventsManager);
+    /**
+     * Sets the events manager
+     *
+     * @param \Phalcon\Events\ManagerInterface $eventsManager
+     */
+    public function setEventsManager($eventsManager);
 
-	/**
-	 * Returns the internal event manager
-	 *
-	 * @return \Phalcon\Events\ManagerInterface
-	 */
-	public function getEventsManager();
+    /**
+     * Returns the internal event manager
+     *
+     * @return \Phalcon\Events\ManagerInterface
+     */
+    public function getEventsManager();
 }

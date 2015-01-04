@@ -13,10 +13,9 @@ namespace Phalcon\Forms;
  * Phalcon\Forms\Exception
  *
  * Exceptions thrown in Phalcon\Forms will use this class
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/forms/exception.c
  */
 class Exception extends \Phalcon\Exception
 {
-
 }

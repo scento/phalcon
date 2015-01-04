@@ -10,11 +10,11 @@
 */
 namespace Phalcon\Validation\Validator;
 
-use \Phalcon\Validation\Validator,
-	\Phalcon\Validation\ValidatorInterface,
-	\Phalcon\Validation\Message,
-	\Phalcon\Validation\Exception,
-	\Phalcon\Validation;
+use \Phalcon\Validation\Validator;
+use \Phalcon\Validation\ValidatorInterface;
+use \Phalcon\Validation\Message;
+use \Phalcon\Validation\Exception;
+use \Phalcon\Validation;
 
 /**
  * Phalcon\Validation\Validator\Identical
@@ -34,36 +34,36 @@ use \Phalcon\Validation\Validator,
  */
 class Identical extends Validator implements ValidatorInterface
 {
-	/**
-	 * Executes the validation
-	 *
-	 * @param \Phalcon\Validation $validator
-	 * @param string $attribute
-	 * @return boolean
-	 * @throws Exception
-	 */
-	public function validate($validator, $attribute)
-	{
-		if(is_object($validator) === false ||
-			$validator instanceof Validation === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+    /**
+     * Executes the validation
+     *
+     * @param \Phalcon\Validation $validator
+     * @param string $attribute
+     * @return boolean
+     * @throws Exception
+     */
+    public function validate($validator, $attribute)
+    {
+        if (is_object($validator) === false ||
+            $validator instanceof Validation === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		if(is_string($attribute) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+        if (is_string($attribute) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		if($validator->getValue($attribute) !== $this->getOption('value')) {
-			$message = $this->getOption('message');
-			if(empty($message) === true) {
-				$message = $attribute.' does not have the expected value';
-			}
+        if ($validator->getValue($attribute) !== $this->getOption('value')) {
+            $message = $this->getOption('message');
+            if (empty($message) === true) {
+                $message = $attribute.' does not have the expected value';
+            }
 
-			$validator->appendMessage(new Message($message, $attribute, 'Identical'));
+            $validator->appendMessage(new Message($message, $attribute, 'Identical'));
 
-			return false;
-		}
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 }

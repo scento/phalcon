@@ -10,9 +10,9 @@
 */
 namespace Phalcon\CLI;
 
-use \Phalcon\DI\Injectable,
-	\Phalcon\Events\EventsAwareInterface,
-	\Phalcon\DI\InjectionAwareInterface;
+use \Phalcon\DI\Injectable;
+use \Phalcon\Events\EventsAwareInterface;
+use \Phalcon\DI\InjectionAwareInterface;
 
 /**
  * Phalcon\CLI\Task
@@ -41,16 +41,16 @@ use \Phalcon\DI\Injectable,
  *}
  *
  *</code>
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/cli/task.c
  */
 class Task extends Injectable implements EventsAwareInterface, InjectionAwareInterface
 {
-	/**
-	 * \Phalcon\CLI\Task constructor
-	 */
-	final public function __construct()
-	{
-		//Look at the original code...
-	}
+    /**
+     * \Phalcon\CLI\Task constructor
+     */
+    final public function __construct()
+    {
+        //Look at the original code...
+    }
 }

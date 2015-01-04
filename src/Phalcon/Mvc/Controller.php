@@ -10,9 +10,9 @@
 */
 namespace Phalcon\Mvc;
 
-use \Phalcon\DI\Injectable,
-	\Phalcon\Events\EventsAwareInterface,
-	\Phalcon\DI\InjectionAwareInterface;
+use \Phalcon\DI\Injectable;
+use \Phalcon\Events\EventsAwareInterface;
+use \Phalcon\DI\InjectionAwareInterface;
 
 /**
  * Phalcon\Mvc\Controller
@@ -48,18 +48,18 @@ use \Phalcon\DI\Injectable,
  *}
  *
  *</code>
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/mvc/controller.c
  */
 abstract class Controller extends Injectable implements EventsAwareInterface, InjectionAwareInterface
 {
-	/**
-	 * \Phalcon\Mvc\Controller constructor
-	 */
-	final public function __construct()
-	{
-		if(method_exists($this, 'onConstruct') === true) {
-			$this->onConstruct();
-		}
-	}
+    /**
+     * \Phalcon\Mvc\Controller constructor
+     */
+    final public function __construct()
+    {
+        if (method_exists($this, 'onConstruct') === true) {
+            $this->onConstruct();
+        }
+    }
 }

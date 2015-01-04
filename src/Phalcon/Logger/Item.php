@@ -21,82 +21,82 @@ use \Phalcon\Logger\Exception;
  */
 class Item
 {
-	/**
-	 * Type
-	 * 
-	 * @var null|int
-	 * @access protected
-	*/
-	protected $_type;
+    /**
+     * Type
+     *
+     * @var null|int
+     * @access protected
+    */
+    protected $_type;
 
-	/**
-	 * Message
-	 * 
-	 * @var null|string
-	 * @access protected
-	*/
-	protected $_message;
+    /**
+     * Message
+     *
+     * @var null|string
+     * @access protected
+    */
+    protected $_message;
 
-	/**
-	 * Time
-	 * 
-	 * @var null|int
-	 * @access protected
-	*/
-	protected $_time;
+    /**
+     * Time
+     *
+     * @var null|int
+     * @access protected
+    */
+    protected $_time;
 
-	/**
-	 * \Phalcon\Logger\Item constructor
-	 *
-	 * @param string $message
-	 * @param integer $type
-	 * @param integer $time
-	 * @throws Exception
-	 */
-	public function __construct($message, $type, $time = null)
-	{
-		if(is_string($message) === false || is_int($type) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+    /**
+     * \Phalcon\Logger\Item constructor
+     *
+     * @param string $message
+     * @param integer $type
+     * @param integer $time
+     * @throws Exception
+     */
+    public function __construct($message, $type, $time = null)
+    {
+        if (is_string($message) === false || is_int($type) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		if(is_null($time) === true) {
-			$time = 0;
-		} elseif(is_int($time) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+        if (is_null($time) === true) {
+            $time = 0;
+        } elseif (is_int($time) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		$this->_message = $message;
-		$this->_type = $type;
-		$this->_time = $time;
-	}
+        $this->_message = $message;
+        $this->_type = $type;
+        $this->_time = $time;
+    }
 
-	/**
-	 * Returns the message
-	 *
-	 * @return string
-	 */
-	public function getMessage()
-	{
-		return $this->_message;
-	}
+    /**
+     * Returns the message
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->_message;
+    }
 
-	/**
-	 * Returns the log type
-	 *
-	 * @return integer
-	 */
-	public function getType()
-	{
-		return $this->_type;
-	}
+    /**
+     * Returns the log type
+     *
+     * @return integer
+     */
+    public function getType()
+    {
+        return $this->_type;
+    }
 
-	/**
-	 * Returns log timestamp
-	 *
-	 * @return integer
-	 */
-	public function getTime()
-	{
-		return $this->_time;
-	}
+    /**
+     * Returns log timestamp
+     *
+     * @return integer
+     */
+    public function getTime()
+    {
+        return $this->_time;
+    }
 }

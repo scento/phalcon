@@ -28,10 +28,9 @@ namespace Phalcon;
  *
  * echo $session->get('var');
  *</code>
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/session.c
  */
 abstract class Session
 {
-	
 }

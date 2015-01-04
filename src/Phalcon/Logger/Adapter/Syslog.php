@@ -10,10 +10,10 @@
 */
 namespace Phalcon\Logger\Adapter;
 
-use \Phalcon\Logger\Adapter,
-	\Phalcon\Logger\AdapterInterface,
-	\Phalcon\Logger\Exception,
-	\Phalcon\Logger\Formatter\Syslog as SyslogFormatter;
+use \Phalcon\Logger\Adapter;
+use \Phalcon\Logger\AdapterInterface;
+use \Phalcon\Logger\Exception;
+use \Phalcon\Logger\Formatter\Syslog as SyslogFormatter;
 
 /**
  * Phalcon\Logger\Adapter\Syslog
@@ -21,112 +21,110 @@ use \Phalcon\Logger\Adapter,
  * Sends logs to the system logger
  *
  *<code>
- *	$logger = new \Phalcon\Logger\Adapter\Syslog("ident", array(
- *		'option' => LOG_NDELAY,
- *		'facility' => LOG_MAIL
- *	));
- *	$logger->log("This is a message");
- *	$logger->log("This is an error", \Phalcon\Logger::ERROR);
- *	$logger->error("This is another error");
+ *  $logger = new \Phalcon\Logger\Adapter\Syslog("ident", array(
+ *      'option' => LOG_NDELAY,
+ *      'facility' => LOG_MAIL
+ *  ));
+ *  $logger->log("This is a message");
+ *  $logger->log("This is an error", \Phalcon\Logger::ERROR);
+ *  $logger->error("This is another error");
  *</code>
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/logger/adapter/syslog.c
  */
 class Syslog extends Adapter implements AdapterInterface
 {
-	/**
-	 * Opened
-	 * 
-	 * @var boolean
-	 * @access protected
-	*/
-	protected $_opened = false;
+    /**
+     * Opened
+     *
+     * @var boolean
+     * @access protected
+    */
+    protected $_opened = false;
 
-	/**
-	 * \Phalcon\Logger\Adapter\Syslog constructor
-	 *
-	 * @param string $name
-	 * @param array|null $options
-	 */
-	public function __construct($name, $options = null)
-	{
-		if(is_string($name) === true) {
+    /**
+     * \Phalcon\Logger\Adapter\Syslog constructor
+     *
+     * @param string $name
+     * @param array|null $options
+     */
+    public function __construct($name, $options = null)
+    {
+        if (is_string($name) === true) {
+            //Open the log in LOG_ODELAY mode
+            $option = 4;
 
-			//Open the log in LOG_ODELAY mode
-			$option = 4;
+            //By default the facility is LOG_USER
+            $facility = 8;
 
-			//By default the facility is LOG_USER
-			$facility = 8;
+            if (is_array($options) === true) {
+                if (isset($options['option']) === true) {
+                    $option = $options['option'];
+                }
 
-			if(is_array($options) === true) {
+                if (isset($options['facility']) === true) {
+                    $facility = $options['facility'];
+                }
+            }
 
-				if(isset($options['option']) === true) {
-					$option = $options['option'];
-				}
+            //@note no return value check
+            openlog($name, $option, $facility);
+            $this->_opened = true;
+        }
+    }
 
-				if(isset($options['facility']) === true) {
-					$facility = $options['facility'];
-				}
-			}
+    /**
+     * Returns the internal formatter
+     *
+     * @return \Phalcon\Logger\FormatterInterface
+     */
+    public function getFormatter()
+    {
+        if (is_object($this->_formatter) === false) {
+            $this->_formatter = new SyslogFormatter();
+        }
 
-			//@note no return value check
-			openlog($name, $option, $facility);
-			$this->_opened = true;
-		}
-	}
+        return $this->_formatter;
+    }
 
-	/**
-	 * Returns the internal formatter
-	 *
-	 * @return \Phalcon\Logger\FormatterInterface
-	 */
-	public function getFormatter()
-	{
-		if(is_object($this->_formatter) === false) {
-			$this->_formatter = new SyslogFormatter();
-		}
+    /**
+     * Writes the log to the stream itself
+     *
+     * @param string $message
+     * @param int $type
+     * @param int $time
+     * @throws Exception
+     */
+    public function logInternal($message, $type, $time)
+    {
+        if (is_string($message) === false ||
+            is_int($type) === false ||
+            is_int($time) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		return $this->_formatter;
-	}
+        $appliedFormat = $this->getFormatter()->format($message, $type, $time);
+        if (is_array($appliedFormat) === false) {
+            throw new Exception('The formatted message is not valid');
+        }
 
-	/**
-	 * Writes the log to the stream itself
-	 *
-	 * @param string $message
-	 * @param int $type
-	 * @param int $time
-	 * @throws Exception
-	 */
-	public function logInternal($message, $type, $time)
-	{
-		if(is_string($message) === false ||
-			is_int($type) === false ||
-			is_int($time) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+        //@note no return value check
+        syslog($appliedFormat[0], $appliedFormat[1]);
+    }
 
-		$appliedFormat = $this->getFormatter()->format($message, $type, $time);
-		if(is_array($appliedFormat) === false) {
-			throw new Exception('The formatted message is not valid');
-		}
+    /**
+     * Closes the logger
+     *
+     * @return null
+     */
+    public function close()
+    {
+        //@note we don't set $this->_opened = false!
+        if ($this->_opened === true) {
+            //@note no return value check
+            closelog();
+        }
 
-		//@note no return value check
-		syslog($appliedFormat[0], $appliedFormat[1]);
-	}
-
-	/**
-	 * Closes the logger
-	 *
-	 * @return null
-	 */
-	public function close()
-	{
-		//@note we don't set $this->_opened = false!
-		if($this->_opened === true) {
-			//@note no return value check
-			closelog();
-		}
-
-		//@note we don't return a boolean
-	}
+        //@note we don't return a boolean
+    }
 }

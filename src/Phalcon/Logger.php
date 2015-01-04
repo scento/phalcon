@@ -17,83 +17,83 @@ namespace Phalcon;
  * also implementing transactions.
  *
  *<code>
- *	$logger = new Phalcon\Logger\Adapter\File("app/logs/test.log");
- *	$logger->log("This is a message");
- *	$logger->log("This is an error", Phalcon\Logger::ERROR);
- *	$logger->error("This is another error");
+ *  $logger = new Phalcon\Logger\Adapter\File("app/logs/test.log");
+ *  $logger->log("This is a message");
+ *  $logger->log("This is an error", Phalcon\Logger::ERROR);
+ *  $logger->error("This is another error");
  *</code>
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/logger.c
  */
 abstract class Logger
 {
-	/**
-	 * Special
-	 * 
-	 * @var int
-	*/
-	const SPECIAL = 9;
+    /**
+     * Special
+     *
+     * @var int
+    */
+    const SPECIAL = 9;
 
-	/**
-	 * Custom
-	 * 
-	 * @var int
-	*/
-	const CUSTOM = 8;
+    /**
+     * Custom
+     *
+     * @var int
+    */
+    const CUSTOM = 8;
 
-	/**
-	 * Debug
-	 * 
-	 * @var int
-	*/
-	const DEBUG = 7;
+    /**
+     * Debug
+     *
+     * @var int
+    */
+    const DEBUG = 7;
 
-	/**
-	 * Info
-	 * 
-	 * @var int
-	*/
-	const INFO = 6;
+    /**
+     * Info
+     *
+     * @var int
+    */
+    const INFO = 6;
 
-	/**
-	 * Notice
-	 * 
-	 * @var int
-	*/
-	const NOTICE = 5;
+    /**
+     * Notice
+     *
+     * @var int
+    */
+    const NOTICE = 5;
 
-	/**
-	 * Warning
-	 * 
-	 * @var int
-	*/
-	const WARNING = 4;
+    /**
+     * Warning
+     *
+     * @var int
+    */
+    const WARNING = 4;
 
-	/**
-	 * Error
-	 * 
-	 * @var int
-	*/
-	const ERROR = 3;
+    /**
+     * Error
+     *
+     * @var int
+    */
+    const ERROR = 3;
 
-	/**
-	 * Alert
-	 * 
-	 * @var int
-	*/
-	const ALERT = 2;
+    /**
+     * Alert
+     *
+     * @var int
+    */
+    const ALERT = 2;
 
-	/**
-	 * Critical
-	 * 
-	 * @var int
-	*/
-	const CRITICAL = 1;
+    /**
+     * Critical
+     *
+     * @var int
+    */
+    const CRITICAL = 1;
 
-	/**
-	 * Emergence
-	 * 
-	 * @var int
-	*/
-	const EMERGENCE = 0;
+    /**
+     * Emergence
+     *
+     * @var int
+    */
+    const EMERGENCE = 0;
 }

@@ -10,8 +10,8 @@
 */
 namespace Phalcon\Cache\Frontend;
 
-use \Phalcon\Cache\FrontendInterface,
-	\Phalcon\Cache\Exception;
+use \Phalcon\Cache\FrontendInterface;
+use \Phalcon\Cache\Exception;
 
 /**
  * Phalcon\Cache\Frontend\Output
@@ -19,7 +19,7 @@ use \Phalcon\Cache\FrontendInterface,
  * Allows to cache output fragments captured with ob_* functions
  *
  *<code>
- * 
+ *
  * //Create an Output frontend. Cache the files for 2 days
  * $frontCache = new Phalcon\Cache\Frontend\Output(array(
  *   "lifetime" => 172800
@@ -59,122 +59,122 @@ use \Phalcon\Cache\FrontendInterface,
  *     echo $content;
  * }
  *</code>
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/cache/frontend/output.c
  */
 class Output implements FrontendInterface
 {
-	/**
-	 * Buffering
-	 * 
-	 * @var boolean
-	 * @access protected
-	*/
-	protected $_buffering = false;
+    /**
+     * Buffering
+     *
+     * @var boolean
+     * @access protected
+    */
+    protected $_buffering = false;
 
-	/**
-	 * Frontend Options
-	 * 
-	 * @var array|null
-	 * @access protected
-	*/
-	protected $_frontendOptions;
+    /**
+     * Frontend Options
+     *
+     * @var array|null
+     * @access protected
+    */
+    protected $_frontendOptions;
 
-	/**
-	 * \Phalcon\Cache\Frontend\Output constructor
-	 *
-	 * @param array|null $frontendOptions
-	 * @throws Exception
-	 */
-	public function __construct($frontendOptions = null)
-	{
-		if(is_array($frontendOptions) === false &&
-			is_null($frontendOptions) === false) {
-			throw new Exception('Invalid parameter type.');
-		}
+    /**
+     * \Phalcon\Cache\Frontend\Output constructor
+     *
+     * @param array|null $frontendOptions
+     * @throws Exception
+     */
+    public function __construct($frontendOptions = null)
+    {
+        if (is_array($frontendOptions) === false &&
+            is_null($frontendOptions) === false) {
+            throw new Exception('Invalid parameter type.');
+        }
 
-		$this->_frontendOptions = $frontendOptions;
-	}
+        $this->_frontendOptions = $frontendOptions;
+    }
 
-	/**
-	 * Returns cache lifetime
-	 *
-	 * @return integer
-	 */
-	public function getLifetime()
-	{
-		if(is_array($this->_frontendOptions) === true &&
-			isset($this->_frontendOptions['lifetime']) === true) {
-			return $this->_frontendOptions['lifetime'];
-		}
+    /**
+     * Returns cache lifetime
+     *
+     * @return integer
+     */
+    public function getLifetime()
+    {
+        if (is_array($this->_frontendOptions) === true &&
+            isset($this->_frontendOptions['lifetime']) === true) {
+            return $this->_frontendOptions['lifetime'];
+        }
 
-		return 1;
-	}
+        return 1;
+    }
 
-	/**
-	 * Check whether if frontend is buffering output
-	 *
-	 * @return boolean
-	 */
-	public function isBuffering()
-	{
-		return $this->_buffering;
-	}
+    /**
+     * Check whether if frontend is buffering output
+     *
+     * @return boolean
+     */
+    public function isBuffering()
+    {
+        return $this->_buffering;
+    }
 
-	/**
-	 * Starts output frontend
-	 */
-	public function start()
-	{
-		$this->_buffering = true;
-		ob_start();
-	}
+    /**
+     * Starts output frontend
+     */
+    public function start()
+    {
+        $this->_buffering = true;
+        ob_start();
+    }
 
-	/**
-	 * Returns output cached content
-	 *
-	 * @return string|null
-	 */
-	public function getContent()
-	{
-		if($this->_buffering === true) {
-			return ob_get_contents();
-		}
+    /**
+     * Returns output cached content
+     *
+     * @return string|null
+     */
+    public function getContent()
+    {
+        if ($this->_buffering === true) {
+            return ob_get_contents();
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	/**
-	 * Stops output frontend
-	 */
-	public function stop()
-	{
-		if($this->_buffering === true) {
-			ob_end_clean();
-		}
+    /**
+     * Stops output frontend
+     */
+    public function stop()
+    {
+        if ($this->_buffering === true) {
+            ob_end_clean();
+        }
 
-		$this->_buffering = false;
-	}
+        $this->_buffering = false;
+    }
 
-	/**
-	 * Prepare data to be stored
-	 *
-	 * @param mixed $data
-	 * @return mixed
-	 */
-	public function beforeStore($data)
-	{
-		return $data;
-	}
+    /**
+     * Prepare data to be stored
+     *
+     * @param mixed $data
+     * @return mixed
+     */
+    public function beforeStore($data)
+    {
+        return $data;
+    }
 
-	/**
-	 * Prepares data to be retrieved to user
-	 *
-	 * @param mixed $data
-	 * @return mixed
-	 */
-	public function afterRetrieve($data)
-	{
-		return $data;
-	}
+    /**
+     * Prepares data to be retrieved to user
+     *
+     * @param mixed $data
+     * @return mixed
+     */
+    public function afterRetrieve($data)
+    {
+        return $data;
+    }
 }

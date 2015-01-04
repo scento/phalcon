@@ -11,16 +11,16 @@ namespace Phalcon\Assets;
 
 /**
  * Phalcon\Assets\FilterInterface initializer
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/1.2.6/master/ext/assets/filterinterface.c
  */
 interface FilterInterface
 {
-	/**
-	 * Filters the content returning a string with the filtered content
-	 *
-	 * @param string $content
-	 * @return $content
-	 */
-	public function filter($content);
+    /**
+     * Filters the content returning a string with the filtered content
+     *
+     * @param string $content
+     * @return $content
+     */
+    public function filter($content);
 }

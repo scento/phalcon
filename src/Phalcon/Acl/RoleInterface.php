@@ -11,37 +11,37 @@ namespace Phalcon\Acl;
 
 /**
  * Phalcon\Acl\RoleInterface initializer
- * 
+ *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/acl/roleinterface.c
  */
 interface RoleInterface
 {
-	/**
-	 * \Phalcon\Acl\Role constructor
-	 *
-	 * @param string $name
-	 * @param string|null $description
-	 */
-	public function __construct($name, $description = null);
+    /**
+     * \Phalcon\Acl\Role constructor
+     *
+     * @param string $name
+     * @param string|null $description
+     */
+    public function __construct($name, $description = null);
 
-	/**
-	 * Returns the role name
-	 *
-	 * @return string
-	 */
-	public function getName();
+    /**
+     * Returns the role name
+     *
+     * @return string
+     */
+    public function getName();
 
-	/**
-	 * Returns role description
-	 *
-	 * @return string|null
-	 */
-	public function getDescription();
+    /**
+     * Returns role description
+     *
+     * @return string|null
+     */
+    public function getDescription();
 
-	/**
-	 * Magic method __toString
-	 *
-	 * @return string
-	 */
-	public function __toString();
+    /**
+     * Magic method __toString
+     *
+     * @return string
+     */
+    public function __toString();
 }

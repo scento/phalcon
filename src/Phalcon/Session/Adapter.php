@@ -186,7 +186,7 @@ abstract class Adapter
             throw new Exception('Invalid parameter type.');
         }
 
-        return $_SESSION[$this->_uniqueId.$index];
+        return isset($_SESSION[$this->_uniqueId.$index]);
     }
 
     /**

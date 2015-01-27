@@ -144,7 +144,7 @@ class Request implements RequestInterface, InjectionAwareInterface
             return $defaultValue;
         }
 
-        return $request;
+        return $_REQUEST;
     }
 
     /**

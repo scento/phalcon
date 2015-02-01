@@ -228,7 +228,7 @@ class Route implements RouteInterface
      * @param array $matches
      * @throws Exception
     */
-    private static function extractNamedParameters($str, $matches)
+    private static function extractNamedParameters($str, &$matches)
     {
         if (is_string($str) === false ||
             strlen($str) <= 0 ||

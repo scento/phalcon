@@ -507,28 +507,28 @@ class Request implements RequestInterface, InjectionAwareInterface
         $scheme = $this->getScheme();
 
         //Get the server name from _SERVER['SERVER_NAME']
-        $serverName = $this->getServer['SERVER_NAME'];
+        $serverName = $this->getServer('SERVER_NAME');
 
         //Get the server port from _SERVER['SERVER_PORT']
-        $serverPort = $this->getServer['SERVER_PORT'];
+        $serverPort = $this->getServer('SERVER_PORT');
 
         //Check if the request is a standard http
         $isStdName = ($scheme === 'http' ? true : false);
-        $isStdPort = ($port === 80 ? true : false);
+        $isStdPort = ($serverPort === 80 ? true : false);
         $isStdHttp = ($isStdName && $isStdPort ? true : false);
 
         //Check if the request is a secure http request
         $isSecureScheme = ($scheme === 'https' ? true : false);
-        $isSecurePort = ($port === 443 ? true : false);
+        $isSecurePort = ($serverPort === 443 ? true : false);
         $isSecureHttp = ($isSecureScheme && $isSecurePort ? true : false);
 
         //If is is a standard http we return the server name only
         if ($isStdHttp === true ||
             $isSecureHttp === true) {
-            return $name;
+            return $serverName;
         }
 
-        return $name.':'.$port;
+        return $serverName.':'.$serverPort;
     }
 
     /**

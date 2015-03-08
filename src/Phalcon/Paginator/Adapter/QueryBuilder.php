@@ -107,7 +107,7 @@ class QueryBuilder implements AdapterInterface
      */
     public function setCurrentPage($currentPage)
     {
-        if (is_int($page) === false) {
+        if (is_int($currentPage) === false) {
             throw new Exception('Invalid parameter type.');
         }
         $this->_page = $currentPage;

@@ -382,7 +382,7 @@ class Annotations extends Router implements InjectionAwareInterface, RouterInter
             $converts = $annotation->getNamedParameter('converts');
             if (is_array($converts) === true) {
                 foreach ($converts as $param => $convert) {
-                    $route->convert($param, $conver);
+                    $route->convert($param, $convert);
                 }
             }
 

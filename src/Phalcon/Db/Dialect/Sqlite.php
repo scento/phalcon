@@ -155,7 +155,7 @@ class Sqlite extends Dialect implements DialectInterface
 
         if (is_string($schemaName) === true &&
             $schemaName == true) {
-            $sql = 'CREATE INDEX "'.$schemaName.'" ON "'.$tableName.'" (';
+            $sql = 'CREATE INDEX "'.$schemaName.'"."'.$index->getName().'" ON "'.$tableName.'" (';
         } else {
             $sql = 'CREATE INDEX "'.$index->getName().'" ON "'.$tableName.'" (';
         }

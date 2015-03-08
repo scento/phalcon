@@ -54,7 +54,7 @@ class Xcache extends Backend implements BackendInterface
             $options = array();
         }
 
-        if (isset($options['statsKey']) === true) {
+        if (isset($options['statsKey']) === false) {
             $options['statsKey'] = '_PHCX';
         }
 

@@ -593,7 +593,7 @@ abstract class Element
             $hasDefaultValue = Tag::hasValue($this->_name);
             if ($hasDefaultValue === false) {
                 //Get the possible value for the widget
-                $value = $this->_form->getValue($name);
+                $value = $this->_form->getValue($this->_name);
             }
         }
 
@@ -670,7 +670,7 @@ abstract class Element
         }
 
         if (is_object($this->_messages) === false) {
-            $this->_messages = new Group($messages);
+            $this->_messages = new Group();
         }
 
         $this->_messages->appendMessage($message);

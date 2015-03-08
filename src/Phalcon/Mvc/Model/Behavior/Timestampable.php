@@ -61,7 +61,7 @@ class Timestampable extends Behavior implements BehaviorInterface
                     //A generator is a closure that produces the current timestamp value
                     if (is_object($options['generator']) === true &&
                         $options['generator'] instanceof Closure === true) {
-                        $timestamp = call_user_func($generator);
+                        $timestamp = call_user_func($options['generator']);
                     }
                 }
             }

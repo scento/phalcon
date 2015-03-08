@@ -342,7 +342,7 @@ class Manager
     }
 
     /**
-     * Returns the CSS collection of assets
+     * Returns the JS collection of assets
      *
      * @return \Phalcon\Assets\Collection
      */
@@ -353,11 +353,11 @@ class Manager
         }
 
         //Check if the collection does not exist and create an implicit collection
-        if (isset($this->_collections['css']) === false) {
+        if (isset($this->_collections['js']) === false) {
             return new Collection();
         }
 
-        return $this->_collections['css'];
+        return $this->_collections['js'];
     }
 
     /**
@@ -686,7 +686,7 @@ class Manager
         }
 
         if (empty($collectionName) === true) {
-            $collection = $this->getjs();
+            $collection = $this->getJs();
         } else {
             $collection = $this->get($collectionName);
         }

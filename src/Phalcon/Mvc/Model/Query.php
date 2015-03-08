@@ -451,7 +451,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             return array('type' => 'all');
         }
 
-        return $this->_getExpression();
+        return $this->_getExpression($argument);
     }
 
     /**
@@ -798,7 +798,7 @@ class Query implements QueryInterface, InjectionAwareInterface
     protected function _getTable(ManagerInterface $manager, array $qualifiedName)
     {
         if (isset($qualifiedName['name']) === true) {
-            $Model = $manager->load($qualifiedName['name']);
+            $model = $manager->load($qualifiedName['name']);
 
             $schema = $model->getSchema();
             if ($schema == true) {
@@ -1081,7 +1081,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                 //Update model => alias
                 $joinModels[$alias] = $modelName;
-                $sqlModelsAliases[$modelName] = $alais;
+                $sqlModelsAliases[$modelName] = $alias;
                 $sqlAliasesModels[$alias] = $modelName;
                 $sqlAliasesModelsInstances[$alias] = $model;
 
@@ -1336,7 +1336,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
                 $models[$modelName] = $alias;
             } else {
-                $sqlAliases[$modelName] = $alias;
+                $sqlAliases[$modelName] = $selectedModel['alias'];
                 $sqlAliasesModels[$modelName] = $modelName;
                 $sqlModelsAliases[$modelName] = $modelName;
                 $sqlAliasesModelsInstances[$modelName] = $model;
@@ -1949,14 +1949,14 @@ class Query implements QueryInterface, InjectionAwareInterface
                     }
 
                     //We cache required meta-data to make its future access faster
-                    $columns[$aliasCopy]['instance'] = $instnace;
+                    $columns[$aliasCopy]['instance'] = $instance;
                     $columns[$aliasCopy]['attributes'] = $attributes;
                     $columns[$aliasCopy]['columnMap'] = $columnMap;
 
                     //Check if the model keeps snapshots
                     $isKeepingSnapshots = $manager->isKeepingSnapshots($instance);
                     if ($isKeepingSnapshots === true) {
-                        $columns[$aliasCopy]['keepSnapshopts'] = $isKeepingSnapshots;
+                        $columns[$aliasCopy]['keepSnapshots'] = $isKeepingSnapshots;
                     }
                 } else {
                     //Query only the columns that are registered as attributes in the metaData
@@ -2042,7 +2042,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 $simpleColumnMap = $metaData->getColumnMap($model);
 
                 //Check if the model keeps snapshots
-                $isKeepingSnapshots = $manger->isKeepingSnapshots($model);
+                $isKeepingSnapshots = $manager->isKeepingSnapshots($model);
             }
         }
 
@@ -2083,7 +2083,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         $automaticFields = false;
 
         //The 'fields' index may already have the fields to be used in the query
-        if (isset($intermediate['fields']) === tue) {
+        if (isset($intermediate['fields']) === true) {
             $fields = $intermediate['fields'];
         } else {
             $automaticFields = true;
@@ -2208,10 +2208,10 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @return \Phalcon\Mvc\Model\Query\StatusInterface
      * @throws Exception
      */
-    protected function _executeUpdate(array $itermediate, array $bindParams, array $bindTypes)
+    protected function _executeUpdate(array $intermediate, array $bindParams, array $bindTypes)
     {
         //Get the model_name
-        $models = $itermediate['models'];
+        $models = $intermediate['models'];
         if (isset($models[1]) === true) {
             throw new Exception('Updating several models at the same time is still not supported');
         }
@@ -2316,7 +2316,7 @@ class Query implements QueryInterface, InjectionAwareInterface
      * @return \Phalcon\Mvc\Model\Query\StatusInterface
      * @throws Exception
      */
-    protected function _executeDelete(array $itermediate, array $bindParams, array $bindTypes)
+    protected function _executeDelete(array $intermediate, array $bindParams, array $bindTypes)
     {
         $models = $intermediate['models'];
         if (isset($models[1]) === true) {
@@ -2327,7 +2327,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
         //Load the model from the modelsManager or from the _modelsInstances property
         if (isset($this->_modelsInstances[$modelName]) === true) {
-            $model = $modelsInstances[$modelName];
+            $model = $this->_modelsInstances[$modelName];
         } else {
             $model = $this->_manager->load($modelName);
         }
@@ -2486,7 +2486,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         //We store the resultset in the cache if any
         if (is_null($cacheOptions) === false) {
             //Only PHQL SELECTs can be cached
-            if ($type !== 309) {
+            if ($this->_type !== 309) {
                 throw new Exception('Only PHQL statements return resultsets can be cached');
             }
 

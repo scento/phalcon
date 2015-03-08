@@ -129,7 +129,7 @@ class Complex extends Resultset implements Serializable, ArrayAccess, Countable,
         if ($this->_type === 1) {
             //The result is bigger than 32 rows so it's retrieved one by one
             if ($this->_result !== false) {
-                $row = $this->_result->fetch($result);
+                $row = $this->_result->fetch($this->_result);
             } else {
                 $row = false;
             }
@@ -149,7 +149,7 @@ class Complex extends Resultset implements Serializable, ArrayAccess, Countable,
         if (is_array($row) === true ||
             is_object($row) === true) {
             //The result type=1 so we need to build every row
-            if ($type === 1) {
+            if ($this->_type === 1) {
                 //Each row in a complex result is a Phalcon\Mvc\Model\Row instance
                 switch((int)$this->_hydrateMode) {
                     case 0:
@@ -190,7 +190,7 @@ class Complex extends Resultset implements Serializable, ArrayAccess, Countable,
                                 }
 
                                 //Get the base instance
-                                $instace = $column['instance'];
+                                $instance = $column['instance'];
 
                                 //Assign the values to the attributes using a column map
                                 $value = Model::cloneResultMap($instance, $rowModel, $columnMap, $dirtyState, $keepSnapshots);
@@ -308,7 +308,7 @@ class Complex extends Resultset implements Serializable, ArrayAccess, Countable,
 
         $resultset = unserialize($data);
 
-        if (is_array($result) === false) {
+        if (is_array($resultset) === false) {
             throw new Exception('Invalid serialization data');
         }
 

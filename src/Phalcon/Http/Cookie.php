@@ -354,7 +354,7 @@ class Cookie implements InjectionAwareInterface
                 throw new Exception("A dependency injection object is required to access the 'filter' service");
             }
 
-            $crypt = $dependencyInjector->getShared('crypt');
+            $crypt = $this->_dependencyInjector->getShared('crypt');
             if ($crypt instanceof CryptInterface === false) {
                 throw new Exception('Wrong crypt service.');
             }

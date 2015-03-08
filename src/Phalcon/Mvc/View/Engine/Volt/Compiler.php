@@ -541,8 +541,9 @@ class Compiler implements InjectionAwareInterface
 
         $exprCode = '';
         $left = $expr['left'];
+        $leftType = $left['type'];
 
-        if ($left['type'] === 265) {
+        if ($leftType === 265) {
             $variable = $left['value'];
 
             //Check if the variable is the loop context
@@ -692,7 +693,7 @@ class Compiler implements InjectionAwareInterface
                                 if ($exprLevel === 1) {
                                     $escapedCode = $block;
                                 } else {
-                                    $escapedCode = addcslashes($block);
+                                    $escapedCode = addslashes($block);
                                 }
                             }
 
@@ -1758,7 +1759,7 @@ class Compiler implements InjectionAwareInterface
     public function compileAutoEscape($statement, $extendsMode)
     {
         if (is_array($statement) === false ||
-            isset($statement['enable']) === fasle) {
+            isset($statement['enable']) === false) {
             throw new Exception('Corrupted statement');
         }
 
@@ -1809,13 +1810,13 @@ class Compiler implements InjectionAwareInterface
             //Parameters are always received as an array
             $code .= $name.'($__p) {';
             $parameters = $statement['parameters'];
-            foreach ($parameters as $position => $parameters) {
+            foreach ($parameters as $position => $parameter) {
                 $variableName = $parameter['variable'];
                 $code .= 'if (isset($__p['.$position.'])) { ';
                 $code .= '$'.$variableName.' = $__p['.$position.'];';
                 $code .= ' } else { ';
-                $code .= "if (isset(\$__p['".$variable."'])) { ";
-                $code .= '$'.$variableName." = \$__p['".$variable."'];";
+                $code .= "if (isset(\$__p['".$variableName."'])) { ";
+                $code .= '$'.$variableName." = \$__p['".$variableName."'];";
                 $code .= ' } else { ';
                 $code .= 'throw new \\Phalcon\\Mvc\\View\\Exception("Macro '.$name.' was called without parameter: '.$variableName.'"); ';
                 $code .= ' } } ';
@@ -1857,7 +1858,7 @@ class Compiler implements InjectionAwareInterface
      * @return string
      * @throws Exception
      */
-    protected function _statementList($statements, $extendsMode)
+    protected function _statementList($statements, $extendsMode = null)
     {
         if (is_null($extendsMode) === true) {
             $extendsMode = false;
@@ -1905,8 +1906,11 @@ class Compiler implements InjectionAwareInterface
                 }
             }
 
+            // Get the statement type
+            $type = $statement['type'];
+
             //Compile the statement according to the statement's type
-            switch((int)$statement['type']) {
+            switch((int)$type) {
                 case 357:
                     //Raw output statement
                     $compilation .= $statement['value'];
@@ -2363,7 +2367,7 @@ class Compiler implements InjectionAwareInterface
 
             //By default the compile extension is .php
             if (isset($options['compiledExtension']) === true) {
-                $compiledExtension = $option['compiledExtension'];
+                $compiledExtension = $options['compiledExtension'];
                 if (is_string($compiledExtension) === false) {
                     throw new Exception('compiledExtension must be a string');
                 }

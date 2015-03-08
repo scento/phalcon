@@ -628,7 +628,7 @@ class Form extends Injectable implements EventsAwareInterface, InjectionAwareInt
      */
     public function getValue($name)
     {
-        if (is_string($value) === false) {
+        if (is_string($name) === false) {
             throw new Exception('Invalid parameter type.');
         }
 

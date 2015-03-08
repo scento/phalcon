@@ -1,6 +1,6 @@
 <?php
 /**
- * Middleware Interfce
+ * Middleware Interface
  *
  * @author Andres Gutierrez <andres@phalconphp.com>
  * @author Eduar Carvajal <eduar@phalconphp.com>

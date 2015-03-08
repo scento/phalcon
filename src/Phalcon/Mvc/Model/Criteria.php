@@ -252,7 +252,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
      */
     public function leftJoin($model, $conditions = null, $alias = null)
     {
-        return $this->join($model, $condition, $alias, 'LEFT');
+        return $this->join($model, $conditions, $alias, 'LEFT');
     }
 
     /**
@@ -482,7 +482,7 @@ class Criteria implements CriteriaInterface, InjectionAwareInterface
         $conditions = $expr.' NOT BETWEEN :'.$minimumKey.': AND :'.$maximumKey.':';
 
         //Append the BETWEEN to the current conditions using 'AND'
-        $this->addWhere($condition, array($minimumKey, $maximumKey));
+        $this->addWhere($conditions, array($minimumKey, $maximumKey));
         $this->_hiddenParamNumber = $nextHiddenParam;
 
         return $this;

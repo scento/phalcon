@@ -556,7 +556,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
             if (is_array($this->_bindParams) === true) {
                 $this->_bindParams = array_merge($bindParams, $this->_bindParams);
             } else {
-                $this->_bindParams = $_bindParams;
+                $this->_bindParams = $bindParams;
             }
         }
 
@@ -608,7 +608,7 @@ class Builder implements BuilderInterface, InjectionAwareInterface
             if (is_array($this->_bindParams) === true) {
                 $this->_bindParams = array_merge($bindParams, $this->_bindParams);
             } else {
-                $this->_bindParams = $_bindParams;
+                $this->_bindParams = $bindParams;
             }
         }
 

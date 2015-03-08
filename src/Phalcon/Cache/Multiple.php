@@ -165,7 +165,7 @@ class Multiple
         }
 
         /* Execution */
-        foreach ($this->_backends as $bakcend) {
+        foreach ($this->_backends as $backend) {
             $backend->save($keyName, $content, $lifetime, $stopBuffer);
         }
     }

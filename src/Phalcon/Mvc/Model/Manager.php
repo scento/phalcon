@@ -415,7 +415,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         }
 
         if (is_null($newInstance) === true) {
-            $newInstance === false;
+            $newInstance = false;
         } elseif (is_bool($newInstance) === false) {
             throw new Exception('Invalid parameter type.');
         }
@@ -1244,7 +1244,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         $relation->setIntermediateRelation($intermediateFields, $intermediateModel, $intermediateFields);
 
         if (isset($options['alias']) === true) {
-            $lowerAlias = strtolower($options[$alias]);
+            $lowerAlias = strtolower($options['alias']);
         } else {
             $lowerAlias = $referencedEntity;
         }
@@ -1639,7 +1639,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         $records = call_user_func_array(array($referencedEntity, $method), $arguments);
 
         //Store the result in the cache if it's reusable
-        if ($reusable === true) {
+        if ($iReusable === true) {
             $this->setReusableRecords($referencedModel, $uniqueKey, $records);
         }
 

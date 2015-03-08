@@ -288,6 +288,8 @@ class Memcache extends Backend implements BackendInterface
                 //Don't use prefix
                 $prefixedKeys = array_keys($keys);
             }
+			
+			return $prefixedKeys;
         }
 
         return array();

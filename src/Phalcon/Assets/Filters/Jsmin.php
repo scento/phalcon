@@ -41,8 +41,6 @@ class Jsmin
             return '';
         }
         
-        require_once(__DIR__.'/JShrink/src/JShrink/Minifier.php');
-
         try {
             return PHP_EOL.Minifier::minify($content);
         } catch (\Exception $e) {

@@ -1,3 +1,0 @@
-[submodule "src/Phalcon/Assets/Filters/JShrink"]
-	path = src/Phalcon/Assets/Filters/JShrink
-	url = https://github.com/tedious/JShrink.git

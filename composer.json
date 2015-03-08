@@ -13,7 +13,9 @@
 		}
 	],
 	"require": {
-		"php": ">=5.3"
+		"php": ">=5.3",
+		
+		"tedivm/jshrink": "~1.0"
 	},
 	"require-dev": {
 		"pdepend/pdepend": "@stable",

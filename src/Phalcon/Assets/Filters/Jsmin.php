@@ -22,7 +22,7 @@ use \JShrink\Minifier;
  *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/assets/filters/jsmin.c
  */
-class Jsmin
+class Jsmin implements \Phalcon\Assets\FilterInterface
 {
     /**
      * Filters the content using JSMIN

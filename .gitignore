@@ -3,3 +3,7 @@ docs/
 .directory
 phpunit.phar
 .idea/
+
+# Composer
+composer.lock
+vendor/

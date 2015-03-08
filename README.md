@@ -34,24 +34,10 @@ version is `master`. We suggest the usage of feature branches if you want to sub
 To keep the compatibility with the framework, this legacy layer is licensed under the terms of the New BSD license.
 
 ## Usage
-You can use this project as a fallback for the original framework.
+You can use this project as a fallback for the original framework. Add this to your composer.json:
 
-### Native
-Add the following code at the top of your bootstrap file:
-```php
-if(extension_loaded('Phalcon') === false) {
-	$files = array('Exception.php', 'Loader/Exception.php', 'Events/EventsAwareInterface.php', 'Text.php', 'Loader.php');
-	foreach($files as $file) {
-		require_once(__DIR__.'/src/Phalcon/'.$file);
-	}
-
-	$loader = new \Phalcon\Loader();
-	$loader->registerNamespaces(array(
-		'Phalcon' => __DIR__.'/src/Phalcon/'
-	));
-	$loader->register();
-}
 ```
-
-### Composer
-You can include the default autoloader of Composer, which is generated after the execution of `composer install`.
+	"require": {
+		"scento/phalcon-php": "dev-master"
+	}
+```

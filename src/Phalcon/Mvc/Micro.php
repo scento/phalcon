@@ -170,7 +170,7 @@ class Micro extends Injectable implements EventsAwareInterface, InjectionAwareIn
     {
         if (is_string($routePattern) === false ||
             is_callable($handler) === false) {
-            throw new Exception('Invlaid parameter type.');
+            throw new Exception('Invalid parameter type.');
         }
 
         //We create a router even if there is no one in the DI

@@ -155,7 +155,7 @@ class Message implements MessageInterface
             throw new Exception('Invalid parameter type.');
         }
 
-        $this->_message = $mesasge;
+        $this->_message = $message;
 
         return $this;
     }
@@ -250,6 +250,6 @@ class Message implements MessageInterface
             throw new Exception('Invalid parameter type.');
         }
 
-        return new Message($this->_message, $this->_field, $this->_type);
+        return new Message($message["_message"], $message["_field"], $message["_type"]);
     }
 }

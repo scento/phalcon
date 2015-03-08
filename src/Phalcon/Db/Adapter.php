@@ -891,7 +891,7 @@ abstract class Adapter implements EventsAwareInterface
         $sql = $this->_dialect->listTables($schemaName);
 
         //Execute the SQL returning the tables
-        $table = $this->fetchAll($sql, 3);
+        $tables = $this->fetchAll($sql, 3);
 
         $allTables = array();
         foreach ($tables as $table) {
@@ -914,7 +914,7 @@ abstract class Adapter implements EventsAwareInterface
     public function listViews($schemaName = null)
     {
         //Get the SQL to list the views
-        $sql = $dialect->listViews($schemaName);
+        $sql = $this->_dialect->listViews($schemaName);
 
         //Execute the SQL returning the views
         $views = $this->fetchAll($sql, 3);

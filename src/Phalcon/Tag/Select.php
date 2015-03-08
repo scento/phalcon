@@ -131,7 +131,7 @@ abstract class Select
             }
 
             //Create the SELECT's option from a resultset
-            $code .= $this->_optionsFromResultset(
+            $code .= self::_optionsFromResultset(
                 $options,
                 $using,
                 $value,
@@ -140,7 +140,7 @@ abstract class Select
         } else {
             if (is_array($options) === true) {
                 //Create the SELECT's option from an array
-                $code .= $this->_optionsFromArray($options, $value, '</option>'.\PHP_EOL);
+                $code .= self::_optionsFromArray($options, $value, '</option>'.\PHP_EOL);
             } else {
                 throw new Exception('Invalid data provided to SELECT helper');
             }

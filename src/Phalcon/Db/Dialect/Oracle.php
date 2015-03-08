@@ -606,10 +606,11 @@ class Oracle extends Dialect implements DialectInterface
         } else {
             $escapeChar = null;
         }
-
-        if (is_array($definition['columns']) === true) {
+	
+		$columns = $definition['columns'];
+        if (is_array($columns) === true) {
             $selectedColumns = array();
-            foreach ($definition['columns'] as $column) {
+            foreach ($columns as $column) {
                 //Escape column name
                 $columnItem = $column[0];
                 if (is_array($columnItem) === true) {
@@ -619,7 +620,7 @@ class Oracle extends Dialect implements DialectInterface
                         $columnSql = $columnItem;
                     } else {
                         if ($escapeIdentifiers === true) {
-                            $columnSql = $escapeChar.$columnItem.$esacpeChar;
+                            $columnSql = $escapeChar.$columnItem.$escapeChar;
                         } else {
                             $columnSql = $columnItem;
                         }
@@ -668,10 +669,11 @@ class Oracle extends Dialect implements DialectInterface
         }
 
         //Check and esacpe tables
-        if (is_array($definition['tables']) === true) {
+		$tables = $definition['tables'];
+        if (is_array($tables) === true) {
             $selectedTables = array();
 
-            foreach ($definition['tables'] as $table) {
+            foreach ($tables as $table) {
                 $selectedTables[] = $this->getSqlTable($table, $escapeChar);
             }
 
@@ -721,10 +723,10 @@ class Oracle extends Dialect implements DialectInterface
         if (isset($definition['group']) === true) {
             $groupItems = array();
             foreach ($definition['group'] as $groupField) {
-                $groupItems[] = $this->getSqlExpression($groupField, $esacpeChar);
+                $groupItems[] = $this->getSqlExpression($groupField, $escapeChar);
             }
 
-            $groupSql = implode(', ', $gorupItems);
+            $groupSql = implode(', ', $groupItems);
             $sql .= ' GROUP BY '.$groupSql;
 
             //Check for a HAVING clause
@@ -735,15 +737,15 @@ class Oracle extends Dialect implements DialectInterface
 
         //Check for a ORDER clause
         if (isset($definition['order']) === true) {
-            $orderItems = aray();
+            $orderItems = array();
             foreach ($definition['order'] as $orderItem) {
                 $orderSqlItem = $this->getSqlExpression($orderItem[0], $escapeChar);
 
                 //In the numeric position 1 could be a ASC/DESC clause
                 if (isset($orderItem[1]) === true) {
-                    $orderSqlItemType = $oderSqlItem.' '.$orderItem[1];
+                    $orderSqlItemType = $orderSqlItem.' '.$orderItem[1];
                 } else {
-                    $orderSqlItemType = $oderSqlItem;
+                    $orderSqlItemType = $orderSqlItem;
                 }
 
                 $orderItems[] = $orderSqlItemType;

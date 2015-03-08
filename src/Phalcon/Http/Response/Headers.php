@@ -79,7 +79,7 @@ class Headers implements HeadersInterface
 	 * Sets a raw header to be sent at the end of the request
 	 *
 	 * @param string $header
-	 * @throws Excepiton
+	 * @throws Exception
 	 */
 	public function setRaw($header)
 	{

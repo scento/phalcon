@@ -181,7 +181,7 @@ class Mongo extends Backend implements BackendInterface
         /* Input preprocessing */
         if (is_null($keyName) === true) {
             $keyName = $this->_lastKey;
-        } elseif (is_string($keyName) === true || is_int($KeyName) === true) {
+        } elseif (is_string($keyName) === true || is_int($keyName) === true) {
             $keyName = $this->_prefix.$keyName;
         } else {
             throw new Exception('Invalid parameter type.');

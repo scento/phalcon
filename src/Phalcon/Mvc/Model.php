@@ -3420,14 +3420,14 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
      * @param array|null $options
      * @return \Phalcon\Mvc\Model\Relation
      */
-    public function hasManyToMany($fields, $intermediateModel, $intermediateFields, $intermediateReferecedFields, $referenceModel, $referencedFields, $options = null)
+    public function hasManyToMany($fields, $intermediateModel, $intermediateFields, $intermediateReferencedFields, $referenceModel, $referencedFields, $options = null)
     {
         return $this->_modelsManager->addHasManyToMany(
             $this,
             $fields,
             $intermediateModel,
             $intermediateFields,
-            $intermediateReferecedFields,
+            $intermediateReferencedFields,
             $referenceModel,
             $referencedFields,
             $options

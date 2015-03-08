@@ -256,7 +256,7 @@ class DI implements DiInterface
         if (is_array($params) === false || empty($params) === true) {
             return new $className;
         } else {
-            $reflection = new ReflectionClass($className);
+            $reflection = new \ReflectionClass($className);
             return $reflection->newInstanceArgs($params);
         }
     }
@@ -283,7 +283,7 @@ class DI implements DiInterface
             if (class_exists($name) === true) {
                 if (is_array($parameters) === true) {
                     if (empty($parameters) === false) {
-                        $instance = self::createInstance($name, $params);
+                        $instance = self::createInstance($name, $parameters);
                     } else {
                         $instance = self::createInstance($name);
                     }

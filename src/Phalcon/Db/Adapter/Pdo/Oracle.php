@@ -111,7 +111,7 @@ class Oracle extends Pdo implements EventsAwareInterface, AdapterInterface
 		* 5:nullable, 6:constraint_type, 7:default, 8:position;
 		*/
 		$oldColumn = null;
-		foreach($descibe as $field) {
+		foreach($describe as $field) {
 			$definition = array('bindType' => 2);
 
 			//Check the column type to get the current Phalcon type

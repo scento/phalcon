@@ -1291,7 +1291,7 @@ class Collection implements CollectionInterface, InjectionAwareInterface, Serial
             throw new Exception('The document cannot be deleted because it doesn\'t exist');
         }
 
-        $disableEvents = self::_disableEvents;
+        $disableEvents = self::$_disableEvents;
 
         if ($disableEvents === false) {
             if ($this->fireEventCancel('beforeDelete') === false) {

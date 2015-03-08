@@ -240,7 +240,7 @@ class Console implements InjectionAwareInterface, EventsAwareInterface
                 if (file_exists($this->_modules[$moduleName]['path']) === true) {
                     require($this->_modules[$moduleName]['path']);
                 } else {
-                    throw new Exception('Module definiton path \''.$this->_modules[$moduleName]['path'].'" doesn\'t exist');
+                    throw new Exception('Module definition path \''.$this->_modules[$moduleName]['path'].'" doesn\'t exist');
                 }
             }
 
@@ -254,7 +254,7 @@ class Console implements InjectionAwareInterface, EventsAwareInterface
             //Prepare $moduleObject
             $moduleObject = $this->_dependencyInjector->get($className);
             $moduleObject->registerAutoloaders();
-            $moduleObject->registerServices($dependencyInjector);
+            $moduleObject->registerServices($this->_dependencyInjector);
 
             //Event: console:afterStartModule
             if (is_object($this->_eventsManager) === true) {

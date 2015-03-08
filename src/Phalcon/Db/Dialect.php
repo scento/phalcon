@@ -50,7 +50,7 @@ abstract class Dialect
         }
 
         if (is_numeric($number) === true) {
-            return $sqlQuery.' LIMIT '.(int)$limit;
+            return $sqlQuery.' LIMIT '.(int)$number;
         }
 
         return $sqlQuery;
@@ -181,7 +181,7 @@ abstract class Dialect
             return $expression['value'];
         } elseif ($type === 'binary-op') {
             //Resolve binary operations expressions
-            return $this->getSqlExpression($expression['left']).' '.$expressions['op'].' '.$this->getSqlExpression($expression['right']);
+            return $this->getSqlExpression($expression['left']).' '.$expression['op'].' '.$this->getSqlExpression($expression['right']);
         } elseif ($type === 'unary-op') {
             //Resolve unary operations expressions
 
@@ -204,7 +204,7 @@ abstract class Dialect
             $sqlArguments = array();
             if (isset($expression['arguments']) === true) {
                 foreach ($expression['arguments'] as $argument) {
-                    $sqlArguments[] = $this->getSqlExpression($arguments, $escapeChar);
+                    $sqlArguments[] = $this->getSqlExpression($argument, $escapeChar);
                 }
 
                 return $expression['name'].implode(', ', $sqlArguments).')';
@@ -411,7 +411,7 @@ abstract class Dialect
                     $joinConditionsArray = $join['conditions'];
                     if (empty($joinConditionsArray) === false) {
                         $joinExpressions = array();
-                        foreach ($joinConditionsAarray as $joinCondition) {
+                        foreach ($joinConditionsArray as $joinCondition) {
                             $joinExpressions[] = $this->getSqlExpression($joinCondition, $escapeChar);
                         }
 
@@ -456,7 +456,7 @@ abstract class Dialect
             $orderItems = array();
 
             foreach ($orderFields as $orderItem) {
-                $orderSqlItem = $this->getSqlExpression($orderItem[0], $escapChar);
+                $orderSqlItem = $this->getSqlExpression($orderItem[0], $escapeChar);
 
                 //In the numeric 1 position could be a ASC/DESC clause
                 if (isset($orderItem[1]) === true) {

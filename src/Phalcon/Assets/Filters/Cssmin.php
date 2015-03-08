@@ -21,7 +21,7 @@ use \Phalcon\Assets\Exception;
  *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/assets/filters/cssmin.c
  */
-class Cssmin
+class Cssmin implements \Phalcon\Assets\FilterInterface
 {
     /**
      * Filters the content using CSSMIN

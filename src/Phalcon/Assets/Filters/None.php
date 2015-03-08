@@ -17,7 +17,7 @@ namespace Phalcon\Assets\Filters;
  *
  * @see https://github.com/phalcon/cphalcon/blob/1.2.6/ext/assets/filters/none.c
  */
-class None
+class None implements \Phalcon\Assets\FilterInterface
 {
     /**
      * Returns the content without be touched

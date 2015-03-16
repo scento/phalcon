@@ -1611,11 +1611,11 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         //Check the right method to get the data
         if (is_null($method) ===true) {
             switch((int)$relation->getType()) {
-                case 0:
-                case 1:
+                case Relation::BELONGS_TO:
+                case Relation::HAS_ONE:
                     $method = 'findFirst';
                     break;
-                case 2:
+                case Relation::HAS_MANY:
                     $method = 'find';
                     break;
             }

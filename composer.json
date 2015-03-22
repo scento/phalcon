@@ -18,6 +18,7 @@
 		"tedivm/jshrink": "~1.0"
 	},
 	"require-dev": {
+		"phpunit/phpunit": "@stable",
 		"pdepend/pdepend": "@stable",
 		"phpmd/phpmd": "@stable",
 		"phploc/phploc": "@stable",

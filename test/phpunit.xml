@@ -76,7 +76,7 @@
 			<!--file>cphalcon/ModelsValidatorsTest.php</file-->
 			<!--file>cphalcon/PaginatorTest.php</file-->
 			<!--file>cphalcon/RequestTest.php</file-->
-			<!--file>cphalcon/ResponseTest.php</file-->
+			<file>cphalcon/ResponseTest.php</file>
 			<file>cphalcon/RouterCliTest.php</file>
 			<!--file>cphalcon/RouterMvcAnnotationsTest.php</file-->
 			<!--file>cphalcon/RouterMvcTest.php</file-->

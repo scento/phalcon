@@ -27,7 +27,7 @@
 			<!--file>cphalcon/CollectionsEventsTest.php</file-->
 			<!--file>cphalcon/CollectionsSerializeTest.php</file-->
 			<!--file>cphalcon/CollectionsTest.php</file-->
-			<!--file>cphalcon/ConfigTest.php</file-->
+			<file>cphalcon/ConfigTest.php</file>
 			<file>cphalcon/ConsoleCliTest.php</file>
 			<file>cphalcon/ControllersTest.php</file>
 			<!--file>cphalcon/CryptTest.php</file-->
@@ -42,7 +42,7 @@
 			<file>cphalcon/DiTest.php</file>
 			<file>cphalcon/EventsTest.php</file>
 			<!--file>cphalcon/FormsTest.php</file-->
-			<!--file>cphalcon/LoaderTest.php</file-->
+			<file>cphalcon/LoaderTest.php</file>
 			<!--file>cphalcon/MicroMvcCollectionsTest.php</file-->
 			<file>cphalcon/MicroMvcEventsTest.php</file>
 			<!--file>cphalcon/MicroMvcMiddlewareTest.php</file-->

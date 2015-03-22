@@ -1,17 +1,20 @@
 <?php
+
+namespace Scento\Tests;
+
 /**
  * Loader Testsuite
  *
  * @author Wenzel Pünter <wenzel@phelix.me>
 */
-class LoaderTest extends BaseTest
+class LoaderTest extends \BaseTest
 {
 	/**
 	 * Test extensions
 	*/
 	public function testExtensions()
 	{
-		$loader = new Phalcon\Loader();
+		$loader = new \Phalcon\Loader();
 
 		$this->assertException(
 			array($loader, 'setExtensions'),
@@ -29,7 +32,7 @@ class LoaderTest extends BaseTest
 	*/
 	public function testNamespaces()
 	{
-		$loader = new Phalcon\Loader();
+		$loader = new \Phalcon\Loader();
 
 		$this->assertException(
 			array($loader, 'registerNamespaces'), 
@@ -72,7 +75,7 @@ class LoaderTest extends BaseTest
 	*/
 	public function testEventsManagerBind()
 	{
-		$loader = new Phalcon\Loader();
+		$loader = new \Phalcon\Loader();
 
 		$this->assertException(
 			array($loader, 'setEventsManager'),
@@ -84,7 +87,7 @@ class LoaderTest extends BaseTest
 			array(new \stdClass()),
 			'Phalcon\Loader\Exception');
 
-		$manager = new Phalcon\Events\Manager();
+		$manager = new \Phalcon\Events\Manager();
 		$loader->setEventsManager($manager);
 		$this->assertEquals($loader->getEventsManager(), $manager);
 	}
@@ -94,7 +97,7 @@ class LoaderTest extends BaseTest
 	*/
 	public function testPrefixes()
 	{
-		$loader = new Phalcon\Loader();
+		$loader = new \Phalcon\Loader();
 
 		$this->assertException(
 			array($loader, 'registerPrefixes'),
@@ -144,7 +147,7 @@ class LoaderTest extends BaseTest
 	*/
 	public function testDirs()
 	{
-		$loader = new Phalcon\Loader();
+		$loader = new \Phalcon\Loader();
 
 		$this->assertException(
 			array($loader, 'registerDirs'),
@@ -199,7 +202,7 @@ class LoaderTest extends BaseTest
 	*/
 	public function testClasses()
 	{
-		$loader = new Phalcon\Loader();
+		$loader = new \Phalcon\Loader();
 
 		$this->assertException(
 			array($loader, 'registerClasses'),
@@ -253,7 +256,7 @@ class LoaderTest extends BaseTest
 	{
 		$functions = spl_autoload_functions();
 
-		$loader = new Phalcon\Loader();
+		$loader = new \Phalcon\Loader();
 		$this->assertEquals($loader->register(), $loader);
 		$this->assertTrue((spl_autoload_functions() !== $functions ? true : false));
 
@@ -269,7 +272,7 @@ class LoaderTest extends BaseTest
 	*/
 	public function testPaths()
 	{
-		$loader = new Phalcon\Loader();
+		$loader = new \Phalcon\Loader();
 
 		$this->assertEquals($loader->getFoundPath(), null);
 		$this->assertEquals($loader->getCheckedPath(), null);

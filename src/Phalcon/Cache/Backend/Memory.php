@@ -201,7 +201,7 @@ class Memory extends Backend implements BackendInterface
         } elseif (is_string($keyName) === true) {
             $keyName = $this->_prefix.$keyName;
         } else {
-            throw new Exeception('Invalid parameter type.');
+            throw new Exception('Invalid parameter type.');
         }
 
         if (is_null($lifetime) === false && is_int($lifetime) === false) {

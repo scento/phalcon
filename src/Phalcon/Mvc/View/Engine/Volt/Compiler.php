@@ -697,7 +697,7 @@ class Compiler implements InjectionAwareInterface
                                 }
                             }
 
-                            //If the super() is the first level we don't esacpe it
+                            //If the super() is the first level we don't escape it
                             if ($exprLevel === 1) {
                                 return $escapedCode;
                             }
@@ -937,10 +937,10 @@ class Compiler implements InjectionAwareInterface
                 return '$this->escaper->escapeHtml('.$arguments.')';
                 break;
             case 'escape':
-                return '$this->escaper->esacpeHtml('.$arguments.')';
+                return '$this->escaper->escapeHtml('.$arguments.')';
                 break;
             case 'escape_css':
-                return '$this->escaper->esacpeCss('.$arguments.')';
+                return '$this->escaper->escapeCss('.$arguments.')';
                 break;
             case 'escape_js':
                 return '$this->escaper->escapeJs('.$arguments.')';

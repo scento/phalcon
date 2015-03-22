@@ -382,7 +382,7 @@ abstract class Dialect
             $columnSql = $columns;
         }
 
-        //Check and esacpe tables
+        //Check and escape tables
         $tables = $definition['tables'];
         if (is_array($tables) === true) {
             $selectedTables = array();

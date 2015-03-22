@@ -18,11 +18,15 @@
 		"tedivm/jshrink": "~1.0"
 	},
 	"require-dev": {
+		"phpunit/phpunit": "@stable",
 		"pdepend/pdepend": "@stable",
 		"phpmd/phpmd": "@stable",
 		"phploc/phploc": "@stable",
 		"sebastian/phpcpd": "@stable",
-		"satooshi/php-coveralls": "dev-master"
+		"satooshi/php-coveralls": "dev-master",
+		
+		"mustache/mustache": "@stable",
+		"twig/twig": "@stable"
 	},
 	"autoload": {
 		"psr-4": {

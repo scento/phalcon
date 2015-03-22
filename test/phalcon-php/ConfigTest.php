@@ -1,10 +1,13 @@
 <?php
+
+namespace Scento\Tests;
+
 /**
  * Config Testsuite
  *
  * @author Wenzel Pünter <wenzel@phelix.me>
 */
-class ConfigTest extends BaseTest
+class ConfigTest extends \BaseTest
 {
 	public function testArraySimple()
 	{

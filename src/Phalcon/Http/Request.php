@@ -41,7 +41,7 @@ class Request implements RequestInterface, InjectionAwareInterface
     /**
      * Dependency Injector
      *
-     * @var null|\Phaclon\DiInterface
+     * @var null|\Phalcon\DiInterface
      * @access protected
     */
     protected $_dependencyInjector;

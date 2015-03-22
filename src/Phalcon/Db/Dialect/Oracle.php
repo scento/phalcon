@@ -643,7 +643,7 @@ class Oracle extends Dialect implements DialectInterface
                     $columnDomainSql = $columnSql;
                 }
 
-                //Esacpe column alias
+                //Escape column alias
                 if (isset($column[2]) === true) {
                     $columnAlias = $column[2];
                     if ($columnAlias == true) {
@@ -668,7 +668,7 @@ class Oracle extends Dialect implements DialectInterface
             $columnsSql = $columns;
         }
 
-        //Check and esacpe tables
+        //Check and escape tables
 		$tables = $definition['tables'];
         if (is_array($tables) === true) {
             $selectedTables = array();

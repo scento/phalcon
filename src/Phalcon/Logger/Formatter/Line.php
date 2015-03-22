@@ -59,7 +59,7 @@ class Line extends Formatter implements FormatterInterface
      * Set the log format
      *
      * @param string $format
-     * @throws Excepiton
+     * @throws Exception
      */
     public function setFormat($format)
     {

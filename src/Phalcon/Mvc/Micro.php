@@ -391,7 +391,7 @@ class Micro extends Injectable implements EventsAwareInterface, InjectionAwareIn
      */
     public function mount($collection)
     {
-        if (is_object($collection) === false ||
+        if (is_object($collection) === false &&
             $collection instanceof CollectionInterface === false) {
             throw new Exception('The collection is not valid');
         }
@@ -879,7 +879,7 @@ class Micro extends Injectable implements EventsAwareInterface, InjectionAwareIn
      */
     public function before($handler)
     {
-        if (is_callable($handler) === false) {
+        if (is_callable($handler) === false && $handler instanceof MiddlewareInterface === false) {
             throw new Exception('Invalid parameter type.');
         }
 
@@ -901,7 +901,7 @@ class Micro extends Injectable implements EventsAwareInterface, InjectionAwareIn
      */
     public function after($handler)
     {
-        if (is_callable($handler) === false) {
+        if (is_callable($handler) === false && $handler instanceof MiddlewareInterface === false) {
             throw new Exception('Invalid parameter type.');
         }
 
@@ -923,7 +923,7 @@ class Micro extends Injectable implements EventsAwareInterface, InjectionAwareIn
      */
     public function finish($handler)
     {
-        if (is_callable($handler) === false) {
+        if (is_callable($handler) === false && $handler instanceof MiddlewareInterface === false) {
             throw new Exception('Invalid parameter type.');
         }
 

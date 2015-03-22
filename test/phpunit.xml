@@ -13,12 +13,80 @@
 	<testsuites>
 		<testsuite name="phalcon-php">
 			<directory>phalcon-php/</directory>
-			</testsuite>
-		<!--
-		Disable cphalcon testsuite until everything is ported
-		<testsuite name="cphalcon">
-			<directory>cphalcon/</directory>
 		</testsuite>
-		-->
+		
+		<!-- Disable failing cphalcon testsuites until everything is ported -->
+		<testsuite name="cphalcon">
+			<!--file>cphalcon/AnnotationsAdaptersTest.php</file-->
+			<!--file>cphalcon/AnnotationsTest.php</file-->
+			<!--file>cphalcon/ApplicationMvcTest.php</file-->
+			<!--file>cphalcon/AssetsTest.php</file-->
+			<!--file>cphalcon/BeanstalkTest.php</file-->
+			<!--file>cphalcon/CacheResultsetTest.php</file-->
+			<!--file>cphalcon/CacheTest.php</file-->
+			<!--file>cphalcon/CollectionsEventsTest.php</file-->
+			<!--file>cphalcon/CollectionsSerializeTest.php</file-->
+			<!--file>cphalcon/CollectionsTest.php</file-->
+			<!--file>cphalcon/ConfigTest.php</file-->
+			<file>cphalcon/ConsoleCliTest.php</file>
+			<file>cphalcon/ControllersTest.php</file>
+			<!--file>cphalcon/CryptTest.php</file-->
+			<!--file>cphalcon/DbBindTest.php</file-->
+			<!--file>cphalcon/DbDescribeTest.php</file-->
+			<file>cphalcon/DbDialectTest.php</file>
+			<!--file>cphalcon/DbProfilerTest.php</file-->
+			<!--file>cphalcon/DbTest.php</file-->
+			<file>cphalcon/DispatcherCliTest.php</file>
+			<file>cphalcon/DispatcherMvcEventsTest.php</file>
+			<file>cphalcon/DispatcherMvcTest.php</file>
+			<file>cphalcon/DiTest.php</file>
+			<file>cphalcon/EventsTest.php</file>
+			<!--file>cphalcon/FormsTest.php</file-->
+			<!--file>cphalcon/LoaderTest.php</file-->
+			<!--file>cphalcon/MicroMvcCollectionsTest.php</file-->
+			<file>cphalcon/MicroMvcEventsTest.php</file>
+			<!--file>cphalcon/MicroMvcMiddlewareTest.php</file-->
+			<file>cphalcon/MicroMvcTest.php</file>
+			<!--file>cphalcon/ModelsBehaviorsTest.php</file-->
+			<!--file>cphalcon/ModelsCalculationsTest.php</file-->
+			<!--file>cphalcon/ModelsCriteriaTest.php</file-->
+			<!--file>cphalcon/ModelsDynamicOperationsTest.php</file-->
+			<!--file>cphalcon/ModelsEventsTest.php</file-->
+			<!--file>cphalcon/ModelsFindersTest.php</file-->
+			<!--file>cphalcon/ModelsForeignKeysTest.php</file-->
+			<!--file>cphalcon/ModelsHydrationTest.php</file-->
+			<!--file>cphalcon/ModelsMassAssigmentTest.php</file-->
+			<!--file>cphalcon/ModelsMetadataAdaptersTest.php</file-->
+			<file>cphalcon/ModelsMetadataManualTest.php</file>
+			<!--file>cphalcon/ModelsMetadataStrategyTest.php</file-->
+			<!--file>cphalcon/ModelsMetadataTest.php</file-->
+			<!--file>cphalcon/ModelsMultipleSourcesTest.php</file-->
+			<!--file>cphalcon/ModelsQueryBuilderTest.php</file-->
+			<!--file>cphalcon/ModelsQueryExecuteTest.php</file-->
+			<!--file>cphalcon/ModelsQueryParsingTest.php</file-->
+			<!--file>cphalcon/ModelsRelationsMagicTest.php</file-->
+			<!--file>cphalcon/ModelsRelationsTest.php</file-->
+			<!--file>cphalcon/ModelsResultsetCacheStaticTest.php</file-->
+			<!--file>cphalcon/ModelsResultsetCacheTest.php</file-->
+			<!--file>cphalcon/ModelsResultsetTest.php</file-->
+			<!--file>cphalcon/ModelsSerializeTest.php</file-->
+			<!--file>cphalcon/ModelsSnapshotsTest.php</file-->
+			<!--file>cphalcon/ModelsTest.php</file-->
+			<!--file>cphalcon/ModelsTransactionsTest.php</file-->
+			<!--file>cphalcon/ModelsValidatorsTest.php</file-->
+			<!--file>cphalcon/PaginatorTest.php</file-->
+			<!--file>cphalcon/RequestTest.php</file-->
+			<!--file>cphalcon/ResponseTest.php</file-->
+			<file>cphalcon/RouterCliTest.php</file>
+			<!--file>cphalcon/RouterMvcAnnotationsTest.php</file-->
+			<!--file>cphalcon/RouterMvcTest.php</file-->
+			<file>cphalcon/SessionTest.php</file>
+			<!--file>cphalcon/TagTest.php</file-->
+			<file>cphalcon/TasksCliTest.php</file>
+			<!--file>cphalcon/ValidationTest.php</file-->
+			<!--file>cphalcon/ViewCacheTest.php</file-->
+			<!--file>cphalcon/ViewEnginesTest.php</file-->
+			<!--file>cphalcon/ViewTest.php</file-->
+		</testsuite>
 	</testsuites>
 </phpunit>

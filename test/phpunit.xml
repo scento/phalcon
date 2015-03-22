@@ -85,7 +85,7 @@
 			<file>cphalcon/TasksCliTest.php</file>
 			<!--file>cphalcon/ValidationTest.php</file-->
 			<!--file>cphalcon/ViewCacheTest.php</file-->
-			<!--file>cphalcon/ViewEnginesTest.php</file-->
+			<file>cphalcon/ViewEnginesTest.php</file>
 			<!--file>cphalcon/ViewTest.php</file-->
 		</testsuite>
 	</testsuites>

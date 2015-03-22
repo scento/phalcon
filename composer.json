@@ -23,7 +23,10 @@
 		"phpmd/phpmd": "@stable",
 		"phploc/phploc": "@stable",
 		"sebastian/phpcpd": "@stable",
-		"satooshi/php-coveralls": "dev-master"
+		"satooshi/php-coveralls": "dev-master",
+		
+		"mustache/mustache": "@stable",
+		"twig/twig": "@stable"
 	},
 	"autoload": {
 		"psr-4": {

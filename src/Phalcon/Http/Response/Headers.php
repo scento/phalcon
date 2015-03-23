@@ -39,8 +39,7 @@ class Headers implements HeadersInterface
 	 */
 	public function set($name, $value)
 	{
-		if(is_string($name) === false ||
-			is_string($value) === false) {
+		if(is_string($name) === false) {
 			throw new Exception('Invalid parameter type.');
 		}
 

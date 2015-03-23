@@ -193,7 +193,7 @@ class Collection implements CollectionInterface
     public function map($routePattern, $handler)
     {
         if (is_string($routePattern) === false ||
-            is_callable($handler) === false) {
+            (is_callable($handler) === false && $handler instanceof MiddlewareInterface === false && is_string($handler) === false)) {
             throw new Exception('Invalid parameter type.');
         }
 
@@ -213,7 +213,7 @@ class Collection implements CollectionInterface
     public function get($routePattern, $handler)
     {
         if (is_string($routePattern) === false ||
-            is_callable($handler) === false) {
+            (is_callable($handler) === false && $handler instanceof MiddlewareInterface === false && is_string($handler) === false)) {
             throw new Exception('Invalid parameter type.');
         }
 
@@ -233,7 +233,7 @@ class Collection implements CollectionInterface
     public function post($routePattern, $handler)
     {
         if (is_string($routePattern) === false ||
-            is_callable($handler) === false) {
+            (is_callable($handler) === false && $handler instanceof MiddlewareInterface === false && is_string($handler) === false)) {
             throw new Exception('Invalid parameter type.');
         }
 
@@ -253,7 +253,7 @@ class Collection implements CollectionInterface
     public function put($routePattern, $handler)
     {
         if (is_string($routePattern) === false ||
-            is_callable($handler) === false) {
+            (is_callable($handler) === false && $handler instanceof MiddlewareInterface === false && is_string($handler) === false)) {
             throw new Exception('Invalid parameter type.');
         }
 
@@ -273,7 +273,7 @@ class Collection implements CollectionInterface
     public function patch($routePattern, $handler)
     {
         if (is_string($routePattern) === false ||
-            is_callable($handler) === false) {
+            (is_callable($handler) === false && $handler instanceof MiddlewareInterface === false && is_string($handler) === false)) {
             throw new Exception('Invalid parameter type.');
         }
 
@@ -293,7 +293,7 @@ class Collection implements CollectionInterface
     public function head($routePattern, $handler)
     {
         if (is_string($routePattern) === false ||
-            is_callable($handler) === false) {
+            (is_callable($handler) === false && $handler instanceof MiddlewareInterface === false && is_string($handler) === false)) {
             throw new Exception('Invalid parameter type.');
         }
 
@@ -313,7 +313,7 @@ class Collection implements CollectionInterface
     public function delete($routePattern, $handler)
     {
         if (is_string($routePattern) === false ||
-            is_callable($handler) === false) {
+            (is_callable($handler) === false && $handler instanceof MiddlewareInterface === false && is_string($handler) === false)) {
             throw new Exception('Invalid parameter type.');
         }
 
@@ -333,7 +333,7 @@ class Collection implements CollectionInterface
     public function options($routePattern, $handler)
     {
         if (is_string($routePattern) === false ||
-            is_callable($handler) === false) {
+            (is_callable($handler) === false && $handler instanceof MiddlewareInterface === false && is_string($handler) === false)) {
             throw new Exception('Invalid parameter type.');
         }
 

@@ -43,9 +43,9 @@
 			<file>cphalcon/EventsTest.php</file>
 			<!--file>cphalcon/FormsTest.php</file-->
 			<file>cphalcon/LoaderTest.php</file>
-			<!--file>cphalcon/MicroMvcCollectionsTest.php</file-->
+			<file>cphalcon/MicroMvcCollectionsTest.php</file>
 			<file>cphalcon/MicroMvcEventsTest.php</file>
-			<!--file>cphalcon/MicroMvcMiddlewareTest.php</file-->
+			<file>cphalcon/MicroMvcMiddlewareTest.php</file>
 			<file>cphalcon/MicroMvcTest.php</file>
 			<!--file>cphalcon/ModelsBehaviorsTest.php</file-->
 			<!--file>cphalcon/ModelsCalculationsTest.php</file-->

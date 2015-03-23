@@ -21,7 +21,7 @@
 			<!--file>cphalcon/AnnotationsTest.php</file-->
 			<!--file>cphalcon/ApplicationMvcTest.php</file-->
 			<!--file>cphalcon/AssetsTest.php</file-->
-			<!--file>cphalcon/BeanstalkTest.php</file-->
+			<file>cphalcon/BeanstalkTest.php</file>
 			<!--file>cphalcon/CacheResultsetTest.php</file-->
 			<!--file>cphalcon/CacheTest.php</file-->
 			<!--file>cphalcon/CollectionsEventsTest.php</file-->

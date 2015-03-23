@@ -100,7 +100,7 @@ class Beanstalk
     public function put($data, $options = null)
     {
         /* Type check */
-        if (is_string($data) === false) {
+        if (is_string($data) === false && is_array($data) === false) {
             throw new Exception('Invalid parameter type.');
         }
 
@@ -248,8 +248,10 @@ class Beanstalk
      *
      * @return array|boolean
      */
-    protected function readStatus()
+    public function readStatus()
     {
+        //@note This method was originally `protected`.
+        
         //@note explode() can return false!
         return explode(' ', $this->read());
     }
@@ -264,7 +266,8 @@ class Beanstalk
     public function read($length = null)
     {
         /* Type check */
-        if (is_null($length) === false && is_int($length) === false) {
+        // The int casting is used because `is_int()` doesn't work with strings.
+        if (is_null($length) === false && ((int) $length == $length) === false) {
             throw new Exception('Invalid parameter type.');
         }
 
@@ -302,8 +305,10 @@ class Beanstalk
      * @return integer|boolean
      * @throws Exception
      */
-    protected function write($data)
+    public function write($data)
     {
+        //@note This method was originally `protected`.
+
         if (is_string($data) === false) {
             throw new Exception('Invalid parameter type.');
         }

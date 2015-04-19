@@ -98,7 +98,6 @@ abstract class Behavior
      */
     public function notify($type, $model)
     {
-
     }
 
     /**
@@ -110,6 +109,5 @@ abstract class Behavior
      */
     public function missingMethod($model, $method, $arguments = null)
     {
-
     }
 }

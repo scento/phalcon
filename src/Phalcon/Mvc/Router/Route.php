@@ -404,7 +404,7 @@ class Route implements RouteInterface
             $numberParts = count($parts);
 
             //Create the array paths dynamically
-            switch($numberParts) {
+            switch ($numberParts) {
                 case 3:
                     $moduleName = $parts[0];
                     $controllerName = $parts[1];

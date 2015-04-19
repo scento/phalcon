@@ -388,7 +388,7 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
 
         if (is_array($accessList) === true) {
             foreach ($accessList as $accessName) {
-                unset ($this->_accessList[$resourceName.'!'.$accessName]);
+                unset($this->_accessList[$resourceName.'!'.$accessName]);
             }
         } elseif (is_string($accessList) === true) {
             unset($this->_accessList[$resourceName.'!'.$accessList]);
@@ -440,7 +440,6 @@ class Memory extends Adapter implements EventsAwareInterface, AdapterInterface
                     }
                 }
             }
-
         } elseif (is_string($access) === true) {
             if ($access !== '*') {
                 $accessKey = $resourceName.'!'.$access;

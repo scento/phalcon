@@ -266,7 +266,7 @@ class Crypt implements CryptInterface
         $textLen = strlen($text);
 
         if (($textLen % $blockSize === 0) && ($mode === 'ecb' || $mode === 'cbc')) {
-            switch($paddingType) {
+            switch ($paddingType) {
                 case self::PADDING_ANSI_X_923:
                     if (ord($text[$textLen-1]) <= $blockSize) {
                         $paddingSize = ord($text[$textLen-1]);
@@ -364,7 +364,7 @@ class Crypt implements CryptInterface
         if ($mode === 'ecb' || $mode === 'cbc') {
             $paddingSize = $blockSize - (strlen($text) % $blockSize);
 
-            switch($paddingType) {
+            switch ($paddingType) {
                 case self::PADDING_ANSI_X_923:
                     $padding = str_repeat(chr(0), $paddingSize - 1).chr($paddingSize);
                     break;
@@ -460,7 +460,7 @@ class Crypt implements CryptInterface
         if (\DIRECTORY_SEPARATOR === '/' && version_compare(\PHP_VERSION, '5.3.0', '<') === true) {
             $iv = (string)mcrypt_create_iv($ivSize, \MCRYPT_RAND);
         } else {
-            $iv = (string)mcrypt_create_iv($ivSize, \ MCRYPT_DEV_URANDOM);
+            $iv = (string)mcrypt_create_iv($ivSize, \MCRYPT_DEV_URANDOM);
         }
 
         $blockSize = (int)mcrypt_get_block_size($this->_cipher, $this->_mode);

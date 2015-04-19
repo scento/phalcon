@@ -50,7 +50,7 @@ class Mysql extends Dialect implements DialectInterface
 
         $size = $column->getSize();
 
-        switch((int)$column->getType()) {
+        switch ((int)$column->getType()) {
             case 0:
                 return 'INT('.$size.')'.($column->isUnsigned() === true ? ' UNSIGNED' : '');
                 break;

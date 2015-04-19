@@ -165,8 +165,7 @@ class Annotation
             throw new Exception('The expression is not valid.');
         }
 
-        switch((int)$expr['type'])
-        {
+        switch ((int)$expr['type']) {
             case self::PHANNOT_T_INTEGER:
             case self::PHANNOT_T_DOUBLE:
             case self::PHANNOT_T_STRING:

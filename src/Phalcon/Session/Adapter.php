@@ -166,7 +166,6 @@ abstract class Adapter
         }
 
         $_SESSION[$this->_uniqueId.$index] = $value;
-
     }
 
     /**

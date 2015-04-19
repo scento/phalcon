@@ -270,7 +270,6 @@ class Manager implements ManagerInterface
                                 break;
                             }
                         }
-
                     } else {
                         //Check if the listener has implemented an event with the same name
                         if (method_exists($handler, $eventName) === true) {

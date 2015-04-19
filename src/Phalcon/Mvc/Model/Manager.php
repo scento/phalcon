@@ -1407,7 +1407,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
     */
     private static function appendPrintableVal($input)
     {
-        switch(getType($input)) {
+        switch (getType($input)) {
             case 'string':
             case 'integer':
             case 'double':
@@ -1610,7 +1610,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
 
         //Check the right method to get the data
         if (is_null($method) ===true) {
-            switch((int)$relation->getType()) {
+            switch ((int)$relation->getType()) {
                 case Relation::BELONGS_TO:
                 case Relation::HAS_ONE:
                     $method = 'findFirst';
@@ -1971,7 +1971,7 @@ class Manager implements ManagerInterface, InjectionAwareInterface, EventsAwareI
         //Check if it's a belongs-to relationship
         if (is_array($this->_belongsTo) === true &&
             isset($this->_belongsTo[$keyRelation]) === true) {
-                return $this->_belongsTo[$keyRelation];
+            return $this->_belongsTo[$keyRelation];
         }
 
         //Check if it's a has-many relationship

@@ -1368,7 +1368,7 @@ class Tag
      */
     public static function getDocType()
     {
-        switch(self::$_documentType) {
+        switch (self::$_documentType) {
             case self::HTML32:
                 return "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 3.2 Final//EN\">\n";
                 break;

@@ -14,7 +14,7 @@ use \Phalcon\Translate\Adapter;
 use \ArrayAccess;
 use \Phalcon\Translate\AdapterInterface;
 use \Phalcon\Translate\Exception;
-    
+
 /**
  * Phalcon\Translate\Adapter\NativeArray
  *

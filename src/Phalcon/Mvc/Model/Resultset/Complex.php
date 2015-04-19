@@ -151,7 +151,7 @@ class Complex extends Resultset implements Serializable, ArrayAccess, Countable,
             //The result type=1 so we need to build every row
             if ($this->_type === 1) {
                 //Each row in a complex result is a Phalcon\Mvc\Model\Row instance
-                switch((int)$this->_hydrateMode) {
+                switch ((int)$this->_hydrateMode) {
                     case 0:
                         $activeRow = new Row();
                         break;
@@ -180,7 +180,7 @@ class Complex extends Resultset implements Serializable, ArrayAccess, Countable,
                         }
 
                         //Generate the column value according to the hydration type
-                        switch((int)$this->_hydrateMode) {
+                        switch ((int)$this->_hydrateMode) {
                             case 0:
                                     //Check if the resultset must keep snapshots
                                 if (isset($column['keepSnapshots']) === true) {
@@ -232,7 +232,7 @@ class Complex extends Resultset implements Serializable, ArrayAccess, Countable,
                     }
 
                     //Assign the instance according to the hydration type
-                    switch((int)$this->_hydrateMode) {
+                    switch ((int)$this->_hydrateMode) {
                         case 1:
                             $activeRow[$attribute] = $value;
                             break;

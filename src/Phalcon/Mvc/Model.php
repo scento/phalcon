@@ -2879,7 +2879,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
                     //If the whitelist is an array check if the attribute is on that list
                     if (is_array($whiteList) === true &&
                         in_array($attributeField, $whiteList) === false) {
-                            continue;
+                        continue;
                     }
 
                     //Read the attribute from the data
@@ -3034,7 +3034,7 @@ abstract class Model implements ModelInterface, ResultInterface, InjectionAwareI
         if (isset($GLOBALS['_PHALCON_ORM_EVENTS']) === true &&
             $GLOBALS['_PHALCON_ORM_EVENTS'] === true &&
             $success === true) {
-                $this->fireEvent('afterDelete');
+            $this->fireEvent('afterDelete');
         }
 
         //Force perform the record existence check again

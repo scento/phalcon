@@ -84,7 +84,7 @@ class Base64 implements FrontendInterface
     {
         if (is_array($this->_frontendOptions) === true &&
             isset($this->_frontendOptions['lifetime']) === true) {
-                return $this->_frontendOptions['lifetime'];
+            return $this->_frontendOptions['lifetime'];
         }
 
         return 1;

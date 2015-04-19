@@ -233,7 +233,7 @@ class Pdo
     {
         $rowCount = $this->_rowCount;
         if ($rowCount === false) {
-            switch($this->_connection->getType()) {
+            switch ($this->_connection->getType()) {
                 case 'mysql':
                     $rowCount = $this->_pdoStatement->rowCount();
                     break;
@@ -324,7 +324,7 @@ class Pdo
             throw new Exception('Invalid parameter type.');
         }
 
-        switch($fetchMode) {
+        switch ($fetchMode) {
             case 1:
                 $fetchType = 2;
                 break;

@@ -46,7 +46,7 @@ class Oracle extends Dialect implements DialectInterface
             throw new Exception('Column definition must be an object compatbiel with Phalcon\\Db\\ColumnInterface');
         }
 
-        switch((int)$column->getType()) {
+        switch ((int)$column->getType()) {
             case 0:
                 return 'INTEGER';
             case 1:
@@ -606,8 +606,8 @@ class Oracle extends Dialect implements DialectInterface
         } else {
             $escapeChar = null;
         }
-	
-		$columns = $definition['columns'];
+    
+        $columns = $definition['columns'];
         if (is_array($columns) === true) {
             $selectedColumns = array();
             foreach ($columns as $column) {
@@ -669,7 +669,7 @@ class Oracle extends Dialect implements DialectInterface
         }
 
         //Check and escape tables
-		$tables = $definition['tables'];
+        $tables = $definition['tables'];
         if (is_array($tables) === true) {
             $selectedTables = array();
 

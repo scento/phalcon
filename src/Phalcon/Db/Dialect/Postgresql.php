@@ -46,8 +46,7 @@ class Postgresql extends Dialect implements DialectInterface
             throw new Exception('Column definition must be an object compatible with Phalcon\\Db\\ColumnInterface');
         }
 
-        switch((int)$column->getType())
-        {
+        switch ((int)$column->getType()) {
             case 0:
                 return 'INT';
             case 1:

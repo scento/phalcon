@@ -226,7 +226,7 @@ class Reader implements ReaderInterface
         $breakpoints = array();
 
         for ($i = 0; $i < $l; ++$i) {
-            switch($raw[$i]) {
+            switch ($raw[$i]) {
                 case ',':
                     if ($openBraces === 0 &&
                         $openBrackets === 0) {
@@ -305,7 +305,7 @@ class Reader implements ReaderInterface
         $breakpoints = array();
 
         for ($i = 0; $i < $l; ++$i) {
-            switch($raw[$i]) {
+            switch ($raw[$i]) {
                 case ',':
                     if ($openBraces === 0 &&
                         $openBrackets === 0) {
@@ -369,35 +369,27 @@ class Reader implements ReaderInterface
         if ($raw == 'null') {
             /* Type: null */
             return array('expr' => array('type' => self::PHANNOT_T_NULL));
-
         } elseif ($raw == 'false') {
             /* Type: boolean (false) */
             return array('expr' => array('type' => self::PHANNOT_T_FALSE));
-
         } elseif ($raw == 'true') {
             /* Type: boolean (true) */
             return array('expr' => array('type' => self::PHANNOT_T_TRUE));
-
         } elseif (preg_match('#^((?:[+-]?)(?:[0-9])+)$#', $raw, $matches) > 0) {
             /* Type: integer */
             return array('expr' => array('type' => self::PHANNOT_T_INTEGER, 'value' => (string)$matches[0]));
-
         } elseif (preg_match('#^((?:[+-]?)(?:[0-9.])+)$#', $raw, $matches) > 0) {
             /* Type: float */
             return array('expr' => array('type' => self::PHANNOT_T_DOUBLE, 'value' => (string)$matches[0]));
-
         } elseif (preg_match('#^"(.*)"$#', $raw, $matches) > 0) {
             /* Type: quoted string */
             return array('expr' => array('type' => self::PHANNOT_T_STRING, 'value' => (string)$matches[0]));
-
         } elseif (preg_match('#^([\w]+):(?:[\s]*)((?:(?:[\w"]+)?|(?:(?:\{(?:.*)\}))|(?:\[(?:.*)\])))$#', $raw, $matches) > 0) {
             /* Colon-divided named parameters */
             return array_merge(array('name' => (string)$matches[1]), self::parseDocBlockArguments($matches[2]));
-
         } elseif (preg_match('#^([\w]+)=((?:(?:[\w"]+)?|(?:(?:\{(?:.*)\}))|(?:\[(?:.*)\])))$#', $raw, $matches) > 0) {
             /* Equal-divided named parameter */
             return array_merge(array('name' => (string)$matches[1]), self::parseDocBlockArguments($matches[2]));
-
         } elseif (preg_match('#^\((?:(\[[^()]+\]|\{[^()]+\}|[^{}[\](),]{1,})(?:,?))*\)(?:;?)$#', $raw) > 0) {
             /* Argument list (default/root element) */
             $results = array();
@@ -406,7 +398,6 @@ class Reader implements ReaderInterface
                 $results[] = self::parseDocBlockArguments($argument);
             }
             return $results;
-
         } elseif (preg_match('#^\{(?:(?:([\w"]+)(?:[:=])[\s]*([\w"])+(?:}$|,[\s]*))|(?:([\w"]+)(?:[:=])[\s]*(\[(?:.*)\])(?:}$|,[\s]*))|(?:([\w"]+)(?:[:=][\s]*(\{(?:.*)\})(?:}$|,[\s]*)))|(?:([\w"]+)[\s]*(?:}$|,[\s]*)))+#', $raw) > 0) {
             /* Type: Associative Array */
             $result = array();
@@ -419,7 +410,6 @@ class Reader implements ReaderInterface
                 }
             }
             return array('expr' => array('type' => self::PHANNOT_T_ARRAY, 'items' => $result));
-
         } elseif (preg_match_all('#^\[(?:((?:["\w]+)|(?:\[(?:.*)\])|(?:\{(?:.*)\}))(?:,|\]$)[\s]*)+#', $raw, $matches) > 0) {
             /* Type: Array */
             $items = array();
@@ -428,15 +418,12 @@ class Reader implements ReaderInterface
                 $items[] = self::parseDocBlockArguments($element);
             }
             return array('expr' => array('type' => self::PHANNOT_T_ARRAY, 'items' => $items));
-
         } elseif (ctype_alnum($raw) === true) {
             /* Type: Identifier */
             return array('expr' => array('type' => self::PHANNOT_T_IDENTIFIER, 'value' => (string)$raw));
-
         } else {
             /* Unknown annotation format */
             throw new Exception('Syntax error, unexpected token.');
-
         }
     }
 }

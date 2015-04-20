@@ -178,7 +178,6 @@ class File implements FileInterface
      */
     public function getRealType()
     {
-
     }
 
     /**

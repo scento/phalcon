@@ -246,14 +246,12 @@ class Escaper implements EscaperInterface
                     * style sheet does contain a character with Unicode codepoint zero."
                     */
                     return false;
-
                 } elseif (($d > 49 && $d < 58) ||
                     ($d > 96 && $d < 123) || ($d > 64 && $d < 91)) {
                     /**
                      * Alphanumeric characters are not escaped
                      */
                     $a .= chr($d);
-
                 } else {
                     /**
                      * Escape character
@@ -289,7 +287,6 @@ class Escaper implements EscaperInterface
                 $d = ord($no[$i])+ord($no[$i+1])+ord($no[$i+2])+ord($no[$i+3]);
                 if ($d === 0) {
                     return false;
-
                 } elseif (($d > 49 && $d < 58) || ($d > 96 && $d < 123) ||
                     ($d > 64 && $d < 91) ||
                     $d === 9 || $d === 10 || $d === 32 || $d === 33 || $d === 35 ||
@@ -297,7 +294,6 @@ class Escaper implements EscaperInterface
                     $d === 63 || $d === 92 || ($d > 93 && $d < 97) ||
                     ($d > 122 && $d < 127)) {
                     $a .= chr($d);
-
                 } else {
                     $a .= '\\x'.dechex($d);
                 }

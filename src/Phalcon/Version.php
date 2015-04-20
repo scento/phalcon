@@ -51,7 +51,7 @@ class Version
 
         $result = $version[0].'.'.$version[1].'.'.$version[2];
 
-        switch($version[3]) {
+        switch ($version[3]) {
             case 1:
                 $result .= ' ALPHA '.$version[4];
                 break;

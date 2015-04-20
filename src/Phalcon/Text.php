@@ -208,7 +208,7 @@ abstract class Text
 
         $t = '';
         for ($i = 0; $i < $length; ++$i) {
-            switch($type) {
+            switch ($type) {
                 case self::RANDOM_ALNUM:
                     //[A-Za-z0-9]
                     $r = mt_rand(0, 59);

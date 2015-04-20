@@ -730,7 +730,6 @@ class Router implements RouterInterface, InjectionAwareInterface
             $this->_action = $this->_defaultAction;
             $this->_params = $this->_defaultParams;
         }
-
     }
 
     /**

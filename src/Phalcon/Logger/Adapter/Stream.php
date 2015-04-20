@@ -81,7 +81,6 @@ class Stream extends Adapter implements AdapterInterface
     {
         if (is_object($this->_formatter) === false) {
             $this->_formatter = new Line();
-
         }
 
         return $this->_formatter;

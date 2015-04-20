@@ -140,7 +140,6 @@ class Model implements AdapterInterface
 
                 ++$i;
             }
-
         }
 
         //Add items to page object

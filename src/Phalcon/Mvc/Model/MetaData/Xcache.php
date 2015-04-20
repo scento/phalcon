@@ -14,7 +14,7 @@ use \Phalcon\Mvc\Model\MetaData;
 use \Phalcon\Mvc\Model\MetaDataInterface;
 use \Phalcon\Mvc\Model\Exception;
 use \Phalcon\DI\InjectionAwareInterface;
-    
+
 /**
  * Phalcon\Mvc\Model\MetaData\Xcache
  *

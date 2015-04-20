@@ -1026,7 +1026,7 @@ class View extends Injectable implements EventsAwareInterface, InjectionAwareInt
             //Inserts templates after layout
             if ($this->_renderLevel >= self::LEVEL_AFTER_TEMPLATE &&
                 isset($this->_disabledLevels[self::LEVEL_AFTER_TEMPLATE]) === false) {
-                    //Templates after must be an array
+                //Templates after must be an array
                 if (is_array($this->_templatesAfter) === true) {
                     foreach ($this->_templatesAfter as $templateAfter) {
                         $this->_engineRender($engines, $layoutsDir.$templateAfter, false, true, $cache);

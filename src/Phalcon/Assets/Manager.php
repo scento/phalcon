@@ -608,7 +608,6 @@ class Manager
 
                 continue;
             }
-
         }
 
         /* Handle joined data */

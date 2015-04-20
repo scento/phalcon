@@ -275,7 +275,6 @@ class Volt extends Engine implements InjectionAwareInterface, EventsAwareInterfa
 
             //Use array_slice on arrays
             return array_slice($value, $start, $length);
-
         } elseif (is_string($value) === true) {
             //Calculating the slice length
             if (is_null($end) === false) {

@@ -249,6 +249,5 @@ abstract class Flash implements FlashInterface
                 return $htmlMessage;
             }
         }
-
     }
 }

@@ -511,7 +511,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             }
 
             //Every node in the AST has a unique integer type
-            switch((int)$expr['type']) {
+            switch ((int)$expr['type']) {
                 case 60:
                     return array('type' => 'binary-op', 'op' => '<', 'left' => $left, 'right' => $right);
                     break;
@@ -845,7 +845,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             throw new Exception('Corrupted SELECT AST');
         }
 
-        switch((int)$join['type']) {
+        switch ((int)$join['type']) {
             case 360:
                 return 'INNER';
                 break;
@@ -1729,7 +1729,7 @@ class Query implements QueryInterface, InjectionAwareInterface
                 //Produce an independent database system representation
                 $this->_type = $ast['type'];
 
-                switch((int)$this->_type) {
+                switch ((int)$this->_type) {
                     case 309:
                         $irPhql = $this->_prepareSelect();
                         break;
@@ -2108,7 +2108,7 @@ class Query implements QueryInterface, InjectionAwareInterface
         $insertValues = array();
 
         foreach ($intermediate['values'] as $number => $value) {
-            switch((int)$value['type']) {
+            switch ((int)$value['type']) {
                 case 260:
                 case 258:
                 case 259:
@@ -2243,7 +2243,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             $fieldName = $field['name'];
             $value = $values[$number];
 
-            switch((int)$value['type']) {
+            switch ((int)$value['type']) {
                 case 260:
                 case 258:
                 case 259:
@@ -2413,7 +2413,7 @@ class Query implements QueryInterface, InjectionAwareInterface
 
             $cache = $this->_dependencyInjector->getShared($cacheService);
             if (is_object($cache) === false) {
-            //@note no interface validation
+                //@note no interface validation
                 throw new Exception('The cache service must be an object');
             }
 
@@ -2465,7 +2465,7 @@ class Query implements QueryInterface, InjectionAwareInterface
             $mergedTypes = $bindTypes;
         }
 
-        switch((int)$this->_type) {
+        switch ((int)$this->_type) {
             case 309:
                 $result = $this->_executeSelect($intermediate, $mergedParams, $mergedTypes);
                 break;

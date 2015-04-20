@@ -198,7 +198,7 @@ class Simple extends Resultset implements Serializable, ArrayAccess, Countable, 
         $columnMap = $this->_columnMap;
 
         //Hydrate based on the current hydration
-        switch((int)$hydrateMode) {
+        switch ((int)$hydrateMode) {
             case 0:
                 //$this->model is the base entity
                 $model = $this->_model;

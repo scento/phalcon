@@ -664,7 +664,7 @@ class Compiler implements InjectionAwareInterface
                 return 'vmacro_'.$name.'(array('.$arguments.'))';
             }
 
-            switch($name) {
+            switch ($name) {
                 case 'get_content':
                 case 'content':
                     //This function includes the previous rendering stage
@@ -745,7 +745,7 @@ class Compiler implements InjectionAwareInterface
                 return '$this->tag->'.$method.'('.$arguments.')';
             }
 
-            switch($name) {
+            switch ($name) {
                 case 'url':
                     return '$this->url->get('.$arguments.')';
                     break;
@@ -802,7 +802,7 @@ class Compiler implements InjectionAwareInterface
 
         //Check if right part is a single identifier
         if ($type === 265) {
-            switch($test['value']) {
+            switch ($test['value']) {
                 case 'empty':
                     return 'empty('.$left.')';
                     break;
@@ -829,7 +829,7 @@ class Compiler implements InjectionAwareInterface
             $testName = $test['name'];
             if (isset($testName['value']) === true) {
                 //Checks if a value is divisible by other
-                switch($testName['value']) {
+                switch ($testName['value']) {
                     case 'divisibleby':
                         return '((('.$left.') % ('.$this->expression($test['arguments']).')) == 0)';
                         break;
@@ -929,7 +929,7 @@ class Compiler implements InjectionAwareInterface
             }
         }
 
-        switch($name) {
+        switch ($name) {
             case 'length':
                 return '$this->length('.$arguments.')';
                 break;
@@ -1100,7 +1100,7 @@ class Compiler implements InjectionAwareInterface
 
             $exprCode = null;
 
-            switch((int)$type) {
+            switch ((int)$type) {
                 case 33:
                     $exprCode = '!'.$rightCode;
                     break;
@@ -1688,7 +1688,7 @@ class Compiler implements InjectionAwareInterface
             $variable = $assignment['variable'];
 
             //Generate the right operator
-            switch((int)$assignment['op']) {
+            switch ((int)$assignment['op']) {
                 case 281:
                     $compilation .= ' $'.$variable.' += '.$exprCode.';';
                     break;
@@ -1847,7 +1847,6 @@ class Compiler implements InjectionAwareInterface
      */
     public function compileCall($statement, $extendsMode)
     {
-
     }
 
     /**
@@ -1910,7 +1909,7 @@ class Compiler implements InjectionAwareInterface
             $type = $statement['type'];
 
             //Compile the statement according to the statement's type
-            switch((int)$type) {
+            switch ((int)$type) {
                 case 357:
                     //Raw output statement
                     $compilation .= $statement['value'];

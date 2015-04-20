@@ -136,7 +136,7 @@ class Filter implements FilterInterface
         }
 
         /* Predefined filter */
-        switch($filter) {
+        switch ($filter) {
             case 'email':
                 return filter_var(str_replace('\'', '', $value), 517);
                 break;

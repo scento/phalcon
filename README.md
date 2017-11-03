@@ -1,10 +1,10 @@
-#phalcon-php
+# phalcon-php
 [![Build Status](https://travis-ci.org/scento/phalcon-php.svg?branch=master)](http://travis-ci.org/scento/phalcon-php)
 [![Coverage Status](https://img.shields.io/coveralls/scento/phalcon-php.svg)](https://coveralls.io/r/scento/phalcon-php)
 
 Phalcon-PHP is a free replacement for the [Phalcon Web Framework](https://github.com/phalcon/cphalcon), delivered as a set of PHP classes based on the [Phalcon Devtools](https://github.com/phalcon/phalcon-devtools). This project allows the usage of the Phalcon API in environments without the possibility to set up the phalcon extension (e.g. shared hosting) by providing a compatibility layer.
 
-##  Disclaimer
+## Disclaimer
 1. This project is in the **pre-alpha** stadium and is currently not maintained. **Do not** use this in a production environment.
 2. This project currently only refers to the cphalcon version 1.2.6, which is **outdated**.
 3. The codebase is **very unstable** and **incomplete** *(VOLT, PHQL, ...)*. A large number of PHPUnit tests fails and the code coverage is even worse.

@@ -1,13 +1,9 @@
 language: php
 
 php:
-  - 5.3
-  - 5.3.3
-  - 5.4
   - 5.5
   - 5.6
   - 7.0
-  - hhvm
 
 matrix:
   allow_failures:
@@ -18,6 +14,8 @@ services:
   - memcached
 
 before_install:
+  - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "extension = memcache.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - ./test/ci/setup_beanstalkd.sh
   - ./test/ci/setup_memcached.sh
   - ./test/ci/setup_mongo.sh
